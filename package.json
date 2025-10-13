@@ -2,11 +2,11 @@
     "name": "otomono-jerseys",
     "version": "1.0.0",
     "description": "Premium Jersey Design, Printing, and Selling Business Website",
-    "main": "server.js",
+    "main": "server-simple.js",
     "scripts": {
-        "start": "node server.js",
-        "web": "node server.js",
-        "dev": "node server.js",
+        "start": "node server-simple.js",
+        "web": "node server-simple.js",
+        "dev": "node server-simple.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
