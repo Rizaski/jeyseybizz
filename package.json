@@ -2,7 +2,7 @@
     "name": "otomono-jerseys",
     "version": "1.0.0",
     "description": "Premium Jersey Design, Printing, and Selling Business Website",
-    "main": "index.js",
+    "main": "server.js",
     "scripts": {
         "start": "node server.js",
         "web": "node server.js",
