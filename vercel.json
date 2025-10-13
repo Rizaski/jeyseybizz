@@ -1,21 +1,3 @@
 {
-    "version": 2,
-    "routes": [
-        {
-            "src": "/",
-            "dest": "/index-static.html"
-        },
-        {
-            "src": "/about",
-            "dest": "/about.html"
-        },
-        {
-            "src": "/services",
-            "dest": "/services.html"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/$1"
-        }
-    ]
+    "version": 2
 }

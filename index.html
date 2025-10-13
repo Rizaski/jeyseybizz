@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,28 +31,15 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             scroll-behavior: smooth;
         }
-
-        .slider-image {
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .indicator {
-            transition: all 0.3s ease;
-        }
-
-        .indicator:hover {
-            transform: scale(1.2);
-        }
     </style>
 </head>
-
 <body class="min-h-screen bg-white">
     <!-- Header -->
     <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
@@ -61,44 +47,22 @@
             <div class="flex justify-between items-center h-16">
                 <!-- Logo Section -->
                 <div class="flex items-center">
-                    <a href="#home" class="hover:opacity-80 transition-opacity duration-200">
-                        <img src="public/logo.png" alt="Otomono Logo" class="h-8 w-auto" />
-                    </a>
+                    <img src="public/logo.png" alt="Otomono Logo" class="h-8 w-auto" />
                 </div>
 
                 <!-- Navigation Menu -->
                 <nav class="hidden md:flex items-center space-x-8">
                     <a href="#home" class="text-gray-700 hover:text-primary font-medium transition-colors">Home</a>
                     <a href="#designs" class="text-gray-700 hover:text-primary font-medium transition-colors">Designs</a>
-                    <a href="services.html" class="text-gray-700 hover:text-primary font-medium transition-colors">Services</a>
-                    <a href="about.html" class="text-gray-700 hover:text-primary font-medium transition-colors">About</a>
+                    <a href="#services" class="text-gray-700 hover:text-primary font-medium transition-colors">Services</a>
+                    <a href="#about" class="text-gray-700 hover:text-primary font-medium transition-colors">About</a>
                     <a href="#contact" class="text-gray-700 hover:text-primary font-medium transition-colors">Contact</a>
                 </nav>
 
                 <!-- Action Buttons -->
                 <div class="flex items-center space-x-3">
-                    <!-- User Profile Button -->
-                    <button id="profile-btn" class="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-all duration-200 group relative">
-                        <svg class="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                            Login with Gmail
-                        </div>
-                    </button>
-
-                    <!-- Staff Login Button -->
-                    <button id="staff-login-btn" class="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-all duration-200 group relative">
-                        <svg class="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                            Staff Login
-                        </div>
-                    </button>
-
                     <!-- Customer Service Button -->
-                    <button id="chat-btn" class="relative px-3 py-2 rounded-full bg-primary hover:bg-red-700 transition-all duration-300 group shadow-lg hover:shadow-xl">
+                    <button class="relative px-3 py-2 rounded-full bg-primary hover:bg-red-700 transition-all duration-300 group shadow-lg hover:shadow-xl">
                         <div class="flex items-center space-x-2">
                             <svg class="w-4 h-4 text-white group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -106,11 +70,7 @@
                             <span class="text-white text-sm font-semibold">Live Chat</span>
                             <span class="bg-green-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">●</span>
                         </div>
-                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                            Customer Service
-                        </div>
                     </button>
-
 
                     <!-- Mobile Menu Button -->
                     <button class="md:hidden p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-all duration-200">
@@ -124,596 +84,140 @@
     </header>
 
     <!-- Hero Section -->
-    <section id="home" class="px-5 py-8 text-center">
-        <h1 class="text-4xl font-bold text-primary mb-3">
-            Premium Jersey Designs
-        </h1>
-        <p class="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
-            Custom designs, quality printing, and fast delivery for all your jersey needs
-        </p>
-
-        <!-- Reel Style Slider -->
-        <div class="max-w-4xl mx-auto">
-            <div class="relative">
-                <div class="relative w-full h-96 rounded-2xl overflow-hidden bg-gray-100">
-                    <img id="slider-image" src="jersey-designs/Mockup24A001.jpg" alt="Jersey Design" class="w-full h-full object-cover slider-image" />
-
-                    <!-- Slider Controls -->
-                    <button id="prev-btn" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 rounded-full p-3 text-white hover:bg-opacity-70 transition-all">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-
-                    <button id="next-btn" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 rounded-full p-3 text-white hover:bg-opacity-70 transition-all">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
-
-                    <!-- Play/Pause Button -->
-                    <button id="play-btn" class="absolute top-4 right-4 bg-black bg-opacity-50 rounded-full p-2 text-white hover:bg-opacity-70 transition-all">
-                        <svg id="play-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z" />
-                        </svg>
-                    </button>
-
-                    <!-- Slide Indicators -->
-                    <div id="indicators" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                        <!-- Indicators will be generated by JavaScript -->
-                    </div>
-                </div>
-
-            </div>
+    <section id="home" class="px-5 py-16 bg-gradient-to-br from-gray-50 to-white">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-5xl font-bold text-gray-800 mb-6">Premium Jersey Design & Printing</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                Create custom jerseys for your team with professional quality printing and fast delivery.
+            </p>
+            <button class="px-8 py-3 bg-primary text-white rounded-lg hover:bg-red-700 transition-colors font-semibold">
+                Get Started
+            </button>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="px-5 py-10 bg-gray-50">
-        <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">
-            Why Choose Otomono?
-        </h2>
-        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm text-center">
-                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                    </svg>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">Premium Quality</h3>
-                <p class="text-gray-600">
-                    High-quality materials and professional printing techniques
+    <section id="services" class="px-5 py-16 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Why Choose Otomono?</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    We provide premium quality jerseys with professional printing and excellent customer service.
                 </p>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl shadow-sm text-center">
-                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17a2 2 0 100 4 2 2 0 000-4zM16 17a2 2 0 100 4 2 2 0 000-4zM3 12h13l-1-7H5a1 1 0 00-1 1v3a1 1 0 01-1 1z" />
-                    </svg>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">Fast Delivery</h3>
-                <p class="text-gray-600">
-                    Quick turnaround times with reliable shipping
-                </p>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl shadow-sm text-center">
-                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">Custom Designs</h3>
-                <p class="text-gray-600">
-                    Personalized jerseys tailored to your specifications
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="px-5 py-16 bg-white">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">
-                What Our Customers Say
-            </h2>
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Testimonial 1 -->
-                <div class="bg-gray-50 p-6 rounded-2xl">
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                        </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                     </div>
-                    <p class="text-gray-600 mb-4 italic">
-                        "The quality of the jerseys exceeded my expectations. The printing is crisp and the material feels premium. Fast delivery too!"
-                    </p>
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-semibold mr-3">
-                            MJ
-                        </div>
-                        <div>
-                            <p class="font-semibold text-gray-800">Ali Shareef</p>
-                            <p class="text-sm text-gray-500">Team Captain</p>
-                        </div>
-                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Premium Quality</h3>
+                    <p class="text-gray-600">High-quality materials and professional printing techniques.</p>
                 </div>
 
-                <!-- Testimonial 2 -->
-                <div class="bg-gray-50 p-6 rounded-2xl">
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                        </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                     </div>
-                    <p class="text-gray-600 mb-4 italic">
-                        "Amazing custom designs! They brought our team vision to life perfectly. The attention to detail is incredible."
-                    </p>
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white font-semibold mr-3">
-                            SC
-                        </div>
-                        <div>
-                            <p class="font-semibold text-gray-800">Mohamed Ismail</p>
-                            <p class="text-sm text-gray-500">Sports Director</p>
-                        </div>
-                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Fast Delivery</h3>
+                    <p class="text-gray-600">Quick turnaround times without compromising on quality.</p>
                 </div>
 
-                <!-- Testimonial 3 -->
-                <div class="bg-gray-50 p-6 rounded-2xl">
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                        </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
                     </div>
-                    <p class="text-gray-600 mb-4 italic">
-                        "Professional service from start to finish. The team was responsive and delivered exactly what we ordered on time."
-                    </p>
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-semibold mr-3">
-                            DR
-                        </div>
-                        <div>
-                            <p class="font-semibold text-gray-800">Hassan Mohamed</p>
-                            <p class="text-sm text-gray-500">Club Manager</p>
-                        </div>
-                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Custom Design</h3>
+                    <p class="text-gray-600">Personalized designs that match your team's unique identity.</p>
                 </div>
             </div>
         </div>
     </section>
 
-
-    <!-- CTA Section -->
-    <section class="px-5 py-10 bg-black text-center">
-        <h2 class="text-3xl font-bold text-white mb-3">
-            Ready to Get Started?
-        </h2>
-        <p class="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-            Find more about our collection and create your perfect jersey today!
-        </p>
-        <button id="cta-contact-btn" class="bg-white text-primary px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-gray-100 transition-colors shadow-lg">
-            Contact Us
-        </button>
+    <!-- Contact Section -->
+    <section id="contact" class="px-5 py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Ready to Get Started?</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                Contact us today to discuss your jersey needs and get a custom quote.
+            </p>
+            <button class="px-8 py-3 bg-primary text-white rounded-lg hover:bg-red-700 transition-colors font-semibold">
+                Contact Us
+            </button>
+        </div>
     </section>
 
-    <!-- Live Chat Bot Modal -->
-    <div id="chat-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[600px] flex flex-col">
-                <!-- Chat Header -->
-                <div class="bg-black text-white p-4 rounded-t-2xl flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold">Otomono Sales Team</h3>
-                            <p class="text-xs text-gray-300">Online now</p>
-                        </div>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-5">
+            <div class="grid md:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center mb-4">
+                        <img src="public/logo-white.png" alt="Otomono Logo" class="h-8 w-auto mr-3" />
                     </div>
-                    <button id="close-chat" class="text-white hover:text-red-200 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+                    <p class="text-gray-400 mb-4 max-w-md">
+                        Premium jersey design, printing, and selling services. Quality materials, professional printing, and fast delivery for all your team needs.
+                    </p>
                 </div>
 
-                <!-- Chat Messages -->
-                <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4">
-                    <div class="flex items-start space-x-2">
-                        <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                            <span class="text-white text-xs font-bold">O</span>
-                        </div>
-                        <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
-                            <p class="text-sm text-gray-800">Hello! Welcome to Otomono. How can I help you with your jersey needs today?</p>
-                            <p class="text-xs text-gray-500 mt-1">Just now</p>
-                        </div>
-                    </div>
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors">Services</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">About</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
                 </div>
 
-                <!-- Chat Input -->
-                <div class="p-4 border-t border-gray-200">
-                    <div class="flex space-x-2">
-                        <input id="chat-input" type="text" placeholder="Type your message..." class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                        <button id="send-message" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-700 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                            </svg>
-                        </button>
-                    </div>
+                <!-- Services -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Our Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Jersey Printing</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Custom Design</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Bulk Orders</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Branding</a></li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Gmail Login Modal -->
-    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
-                <div class="text-center">
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Login to Otomono</h3>
-                    <p class="text-gray-600 mb-6">Sign in with your Gmail account</p>
-
-                    <button id="gmail-login" class="w-full flex items-center justify-center space-x-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24">
-                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                        </svg>
-                        <span class="text-gray-700 font-medium">Continue with Google</span>
-                    </button>
-
-                    <button id="close-login" class="mt-4 text-gray-500 hover:text-gray-700 transition-colors">
-                        Cancel
-                    </button>
-                </div>
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400 text-sm">
+                    © 2024 Otomono Jerseys. All rights reserved.
+                </p>
             </div>
         </div>
-    </div>
-
-    <!-- Staff Login Modal -->
-    <div id="staff-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
-                <div class="text-center">
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Staff Login</h3>
-                    <p class="text-gray-600 mb-6">Access the staff dashboard</p>
-
-                    <div class="space-y-4">
-                        <input type="email" placeholder="Staff Email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                        <input type="password" placeholder="Password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                        <button class="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
-                            Login
-                        </button>
-                    </div>
-
-                    <button id="close-staff" class="mt-4 text-gray-500 hover:text-gray-700 transition-colors">
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    </footer>
 
     <script>
-        // Jersey designs data
-        const jerseyDesigns = [{
-                id: 1,
-                image: 'jersey-designs/Mockup24A001.jpg',
-                title: 'Classic Blue Design',
-                price: '$29.99'
-            },
-            {
-                id: 2,
-                image: 'jersey-designs/Mockup24A002.jpg',
-                title: 'Modern Red Jersey',
-                price: '$34.99'
-            },
-            {
-                id: 3,
-                image: 'jersey-designs/Mockup24A003.jpg',
-                title: 'Elegant White',
-                price: '$32.99'
-            },
-            {
-                id: 4,
-                image: 'jersey-designs/Mockup24A004.jpg',
-                title: 'Bold Black Design',
-                price: '$36.99'
-            },
-            {
-                id: 5,
-                image: 'jersey-designs/Mockup24A005.jpg',
-                title: 'Vibrant Green',
-                price: '$31.99'
-            },
-            {
-                id: 6,
-                image: 'jersey-designs/Mockup24A006.jpg',
-                title: 'Royal Purple',
-                price: '$33.99'
-            },
-            {
-                id: 7,
-                image: 'jersey-designs/Mockup24A007.jpg',
-                title: 'Sunset Orange',
-                price: '$30.99'
-            },
-            {
-                id: 8,
-                image: 'jersey-designs/Mockup24A008.jpg',
-                title: 'Ocean Blue',
-                price: '$35.99'
-            },
-            {
-                id: 9,
-                image: 'jersey-designs/Mockup24A009.jpg',
-                title: 'Forest Green',
-                price: '$32.99'
-            },
-            {
-                id: 10,
-                image: 'jersey-designs/Mockup24A010.jpg',
-                title: 'Midnight Black',
-                price: '$37.99'
-            },
-        ];
-
-        let currentSlide = 0;
-        let isPlaying = false;
-        let playInterval;
-
-        // DOM elements
-        const sliderImage = document.getElementById('slider-image');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const playBtn = document.getElementById('play-btn');
-        const playIcon = document.getElementById('play-icon');
-        const indicators = document.getElementById('indicators');
-
-        // Initialize indicators
-        function initIndicators() {
-            indicators.innerHTML = '';
-            jerseyDesigns.forEach((_, index) => {
-                const indicator = document.createElement('button');
-                indicator.className = `w-2 h-2 rounded-full transition-all indicator ${
-                    index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
-                }`;
-                indicator.addEventListener('click', () => goToSlide(index));
-                indicators.appendChild(indicator);
-            });
-        }
-
-        // Update slide
-        function updateSlide() {
-            sliderImage.src = jerseyDesigns[currentSlide].image;
-            sliderImage.alt = jerseyDesigns[currentSlide].title;
-
-            // Update indicators
-            const indicatorButtons = indicators.querySelectorAll('button');
-            indicatorButtons.forEach((btn, index) => {
-                btn.className = `w-2 h-2 rounded-full transition-all indicator ${
-                    index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
-                }`;
-            });
-        }
-
-        // Go to specific slide
-        function goToSlide(index) {
-            currentSlide = index;
-            updateSlide();
-        }
-
-        // Next slide
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % jerseyDesigns.length;
-            updateSlide();
-        }
-
-        // Previous slide
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + jerseyDesigns.length) % jerseyDesigns.length;
-            updateSlide();
-        }
-
-        // Toggle play/pause
-        function togglePlay() {
-            isPlaying = !isPlaying;
-
-            if (isPlaying) {
-                playIcon.innerHTML = '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>';
-                playInterval = setInterval(nextSlide, 3000);
-            } else {
-                playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-                clearInterval(playInterval);
-            }
-        }
-
-        // Event listeners
-        prevBtn.addEventListener('click', prevSlide);
-        nextBtn.addEventListener('click', nextSlide);
-        playBtn.addEventListener('click', togglePlay);
-
-        // Initialize
-        initIndicators();
-        updateSlide();
-
-        // Auto-play on page load
-        setTimeout(() => {
-            togglePlay();
-        }, 2000);
-
-        // Modal functionality
-        const chatModal = document.getElementById('chat-modal');
-        const loginModal = document.getElementById('login-modal');
-        const staffModal = document.getElementById('staff-modal');
-        const chatBtn = document.getElementById('chat-btn');
-        const profileBtn = document.getElementById('profile-btn');
-        const staffLoginBtn = document.getElementById('staff-login-btn');
-
-        // Chat functionality
-        chatBtn.addEventListener('click', () => {
-            chatModal.classList.remove('hidden');
-        });
-
-        document.getElementById('close-chat').addEventListener('click', () => {
-            chatModal.classList.add('hidden');
-        });
-
-        // Profile/Login functionality
-        profileBtn.addEventListener('click', () => {
-            loginModal.classList.remove('hidden');
-        });
-
-        document.getElementById('close-login').addEventListener('click', () => {
-            loginModal.classList.add('hidden');
-        });
-
-        // Staff login functionality
-        staffLoginBtn.addEventListener('click', () => {
-            staffModal.classList.remove('hidden');
-        });
-
-        document.getElementById('close-staff').addEventListener('click', () => {
-            staffModal.classList.add('hidden');
-        });
-
-        // Close modals when clicking outside
-        [chatModal, loginModal, staffModal].forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.add('hidden');
+        // Simple smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
             });
         });
 
-        // Chat bot responses
-        const chatResponses = [
-            "Thank you for your interest! Our team will get back to you shortly.",
-            "We offer custom jersey designs with premium quality materials.",
-            "Our standard delivery time is 3-5 business days.",
-            "Yes, we can create jerseys for teams of any size!",
-            "We use high-quality polyester and cotton blends for durability.",
-            "You can choose from our catalog or request a custom design.",
-            "We provide digital proofs before printing for your approval.",
-            "Our jerseys come with a 30-day satisfaction guarantee."
-        ];
-
-        // Send message functionality
-        document.getElementById('send-message').addEventListener('click', () => {
-            const input = document.getElementById('chat-input');
-            const message = input.value.trim();
-
-            if (message) {
-                addMessage(message, 'user');
-                input.value = '';
-
-                // Simulate bot response
-                setTimeout(() => {
-                    const randomResponse = chatResponses[Math.floor(Math.random() * chatResponses.length)];
-                    addMessage(randomResponse, 'bot');
-                }, 1000);
-            }
-        });
-
-        // Send message on Enter key
-        document.getElementById('chat-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                document.getElementById('send-message').click();
-            }
-        });
-
-        function addMessage(text, sender) {
-            const messagesContainer = document.getElementById('chat-messages');
-            const messageDiv = document.createElement('div');
-
-            if (sender === 'user') {
-                messageDiv.className = 'flex items-start space-x-2 justify-end';
-                messageDiv.innerHTML = `
-                    <div class="bg-black text-white rounded-lg p-3 max-w-xs">
-                        <p class="text-sm">${text}</p>
-                        <p class="text-xs text-gray-300 mt-1">Just now</p>
-                    </div>
-                    <div class="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center">
-                        <span class="text-white text-xs font-bold">U</span>
-                    </div>
-                `;
-            } else {
-                messageDiv.className = 'flex items-start space-x-2';
-                messageDiv.innerHTML = `
-                    <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                        <span class="text-white text-xs font-bold">O</span>
-                    </div>
-                    <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
-                        <p class="text-sm text-gray-800">${text}</p>
-                        <p class="text-xs text-gray-500 mt-1">Just now</p>
-                    </div>
-                `;
-            }
-
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        // Gmail login simulation
-        document.getElementById('gmail-login').addEventListener('click', () => {
-            alert('Gmail login would be implemented with Google OAuth API');
-            loginModal.classList.add('hidden');
-        });
-
-        // CTA Contact Us button functionality
-        document.getElementById('cta-contact-btn').addEventListener('click', () => {
-            chatModal.classList.remove('hidden');
+        // Simple live chat simulation
+        document.querySelector('button').addEventListener('click', function() {
+            alert('Live chat feature coming soon! Please contact us directly.');
         });
     </script>
 </body>
-
 </html>
