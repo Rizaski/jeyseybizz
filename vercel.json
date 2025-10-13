@@ -1,91 +1,78 @@
 {
-  "version": 2,
-  "name": "otomono-jerseys",
-  "builds": [
-    {
-      "src": "**/*",
-      "use": "@vercel/static"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/designer",
-      "destination": "/contact.html"
-    },
-    {
-      "source": "/design",
-      "destination": "/contact.html"
-    },
-    {
-      "source": "/services",
-      "destination": "/services.html"
-    },
-    {
-      "source": "/about",
-      "destination": "/about.html"
-    },
-    {
-      "source": "/contact",
-      "destination": "/contact.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
+    "version": 2,
+    "name": "otomono-jerseys",
+    "builds": [{
+        "src": "**/*",
+        "use": "@vercel/static"
+    }],
+    "rewrites": [{
+            "source": "/designer",
+            "destination": "/contact.html"
         },
         {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
+            "source": "/design",
+            "destination": "/contact.html"
         },
         {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
+            "source": "/services",
+            "destination": "/services.html"
         },
         {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        }
-      ]
-    },
-    {
-      "source": "/public/(.*)",
-      "headers": [
+            "source": "/about",
+            "destination": "/about.html"
+        },
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
+            "source": "/contact",
+            "destination": "/contact.html"
         }
-      ]
-    },
-    {
-      "source": "/(.*)\\.html",
-      "headers": [
+    ],
+    "headers": [{
+            "source": "/(.*)",
+            "headers": [{
+                    "key": "X-Frame-Options",
+                    "value": "DENY"
+                },
+                {
+                    "key": "X-XSS-Protection",
+                    "value": "1; mode=block"
+                },
+                {
+                    "key": "X-Content-Type-Options",
+                    "value": "nosniff"
+                },
+                {
+                    "key": "Referrer-Policy",
+                    "value": "strict-origin-when-cross-origin"
+                }
+            ]
+        },
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)\\.css",
-      "headers": [
+            "source": "/public/(.*)",
+            "headers": [{
+                "key": "Cache-Control",
+                "value": "public, max-age=31536000, immutable"
+            }]
+        },
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)\\.js",
-      "headers": [
+            "source": "/(.*)\\.html",
+            "headers": [{
+                "key": "Cache-Control",
+                "value": "public, max-age=0, must-revalidate"
+            }]
+        },
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
+            "source": "/(.*)\\.css",
+            "headers": [{
+                "key": "Cache-Control",
+                "value": "public, max-age=31536000, immutable"
+            }]
+        },
+        {
+            "source": "/(.*)\\.js",
+            "headers": [{
+                "key": "Cache-Control",
+                "value": "public, max-age=31536000, immutable"
+            }]
         }
-      ]
-    }
-  ]
+    ]
 }
