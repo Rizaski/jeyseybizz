@@ -7,26 +7,26 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/designer",
-      "dest": "/contact.html"
+      "source": "/designer",
+      "destination": "/contact.html"
     },
     {
-      "src": "/design",
-      "dest": "/contact.html"
+      "source": "/design",
+      "destination": "/contact.html"
     },
     {
-      "src": "/services",
-      "dest": "/services.html"
+      "source": "/services",
+      "destination": "/services.html"
     },
     {
-      "src": "/about",
-      "dest": "/about.html"
+      "source": "/about",
+      "destination": "/about.html"
     },
     {
-      "src": "/contact",
-      "dest": "/contact.html"
+      "source": "/contact",
+      "destination": "/contact.html"
     }
   ],
   "headers": [
