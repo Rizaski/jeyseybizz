@@ -1,14 +1,26 @@
 {
     "version": 2,
-    "builds": [{
-        "src": "server-simple.js",
-        "use": "@vercel/node"
-    }],
-    "routes": [{
-        "src": "/(.*)",
-        "dest": "server-simple.js"
-    }],
-    "env": {
-        "NODE_ENV": "production"
-    }
+    "functions": {
+        "api/index.js": {
+            "runtime": "nodejs18.x"
+        }
+    },
+    "routes": [
+        {
+            "src": "/",
+            "dest": "/index-static.html"
+        },
+        {
+            "src": "/about",
+            "dest": "/about.html"
+        },
+        {
+            "src": "/services",
+            "dest": "/services.html"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/$1"
+        }
+    ]
 }
