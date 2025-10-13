@@ -36,9 +36,29 @@
             prompt: 'select_account'
         });
 
+        // Check if domain is authorized
+        function checkDomainAuthorization() {
+            const currentDomain = window.location.hostname;
+            const isLocalhost = currentDomain === 'localhost' || currentDomain === '127.0.0.1';
+            const isGitHubPages = currentDomain.includes('github.io');
+            
+            if (isLocalhost) {
+                console.log('Running on localhost - make sure to add localhost to Firebase authorized domains');
+            } else if (isGitHubPages) {
+                console.log('Running on GitHub Pages - make sure to add your GitHub Pages domain to Firebase authorized domains');
+            }
+            
+            return true; // Continue with authentication attempt
+        }
+
         // Make auth functions globally available
         window.signInWithGoogle = async () => {
             try {
+                // Check domain authorization
+                if (!checkDomainAuthorization()) {
+                    return null;
+                }
+                
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
                 console.log('User signed in:', user);
@@ -55,7 +75,16 @@
                 return user;
             } catch (error) {
                 console.error('Error signing in:', error);
-                alert('Sign in failed: ' + error.message);
+                
+                // Handle specific Firebase errors
+                if (error.code === 'auth/unauthorized-domain') {
+                    alert('Authentication domain not authorized. Please contact support or try again later.');
+                } else if (error.code === 'auth/popup-closed-by-user') {
+                    console.log('Sign-in popup was closed by user');
+                    return null;
+                } else {
+                    alert('Sign in failed: ' + error.message);
+                }
                 throw error;
             }
         };
