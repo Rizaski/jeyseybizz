@@ -1,120 +1,130 @@
-# Otomono Jerseys - Premium Jersey Design & Printing
+# Otomono Jerseys
 
-A modern, responsive website for jersey design, printing, and selling business built with React Native Web, Tailwind CSS, and Firebase.
+Premium Jersey Design, Printing, and Selling Business Website
 
 ## Features
 
-- 🎨 **Modern Landing Page** - Beautiful, responsive design with reel-style slider
-- 🖼️ **Interactive Slider** - Showcase jersey designs with auto-play functionality
-- 📱 **Mobile-First Design** - Optimized for all devices
-- 🎯 **Brand Integration** - Uses official Otomono logo and favicon
-- 🔥 **Firebase Backend** - Ready for authentication, database, and storage
-- 🎨 **Tailwind CSS** - Modern styling with custom brand colors
-- ⚡ **Lucide Icons** - Beautiful, consistent iconography
+- Modern reel-style slider showcasing jersey designs
+- Responsive design for web, tablet, and mobile
+- Interactive modals for chat, login, and staff access
+- Pure HTML+CSS+JavaScript implementation
+- Tailwind CSS via CDN for styling
 
 ## Tech Stack
 
-- **Frontend**: React Native Web, Tailwind CSS, Lucide Icons
-- **Backend**: Firebase (Firestore, Authentication, Storage)
-- **Styling**: Tailwind CSS with custom brand colors
-- **Icons**: Lucide React Native
+- **Frontend**: Pure HTML5 + CSS3 + JavaScript (ES6+)
+- **Styling**: Tailwind CSS (CDN)
+- **Server**: Python HTTP Server (built-in)
 
-## Brand Colors
+## Getting Started
 
-- Primary: #0052cc (Blue)
-- Secondary: #36b37e (Green)
-- Accent: #ff5630 (Orange)
-
-## Setup Instructions
-
-1. **Install Dependencies**
+### Option 1: Python Server (Recommended)
+1. Start the server:
    ```bash
-   npm install
+   python serve.py
+   ```
+   Or on Windows:
+   ```bash
+   start-server.bat
+   ```
+   Or on Unix/Linux/Mac:
+   ```bash
+   ./start-server.sh
    ```
 
-2. **Configure Firebase**
-   - Create a Firebase project at [Firebase Console](https://console.firebase.google.com)
-   - Copy your Firebase config to `src/config/firebase.js`
-   - Replace the placeholder values with your actual Firebase credentials
+2. Open your browser and navigate to `http://localhost:3000`
 
-3. **Run the Application**
-   ```bash
-   # For web development
-   npm run web
-   
-   # For React Native development
-   npm start
-   ```
+### Option 2: Any Static File Server
+You can use any static file server:
+- Python: `python -m http.server 3000`
+- Node.js: `npx serve .`
+- PHP: `php -S localhost:3000`
+- Or simply open `index.html` directly in your browser
 
 ## Project Structure
 
 ```
-├── src/
-│   ├── components/
-│   │   └── LandingPage.js      # Main landing page component
-│   └── config/
-│       └── firebase.js         # Firebase configuration
-├── jersey-designs/             # Jersey design images
-├── public/                     # Static assets (logo, favicon)
-├── App.js                      # Main app component
-├── index.html                  # HTML entry point
-└── tailwind.config.js          # Tailwind CSS configuration
+├── index.html              # Main homepage with jersey slider
+├── services.html           # Services page
+├── serve.py               # Python HTTP server
+├── start-server.bat       # Windows startup script
+├── start-server.sh        # Unix/Linux/Mac startup script
+├── public/
+│   ├── logo.png
+│   ├── logo-white.png
+│   └── favicon.png
+├── jersey-designs/
+│   └── [10 jersey design images]
+├── design-system.md       # Design system documentation
+├── typography-guidelines.md
+└── README.md
 ```
 
-## Firebase Configuration
+## Features
 
-You'll need to provide the following Firebase configuration values:
+### Homepage (`index.html`)
+- **Reel-style Slider**: Auto-playing slider with 10 jersey designs
+- **Interactive Controls**: Previous, Next, Play/Pause buttons
+- **Navigation**: Sticky header with smooth scrolling
+- **Modals**: Live chat, Gmail login, Staff login
+- **Testimonials**: Customer reviews with star ratings
+- **Responsive Design**: Mobile-first approach
 
-```javascript
-const firebaseConfig = {
-  apiKey: "your-api-key-here",
-  authDomain: "your-project-id.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project-id.appspot.com",
-  messagingSenderId: "your-sender-id",
-  appId: "your-app-id"
-};
-```
+### Services Page (`services.html`)
+- **Service Overview**: Jersey printing, design, bulk orders
+- **Process Workflow**: 4-step process visualization
+- **Pricing Tiers**: Flexible pricing options
+- **Quality Assurance**: Material testing and inspection
+- **Footer**: Navigation and company information
 
-## Features Overview
+## Configuration
 
-### Landing Page
-- Hero section with animated slider
-- Interactive jersey design showcase
-- Auto-play functionality with manual controls
-- Responsive design for all screen sizes
+### Colors
+- Primary: `#dc2626` (Red)
+- Secondary: `#6b7280` (Gray)
+- Accent: `#ff5630` (Orange)
 
-### Slider Component
-- Displays all jersey designs from the `jersey-designs` folder
-- Smooth transitions and animations
-- Play/pause controls
-- Slide indicators
-- Touch/swipe support
+### Fonts
+- Primary: Inter (Google Fonts)
+- Fallback: System fonts
 
-### Design System
-- Consistent typography using Inter font family
-- Brand color scheme throughout
-- Modern UI components with shadows and rounded corners
-- Responsive grid layouts
+## Browser Compatibility
 
-## Development
+- Chrome 60+
+- Firefox 55+
+- Safari 12+
+- Edge 79+
+- Mobile browsers (iOS Safari, Chrome Mobile)
 
-The project uses React Native Web for cross-platform development, allowing you to build for both web and mobile using the same codebase.
+## No Dependencies Required
 
-### Key Components
+This application uses only:
+- HTML5
+- CSS3
+- JavaScript (ES6+)
+- Tailwind CSS (CDN)
+- Python (for server, optional)
 
-- **LandingPage**: Main component with slider and features
-- **Firebase Config**: Backend integration setup
-- **Tailwind Config**: Custom styling configuration
+No npm packages, no build process, no compilation required!
+
+## Quick Start
+
+1. **Clone or download** this repository
+2. **Open terminal** in the project directory
+3. **Run**: `python serve.py`
+4. **Open browser** to `http://localhost:3000`
+
+That's it! No installation, no dependencies, no configuration needed.
 
 ## Deployment
 
-The application can be deployed to any static hosting service like:
-- Vercel
-- Netlify
-- Firebase Hosting
-- GitHub Pages
+Deploy to any static hosting service:
+- **GitHub Pages**: Push to GitHub and enable Pages
+- **Netlify**: Drag and drop the folder
+- **Vercel**: Connect GitHub repository
+- **Firebase Hosting**: `firebase deploy`
+- **Any web server**: Upload files to public_html
 
 ## License
 
-ISC License - See LICENSE file for details
+ISC License
