@@ -476,15 +476,15 @@
 
             // Wait a bit for authentication to be processed
             await new Promise(resolve => setTimeout(resolve, 1000));
-            
+
             // Check localStorage first
             const storedUser = localStorage.getItem('user');
             console.log('Stored user data:', storedUser);
-            
+
             // Restore authentication state (persistent login)
             const user = await window.FirebaseAuth.restoreAuthState();
             console.log('Restored user:', user);
-            
+
             if (!user) {
                 console.log('No authenticated user, redirecting to home page');
                 window.location.href = 'index.html';
