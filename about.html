@@ -195,6 +195,9 @@
             display: none;
         }
     </style>
+    
+    <!-- Global Firebase Authentication -->
+    <script src="js/firebase-config.js"></script>
 </head>
 
 <body class="min-h-screen bg-rog-dark text-white">
@@ -804,6 +807,46 @@
     <script>
         // Wait for DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {
+            // Authentication functionality
+            const profileBtn = document.getElementById('profile-btn');
+            const mobileGmailBtn = document.getElementById('mobile-gmail-login');
+
+            // Profile/Login functionality - Updated to use global Firebase
+            if (profileBtn) {
+                profileBtn.addEventListener('click', async () => {
+                    try {
+                        const user = window.FirebaseAuth.getCurrentUser();
+                        if (user) {
+                            // User is signed in, show profile or sign out
+                            await window.FirebaseAuth.signOut();
+                        } else {
+                            // User is not signed in, sign in with Google
+                            await window.FirebaseAuth.signInWithGoogle();
+                        }
+                    } catch (error) {
+                        console.error('Authentication error:', error);
+                        }
+                    });
+                }
+
+            // Mobile Gmail login - Updated to use global Firebase
+            if (mobileGmailBtn) {
+                mobileGmailBtn.addEventListener('click', async () => {
+                    try {
+                        const user = window.FirebaseAuth.getCurrentUser();
+                        if (user) {
+                            // User is signed in, sign out
+                            await window.FirebaseAuth.signOut();
+                        } else {
+                            // User is not signed in, sign in with Google
+                            await window.FirebaseAuth.signInWithGoogle();
+                        }
+                    } catch (error) {
+                        console.error('Authentication error:', error);
+                    }
+                });
+            }
+
             // Mobile menu functionality
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
