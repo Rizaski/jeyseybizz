@@ -9,18 +9,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#dc2626',
-                        secondary: '#6b7280',
-                        accent: '#ff5630',
+                        primary: '#ff0040',
+                        secondary: '#1a1a1a',
+                        accent: '#ff0040',
+                        'rog-red': '#ff0040',
+                        'rog-dark': '#0a0a0a',
+                        'rog-gray': '#1a1a1a',
+                        'rog-light': '#2a2a2a',
                     },
                     fontFamily: {
-                        'inter': ['Inter', 'Poppins', 'Roboto', 'Segoe UI', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        'rog-heading': ['Orbitron', 'Inter', 'sans-serif'],
+                        'rog-body': ['Roboto', 'Inter', 'sans-serif'],
+                        'rog-display': ['Orbitron', 'sans-serif'],
                     },
                 }
             }
@@ -34,10 +42,79 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             scroll-behavior: smooth;
+            background-color: #0a0a0a;
+            color: #ffffff;
+        }
+
+        /* ROG Global Styles */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Orbitron', 'Inter', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p,
+        span,
+        div,
+        a,
+        li {
+            font-family: 'Roboto', 'Inter', sans-serif;
+        }
+
+        .rog-heading {
+            font-family: 'Orbitron', 'Inter', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rog-body {
+            font-family: 'Roboto', 'Inter', sans-serif;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .rog-display {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px rgba(255, 0, 64, 0.5);
+        }
+
+        .hover\:glow:hover {
+            text-shadow: 0 0 15px rgba(255, 0, 64, 0.8);
+        }
+
+        .rog-button {
+            background: linear-gradient(45deg, #ff0040, #ff4080);
+            border: 1px solid #ff0040;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 0, 64, 0.3);
+        }
+
+        .rog-button:hover {
+            background: linear-gradient(45deg, #ff4080, #ff0040);
+            box-shadow: 0 0 30px rgba(255, 0, 64, 0.6);
+            transform: translateY(-2px);
         }
 
         .hero-gradient {
@@ -120,9 +197,9 @@
     </style>
 </head>
 
-<body class="min-h-screen bg-white">
+<body class="min-h-screen bg-rog-dark text-white">
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+    <header class="sticky top-0 z-50 bg-rog-dark/95 backdrop-blur-sm border-b border-rog-red shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo Section -->
@@ -134,15 +211,15 @@
 
                 <!-- Navigation Menu -->
                 <nav class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-primary font-medium transition-colors">Home</a>
-                    <a href="services.html" class="text-gray-700 hover:text-primary font-medium transition-colors">Services</a>
-                    <a href="about.html" class="text-primary font-medium">About</a>
-                    <a href="contact.html" class="text-gray-700 hover:text-primary font-medium transition-colors">Contact</a>
+                    <a href="index.html" class="text-white hover:text-rog-red font-rog-heading font-medium transition-colors hover:glow">Home</a>
+                    <a href="services.html" class="text-white hover:text-rog-red font-rog-heading font-medium transition-colors hover:glow">Services</a>
+                    <a href="about.html" class="text-rog-red font-rog-heading font-bold glow">About</a>
+                    <a href="contact.html" class="text-white hover:text-rog-red font-rog-heading font-medium transition-colors hover:glow">Contact</a>
                 </nav>
 
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-all duration-200">
-                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg bg-rog-light hover:bg-rog-red transition-all duration-200 border border-rog-red">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
@@ -150,35 +227,35 @@
                 <!-- Action Buttons -->
                 <div class="hidden md:flex items-center space-x-3">
                     <!-- User Profile Button -->
-                    <button id="profile-btn" class="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-all duration-200 group relative">
-                        <svg class="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button id="profile-btn" class="p-2 rounded-lg bg-rog-light hover:bg-rog-red transition-all duration-200 group relative border border-rog-red">
+                        <svg class="w-5 h-5 text-white group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-rog-dark text-rog-red text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red">
                             Login with Gmail
                         </div>
                     </button>
 
                     <!-- Staff Login Button -->
-                    <button id="staff-login-btn" class="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-all duration-200 group relative">
-                        <svg class="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button id="staff-login-btn" class="p-2 rounded-lg bg-rog-light hover:bg-rog-red transition-all duration-200 group relative border border-rog-red">
+                        <svg class="w-5 h-5 text-white group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
-                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-rog-dark text-rog-red text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red">
                             Staff Login
                         </div>
                     </button>
 
                     <!-- Customer Service Button -->
-                    <button id="chat-btn" class="relative px-3 py-2 rounded-full bg-primary hover:bg-red-700 transition-all duration-300 group shadow-lg hover:shadow-xl">
+                    <button id="chat-btn" class="relative px-3 py-2 rounded-full rog-button group shadow-lg hover:shadow-xl">
                         <div class="flex items-center space-x-2">
                             <svg class="w-4 h-4 text-white group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>
-                            <span class="text-white text-sm font-semibold">Live Chat</span>
-                            <span class="bg-green-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">●</span>
+                            <span class="text-white text-sm font-rog font-semibold">Live Chat</span>
+                            <span class="bg-rog-red text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">●</span>
                         </div>
-                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-rog-dark text-rog-red text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red">
                             Customer Service
                         </div>
                     </button>
@@ -231,54 +308,57 @@
     </div>
 
     <!-- Hero Section -->
-    <section class="hero-gradient py-20 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="relative py-20 text-white overflow-hidden min-h-screen flex items-center bg-rog-dark">
+        <!-- ROG-style gradient background -->
+        <div class="absolute inset-0 bg-gradient-to-br from-rog-red/20 via-rog-dark to-rog-gray"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <!-- Text Content -->
                 <div class="space-y-8">
                     <div class="space-y-4">
-                        <h1 class="text-5xl lg:text-6xl font-bold leading-tight">
-                            About Otomono Jerseys
+                        <h1 class="text-5xl lg:text-6xl font-rog-display font-bold leading-tight text-white glow">
+                            ABOUT OTOMONO JERSEYS
                         </h1>
-                        <p class="text-xl text-gray-200 leading-relaxed">
+                        <p class="text-xl text-gray-200 leading-relaxed font-rog-body">
                             Founded in 2024, Otomono Jerseys is a dynamic and forward-thinking sportswear brand committed to delivering premium-quality jerseys and apparel tailored to the needs of athletes, teams, and organizations.
                         </p>
                     </div>
 
                     <div class="space-y-4">
-                        <p class="text-lg text-gray-200 leading-relaxed">
+                        <p class="text-lg text-gray-200 leading-relaxed font-rog-body">
                             Built on innovation, craftsmanship, and customer satisfaction, Otomono has established partnerships with reputed suppliers across the globe, ensuring access to world-class fabrics, materials, and printing technologies.
                         </p>
                     </div>
 
                     <!-- Key Stats -->
                     <div class="grid grid-cols-3 gap-6 pt-8">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-white">2024</div>
-                            <div class="text-sm text-gray-300">Founded</div>
+                        <div class="text-center bg-rog-light/20 backdrop-blur-sm rounded-lg p-4 border border-rog-red/30">
+                            <div class="text-3xl font-rog-display font-bold text-rog-red">2024</div>
+                            <div class="text-sm text-gray-300 font-rog-body">Founded</div>
                         </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-white">100+</div>
-                            <div class="text-sm text-gray-300">Global Partners</div>
+                        <div class="text-center bg-rog-light/20 backdrop-blur-sm rounded-lg p-4 border border-rog-red/30">
+                            <div class="text-3xl font-rog-display font-bold text-rog-red">100+</div>
+                            <div class="text-sm text-gray-300 font-rog-body">Global Partners</div>
                         </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-white">24/7</div>
-                            <div class="text-sm text-gray-300">Support</div>
+                        <div class="text-center bg-rog-light/20 backdrop-blur-sm rounded-lg p-4 border border-rog-red/30">
+                            <div class="text-3xl font-rog-display font-bold text-rog-red">24/7</div>
+                            <div class="text-sm text-gray-300 font-rog-body">Support</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Jersey Showcase -->
-                <div class="jersey-showcase p-8">
+                <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl p-8 border border-rog-red/30">
                     <div class="relative">
                         <!-- About Us Image -->
                         <img src="public/aboutusimg.png" alt="Otomono About Us" class="w-full h-auto rounded-2xl shadow-2xl">
 
-                        <!-- Overlay -->
-                        <div class="jersey-overlay">
+                        <!-- ROG-style Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-rog-red/80 to-rog-dark/90 rounded-2xl flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
                             <div class="text-center text-white">
-                                <div class="text-4xl font-bold mb-4">Premium Quality</div>
-                                <div class="text-xl">Professional Sportswear</div>
+                                <div class="text-4xl font-rog-display font-bold mb-4 glow">PREMIUM QUALITY</div>
+                                <div class="text-xl font-rog-body">Professional Sportswear</div>
                             </div>
                         </div>
                     </div>
@@ -288,77 +368,77 @@
     </section>
 
     <!-- Services Overview -->
-    <section class="py-20 bg-gray-50">
+    <section class="py-20 bg-rog-dark">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-800 mb-6">Our Services</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                <h2 class="text-4xl font-rog-display font-bold text-white mb-6 glow">OUR SERVICES</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto font-rog-body">
                     Otomono Jerseys offers a diverse range of services that cater to both individual and corporate clients
                 </p>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Jersey Printing -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 service-item">
-                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300 service-item">
+                    <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-rog-red">
+                        <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Jersey Printing</h3>
-                    <p class="text-gray-600 text-center">
+                    <h3 class="text-xl font-rog-heading font-bold text-rog-red mb-4 text-center">JERSEY PRINTING</h3>
+                    <p class="text-gray-300 text-center font-rog-body">
                         Utilizing advanced printing methods such as sublimation, screen printing, and embroidery, Otomono guarantees vibrant, durable, and professional finishes suitable for all sports and events.
                     </p>
                 </div>
 
                 <!-- Custom Design -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 service-item">
-                    <div class="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300 service-item">
+                    <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-rog-red">
+                        <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Custom Design</h3>
-                    <p class="text-gray-600 text-center">
+                    <h3 class="text-xl font-rog-heading font-bold text-rog-red mb-4 text-center">CUSTOM DESIGN</h3>
+                    <p class="text-gray-300 text-center font-rog-body">
                         Clients can express their unique identity through personalized designs, colors, and graphics. Otomono's creative design team collaborates closely with customers to turn their concepts into reality.
                     </p>
                 </div>
 
                 <!-- Bulk Orders -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 service-item">
-                    <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300 service-item">
+                    <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-rog-red">
+                        <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Bulk Orders</h3>
-                    <p class="text-gray-600 text-center">
+                    <h3 class="text-xl font-rog-heading font-bold text-rog-red mb-4 text-center">BULK ORDERS</h3>
+                    <p class="text-gray-300 text-center font-rog-body">
                         Whether for schools, clubs, or corporate tournaments, Otomono efficiently handles bulk orders with consistent quality control and timely delivery.
                     </p>
                 </div>
 
                 <!-- Branding Solutions -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 service-item">
-                    <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300 service-item">
+                    <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-rog-red">
+                        <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Branding Solutions</h3>
-                    <p class="text-gray-600 text-center">
+                    <h3 class="text-xl font-rog-heading font-bold text-rog-red mb-4 text-center">BRANDING SOLUTIONS</h3>
+                    <p class="text-gray-300 text-center font-rog-body">
                         The company provides comprehensive branding services — including logo creation, team identity design, and promotional apparel — helping brands and teams enhance their visibility and recognition.
                     </p>
                 </div>
 
                 <!-- Customer Support -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 service-item md:col-span-2 lg:col-span-1">
-                    <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300 service-item md:col-span-2 lg:col-span-1">
+                    <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-rog-red">
+                        <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 100 19.5 9.75 9.75 0 000-19.5z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Customer Support</h3>
-                    <p class="text-gray-600 text-center">
+                    <h3 class="text-xl font-rog-heading font-bold text-rog-red mb-4 text-center">CUSTOMER SUPPORT</h3>
+                    <p class="text-gray-300 text-center font-rog-body">
                         Otomono prides itself on responsive, transparent, and professional customer service. From initial consultation to post-delivery follow-up, clients receive dedicated support throughout the process.
                     </p>
                 </div>
@@ -367,27 +447,27 @@
     </section>
 
     <!-- Core Values -->
-    <section class="py-20 bg-white">
+    <section class="py-20 bg-rog-gray">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-800 mb-6">Our Core Values and Principles</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                <h2 class="text-4xl font-rog-display font-bold text-white mb-6 glow">OUR CORE VALUES AND PRINCIPLES</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto font-rog-body">
                     The foundation of our success lies in our unwavering commitment to these core values
                 </p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
                 <!-- Quality Excellence -->
-                <div class="bg-gradient-to-br from-red-50 to-red-100 p-8 rounded-2xl value-card">
+                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300 value-card">
                     <div class="flex items-start space-x-4">
-                        <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-12 h-12 bg-rog-red/20 rounded-full flex items-center justify-center flex-shrink-0 border border-rog-red">
+                            <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-xl font-bold text-gray-800 mb-3">Quality Excellence</h3>
-                            <p class="text-gray-600 leading-relaxed">
+                            <h3 class="text-xl font-rog-heading font-bold text-rog-red mb-3">QUALITY EXCELLENCE</h3>
+                            <p class="text-gray-300 leading-relaxed font-rog-body">
                                 We are committed to delivering top-tier products using premium materials and precise craftsmanship to ensure lasting performance and comfort.
                             </p>
                         </div>
@@ -395,16 +475,16 @@
                 </div>
 
                 <!-- Customer Focus -->
-                <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-2xl value-card">
+                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300 value-card">
                     <div class="flex items-start space-x-4">
-                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-12 h-12 bg-rog-red/20 rounded-full flex items-center justify-center flex-shrink-0 border border-rog-red">
+                            <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-xl font-bold text-gray-800 mb-3">Customer Focus</h3>
-                            <p class="text-gray-600 leading-relaxed">
+                            <h3 class="text-xl font-rog-heading font-bold text-rog-red mb-3">CUSTOMER FOCUS</h3>
+                            <p class="text-gray-300 leading-relaxed font-rog-body">
                                 Our customers are at the heart of everything we do. We prioritize their needs, feedback, and satisfaction in every step of our process.
                             </p>
                         </div>
@@ -412,16 +492,16 @@
                 </div>
 
                 <!-- Innovation & Creativity -->
-                <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-8 rounded-2xl value-card">
+                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300 value-card">
                     <div class="flex items-start space-x-4">
-                        <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-12 h-12 bg-rog-red/20 rounded-full flex items-center justify-center flex-shrink-0 border border-rog-red">
+                            <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-xl font-bold text-gray-800 mb-3">Innovation & Creativity</h3>
-                            <p class="text-gray-600 leading-relaxed">
+                            <h3 class="text-xl font-rog-heading font-bold text-rog-red mb-3">INNOVATION & CREATIVITY</h3>
+                            <p class="text-gray-300 leading-relaxed font-rog-body">
                                 We embrace fresh ideas, modern designs, and advanced technology to create unique, standout sportswear solutions.
                             </p>
                         </div>
@@ -429,16 +509,16 @@
                 </div>
 
                 <!-- Integrity & Reliability -->
-                <div class="bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-2xl value-card">
+                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300 value-card">
                     <div class="flex items-start space-x-4">
-                        <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-12 h-12 bg-rog-red/20 rounded-full flex items-center justify-center flex-shrink-0 border border-rog-red">
+                            <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-xl font-bold text-gray-800 mb-3">Integrity & Reliability</h3>
-                            <p class="text-gray-600 leading-relaxed">
+                            <h3 class="text-xl font-rog-heading font-bold text-rog-red mb-3">INTEGRITY & RELIABILITY</h3>
+                            <p class="text-gray-300 leading-relaxed font-rog-body">
                                 We uphold honesty, transparency, and accountability in all our dealings, building lasting trust with clients, partners, and communities.
                             </p>
                         </div>
@@ -449,57 +529,57 @@
     </section>
 
     <!-- Company Timeline -->
-    <section class="py-20 bg-gray-50">
+    <section class="py-20 bg-rog-dark">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-800 mb-6">Our Journey</h2>
-                <p class="text-xl text-gray-600">
+                <h2 class="text-4xl font-rog-display font-bold text-white mb-6 glow">OUR JOURNEY</h2>
+                <p class="text-xl text-gray-300 font-rog-body">
                     From inception to becoming your reliable jersey partner
                 </p>
             </div>
 
             <div class="space-y-8">
                 <div class="timeline-item">
-                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <div class="bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
                         <div class="flex items-center space-x-4 mb-4">
-                            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                                <span class="text-white font-bold">2024</span>
+                            <div class="w-12 h-12 bg-rog-red/20 rounded-full flex items-center justify-center border border-rog-red">
+                                <span class="text-rog-red font-rog-display font-bold">2024</span>
                             </div>
-                            <h3 class="text-xl font-bold text-gray-800">Company Founded</h3>
+                            <h3 class="text-xl font-rog-heading font-bold text-rog-red">COMPANY FOUNDED</h3>
                         </div>
-                        <p class="text-gray-600">
+                        <p class="text-gray-300 font-rog-body">
                             Otomono Jerseys was established with a vision to provide premium-quality sportswear solutions to athletes, teams, and organizations worldwide.
                         </p>
                     </div>
                 </div>
 
                 <div class="timeline-item">
-                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <div class="bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
                         <div class="flex items-center space-x-4 mb-4">
-                            <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-12 h-12 bg-rog-red/20 rounded-full flex items-center justify-center border border-rog-red">
+                                <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-bold text-gray-800">Global Partnerships</h3>
+                            <h3 class="text-xl font-rog-heading font-bold text-rog-red">GLOBAL PARTNERSHIPS</h3>
                         </div>
-                        <p class="text-gray-600">
+                        <p class="text-gray-300 font-rog-body">
                             Established partnerships with reputed suppliers across the globe, ensuring access to world-class fabrics, materials, and printing technologies.
                         </p>
                     </div>
                 </div>
 
                 <div class="timeline-item">
-                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <div class="bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
                         <div class="flex items-center space-x-4 mb-4">
-                            <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-12 h-12 bg-rog-red/20 rounded-full flex items-center justify-center border border-rog-red">
+                                <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-bold text-gray-800">Innovation & Growth</h3>
+                            <h3 class="text-xl font-rog-heading font-bold text-rog-red">INNOVATION & GROWTH</h3>
                         </div>
-                        <p class="text-gray-600">
+                        <p class="text-gray-300 font-rog-body">
                             Continuously investing in advanced printing methods, creative design capabilities, and customer service excellence to meet evolving market demands.
                         </p>
                     </div>
@@ -509,20 +589,20 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="py-20 bg-black text-center">
+    <section class="py-20 bg-rog-dark text-center">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl font-bold text-white mb-6">
-                Ready to Partner with Us?
+            <h2 class="text-4xl font-rog-display font-bold text-white mb-6 glow">
+                READY TO PARTNER WITH US?
             </h2>
-            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-rog-body">
                 Join thousands of satisfied customers who trust Otomono for their premium jersey needs.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="services.html" class="bg-white text-black px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-gray-100 transition-colors shadow-lg">
-                    View Our Services
+                <a href="services.html" class="bg-rog-light/20 backdrop-blur-sm text-white px-8 py-4 rounded-2xl font-rog-heading font-semibold text-lg hover:bg-rog-light/40 transition-all duration-300 shadow-lg border border-rog-red/30 hover:border-rog-red">
+                    VIEW OUR SERVICES
                 </a>
-                <button id="cta-contact-btn" class="bg-primary text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-red-700 transition-colors shadow-lg">
-                    Contact Us
+                <button id="cta-contact-btn" class="rog-button px-8 py-4 rounded-2xl font-rog-heading font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl">
+                    CONTACT US
                 </button>
             </div>
         </div>
