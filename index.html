@@ -4,12 +4,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Otomono Jerseys - Premium Jersey Design & Printing</title>
+    <title>Otomono Jerseys - Premium Jersey Design & Printing | Custom Sportswear</title>
+    <meta name="description" content="Premium jersey design, printing, and selling services. Quality materials, professional printing, and fast delivery for all your team needs. Custom sportswear solutions.">
+    <meta name="keywords" content="jersey design, custom jerseys, sportswear, team uniforms, printing services, Maldives, Otomono">
+    <meta name="author" content="Otomono Jerseys">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://otomono.vercel.app/">
+    <meta property="og:title" content="Otomono Jerseys - Premium Jersey Design & Printing">
+    <meta property="og:description" content="Premium jersey design, printing, and selling services. Quality materials, professional printing, and fast delivery for all your team needs.">
+    <meta property="og:image" content="https://otomono.vercel.app/public/logo.png">
+    <meta property="og:site_name" content="Otomono Jerseys">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://otomono.vercel.app/">
+    <meta property="twitter:title" content="Otomono Jerseys - Premium Jersey Design & Printing">
+    <meta property="twitter:description" content="Premium jersey design, printing, and selling services. Quality materials, professional printing, and fast delivery for all your team needs.">
+    <meta property="twitter:image" content="https://otomono.vercel.app/public/logo.png">
+
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="public/favicon.png">
+    <link rel="apple-touch-icon" href="public/favicon.png">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://otomono.vercel.app/">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Otomono Jerseys",
+            "url": "https://otomono.vercel.app/",
+            "logo": "https://otomono.vercel.app/public/logo.png",
+            "description": "Premium jersey design, printing, and selling services. Quality materials, professional printing, and fast delivery for all your team needs.",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Noomuraka",
+                "addressLocality": "Manadhoo",
+                "postalCode": "20199",
+                "addressRegion": "Noonu Atoll",
+                "addressCountry": "MV"
+            },
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+960-7XXX-777",
+                "contactType": "customer service",
+                "email": "info@otomono.com"
+            },
+            "sameAs": [
+                "https://otomono.vercel.app/"
+            ],
+            "offers": {
+                "@type": "Offer",
+                "name": "Custom Jersey Design and Printing",
+                "description": "Premium jersey design, printing, and selling services",
+                "category": "Sportswear"
+            }
+        }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID', {
+            page_title: 'Otomono Jerseys - Premium Jersey Design & Printing',
+            page_location: window.location.href
+        });
+    </script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -826,6 +907,57 @@
                     alert('Gmail login would be implemented with Google OAuth API');
                     loginModal.classList.add('hidden');
                 });
+            }
+
+            // Error handling and loading states
+            window.addEventListener('error', function(e) {
+                console.error('Global error:', e.error);
+                // Track errors in analytics
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'exception', {
+                        'description': e.error.message,
+                        'fatal': false
+                    });
+                }
+            });
+
+            // Performance monitoring
+            window.addEventListener('load', function() {
+                // Track page load time
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'timing_complete', {
+                        'name': 'load',
+                        'value': performance.now()
+                    });
+                }
+            });
+
+            // Form validation
+            function validateForm(form) {
+                const inputs = form.querySelectorAll('input[required], textarea[required]');
+                let isValid = true;
+
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        input.classList.add('border-red-500');
+                        isValid = false;
+                    } else {
+                        input.classList.remove('border-red-500');
+                    }
+                });
+
+                return isValid;
+            }
+
+            // Add loading states to buttons
+            function addLoadingState(button) {
+                button.disabled = true;
+                button.innerHTML = '<div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>';
+            }
+
+            function removeLoadingState(button, originalText) {
+                button.disabled = false;
+                button.innerHTML = originalText;
             }
 
         }); // End of DOMContentLoaded
