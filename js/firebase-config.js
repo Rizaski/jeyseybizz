@@ -43,7 +43,10 @@ async function initializeFirebase() {
         });
 
         // Set authentication persistence
-        const { setPersistence, browserLocalPersistence } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+        const {
+            setPersistence,
+            browserLocalPersistence
+        } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
         await setPersistence(auth, browserLocalPersistence);
         console.log('Authentication persistence set to local');
 
@@ -107,31 +110,16 @@ window.FirebaseAuth = {
                 throw new Error('Domain not authorized');
             }
 
-            console.log('Domain authorized, importing signInWithPopup...');
+            console.log('Domain authorized, starting redirect sign-in...');
             const {
-                signInWithPopup
+                signInWithRedirect,
+                getRedirectResult
             } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
 
-            console.log('Starting popup sign-in...');
-            const result = await signInWithPopup(auth, provider);
-
-            const user = result.user;
-            console.log('User signed in successfully:', user);
-
-            // Store user data in localStorage
-            const userData = {
-                uid: user.uid,
-                email: user.email,
-                displayName: user.displayName,
-                photoURL: user.photoURL
-            };
-            localStorage.setItem('user', JSON.stringify(userData));
-            console.log('User data stored in localStorage');
-
-            // Update UI
-            this.updateAuthUI(user);
-
-            return user;
+            console.log('Starting redirect sign-in...');
+            // Use redirect instead of popup
+            await signInWithRedirect(auth, provider);
+            return; // Don't continue as redirect will navigate away
         } catch (error) {
             console.error('Google sign-in error:', error);
             console.error('Error code:', error.code);
@@ -140,9 +128,6 @@ window.FirebaseAuth = {
             // Handle specific Firebase errors
             if (error.code === 'auth/unauthorized-domain') {
                 alert('Authentication domain not authorized. Please contact support or try again later.');
-            } else if (error.code === 'auth/popup-closed-by-user') {
-                console.log('User closed the popup');
-                // Don't show alert for user closing popup
             } else if (error.code === 'auth/internal-error') {
                 console.error('Firebase internal error:', error);
                 alert('Authentication service temporarily unavailable. Please try again later or contact support.');
@@ -150,11 +135,6 @@ window.FirebaseAuth = {
                 alert('Network error. Please check your internet connection and try again.');
             } else if (error.code === 'auth/too-many-requests') {
                 alert('Too many failed attempts. Please try again later.');
-            } else if (error.code === 'auth/popup-blocked') {
-                this.showPopupBlockerInstructions();
-            } else if (error.code === 'auth/cancelled-popup-request') {
-                console.log('Popup request was cancelled');
-                // Don't show alert for cancelled requests
             } else {
                 console.error('Firebase auth error:', error);
                 alert(`Authentication failed: ${error.message}. Please try again.`);
@@ -514,7 +494,7 @@ window.FirebaseAuth = {
 
             onAuthStateChanged(auth, (user) => {
                 console.log('Auth state changed:', user ? 'User signed in' : 'User signed out');
-                
+
                 if (user) {
                     // Store user data with timestamp for session management
                     const userData = {
@@ -532,7 +512,7 @@ window.FirebaseAuth = {
                     localStorage.removeItem('user');
                     console.log('User data cleared');
                 }
-                
+
                 // Update UI immediately
                 this.updateAuthUI(user);
                 callback(user);
@@ -551,7 +531,7 @@ window.FirebaseAuth = {
         const lastSignIn = new Date(userData.lastSignIn);
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        
+
         if (lastSignIn < thirtyDaysAgo) {
             console.log('Session expired (older than 30 days)');
             localStorage.removeItem('user');
@@ -561,11 +541,53 @@ window.FirebaseAuth = {
         return true;
     },
 
+    // Handle redirect result after Google sign-in
+    async handleRedirectResult() {
+        try {
+            await this.init();
+            const { getRedirectResult } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+            
+            const result = await getRedirectResult(auth);
+            if (result) {
+                const user = result.user;
+                console.log('User signed in via redirect:', user.email);
+                
+                // Store user data
+                const userData = {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                    photoURL: user.photoURL,
+                    lastSignIn: new Date().toISOString(),
+                    isAuthenticated: true
+                };
+                localStorage.setItem('user', JSON.stringify(userData));
+                
+                // Update UI
+                this.updateAuthUI(user);
+                
+                // Redirect to customer page
+                window.location.href = 'customer.html';
+                return user;
+            }
+            return null;
+        } catch (error) {
+            console.error('Failed to handle redirect result:', error);
+            return null;
+        }
+    },
+
     // Restore authentication state on page load
     async restoreAuthState() {
         try {
             await this.init();
             
+            // First check for redirect result
+            const redirectUser = await this.handleRedirectResult();
+            if (redirectUser) {
+                return redirectUser;
+            }
+
             // Check if we have a valid session
             if (!this.isSessionValid()) {
                 console.log('No valid session found');
@@ -574,8 +596,10 @@ window.FirebaseAuth = {
             }
 
             // Get current user from Firebase
-            const { onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
-            
+            const {
+                onAuthStateChanged
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+
             return new Promise((resolve) => {
                 const unsubscribe = onAuthStateChanged(auth, (user) => {
                     unsubscribe(); // Unsubscribe after first call
@@ -599,38 +623,33 @@ window.FirebaseAuth = {
     }
 };
 
-    // Initialize Firebase when the page loads
-    document.addEventListener('DOMContentLoaded', async () => {
-        try {
-            console.log('DOM loaded, initializing Firebase...');
-            await window.FirebaseAuth.init();
-            console.log('Firebase initialized, restoring auth state...');
-            
-            // Restore authentication state (persistent login)
-            const user = await window.FirebaseAuth.restoreAuthState();
-            if (user) {
-                console.log('User session restored successfully:', user.email);
-            } else {
-                console.log('No active user session found');
-            }
+// Initialize Firebase when the page loads
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        console.log('DOM loaded, initializing Firebase...');
+        await window.FirebaseAuth.init();
+        console.log('Firebase initialized, restoring auth state...');
 
-            // Check for popup blocker and show warning if needed
-            const isBlocked = await window.FirebaseAuth.detectPopupBlocker();
-            if (isBlocked) {
-                console.log('Popup blocker detected, showing warning...');
-                window.FirebaseAuth.showPopupBlockerWarning();
-            }
-
-            // Listen for auth state changes (for real-time updates)
-            window.FirebaseAuth.onAuthStateChanged((user) => {
-                console.log('Auth state changed:', user ? 'User signed in' : 'User signed out');
-                // UI is already updated in restoreAuthState and onAuthStateChanged
-            });
-        } catch (error) {
-            console.error('Failed to initialize Firebase:', error);
-            console.error('This might be due to network issues or Firebase configuration problems');
+        // Restore authentication state (persistent login)
+        const user = await window.FirebaseAuth.restoreAuthState();
+        if (user) {
+            console.log('User session restored successfully:', user.email);
+        } else {
+            console.log('No active user session found');
         }
-    });
+
+            // No need to check for popup blocker since we're using redirect
+
+        // Listen for auth state changes (for real-time updates)
+        window.FirebaseAuth.onAuthStateChanged((user) => {
+            console.log('Auth state changed:', user ? 'User signed in' : 'User signed out');
+            // UI is already updated in restoreAuthState and onAuthStateChanged
+        });
+    } catch (error) {
+        console.error('Failed to initialize Firebase:', error);
+        console.error('This might be due to network issues or Firebase configuration problems');
+    }
+});
 
 // Add a fallback initialization method
 window.addEventListener('load', async () => {
