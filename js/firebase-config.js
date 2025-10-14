@@ -3,12 +3,13 @@
 
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDrLm4hxslT2H_jaT6eQrAEK8swP55h6_c",
-    authDomain: "jeysey-39fb6.firebaseapp.com",
-    projectId: "jeysey-39fb6",
-    storageBucket: "jeysey-39fb6.firebasestorage.app",
-    messagingSenderId: "71940333413",
-    appId: "1:71940333413:web:c9986db4e5e314d8124b8c"
+    apiKey: "AIzaSyBNWEchdrKX9A2WdMa3VTnpbKgo0_eWqHE",
+    authDomain: "otomono-c9938.firebaseapp.com",
+    projectId: "otomono-c9938",
+    storageBucket: "otomono-c9938.firebasestorage.app",
+    messagingSenderId: "348906539551",
+    appId: "1:348906539551:web:e249c40d0ae9e2964a632a",
+    measurementId: "G-YVL497L1V3"
 };
 
 // Global Firebase instances

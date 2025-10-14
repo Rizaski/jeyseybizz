@@ -1066,7 +1066,7 @@
 
                     // Get current user
                     const user = window.FirebaseAuth ? .getCurrentUser();
-                    const userId = user ? .uid || 'anonymous';
+                    const userId = user ? .uid || 'anonymous;
                     const userName = user ? .displayName || 'Guest';
 
                     // Save message to Firestore
