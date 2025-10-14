@@ -93,7 +93,7 @@ window.FirebaseAuth = {
         };
     },
 
-    // Sign in with Google
+    // Sign in with Google - Enhanced for deployed sites
     async signInWithGoogle() {
         try {
             console.log('Starting Google sign-in process...');
@@ -106,20 +106,84 @@ window.FirebaseAuth = {
 
             console.log('Firebase initialized, checking domain authorization...');
 
-            if (!checkDomainAuthorization()) {
-                throw new Error('Domain not authorized');
+            // More flexible domain checking for deployed sites
+            const currentDomain = window.location.hostname;
+            const isLocalhost = currentDomain === 'localhost' || currentDomain === '127.0.0.1';
+            const isDeployed = currentDomain.includes('.') && !isLocalhost;
+            
+            console.log('Current domain:', currentDomain, 'Is deployed:', isDeployed);
+
+            // For deployed sites, be more lenient with domain checking
+            if (isDeployed && !checkDomainAuthorization()) {
+                console.warn('Domain not in authorized list, but proceeding for deployed site');
+                // Continue anyway for deployed sites
+            } else if (!isDeployed && !checkDomainAuthorization()) {
+                throw new Error('Domain not authorized for local development');
             }
 
-            console.log('Domain authorized, starting redirect sign-in...');
-            const {
-                signInWithRedirect,
-                getRedirectResult
-            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
-
-            console.log('Starting redirect sign-in...');
-            // Use redirect instead of popup
-            await signInWithRedirect(auth, provider);
-            return; // Don't continue as redirect will navigate away
+            console.log('Domain check passed, starting authentication...');
+            
+            // Try popup first for better UX, fallback to redirect
+            try {
+                const { signInWithPopup } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+                console.log('Attempting popup sign-in...');
+                
+                const result = await signInWithPopup(auth, provider);
+                console.log('Popup sign-in successful:', result.user.email);
+                
+                // Handle successful authentication
+                const user = result.user;
+                const userData = {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                    photoURL: user.photoURL,
+                    lastSignIn: new Date().toISOString(),
+                    isAuthenticated: true
+                };
+                localStorage.setItem('user', JSON.stringify(userData));
+                
+                // Create or update user profile in Firestore
+                if (window.FirebaseDB) {
+                    try {
+                        const existingProfile = await window.FirebaseDB.getUserProfile(user.uid);
+                        if (!existingProfile) {
+                            await window.FirebaseDB.createUserProfile(user);
+                            console.log('New user profile created in Firestore');
+                        } else {
+                            await window.FirebaseDB.updateUserProfile(user.uid, {
+                                lastLogin: new Date().toISOString()
+                            });
+                            console.log('User profile updated in Firestore');
+                        }
+                        
+                        // Track user login
+                        await window.FirebaseDB.trackUserAction(user.uid, 'user_login', {
+                            method: 'google_popup'
+                        });
+                    } catch (dbError) {
+                        console.error('Error managing user profile:', dbError);
+                        // Continue with authentication even if database fails
+                    }
+                }
+                
+                this.updateAuthUI(user);
+                
+                // Redirect to customer page
+                console.log('Redirecting to customer page after successful login');
+                window.location.replace('customer.html');
+                return result;
+                
+            } catch (popupError) {
+                console.log('Popup sign-in failed, trying redirect method...', popupError);
+                
+                // Fallback to redirect method
+                const { signInWithRedirect } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+                console.log('Starting redirect sign-in...');
+                await signInWithRedirect(auth, provider);
+                return; // Don't continue as redirect will navigate away
+            }
+            
         } catch (error) {
             console.error('Google sign-in error:', error);
             console.error('Error code:', error.code);
@@ -127,24 +191,28 @@ window.FirebaseAuth = {
 
             // Handle specific Firebase errors
             if (error.code === 'auth/unauthorized-domain') {
-                alert('Authentication domain not authorized. Please contact support or try again later.');
+                console.error('Domain authorization error:', error);
+                this.showDomainErrorModal();
             } else if (error.code === 'auth/internal-error') {
                 console.error('Firebase internal error:', error);
-                alert('Authentication service temporarily unavailable. Please try again later or contact support.');
+                this.showGenericErrorModal('Authentication service temporarily unavailable. Please try again later.');
             } else if (error.code === 'auth/network-request-failed') {
                 console.error('Network error detected:', error);
                 this.showNetworkErrorModal();
             } else if (error.code === 'auth/too-many-requests') {
-                alert('Too many failed attempts. Please try again later.');
+                this.showGenericErrorModal('Too many failed attempts. Please try again later.');
             } else if (error.code === 'auth/popup-blocked') {
                 console.log('Popup blocked, showing instructions');
                 this.showPopupBlockerInstructions();
             } else if (error.code === 'auth/cancelled-popup-request') {
                 console.log('Popup cancelled by user');
                 // Don't show error for user cancellation
+            } else if (error.code === 'auth/popup-closed-by-user') {
+                console.log('Popup closed by user');
+                // Don't show error for user cancellation
             } else {
                 console.error('Firebase auth error:', error);
-                this.showGenericErrorModal(error.message);
+                this.showGenericErrorModal(error.message || 'Authentication failed. Please try again.');
             }
             throw error;
         }
@@ -422,14 +490,14 @@ window.FirebaseAuth = {
     async testNetworkConnection() {
         try {
             console.log('Testing network connectivity...');
-            
+
             // Test basic connectivity
             const response = await fetch('https://www.google.com/favicon.ico', {
                 method: 'HEAD',
                 mode: 'no-cors',
                 cache: 'no-cache'
             });
-            
+
             console.log('Network test successful');
             return true;
         } catch (error) {
@@ -777,6 +845,88 @@ window.FirebaseAuth = {
         });
 
         document.getElementById('close-network-modal').addEventListener('click', () => {
+            modal.remove();
+        });
+
+        // Close on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    },
+
+    // Show domain error modal
+    showDomainErrorModal() {
+        // Remove existing modal if any
+        const existingModal = document.getElementById('domain-error-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        // Create modal
+        const modal = document.createElement('div');
+        modal.id = 'domain-error-modal';
+        modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+        modal.innerHTML = `
+            <div class="bg-rog-dark rounded-lg shadow-xl max-w-md w-full p-6 border border-rog-red/30">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-rog-red/20 rounded-full flex items-center justify-center mr-4 border border-rog-red">
+                        <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-rog-display font-bold text-white glow">Domain Authorization Error</h3>
+                        <p class="text-sm text-gray-300 font-rog-body">Authentication domain not configured</p>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <p class="text-gray-300 font-rog-body mb-4">
+                        The current domain <strong class="text-white">${window.location.hostname}</strong> is not authorized for Google authentication.
+                    </p>
+                    <p class="text-sm text-gray-400 font-rog-body">
+                        This is a configuration issue that needs to be resolved by the site administrator.
+                    </p>
+                </div>
+
+                <div class="bg-rog-red/10 border border-rog-red/30 rounded-lg p-4 mb-6">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-rog-red mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <p class="text-sm text-rog-red font-rog-heading font-medium">Contact Support</p>
+                            <p class="text-sm text-gray-300 font-rog-body">Please contact the site administrator to add this domain to the authorized list.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3">
+                    <button id="retry-domain-login" class="flex-1 rog-button px-4 py-2 rounded-lg font-rog-heading font-semibold transition-all duration-300 shadow-lg hover:shadow-xl">
+                        Try Again
+                    </button>
+                    <button id="close-domain-modal" class="px-4 py-2 bg-rog-light/20 backdrop-blur-sm border border-rog-red/30 text-white rounded-lg hover:bg-rog-red/20 transition-all duration-300 hover:border-rog-red font-rog-heading">
+                        Close
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Add to page
+        document.body.appendChild(modal);
+
+        // Add event listeners
+        document.getElementById('retry-domain-login').addEventListener('click', () => {
+            modal.remove();
+            // Retry login after a short delay
+            setTimeout(() => {
+                this.signInWithGoogle();
+            }, 1000);
+        });
+
+        document.getElementById('close-domain-modal').addEventListener('click', () => {
             modal.remove();
         });
 

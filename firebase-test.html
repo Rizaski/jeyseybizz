@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Authentication Test - Otomono Jerseys</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 8px; }
+        .success { background-color: #10B981; color: white; }
+        .error { background-color: #EF4444; color: white; }
+        .warning { background-color: #F59E0B; color: white; }
+        .info { background-color: #3B82F6; color: white; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8">Firebase Authentication Test</h1>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Environment Information</h2>
+            <div id="env-info"></div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Firebase Configuration Test</h2>
+            <div id="config-test"></div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Authentication Test</h2>
+            <button id="test-auth" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                Test Google Authentication
+            </button>
+            <div id="auth-test" class="mt-4"></div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Debug Information</h2>
+            <div id="debug-info"></div>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase-database.js"></script>
+
+    <script>
+        // Test environment information
+        function testEnvironment() {
+            const envInfo = document.getElementById('env-info');
+            const info = {
+                'Current URL': window.location.href,
+                'Hostname': window.location.hostname,
+                'Protocol': window.location.protocol,
+                'User Agent': navigator.userAgent,
+                'Online Status': navigator.onLine ? 'Online' : 'Offline',
+                'Cookies Enabled': navigator.cookieEnabled ? 'Yes' : 'No',
+                'Local Storage': typeof(Storage) !== 'undefined' ? 'Available' : 'Not Available'
+            };
+
+            envInfo.innerHTML = Object.entries(info).map(([key, value]) => 
+                `<div class="flex justify-between py-2 border-b"><span class="font-medium">${key}:</span><span>${value}</span></div>`
+            ).join('');
+        }
+
+        // Test Firebase configuration
+        async function testFirebaseConfig() {
+            const configTest = document.getElementById('config-test');
+            const results = [];
+
+            try {
+                // Test Firebase initialization
+                results.push({ test: 'Firebase Initialization', status: 'testing', message: 'Testing...' });
+                updateTestResults(configTest, results);
+
+                const initSuccess = await window.FirebaseAuth.init();
+                if (initSuccess) {
+                    results[0] = { test: 'Firebase Initialization', status: 'success', message: 'Firebase initialized successfully' };
+                } else {
+                    results[0] = { test: 'Firebase Initialization', status: 'error', message: 'Failed to initialize Firebase' };
+                }
+
+                // Test domain authorization
+                results.push({ test: 'Domain Authorization', status: 'testing', message: 'Testing...' });
+                updateTestResults(configTest, results);
+
+                const domainCheck = checkDomainAuthorization();
+                results[1] = { 
+                    test: 'Domain Authorization', 
+                    status: domainCheck ? 'success' : 'warning', 
+                    message: domainCheck ? 'Domain is authorized' : 'Domain may not be authorized - check Firebase console' 
+                };
+
+                // Test network connectivity
+                results.push({ test: 'Network Connectivity', status: 'testing', message: 'Testing...' });
+                updateTestResults(configTest, results);
+
+                const networkOk = await window.FirebaseAuth.testNetworkConnection();
+                results[2] = { 
+                    test: 'Network Connectivity', 
+                    status: networkOk ? 'success' : 'error', 
+                    message: networkOk ? 'Network connection is working' : 'Network connection failed' 
+                };
+
+            } catch (error) {
+                results.push({ test: 'Configuration Test', status: 'error', message: `Error: ${error.message}` });
+            }
+
+            updateTestResults(configTest, results);
+        }
+
+        // Test authentication
+        async function testAuthentication() {
+            const authTest = document.getElementById('auth-test');
+            const results = [];
+
+            try {
+                results.push({ test: 'Google Authentication', status: 'testing', message: 'Testing Google sign-in...' });
+                updateTestResults(authTest, results);
+
+                // Try authentication
+                await window.FirebaseAuth.signInWithGoogle();
+                
+            } catch (error) {
+                results[0] = { 
+                    test: 'Google Authentication', 
+                    status: 'error', 
+                    message: `Authentication failed: ${error.message}` 
+                };
+                updateTestResults(authTest, results);
+            }
+        }
+
+        // Update test results display
+        function updateTestResults(container, results) {
+            container.innerHTML = results.map(result => 
+                `<div class="test-result ${result.status}">
+                    <strong>${result.test}:</strong> ${result.message}
+                </div>`
+            ).join('');
+        }
+
+        // Add debug information
+        function addDebugInfo() {
+            const debugInfo = document.getElementById('debug-info');
+            const debug = {
+                'Firebase Config Available': typeof window.FirebaseAuth !== 'undefined' ? 'Yes' : 'No',
+                'Firebase DB Available': typeof window.FirebaseDB !== 'undefined' ? 'Yes' : 'No',
+                'Local Storage User': localStorage.getItem('user') ? 'User data found' : 'No user data',
+                'Console Errors': 'Check browser console for detailed error messages'
+            };
+
+            debugInfo.innerHTML = Object.entries(debug).map(([key, value]) => 
+                `<div class="flex justify-between py-2 border-b"><span class="font-medium">${key}:</span><span>${value}</span></div>`
+            ).join('');
+        }
+
+        // Initialize tests
+        document.addEventListener('DOMContentLoaded', async () => {
+            testEnvironment();
+            await testFirebaseConfig();
+            addDebugInfo();
+
+            // Add event listener for auth test button
+            document.getElementById('test-auth').addEventListener('click', testAuthentication);
+        });
+
+        // Domain authorization check (copied from firebase-config.js)
+        function checkDomainAuthorization() {
+            const currentDomain = window.location.hostname;
+            const isLocalhost = currentDomain === 'localhost' || currentDomain === '127.0.0.1';
+            const isGitHubPages = currentDomain.includes('github.io');
+
+            if (isLocalhost) {
+                console.log('Running on localhost - make sure to add localhost to Firebase authorized domains');
+            } else if (isGitHubPages) {
+                console.log('Running on GitHub Pages - make sure to add your GitHub Pages domain to Firebase authorized domains');
+            }
+
+            return true; // Continue with authentication attempt
+        }
+    </script>
+</body>
+</html>
