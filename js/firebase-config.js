@@ -43,6 +43,14 @@ async function initializeFirebase() {
             prompt: 'select_account'
         });
 
+        // Add Vercel-specific configuration
+        if (window.location.hostname.includes('vercel.app')) {
+            console.log('Vercel deployment detected, applying Vercel-specific configuration');
+            // Ensure proper redirect handling for Vercel
+            provider.addScope('email');
+            provider.addScope('profile');
+        }
+
         // Set authentication persistence
         const {
             setPersistence,
@@ -74,6 +82,7 @@ function checkDomainAuthorization() {
         'github.io',
         'netlify.app',
         'vercel.app',
+        'otomono.vercel.app',
         'firebaseapp.com'
     ];
 
@@ -145,6 +154,10 @@ window.FirebaseAuth = {
             // For deployed sites, be more lenient with domain checking
             if (isDeployed && !checkDomainAuthorization()) {
                 console.warn('Domain not in authorized list, but proceeding for deployed site');
+                // Special handling for Vercel domains
+                if (currentDomain.includes('vercel.app')) {
+                    console.log('Vercel domain detected, using flexible authentication');
+                }
                 // Continue anyway for deployed sites
             } else if (!isDeployed && !checkDomainAuthorization()) {
                 throw new Error('Domain not authorized for local development');
@@ -225,7 +238,13 @@ window.FirebaseAuth = {
             // Handle specific Firebase errors
             if (error.code === 'auth/unauthorized-domain') {
                 console.error('Domain authorization error:', error);
-                this.showDomainErrorModal();
+                // Special handling for Vercel domains
+                if (window.location.hostname.includes('vercel.app')) {
+                    console.log('Vercel domain authorization error - domain needs to be added to Firebase console');
+                    this.showVercelDomainErrorModal();
+                } else {
+                    this.showDomainErrorModal();
+                }
             } else if (error.code === 'auth/internal-error') {
                 console.error('Firebase internal error:', error);
                 this.showGenericErrorModal('Authentication service temporarily unavailable. Please try again later.');
@@ -886,6 +905,70 @@ window.FirebaseAuth = {
             if (e.target === modal) {
                 modal.remove();
             }
+        });
+    },
+
+    // Show Vercel-specific domain error modal
+    showVercelDomainErrorModal() {
+        // Remove existing modal if any
+        const existingModal = document.getElementById('vercel-domain-error-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+        modal.id = 'vercel-domain-error-modal';
+
+        modal.innerHTML = `
+            <div class="bg-rog-dark rounded-2xl shadow-2xl w-full max-w-md p-6 border border-rog-red/30">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-rog-display font-bold text-white glow">Vercel Domain Setup Required</h3>
+                    <button id="close-vercel-modal" class="text-gray-400 hover:text-rog-red transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-rog-light/20 backdrop-blur-sm rounded-lg p-4 border border-rog-red/30">
+                        <h4 class="font-rog-heading font-semibold text-rog-red mb-2">Domain Authorization Required</h4>
+                        <p class="text-sm text-gray-300 font-rog-body">
+                            The Vercel domain <strong class="text-white">${window.location.hostname}</strong> needs to be added to Firebase authorized domains.
+                        </p>
+                    </div>
+                    <div class="space-y-3">
+                        <h4 class="font-rog-heading font-semibold text-white">Steps to Fix:</h4>
+                        <ol class="text-sm text-gray-300 space-y-2 font-rog-body">
+                            <li>1. Go to <a href="https://console.firebase.google.com" target="_blank" class="text-rog-red hover:underline">Firebase Console</a></li>
+                            <li>2. Select your project: <strong class="text-white">otomono-c9938</strong></li>
+                            <li>3. Go to Authentication → Settings → Authorized domains</li>
+                            <li>4. Add: <strong class="text-white">${window.location.hostname}</strong></li>
+                            <li>5. Save and refresh this page</li>
+                        </ol>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button id="retry-vercel-login" class="flex-1 rog-button px-4 py-2 rounded-lg font-rog-heading font-semibold transition-all duration-300 shadow-lg hover:shadow-xl">
+                            Try Again
+                        </button>
+                        <button id="close-vercel-modal" class="px-4 py-2 bg-rog-light/20 backdrop-blur-sm border border-rog-red/30 text-white rounded-lg hover:bg-rog-red/20 transition-all duration-300 hover:border-rog-red font-rog-heading">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Event listeners
+        document.getElementById('retry-vercel-login').addEventListener('click', () => {
+            modal.remove();
+            this.signInWithGoogle();
+        });
+
+        document.getElementById('close-vercel-modal').addEventListener('click', () => {
+            modal.remove();
         });
     },
 
