@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Dashboard - Otomono Jerseys</title>
     <meta name="description" content="Customer dashboard for Otomono Jerseys - Manage your orders and design custom jerseys">
     <meta name="author" content="Otomono Jerseys">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="public/favicon.png">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Global Firebase Authentication -->
     <script src="js/firebase-config.js"></script>
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -44,7 +45,7 @@
             }
         }
     </script>
-    
+
     <style>
         * {
             margin: 0;
@@ -58,11 +59,20 @@
             color: #ffffff;
         }
 
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-family: 'Orbitron', sans-serif;
         }
 
-        p, span, div, a, li {
+        p,
+        span,
+        div,
+        a,
+        li {
             font-family: 'Inter', sans-serif;
         }
 
@@ -121,8 +131,8 @@
             color: #9ca3af;
         }
 
-        .floating-label input:focus + label,
-        .floating-label input:not(:placeholder-shown) + label {
+        .floating-label input:focus+label,
+        .floating-label input:not(:placeholder-shown)+label {
             top: 0.25rem;
             font-size: 0.75rem;
             color: #ff0040;
@@ -241,7 +251,7 @@
                             <p class="text-xs text-gray-500 font-rog-body" id="user-email">user@example.com</p>
                         </div>
                     </div>
-                    
+
                     <!-- Sign Out Button -->
                     <button id="sign-out-btn" class="px-4 py-2 text-sm font-rog-heading text-gray-600 hover:text-rog-red transition-colors border border-gray-300 rounded-lg hover:border-rog-red">
                         Sign Out
@@ -505,4 +515,5 @@
         }
     </script>
 </body>
+
 </html>

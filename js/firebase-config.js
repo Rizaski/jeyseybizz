@@ -140,21 +140,7 @@ window.FirebaseAuth = {
                 // Don't show alert for user closing popup
             } else if (error.code === 'auth/internal-error') {
                 console.error('Firebase internal error:', error);
-                console.error('This might be due to Firebase configuration issues or network problems');
-                
-                // Try to reinitialize Firebase
-                console.log('Attempting to reinitialize Firebase...');
-                try {
-                    await this.init();
-                    console.log('Firebase reinitialized successfully');
-                    alert('Authentication service was temporarily unavailable. Please try signing in again.');
-                } catch (reinitError) {
-                    console.error('Failed to reinitialize Firebase:', reinitError);
-                    alert('Authentication service temporarily unavailable. Please refresh the page and try again.');
-                }
-                
-                // Don't throw error, let user try again
-                return;
+                alert('Authentication service temporarily unavailable. Please try again later or contact support.');
             } else if (error.code === 'auth/network-request-failed') {
                 alert('Network error. Please check your internet connection and try again.');
             } else if (error.code === 'auth/too-many-requests') {
@@ -208,19 +194,18 @@ window.FirebaseAuth = {
         const profileButtons = document.querySelectorAll('#profile-btn');
         profileButtons.forEach(button => {
             if (userData) {
-                // User is signed in - show Account button that redirects to customer page
+                // User is signed in - show Account dropdown
                 button.innerHTML = `
-                    <svg class="w-5 h-5 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
-                    <span class="text-white font-rog-heading font-medium">Account</span>
                     <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-rog-dark text-rog-red text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red">
-                        Go to Dashboard
+                        ${userData.displayName || userData.email}
                     </div>
                 `;
                 button.onclick = () => {
-                    // Redirect to customer page
-                    window.location.href = 'customer.html';
+                    // Show dropdown menu
+                    this.toggleAccountDropdown(button);
                 };
             } else {
                 // User is not signed in
@@ -236,11 +221,10 @@ window.FirebaseAuth = {
             }
         });
 
-        // Update mobile menu buttons - show Account and Logout options
+        // Update mobile menu buttons
         const mobileButtons = document.querySelectorAll('#mobile-gmail-login');
         mobileButtons.forEach(button => {
             if (userData) {
-                // User is signed in - show Account and Logout options
                 button.innerHTML = `
                     <svg class="w-5 h-5 text-rog-red mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -261,79 +245,72 @@ window.FirebaseAuth = {
                 button.onclick = () => this.signInWithGoogle();
             }
         });
-
-        // Update staff login button to show logout when signed in
-        this.updateStaffLogoutButton(userData);
-
-        // Add logout button to mobile menu if user is signed in
-        this.updateMobileLogoutButton(userData);
     },
 
-    // Update staff login button to show logout when signed in
-    updateStaffLogoutButton(userData) {
-        const staffButtons = document.querySelectorAll('#staff-login-btn');
-        staffButtons.forEach(button => {
-            if (userData) {
-                // User is signed in - show logout button
-                button.innerHTML = `
-                    <svg class="w-5 h-5 text-white group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    // Toggle account dropdown
+    toggleAccountDropdown(button) {
+        // Remove existing dropdown
+        const existingDropdown = document.getElementById('account-dropdown');
+        if (existingDropdown) {
+            existingDropdown.remove();
+            return;
+        }
+
+        // Create dropdown menu
+        const dropdown = document.createElement('div');
+        dropdown.id = 'account-dropdown';
+        dropdown.className = 'absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50';
+        dropdown.innerHTML = `
+            <div class="py-2">
+                <div class="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
+                    <div class="font-semibold">${this.getCurrentUser()?.displayName || 'User'}</div>
+                    <div class="text-gray-500">${this.getCurrentUser()?.email || ''}</div>
+                </div>
+                <a href="customer.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Account Dashboard
+                </a>
+                <a href="designer-studio.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Jersey Designer
+                </a>
+                <div class="border-t border-gray-100"></div>
+                <button onclick="window.FirebaseAuth.signOut()" class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
-                    <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-rog-dark text-rog-red text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red">
-                        Logout
-                    </div>
-                `;
-                button.onclick = () => this.signOut();
-            } else {
-                // User is not signed in - show staff login
-                button.innerHTML = `
-                    <svg class="w-5 h-5 text-white group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                    <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-rog-dark text-rog-red text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red">
-                        Staff Login
-                    </div>
-                `;
-                button.onclick = () => {
-                    // Original staff login functionality
-                    console.log('Staff login clicked');
-                };
-            }
-        });
-    },
+                    Sign Out
+                </button>
+            </div>
+        `;
 
-    // Update mobile logout button
-    updateMobileLogoutButton(userData) {
-        // Find existing logout button or create one
-        let logoutButton = document.getElementById('mobile-logout-btn');
+        // Position dropdown relative to button
+        const buttonRect = button.getBoundingClientRect();
+        dropdown.style.position = 'absolute';
+        dropdown.style.top = '100%';
+        dropdown.style.right = '0';
+        dropdown.style.marginTop = '0.5rem';
 
-        if (userData) {
-            // User is signed in - show logout button
-            if (!logoutButton) {
-                // Create logout button
-                const mobileMenu = document.querySelector('#mobile-menu nav');
-                if (mobileMenu) {
-                    const logoutBtn = document.createElement('button');
-                    logoutBtn.id = 'mobile-logout-btn';
-                    logoutBtn.className = 'w-full flex items-center justify-center px-4 py-3 bg-red-600/20 backdrop-blur-sm rounded-lg hover:bg-red-600/30 transition-all duration-300 border border-red-600/30 hover:border-red-600';
-                    logoutBtn.innerHTML = `
-                        <svg class="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
-                        <span class="text-red-600 font-rog-heading font-medium">Logout</span>
-                    `;
-                    logoutBtn.onclick = () => this.signOut();
-                    mobileMenu.appendChild(logoutBtn);
-                }
-            } else {
-                logoutButton.style.display = 'block';
+        // Add to button's parent (which should be relative positioned)
+        button.parentElement.style.position = 'relative';
+        button.parentElement.appendChild(dropdown);
+
+        // Close dropdown when clicking outside
+        const closeDropdown = (event) => {
+            if (!dropdown.contains(event.target) && !button.contains(event.target)) {
+                dropdown.remove();
+                document.removeEventListener('click', closeDropdown);
             }
-        } else {
-            // User is not signed in - hide logout button
-            if (logoutButton) {
-                logoutButton.style.display = 'none';
-            }
-        }
+        };
+
+        // Add click outside listener after a short delay
+        setTimeout(() => {
+            document.addEventListener('click', closeDropdown);
+        }, 100);
     },
 
     // Listen for authentication state changes
