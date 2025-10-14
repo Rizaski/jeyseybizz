@@ -165,70 +165,8 @@ window.FirebaseAuth = {
 
             console.log('Domain check passed, starting authentication...');
 
-            // Try popup first for better UX, fallback to redirect
-            try {
-                const {
-                    signInWithPopup
-                } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
-                console.log('Attempting popup sign-in...');
-
-                const result = await signInWithPopup(auth, provider);
-                console.log('Popup sign-in successful:', result.user.email);
-
-                // Handle successful authentication
-                const user = result.user;
-                const userData = {
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: user.displayName,
-                    photoURL: user.photoURL,
-                    lastSignIn: new Date().toISOString(),
-                    isAuthenticated: true
-                };
-                localStorage.setItem('user', JSON.stringify(userData));
-
-                // Create or update user profile in Firestore
-                if (window.FirebaseDB) {
-                    try {
-                        const existingProfile = await window.FirebaseDB.getUserProfile(user.uid);
-                        if (!existingProfile) {
-                            await window.FirebaseDB.createUserProfile(user);
-                            console.log('New user profile created in Firestore');
-                        } else {
-                            await window.FirebaseDB.updateUserProfile(user.uid, {
-                                lastLogin: new Date().toISOString()
-                            });
-                            console.log('User profile updated in Firestore');
-                        }
-
-                        // Track user login
-                        await window.FirebaseDB.trackUserAction(user.uid, 'user_login', {
-                            method: 'google_popup'
-                        });
-                    } catch (dbError) {
-                        console.error('Error managing user profile:', dbError);
-                        // Continue with authentication even if database fails
-                    }
-                }
-
-                this.updateAuthUI(user);
-
-                // Redirect to customer page
-                console.log('Redirecting to customer page after successful login');
-                window.location.replace('customer.html');
-                return result;
-
-            } catch (popupError) {
-                console.log('Popup sign-in failed, trying redirect method...', popupError);
-
-                // Fallback to redirect method
-                const {
-                    signInWithRedirect
-                } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
-                console.log('Starting redirect sign-in...');
-                await signInWithRedirect(auth, provider);
-                return; // Don't continue as redirect will navigate away
-            }
+            // Show sign-up popup first, then redirect to sign-in
+            this.showSignUpPopup();
 
         } catch (error) {
             console.error('Google sign-in error:', error);
@@ -906,6 +844,174 @@ window.FirebaseAuth = {
                 modal.remove();
             }
         });
+    },
+
+    // Show sign-up popup first, then redirect to sign-in
+    showSignUpPopup() {
+        // Remove existing modal if any
+        const existingModal = document.getElementById('signup-popup-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+        modal.id = 'signup-popup-modal';
+
+        modal.innerHTML = `
+            <div class="bg-rog-dark rounded-2xl shadow-2xl w-full max-w-md p-6 border border-rog-red/30">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-rog-red">
+                        <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-rog-display font-bold text-white glow mb-2">Welcome to Otomono</h3>
+                    <p class="text-gray-300 font-rog-body">Create your account to access premium jersey designs</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="bg-rog-light/20 backdrop-blur-sm rounded-lg p-4 border border-rog-red/30">
+                        <h4 class="font-rog-heading font-semibold text-rog-red mb-2">Get Started</h4>
+                        <p class="text-sm text-gray-300 font-rog-body">
+                            Sign up with your Google account to access our designer studio and track your orders.
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <h4 class="font-rog-heading font-semibold text-white">What you'll get:</h4>
+                        <ul class="text-sm text-gray-300 space-y-2 font-rog-body">
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-4 h-4 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>3D Jersey Designer Studio</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-4 h-4 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Order History & Tracking</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-4 h-4 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Save & Share Designs</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-4 h-4 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Priority Customer Support</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button id="signup-with-google" class="flex-1 rog-button px-4 py-3 rounded-lg font-rog-heading font-semibold transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                            </svg>
+                            <span>Sign Up with Google</span>
+                        </button>
+                        <button id="close-signup-popup" class="px-4 py-3 bg-rog-light/20 backdrop-blur-sm border border-rog-red/30 text-white rounded-lg hover:bg-rog-red/20 transition-all duration-300 hover:border-rog-red font-rog-heading">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Event listeners
+        document.getElementById('signup-with-google').addEventListener('click', () => {
+            modal.remove();
+            this.proceedWithGoogleSignIn();
+        });
+
+        document.getElementById('close-signup-popup').addEventListener('click', () => {
+            modal.remove();
+        });
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    },
+
+    // Proceed with Google sign-in after sign-up popup
+    async proceedWithGoogleSignIn() {
+        try {
+            // Try popup first for better UX, fallback to redirect
+            const {
+                signInWithPopup
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+            console.log('Attempting popup sign-in...');
+
+            const result = await signInWithPopup(auth, provider);
+            console.log('Popup sign-in successful:', result.user.email);
+
+            // Handle successful authentication
+            const user = result.user;
+            const userData = {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+                lastSignIn: new Date().toISOString(),
+                isAuthenticated: true
+            };
+            localStorage.setItem('user', JSON.stringify(userData));
+
+            // Create or update user profile in Firestore
+            if (window.FirebaseDB) {
+                try {
+                    const existingProfile = await window.FirebaseDB.getUserProfile(user.uid);
+                    if (!existingProfile) {
+                        await window.FirebaseDB.createUserProfile(user);
+                        console.log('New user profile created in Firestore');
+                    } else {
+                        await window.FirebaseDB.updateUserProfile(user.uid, {
+                            lastLogin: new Date().toISOString()
+                        });
+                        console.log('User profile updated in Firestore');
+                    }
+
+                    // Track user login
+                    await window.FirebaseDB.trackUserAction(user.uid, 'user_login', {
+                        method: 'google_popup'
+                    });
+                } catch (dbError) {
+                    console.error('Error managing user profile:', dbError);
+                    // Continue with authentication even if database fails
+                }
+            }
+
+            this.updateAuthUI(user);
+
+            // Redirect to customer page
+            console.log('Redirecting to customer page after successful login');
+            window.location.replace('customer.html');
+            return result;
+
+        } catch (popupError) {
+            console.log('Popup sign-in failed, trying redirect method...', popupError);
+
+            // Fallback to redirect method
+            const {
+                signInWithRedirect
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+            console.log('Starting redirect sign-in...');
+            await signInWithRedirect(auth, provider);
+            return; // Don't continue as redirect will navigate away
+        }
     },
 
     // Show Vercel-specific domain error modal
