@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jersey Designer Studio - Otomono Jerseys</title>
+    <meta name="description" content="Design custom jerseys with our advanced 3D designer studio">
+    <meta name="author" content="Otomono Jerseys">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="public/favicon.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Three.js for 3D rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <!-- Global Firebase Authentication -->
+    <script src="js/firebase-config.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ff0040',
+                        secondary: '#1a1a1a',
+                        accent: '#ff0040',
+                        'rog-red': '#ff0040',
+                        'rog-dark': '#0a0a0a',
+                        'rog-gray': '#1a1a1a',
+                        'rog-light': '#1a1a1a',
+                    },
+                    fontFamily: {
+                        'rog-heading': ['Orbitron', 'sans-serif'],
+                        'rog-body': ['Inter', 'sans-serif'],
+                        'rog-display': ['Orbitron', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        p, span, div, a, li {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .rog-heading {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .rog-body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .rog-display {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px rgba(255, 0, 64, 0.5);
+        }
+
+        .hover\:glow:hover {
+            text-shadow: 0 0 15px rgba(255, 0, 64, 0.7);
+        }
+
+        .rog-button {
+            background: linear-gradient(135deg, #ff0040, #dc143c);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 0, 64, 0.3);
+        }
+
+        .rog-button:hover {
+            background: linear-gradient(135deg, #dc143c, #b91c3c);
+            box-shadow: 0 6px 20px rgba(255, 0, 64, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .tool-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            width: 4rem;
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+        }
+
+        .tool-button:hover {
+            background-color: #1f2937;
+            color: white;
+        }
+
+        .tool-button.active {
+            background: linear-gradient(135deg, #dc2626, #b91c3c);
+            color: white;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .form-input {
+            background-color: #1a1a1a;
+            border: 1px solid #374151;
+            color: white;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ff0040;
+            box-shadow: 0 0 0 3px rgba(255, 0, 64, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #6b7280;
+        }
+
+        .template-card {
+            border: 2px solid #374151;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            background-color: rgba(26, 26, 26, 0.5);
+            cursor: pointer;
+        }
+
+        .template-card:hover {
+            border-color: #ff0040;
+        }
+
+        .template-card.selected {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.3);
+            background-color: #1f2937;
+        }
+
+        .pattern-card {
+            border: 2px solid #374151;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            background-color: rgba(26, 26, 26, 0.5);
+            cursor: pointer;
+        }
+
+        .pattern-card:hover {
+            border-color: #ff0040;
+        }
+
+        .pattern-card.selected {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.3);
+            background-color: #1f2937;
+        }
+
+        .jersey-preview {
+            width: 4rem;
+            height: 5rem;
+            border-radius: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .color-input {
+            width: 5rem;
+            height: 2.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .color-input::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .color-input::-webkit-color-swatch {
+            border: none;
+            border-radius: 0.5rem;
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+        }
+
+        .canvas-controls {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 10;
+        }
+
+        .canvas-controls-right {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 10;
+        }
+
+        .canvas-controls-bottom {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 10;
+        }
+
+        .control-button {
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .control-button:hover {
+            background-color: #374151;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .control-button.rog-button {
+            background: linear-gradient(135deg, #dc2626, #b91c3c);
+            border: none;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .control-button.rog-button:hover {
+            background: linear-gradient(135deg, #b91c3c, #991b1b);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+        }
+
+        .sidebar {
+            width: 24rem;
+            background-color: #1f2937;
+            border-right: 1px solid #374151;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .toolbar {
+            width: 5rem;
+            background-color: #1f2937;
+            border-right: 1px solid #374151;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 0;
+            gap: 1rem;
+        }
+
+        .upload-area {
+            border: 2px dashed #6b7280;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            background-color: rgba(26, 26, 26, 0.5);
+        }
+
+        .upload-area:hover {
+            border-color: #ff0040;
+            background-color: rgba(255, 0, 64, 0.05);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* 3D Canvas Styles */
+        #jersey-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 3rem;
+            height: 3rem;
+            border: 3px solid #374151;
+            border-top: 3px solid #ff0040;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-rog-dark text-white">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <img src="public/logo.png" alt="Otomono Logo" class="h-8 w-auto" />
+                    <span class="ml-3 text-xl font-rog-display font-bold text-gray-900">Otomono</span>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="customer.html" class="text-gray-600 hover:text-rog-red transition-colors font-rog-heading">Dashboard</a>
+                    <a href="index.html" class="text-gray-600 hover:text-rog-red transition-colors font-rog-heading">Home</a>
+                    <a href="services.html" class="text-gray-600 hover:text-rog-red transition-colors font-rog-heading">Services</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-rog-red transition-colors font-rog-heading">Contact</a>
+                </nav>
+
+                <!-- User Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- User Profile -->
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-rog-red rounded-full flex items-center justify-center">
+                            <span class="text-white text-sm font-rog-heading font-bold" id="user-initial">U</span>
+                        </div>
+                        <div class="hidden sm:block">
+                            <p class="text-sm font-rog-heading font-semibold text-gray-900" id="user-name">User Name</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Sign Out Button -->
+                    <button id="sign-out-btn" class="px-4 py-2 text-sm font-rog-heading text-gray-600 hover:text-rog-red transition-colors border border-gray-300 rounded-lg hover:border-rog-red">
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Designer Interface -->
+    <div class="flex h-screen">
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <button class="tool-button active" data-tool="design">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                <span class="text-xs font-medium">Design</span>
+            </button>
+            <button class="tool-button" data-tool="color">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
+                </svg>
+                <span class="text-xs font-medium">Color</span>
+            </button>
+            <button class="tool-button" data-tool="pattern">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                </svg>
+                <span class="text-xs font-medium">Pattern</span>
+            </button>
+            <button class="tool-button" data-tool="number">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                </svg>
+                <span class="text-xs font-medium">Number</span>
+            </button>
+            <button class="tool-button" data-tool="name">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span class="text-xs font-medium">Name</span>
+            </button>
+            <button class="tool-button" data-tool="text">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                </svg>
+                <span class="text-xs font-medium">Text</span>
+            </button>
+            <button class="tool-button" data-tool="logo">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span class="text-xs font-medium">Logo</span>
+            </button>
+
+            <div class="mt-auto flex flex-col gap-2">
+                <button class="control-button" id="undo-btn">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                    </svg>
+                </button>
+                <button class="control-button" id="redo-btn">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10h7a8 8 0 018 8v2M13 10l-6 6m6-6l-6-6" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="p-6">
+                <!-- Design Tool Panel -->
+                <div id="design-panel" class="tool-panel">
+                    <div class="mb-6">
+                        <h2 class="text-lg font-rog-display font-semibold text-white mb-2">Select Design</h2>
+                        <p class="text-sm text-gray-400 font-rog-body">Choose a standard design</p>
+                    </div>
+
+                    <div class="flex gap-2 border-b border-gray-700 mb-4">
+                        <button class="px-4 py-2 text-sm font-medium text-rog-red border-b-2 border-rog-red">Designs</button>
+                        <button class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white">Best Designs</button>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <div class="template-card selected" data-template="0">
+                            <div class="aspect-square bg-rog-dark rounded flex items-center justify-center mb-2">
+                                <div class="jersey-preview" style="background: linear-gradient(135deg, #1e40af 60%, #ffffff 60%);"></div>
+                            </div>
+                            <p class="text-xs font-medium text-gray-300">Classic Stripes</p>
+                        </div>
+                        <div class="template-card" data-template="1">
+                            <div class="aspect-square bg-rog-dark rounded flex items-center justify-center mb-2">
+                                <div class="jersey-preview" style="background: linear-gradient(135deg, #dc2626 60%, #ffffff 60%);"></div>
+                            </div>
+                            <p class="text-xs font-medium text-gray-300">Bold Red</p>
+                        </div>
+                        <div class="template-card" data-template="2">
+                            <div class="aspect-square bg-rog-dark rounded flex items-center justify-center mb-2">
+                                <div class="jersey-preview" style="background: linear-gradient(135deg, #16a34a 60%, #ffffff 60%);"></div>
+                            </div>
+                            <p class="text-xs font-medium text-gray-300">Forest Green</p>
+                        </div>
+                        <div class="template-card" data-template="3">
+                            <div class="aspect-square bg-rog-dark rounded flex items-center justify-center mb-2">
+                                <div class="jersey-preview" style="background: linear-gradient(135deg, #000000 60%, #fbbf24 60%);"></div>
+                            </div>
+                            <p class="text-xs font-medium text-gray-300">Black & Gold</p>
+                        </div>
+                    </div>
+
+                    <button class="w-full bg-rog-dark border border-gray-700 text-white hover:bg-gray-700 transition-colors rounded-lg py-2 px-4 font-rog-heading">
+                        <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        Add Product
+                    </button>
+                </div>
+
+                <!-- Color Tool Panel -->
+                <div id="color-panel" class="tool-panel hidden">
+                    <div class="mb-6">
+                        <h2 class="text-lg font-rog-display font-semibold text-white mb-2">Color Customization</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <label class="text-gray-300 font-rog-body">Primary Jersey Color</label>
+                            <div class="flex gap-2">
+                                <input type="color" id="jersey-color" value="#1e40af" class="color-input">
+                                <input type="text" id="jersey-color-text" value="#1e40af" class="form-input flex-1">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-gray-300 font-rog-body">Secondary Color</label>
+                            <div class="flex gap-2">
+                                <input type="color" id="secondary-color" value="#ffffff" class="color-input">
+                                <input type="text" id="secondary-color-text" value="#ffffff" class="form-input flex-1">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-gray-300 font-rog-body">Text Color</label>
+                            <div class="flex gap-2">
+                                <input type="color" id="text-color" value="#ffffff" class="color-input">
+                                <input type="text" id="text-color-text" value="#ffffff" class="form-input flex-1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pattern Tool Panel -->
+                <div id="pattern-panel" class="tool-panel hidden">
+                    <div class="mb-6">
+                        <h2 class="text-lg font-rog-display font-semibold text-white mb-2">Select Pattern</h2>
+                        <p class="text-sm text-gray-400 font-rog-body">Choose a jersey pattern</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="pattern-card selected" data-pattern="solid">
+                            <div class="aspect-square bg-rog-dark rounded flex items-center justify-center mb-2">
+                                <div class="jersey-preview" style="background: #1e40af;"></div>
+                            </div>
+                            <p class="text-xs font-medium text-gray-300">Solid</p>
+                        </div>
+                        <div class="pattern-card" data-pattern="vertical-stripes">
+                            <div class="aspect-square bg-rog-dark rounded flex items-center justify-center mb-2">
+                                <div class="jersey-preview" style="background: linear-gradient(90deg, #1e40af 0%, #1e40af 45%, #ffffff 45%, #ffffff 55%, #1e40af 55%, #1e40af 100%);"></div>
+                            </div>
+                            <p class="text-xs font-medium text-gray-300">Vertical Stripes</p>
+                        </div>
+                        <div class="pattern-card" data-pattern="horizontal-stripes">
+                            <div class="aspect-square bg-rog-dark rounded flex items-center justify-center mb-2">
+                                <div class="jersey-preview" style="background: linear-gradient(180deg, #1e40af 0%, #1e40af 45%, #ffffff 45%, #ffffff 55%, #1e40af 55%, #1e40af 100%);"></div>
+                            </div>
+                            <p class="text-xs font-medium text-gray-300">Horizontal Stripes</p>
+                        </div>
+                        <div class="pattern-card" data-pattern="gradient">
+                            <div class="aspect-square bg-rog-dark rounded flex items-center justify-center mb-2">
+                                <div class="jersey-preview" style="background: linear-gradient(135deg, #1e40af, #ffffff);"></div>
+                            </div>
+                            <p class="text-xs font-medium text-gray-300">Gradient</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Number Tool Panel -->
+                <div id="number-panel" class="tool-panel hidden">
+                    <div class="mb-6">
+                        <h2 class="text-lg font-rog-display font-semibold text-white mb-2">Player Number</h2>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-gray-300 font-rog-body">Number (Front)</label>
+                        <input type="text" id="player-number" value="10" maxlength="2" class="form-input text-2xl text-center font-bold" placeholder="00">
+                        <p class="text-sm text-gray-400 font-rog-body">Enter a number between 0-99</p>
+                    </div>
+                </div>
+
+                <!-- Name Tool Panel -->
+                <div id="name-panel" class="tool-panel hidden">
+                    <div class="mb-6">
+                        <h2 class="text-lg font-rog-display font-semibold text-white mb-2">Player Name</h2>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-gray-300 font-rog-body">Name (Front)</label>
+                        <input type="text" id="player-name" value="PLAYER" maxlength="15" class="form-input" placeholder="Enter player name">
+                        <p class="text-sm text-gray-400 font-rog-body">Maximum 15 characters</p>
+                    </div>
+                </div>
+
+                <!-- Text Tool Panel -->
+                <div id="text-panel" class="tool-panel hidden">
+                    <div class="mb-6">
+                        <h2 class="text-lg font-rog-display font-semibold text-white mb-2">Team Text</h2>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-gray-300 font-rog-body">Team Name (Front)</label>
+                        <input type="text" id="team-name" value="TEAM NAME" maxlength="20" class="form-input" placeholder="Enter team name">
+                        <p class="text-sm text-gray-400 font-rog-body">Maximum 20 characters</p>
+                    </div>
+                </div>
+
+                <!-- Logo Tool Panel -->
+                <div id="logo-panel" class="tool-panel hidden">
+                    <div class="mb-6">
+                        <h2 class="text-lg font-rog-display font-semibold text-white mb-2">Team Logo</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="upload-area">
+                            <input type="file" id="logo-upload" accept="image/*" class="hidden">
+                            <label for="logo-upload" class="cursor-pointer">
+                                <svg class="h-10 w-10 mx-auto mb-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                </svg>
+                                <p class="text-sm font-medium text-gray-300">Click to upload</p>
+                                <p class="text-xs text-gray-500 mt-1">PNG, JPG, SVG up to 5MB</p>
+                            </label>
+                        </div>
+
+                        <div id="logo-preview" class="hidden">
+                            <label class="text-gray-300 font-rog-body">Logo Preview</label>
+                            <div class="border border-gray-700 rounded-lg p-4 bg-rog-dark mt-2">
+                                <img id="logo-image" src="" alt="Team logo" class="max-h-32 mx-auto object-contain">
+                            </div>
+                            <button id="remove-logo" class="w-full bg-rog-dark border border-gray-700 text-white hover:bg-gray-700 transition-colors rounded-lg py-2 px-4 font-rog-heading mt-2">
+                                Remove Logo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3D Canvas Area -->
+        <div class="flex-1 canvas-container">
+            <canvas id="jersey-canvas"></canvas>
+            <div class="loading-spinner" id="loading-spinner"></div>
+            
+            <!-- Canvas Controls -->
+            <div class="canvas-controls">
+                <button id="flip-view" class="control-button rog-button">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    View Back
+                </button>
+            </div>
+
+            <div class="canvas-controls-right">
+                <button class="control-button" id="reset-camera">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                </button>
+                <button class="control-button" id="zoom-in">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                    </svg>
+                </button>
+                <button class="control-button" id="zoom-out">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="canvas-controls-bottom">
+                <button id="download-png" class="control-button rog-button">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Download PNG
+                </button>
+                <button id="download-pdf" class="control-button">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Download PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Jersey Designer State
+        const jerseyState = {
+            activeTool: 'design',
+            view: 'front',
+            jerseyColor: '#1e40af',
+            secondaryColor: '#ffffff',
+            playerName: 'PLAYER',
+            playerNumber: '10',
+            teamName: 'TEAM NAME',
+            logo: null,
+            textColor: '#ffffff',
+            selectedTemplate: 0,
+            selectedPattern: 'solid'
+        };
+
+        // Templates
+        const templates = [
+            { id: 0, name: "Classic Stripes", primary: "#1e40af", secondary: "#ffffff" },
+            { id: 1, name: "Bold Red", primary: "#dc2626", secondary: "#ffffff" },
+            { id: 2, name: "Forest Green", primary: "#16a34a", secondary: "#ffffff" },
+            { id: 3, name: "Black & Gold", primary: "#000000", secondary: "#fbbf24" }
+        ];
+
+        // Three.js Scene Setup
+        let scene, camera, renderer, controls;
+        let jerseyMesh, logoMesh;
+
+        // Initialize the designer
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            const user = window.FirebaseAuth.getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            updateUserInfo(user);
+            initializeDesigner();
+            setupEventListeners();
+        });
+
+        function updateUserInfo(user) {
+            const userName = document.getElementById('user-name');
+            const userInitial = document.getElementById('user-initial');
+
+            if (userName) {
+                userName.textContent = user.displayName || 'User';
+            }
+            if (userInitial) {
+                userInitial.textContent = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+            }
+        }
+
+        function initializeDesigner() {
+            // Initialize Three.js scene
+            const canvas = document.getElementById('jersey-canvas');
+            const container = canvas.parentElement;
+            
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setClearColor(0x0a0a0a);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+            // Setup camera
+            camera.position.set(0, 0, 6);
+
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+            scene.add(ambientLight);
+
+            const spotLight = new THREE.SpotLight(0xffffff, 2, 20, Math.PI / 6, 1, 1);
+            spotLight.position.set(5, 8, 5);
+            spotLight.castShadow = true;
+            spotLight.shadow.mapSize.width = 2048;
+            spotLight.shadow.mapSize.height = 2048;
+            scene.add(spotLight);
+
+            // Create jersey mesh
+            createJerseyMesh();
+
+            // Setup controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enablePan = false;
+            controls.minDistance = 4;
+            controls.maxDistance = 10;
+            controls.minPolarAngle = Math.PI / 4;
+            controls.maxPolarAngle = Math.PI / 1.5;
+
+            // Start render loop
+            animate();
+
+            // Hide loading spinner
+            document.getElementById('loading-spinner').style.display = 'none';
+        }
+
+        function createJerseyMesh() {
+            // Create jersey geometry (simplified)
+            const jerseyGeometry = new THREE.BoxGeometry(2.8, 3.2, 0.4);
+            const jerseyMaterial = new THREE.MeshStandardMaterial({
+                color: jerseyState.jerseyColor,
+                roughness: 0.85,
+                metalness: 0.05
+            });
+
+            jerseyMesh = new THREE.Mesh(jerseyGeometry, jerseyMaterial);
+            jerseyMesh.castShadow = true;
+            jerseyMesh.receiveShadow = true;
+            scene.add(jerseyMesh);
+
+            // Add collar
+            const collarGeometry = new THREE.CylinderGeometry(0.45, 0.5, 0.25, 32);
+            const collarMaterial = new THREE.MeshStandardMaterial({ color: jerseyState.secondaryColor });
+            const collar = new THREE.Mesh(collarGeometry, collarMaterial);
+            collar.position.set(0, 1.6, 0);
+            collar.castShadow = true;
+            scene.add(collar);
+
+            // Add sleeves
+            const sleeveGeometry = new THREE.CylinderGeometry(0.35, 0.45, 1.6, 16);
+            const sleeveMaterial = new THREE.MeshStandardMaterial({ color: jerseyState.jerseyColor });
+            
+            const leftSleeve = new THREE.Mesh(sleeveGeometry, sleeveMaterial);
+            leftSleeve.position.set(-1.7, 0.9, 0);
+            leftSleeve.rotation.z = -0.4;
+            leftSleeve.castShadow = true;
+            scene.add(leftSleeve);
+
+            const rightSleeve = new THREE.Mesh(sleeveGeometry, sleeveMaterial);
+            rightSleeve.position.set(1.7, 0.9, 0);
+            rightSleeve.rotation.z = 0.4;
+            rightSleeve.castShadow = true;
+            scene.add(rightSleeve);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        function setupEventListeners() {
+            // Tool buttons
+            document.querySelectorAll('.tool-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const tool = this.dataset.tool;
+                    setActiveTool(tool);
+                });
+            });
+
+            // Template selection
+            document.querySelectorAll('.template-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const templateId = parseInt(this.dataset.template);
+                    selectTemplate(templateId);
+                });
+            });
+
+            // Pattern selection
+            document.querySelectorAll('.pattern-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const pattern = this.dataset.pattern;
+                    selectPattern(pattern);
+                });
+            });
+
+            // Color inputs
+            document.getElementById('jersey-color').addEventListener('change', function() {
+                jerseyState.jerseyColor = this.value;
+                document.getElementById('jersey-color-text').value = this.value;
+                updateJerseyColors();
+            });
+
+            document.getElementById('secondary-color').addEventListener('change', function() {
+                jerseyState.secondaryColor = this.value;
+                document.getElementById('secondary-color-text').value = this.value;
+                updateJerseyColors();
+            });
+
+            document.getElementById('text-color').addEventListener('change', function() {
+                jerseyState.textColor = this.value;
+                document.getElementById('text-color-text').value = this.value;
+            });
+
+            // Text inputs
+            document.getElementById('player-number').addEventListener('input', function() {
+                jerseyState.playerNumber = this.value;
+            });
+
+            document.getElementById('player-name').addEventListener('input', function() {
+                jerseyState.playerName = this.value.toUpperCase();
+            });
+
+            document.getElementById('team-name').addEventListener('input', function() {
+                jerseyState.teamName = this.value.toUpperCase();
+            });
+
+            // Logo upload
+            document.getElementById('logo-upload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        jerseyState.logo = event.target.result;
+                        showLogoPreview(event.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Remove logo
+            document.getElementById('remove-logo').addEventListener('click', function() {
+                jerseyState.logo = null;
+                hideLogoPreview();
+            });
+
+            // View flip
+            document.getElementById('flip-view').addEventListener('click', function() {
+                jerseyState.view = jerseyState.view === 'front' ? 'back' : 'front';
+                this.innerHTML = jerseyState.view === 'front' ? 
+                    '<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>View Back' :
+                    '<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>View Front';
+            });
+
+            // Download buttons
+            document.getElementById('download-png').addEventListener('click', downloadPNG);
+            document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+
+            // Sign out
+            document.getElementById('sign-out-btn').addEventListener('click', async function() {
+                try {
+                    await window.FirebaseAuth.signOut();
+                    window.location.href = 'index.html';
+                } catch (error) {
+                    console.error('Sign out error:', error);
+                }
+            });
+        }
+
+        function setActiveTool(tool) {
+            jerseyState.activeTool = tool;
+            
+            // Update button states
+            document.querySelectorAll('.tool-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-tool="${tool}"]`).classList.add('active');
+
+            // Show/hide panels
+            document.querySelectorAll('.tool-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+            document.getElementById(`${tool}-panel`).classList.remove('hidden');
+        }
+
+        function selectTemplate(templateId) {
+            jerseyState.selectedTemplate = templateId;
+            const template = templates[templateId];
+            
+            jerseyState.jerseyColor = template.primary;
+            jerseyState.secondaryColor = template.secondary;
+
+            // Update UI
+            document.getElementById('jersey-color').value = template.primary;
+            document.getElementById('jersey-color-text').value = template.primary;
+            document.getElementById('secondary-color').value = template.secondary;
+            document.getElementById('secondary-color-text').value = template.secondary;
+
+            // Update template cards
+            document.querySelectorAll('.template-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-template="${templateId}"]`).classList.add('selected');
+
+            updateJerseyColors();
+        }
+
+        function selectPattern(pattern) {
+            jerseyState.selectedPattern = pattern;
+
+            // Update pattern cards
+            document.querySelectorAll('.pattern-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-pattern="${pattern}"]`).classList.add('selected');
+        }
+
+        function updateJerseyColors() {
+            if (jerseyMesh) {
+                jerseyMesh.material.color.setHex(jerseyState.jerseyColor.replace('#', '0x'));
+            }
+        }
+
+        function showLogoPreview(src) {
+            const preview = document.getElementById('logo-preview');
+            const image = document.getElementById('logo-image');
+            image.src = src;
+            preview.classList.remove('hidden');
+        }
+
+        function hideLogoPreview() {
+            const preview = document.getElementById('logo-preview');
+            preview.classList.add('hidden');
+        }
+
+        function downloadPNG() {
+            // Simple download implementation
+            const link = document.createElement('a');
+            link.download = `jersey-design-${jerseyState.view}.png`;
+            link.href = renderer.domElement.toDataURL();
+            link.click();
+        }
+
+        function downloadPDF() {
+            // Simple PDF download implementation
+            const link = document.createElement('a');
+            link.download = `jersey-design-${jerseyState.view}.pdf`;
+            link.href = renderer.domElement.toDataURL();
+            link.click();
+        }
+
+        // Listen for authentication state changes
+        if (window.FirebaseAuth) {
+            window.FirebaseAuth.onAuthStateChanged((user) => {
+                if (!user) {
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
