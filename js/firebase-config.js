@@ -42,6 +42,11 @@ async function initializeFirebase() {
             prompt: 'select_account'
         });
 
+        // Set authentication persistence
+        const { setPersistence, browserLocalPersistence } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+        await setPersistence(auth, browserLocalPersistence);
+        console.log('Authentication persistence set to local');
+
         console.log('Firebase initialized successfully');
         console.log('Auth instance:', auth);
         console.log('Provider instance:', provider);
@@ -414,7 +419,7 @@ window.FirebaseAuth = {
     async detectPopupBlocker() {
         return new Promise((resolve) => {
             const popup = window.open('', '_blank', 'width=1,height=1,left=-1000,top=-1000');
-            
+
             if (!popup || popup.closed || typeof popup.closed === 'undefined') {
                 // Popup was blocked
                 resolve(true);
@@ -430,7 +435,7 @@ window.FirebaseAuth = {
     async signInWithGoogleEnhanced() {
         try {
             console.log('Checking for popup blocker...');
-            
+
             // Check if popup blocker is active
             const isBlocked = await this.detectPopupBlocker();
             if (isBlocked) {
@@ -508,22 +513,88 @@ window.FirebaseAuth = {
             } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
 
             onAuthStateChanged(auth, (user) => {
+                console.log('Auth state changed:', user ? 'User signed in' : 'User signed out');
+                
                 if (user) {
-                    // Store user data
-                    localStorage.setItem('user', JSON.stringify({
+                    // Store user data with timestamp for session management
+                    const userData = {
                         uid: user.uid,
                         email: user.email,
                         displayName: user.displayName,
-                        photoURL: user.photoURL
-                    }));
+                        photoURL: user.photoURL,
+                        lastSignIn: new Date().toISOString(),
+                        isAuthenticated: true
+                    };
+                    localStorage.setItem('user', JSON.stringify(userData));
+                    console.log('User data stored:', userData);
                 } else {
                     // Clear user data
                     localStorage.removeItem('user');
+                    console.log('User data cleared');
                 }
+                
+                // Update UI immediately
+                this.updateAuthUI(user);
                 callback(user);
             });
         } catch (error) {
             console.error('Auth state listener error:', error);
+        }
+    },
+
+    // Check if user session is still valid
+    isSessionValid() {
+        const userData = this.getCurrentUser();
+        if (!userData) return false;
+
+        // Check if session is older than 30 days (optional security measure)
+        const lastSignIn = new Date(userData.lastSignIn);
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        
+        if (lastSignIn < thirtyDaysAgo) {
+            console.log('Session expired (older than 30 days)');
+            localStorage.removeItem('user');
+            return false;
+        }
+
+        return true;
+    },
+
+    // Restore authentication state on page load
+    async restoreAuthState() {
+        try {
+            await this.init();
+            
+            // Check if we have a valid session
+            if (!this.isSessionValid()) {
+                console.log('No valid session found');
+                this.updateAuthUI(null);
+                return null;
+            }
+
+            // Get current user from Firebase
+            const { onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+            
+            return new Promise((resolve) => {
+                const unsubscribe = onAuthStateChanged(auth, (user) => {
+                    unsubscribe(); // Unsubscribe after first call
+                    if (user) {
+                        console.log('User session restored:', user.email);
+                        this.updateAuthUI(user);
+                        resolve(user);
+                    } else {
+                        console.log('No active Firebase session');
+                        localStorage.removeItem('user');
+                        this.updateAuthUI(null);
+                        resolve(null);
+                    }
+                });
+            });
+        } catch (error) {
+            console.error('Failed to restore auth state:', error);
+            this.updateAuthUI(null);
+            return null;
         }
     }
 };
@@ -533,8 +604,15 @@ window.FirebaseAuth = {
         try {
             console.log('DOM loaded, initializing Firebase...');
             await window.FirebaseAuth.init();
-            console.log('Firebase initialized, updating UI...');
-            window.FirebaseAuth.updateAuthUI();
+            console.log('Firebase initialized, restoring auth state...');
+            
+            // Restore authentication state (persistent login)
+            const user = await window.FirebaseAuth.restoreAuthState();
+            if (user) {
+                console.log('User session restored successfully:', user.email);
+            } else {
+                console.log('No active user session found');
+            }
 
             // Check for popup blocker and show warning if needed
             const isBlocked = await window.FirebaseAuth.detectPopupBlocker();
@@ -543,10 +621,10 @@ window.FirebaseAuth = {
                 window.FirebaseAuth.showPopupBlockerWarning();
             }
 
-            // Listen for auth state changes
+            // Listen for auth state changes (for real-time updates)
             window.FirebaseAuth.onAuthStateChanged((user) => {
                 console.log('Auth state changed:', user ? 'User signed in' : 'User signed out');
-                window.FirebaseAuth.updateAuthUI(user);
+                // UI is already updated in restoreAuthState and onAuthStateChanged
             });
         } catch (error) {
             console.error('Failed to initialize Firebase:', error);
@@ -561,7 +639,8 @@ window.addEventListener('load', async () => {
         console.log('Firebase not initialized on DOM load, retrying...');
         try {
             await window.FirebaseAuth.init();
-            window.FirebaseAuth.updateAuthUI();
+            // Restore authentication state
+            await window.FirebaseAuth.restoreAuthState();
         } catch (error) {
             console.error('Fallback Firebase initialization failed:', error);
         }

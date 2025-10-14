@@ -460,15 +460,29 @@
     </main>
 
     <script>
-        // Authentication check
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if user is authenticated
-            const user = window.FirebaseAuth.getCurrentUser();
+        // Authentication check with persistent session
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Wait for Firebase to initialize and restore auth state
+            await new Promise(resolve => {
+                const checkAuth = () => {
+                    if (window.FirebaseAuth && window.FirebaseAuth.getCurrentUser) {
+                        resolve();
+                    } else {
+                        setTimeout(checkAuth, 100);
+                    }
+                };
+                checkAuth();
+            });
+
+            // Restore authentication state (persistent login)
+            const user = await window.FirebaseAuth.restoreAuthState();
             if (!user) {
-                // Redirect to login if not authenticated
+                console.log('No authenticated user, redirecting to home page');
                 window.location.href = 'index.html';
                 return;
             }
+
+            console.log('User authenticated:', user.email);
 
             // Update user information in header
             updateUserInfo(user);
