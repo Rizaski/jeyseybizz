@@ -948,69 +948,249 @@ window.FirebaseAuth = {
 
     // Proceed with Google sign-in after sign-up popup
     async proceedWithGoogleSignIn() {
+        // Detect if we're on a deployed site (more likely to have popup blockers)
+        const isDeployed = window.location.hostname !== 'localhost' && 
+                          window.location.hostname !== '127.0.0.1' &&
+                          !window.location.hostname.includes('localhost');
+        
+        console.log('Authentication method detection:', {
+            hostname: window.location.hostname,
+            isDeployed: isDeployed,
+            userAgent: navigator.userAgent
+        });
+
+        // For deployed sites, use redirect method directly to avoid popup blockers
+        if (isDeployed) {
+            console.log('Deployed site detected, using redirect method to avoid popup blockers');
+            this.showRedirectModal();
+            return;
+        }
+
+        // For localhost, try popup first with popup blocker detection
         try {
-            // Try popup first for better UX, fallback to redirect
+            await this.attemptPopupSignIn();
+        } catch (error) {
+            console.log('Popup sign-in failed, falling back to redirect:', error);
+            this.showPopupBlockerModal();
+        }
+    },
+
+    // Attempt popup sign-in with popup blocker detection
+    async attemptPopupSignIn() {
+        const {
+            signInWithPopup
+        } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+        
+        console.log('Attempting popup sign-in...');
+        
+        // Test for popup blocker before attempting authentication
+        const popupTest = window.open('', '_blank', 'width=1,height=1');
+        if (!popupTest || popupTest.closed || typeof popupTest.closed === 'undefined') {
+            popupTest?.close();
+            throw new Error('Popup blocked by browser');
+        }
+        popupTest.close();
+
+        const result = await signInWithPopup(auth, provider);
+        console.log('Popup sign-in successful:', result.user.email);
+
+        // Handle successful authentication
+        await this.handleSuccessfulAuth(result.user, 'google_popup');
+        return result;
+    },
+
+    // Handle redirect sign-in
+    async signInWithRedirect() {
+        try {
             const {
-                signInWithPopup
+                signInWithRedirect,
+                getRedirectResult
             } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
-            console.log('Attempting popup sign-in...');
-
-            const result = await signInWithPopup(auth, provider);
-            console.log('Popup sign-in successful:', result.user.email);
-
-            // Handle successful authentication
-            const user = result.user;
-            const userData = {
-                uid: user.uid,
-                email: user.email,
-                displayName: user.displayName,
-                photoURL: user.photoURL,
-                lastSignIn: new Date().toISOString(),
-                isAuthenticated: true
-            };
-            localStorage.setItem('user', JSON.stringify(userData));
-
-            // Create or update user profile in Firestore
-            if (window.FirebaseDB) {
-                try {
-                    const existingProfile = await window.FirebaseDB.getUserProfile(user.uid);
-                    if (!existingProfile) {
-                        await window.FirebaseDB.createUserProfile(user);
-                        console.log('New user profile created in Firestore');
-                    } else {
-                        await window.FirebaseDB.updateUserProfile(user.uid, {
-                            lastLogin: new Date().toISOString()
-                        });
-                        console.log('User profile updated in Firestore');
-                    }
-
-                    // Track user login
-                    await window.FirebaseDB.trackUserAction(user.uid, 'user_login', {
-                        method: 'google_popup'
-                    });
-                } catch (dbError) {
-                    console.error('Error managing user profile:', dbError);
-                    // Continue with authentication even if database fails
-                }
+            
+            // Check if we're returning from a redirect
+            const result = await getRedirectResult(auth);
+            if (result) {
+                console.log('Redirect sign-in successful:', result.user.email);
+                await this.handleSuccessfulAuth(result.user, 'google_redirect');
+                return;
             }
 
-            this.updateAuthUI(user);
-
-            // Redirect to customer page
-            console.log('Redirecting to customer page after successful login');
-            window.location.replace('customer.html');
-            return result;
-
-        } catch (popupError) {
-            console.log('Popup sign-in failed, trying redirect method...', popupError);
-
-            // Fallback to redirect method
-            const {
-                signInWithRedirect
-            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+            // Start redirect sign-in
             console.log('Starting redirect sign-in...');
             await signInWithRedirect(auth, provider);
             return; // Don't continue as redirect will navigate away
+            
+        } catch (error) {
+            console.error('Redirect sign-in error:', error);
+            this.showGenericErrorModal('Authentication failed. Please try again.');
+        }
+    },
+
+    // Handle successful authentication (common for both popup and redirect)
+    async handleSuccessfulAuth(user, method) {
+        const userData = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            lastSignIn: new Date().toISOString(),
+            isAuthenticated: true
+        };
+        localStorage.setItem('user', JSON.stringify(userData));
+
+        // Create or update user profile in Firestore
+        if (window.FirebaseDB) {
+            try {
+                const existingProfile = await window.FirebaseDB.getUserProfile(user.uid);
+                if (!existingProfile) {
+                    await window.FirebaseDB.createUserProfile(user);
+                    console.log('New user profile created in Firestore');
+                } else {
+                    await window.FirebaseDB.updateUserProfile(user.uid, {
+                        lastLogin: new Date().toISOString()
+                    });
+                    console.log('User profile updated in Firestore');
+                }
+
+                // Track user login
+                await window.FirebaseDB.trackUserAction(user.uid, 'user_login', {
+                    method: method
+                });
+            } catch (dbError) {
+                console.error('Error managing user profile:', dbError);
+                // Continue with authentication even if database fails
+            }
+        }
+
+        this.updateAuthUI(user);
+
+        // Redirect to customer page
+        console.log('Redirecting to customer page after successful login');
+        window.location.replace('customer.html');
+    },
+
+    // Show redirect modal for deployed sites
+    showRedirectModal() {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+        modal.id = 'redirect-modal';
+
+        modal.innerHTML = `
+            <div class="bg-rog-dark rounded-2xl shadow-2xl w-full max-w-md p-6 border border-rog-red/30">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-rog-red">
+                        <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-rog-display font-bold text-white glow mb-2">Redirecting to Google</h3>
+                    <p class="text-gray-300 font-rog-body">You'll be redirected to Google for secure authentication</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="bg-rog-light/20 backdrop-blur-sm rounded-lg p-4 border border-rog-red/30">
+                        <h4 class="font-rog-heading font-semibold text-rog-red mb-2">Secure Authentication</h4>
+                        <p class="text-sm text-gray-300 font-rog-body">
+                            For security reasons, we use Google's secure authentication system. 
+                            You'll be redirected to Google and then back to our site.
+                        </p>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button id="proceed-redirect" class="flex-1 rog-button px-4 py-3 rounded-lg font-rog-heading font-semibold transition-all duration-300 shadow-lg hover:shadow-xl">
+                            Continue to Google
+                        </button>
+                        <button id="cancel-redirect" class="px-4 py-3 bg-rog-light/20 backdrop-blur-sm border border-rog-red/30 text-white rounded-lg hover:bg-rog-red/20 transition-all duration-300 hover:border-rog-red font-rog-heading">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Event listeners
+        document.getElementById('proceed-redirect').addEventListener('click', async () => {
+            modal.remove();
+            await this.signInWithRedirect();
+        });
+
+        document.getElementById('cancel-redirect').addEventListener('click', () => {
+            modal.remove();
+        });
+    },
+
+    // Show popup blocker modal
+    showPopupBlockerModal() {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+        modal.id = 'popup-blocker-modal';
+
+        modal.innerHTML = `
+            <div class="bg-rog-dark rounded-2xl shadow-2xl w-full max-w-md p-6 border border-rog-red/30">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-rog-red">
+                        <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-rog-display font-bold text-white glow mb-2">Popup Blocked</h3>
+                    <p class="text-gray-300 font-rog-body">Your browser blocked the authentication popup</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="bg-rog-light/20 backdrop-blur-sm rounded-lg p-4 border border-rog-red/30">
+                        <h4 class="font-rog-heading font-semibold text-rog-red mb-2">How to Fix:</h4>
+                        <ol class="text-sm text-gray-300 space-y-2 font-rog-body">
+                            <li>1. Allow popups for this site in your browser</li>
+                            <li>2. Or use the redirect method below</li>
+                            <li>3. Disable popup blocker temporarily</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button id="try-redirect" class="flex-1 rog-button px-4 py-3 rounded-lg font-rog-heading font-semibold transition-all duration-300 shadow-lg hover:shadow-xl">
+                            Use Redirect Method
+                        </button>
+                        <button id="cancel-popup-modal" class="px-4 py-3 bg-rog-light/20 backdrop-blur-sm border border-rog-red/30 text-white rounded-lg hover:bg-rog-red/20 transition-all duration-300 hover:border-rog-red font-rog-heading">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Event listeners
+        document.getElementById('try-redirect').addEventListener('click', async () => {
+            modal.remove();
+            await this.signInWithRedirect();
+        });
+
+        document.getElementById('cancel-popup-modal').addEventListener('click', () => {
+            modal.remove();
+        });
+    },
+
+    // Check for redirect result on page load
+    async checkRedirectResult() {
+        try {
+            const {
+                getRedirectResult
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+            
+            const result = await getRedirectResult(auth);
+            if (result) {
+                console.log('Redirect authentication successful:', result.user.email);
+                await this.handleSuccessfulAuth(result.user, 'google_redirect');
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error('Error checking redirect result:', error);
+            return false;
         }
     },
 
@@ -1233,6 +1413,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('DOM loaded, initializing Firebase...');
         await window.FirebaseAuth.init();
         console.log('Firebase initialized, restoring auth state...');
+
+        // Check for redirect result first
+        await window.FirebaseAuth.checkRedirectResult();
 
         // Restore authentication state (persistent login)
         const user = await window.FirebaseAuth.restoreAuthState();
