@@ -132,12 +132,19 @@ window.FirebaseAuth = {
                 console.error('Firebase internal error:', error);
                 alert('Authentication service temporarily unavailable. Please try again later or contact support.');
             } else if (error.code === 'auth/network-request-failed') {
-                alert('Network error. Please check your internet connection and try again.');
+                console.error('Network error detected:', error);
+                this.showNetworkErrorModal();
             } else if (error.code === 'auth/too-many-requests') {
                 alert('Too many failed attempts. Please try again later.');
+            } else if (error.code === 'auth/popup-blocked') {
+                console.log('Popup blocked, showing instructions');
+                this.showPopupBlockerInstructions();
+            } else if (error.code === 'auth/cancelled-popup-request') {
+                console.log('Popup cancelled by user');
+                // Don't show error for user cancellation
             } else {
                 console.error('Firebase auth error:', error);
-                alert(`Authentication failed: ${error.message}. Please try again.`);
+                this.showGenericErrorModal(error.message);
             }
             throw error;
         }
@@ -411,6 +418,26 @@ window.FirebaseAuth = {
         });
     },
 
+    // Test network connectivity
+    async testNetworkConnection() {
+        try {
+            console.log('Testing network connectivity...');
+            
+            // Test basic connectivity
+            const response = await fetch('https://www.google.com/favicon.ico', {
+                method: 'HEAD',
+                mode: 'no-cors',
+                cache: 'no-cache'
+            });
+            
+            console.log('Network test successful');
+            return true;
+        } catch (error) {
+            console.error('Network test failed:', error);
+            return false;
+        }
+    },
+
     // Enhanced sign in with popup blocker detection
     async signInWithGoogleEnhanced() {
         try {
@@ -424,7 +451,16 @@ window.FirebaseAuth = {
                 return;
             }
 
-            console.log('No popup blocker detected, proceeding with login...');
+            // Test network connectivity before attempting login
+            console.log('Testing network connectivity...');
+            const networkOk = await this.testNetworkConnection();
+            if (!networkOk) {
+                console.log('Network connectivity issues detected');
+                this.showNetworkErrorModal();
+                return;
+            }
+
+            console.log('No popup blocker detected, network OK, proceeding with login...');
             return await this.signInWithGoogle();
         } catch (error) {
             console.error('Enhanced sign-in error:', error);
@@ -647,6 +683,175 @@ window.FirebaseAuth = {
             this.updateAuthUI(null);
             return null;
         }
+    },
+
+    // Show network error modal
+    showNetworkErrorModal() {
+        // Remove existing modal if any
+        const existingModal = document.getElementById('network-error-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        // Create modal
+        const modal = document.createElement('div');
+        modal.id = 'network-error-modal';
+        modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+        modal.innerHTML = `
+            <div class="bg-rog-dark rounded-lg shadow-xl max-w-md w-full p-6 border border-rog-red/30">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-rog-red/20 rounded-full flex items-center justify-center mr-4 border border-rog-red">
+                        <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-rog-display font-bold text-white glow">Network Error</h3>
+                        <p class="text-sm text-gray-300 font-rog-body">Unable to connect to authentication service</p>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="font-rog-heading font-semibold text-rog-red mb-3">Please try these solutions:</h4>
+                    <div class="space-y-3 text-sm text-gray-300 font-rog-body">
+                        <div class="flex items-start">
+                            <span class="font-rog-heading font-bold text-rog-red mr-2">1.</span>
+                            <div>
+                                <strong class="text-white">Check your internet connection</strong> - Ensure you have a stable internet connection
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="font-rog-heading font-bold text-rog-red mr-2">2.</span>
+                            <div>
+                                <strong class="text-white">Try refreshing the page</strong> - Sometimes a simple refresh resolves connectivity issues
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="font-rog-heading font-bold text-rog-red mr-2">3.</span>
+                            <div>
+                                <strong class="text-white">Check firewall settings</strong> - Ensure your firewall isn't blocking the authentication service
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="font-rog-heading font-bold text-rog-red mr-2">4.</span>
+                            <div>
+                                <strong class="text-white">Try a different network</strong> - Switch to mobile data or a different WiFi network
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-rog-red/10 border border-rog-red/30 rounded-lg p-4 mb-6">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-rog-red mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <p class="text-sm text-rog-red font-rog-heading font-medium">Still having issues?</p>
+                            <p class="text-sm text-gray-300 font-rog-body">Contact our support team for assistance with authentication problems.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3">
+                    <button id="retry-network-login" class="flex-1 rog-button px-4 py-2 rounded-lg font-rog-heading font-semibold transition-all duration-300 shadow-lg hover:shadow-xl">
+                        Try Again
+                    </button>
+                    <button id="close-network-modal" class="px-4 py-2 bg-rog-light/20 backdrop-blur-sm border border-rog-red/30 text-white rounded-lg hover:bg-rog-red/20 transition-all duration-300 hover:border-rog-red font-rog-heading">
+                        Close
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Add to page
+        document.body.appendChild(modal);
+
+        // Add event listeners
+        document.getElementById('retry-network-login').addEventListener('click', () => {
+            modal.remove();
+            // Retry login after a short delay
+            setTimeout(() => {
+                this.signInWithGoogle();
+            }, 1000);
+        });
+
+        document.getElementById('close-network-modal').addEventListener('click', () => {
+            modal.remove();
+        });
+
+        // Close on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    },
+
+    // Show generic error modal
+    showGenericErrorModal(errorMessage) {
+        // Remove existing modal if any
+        const existingModal = document.getElementById('generic-error-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        // Create modal
+        const modal = document.createElement('div');
+        modal.id = 'generic-error-modal';
+        modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+        modal.innerHTML = `
+            <div class="bg-rog-dark rounded-lg shadow-xl max-w-md w-full p-6 border border-rog-red/30">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-rog-red/20 rounded-full flex items-center justify-center mr-4 border border-rog-red">
+                        <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-rog-display font-bold text-white glow">Authentication Error</h3>
+                        <p class="text-sm text-gray-300 font-rog-body">Unable to complete login process</p>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <p class="text-gray-300 font-rog-body mb-4">${errorMessage}</p>
+                    <p class="text-sm text-gray-400 font-rog-body">Please try again or contact support if the problem persists.</p>
+                </div>
+
+                <div class="flex space-x-3">
+                    <button id="retry-generic-login" class="flex-1 rog-button px-4 py-2 rounded-lg font-rog-heading font-semibold transition-all duration-300 shadow-lg hover:shadow-xl">
+                        Try Again
+                    </button>
+                    <button id="close-generic-modal" class="px-4 py-2 bg-rog-light/20 backdrop-blur-sm border border-rog-red/30 text-white rounded-lg hover:bg-rog-red/20 transition-all duration-300 hover:border-rog-red font-rog-heading">
+                        Close
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Add to page
+        document.body.appendChild(modal);
+
+        // Add event listeners
+        document.getElementById('retry-generic-login').addEventListener('click', () => {
+            modal.remove();
+            // Retry login after a short delay
+            setTimeout(() => {
+                this.signInWithGoogle();
+            }, 1000);
+        });
+
+        document.getElementById('close-generic-modal').addEventListener('click', () => {
+            modal.remove();
+        });
+
+        // Close on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
     }
 };
 
