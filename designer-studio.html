@@ -21,8 +21,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Three.js for 3D rendering -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" onerror="console.error('Failed to load Three.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js" onerror="console.warn('Failed to load OrbitControls')"></script>
 
     <!-- Global Firebase Authentication -->
     <script src="js/firebase-config.js"></script>
@@ -838,24 +838,40 @@
         }
 
         function initializeDesigner() {
-            // Initialize Three.js scene
-            const canvas = document.getElementById('jersey-canvas');
-            const container = canvas.parentElement;
+            try {
+                // Initialize Three.js scene
+                const canvas = document.getElementById('jersey-canvas');
+                if (!canvas) {
+                    console.error('Canvas element not found');
+                    return;
+                }
+                
+                const container = canvas.parentElement;
+                if (!container) {
+                    console.error('Canvas container not found');
+                    return;
+                }
 
-            console.log('Initializing Three.js scene...');
-            console.log('Container dimensions:', container.clientWidth, 'x', container.clientHeight);
+                console.log('Initializing Three.js scene...');
+                console.log('Container dimensions:', container.clientWidth, 'x', container.clientHeight);
 
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({
-                canvas: canvas,
-                antialias: true
-            });
+                // Check if Three.js is loaded
+                if (typeof THREE === 'undefined') {
+                    console.error('Three.js not loaded');
+                    return;
+                }
 
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setClearColor(0xffffff);
-            renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+                renderer = new THREE.WebGLRenderer({
+                    canvas: canvas,
+                    antialias: true
+                });
+
+                renderer.setSize(container.clientWidth, container.clientHeight);
+                renderer.setClearColor(0xffffff);
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
             // Setup camera
             camera.position.set(0, 0, 6);
@@ -879,12 +895,16 @@
             createJerseyMesh();
 
             // Setup controls
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enablePan = false;
-            controls.minDistance = 4;
-            controls.maxDistance = 10;
-            controls.minPolarAngle = Math.PI / 4;
-            controls.maxPolarAngle = Math.PI / 1.5;
+            if (typeof THREE.OrbitControls !== 'undefined') {
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enablePan = false;
+                controls.minDistance = 4;
+                controls.maxDistance = 10;
+                controls.minPolarAngle = Math.PI / 4;
+                controls.maxPolarAngle = Math.PI / 1.5;
+            } else {
+                console.warn('OrbitControls not available, using basic camera controls');
+            }
 
             // Start render loop
             animate();
@@ -892,10 +912,31 @@
             // Handle window resize
             window.addEventListener('resize', onWindowResize);
 
-            // Hide loading spinner
-            document.getElementById('loading-spinner').style.display = 'none';
+                // Hide loading spinner
+                document.getElementById('loading-spinner').style.display = 'none';
 
-            console.log('Three.js scene initialized successfully');
+                console.log('Three.js scene initialized successfully');
+            } catch (error) {
+                console.error('Error initializing Three.js scene:', error);
+                // Show error message to user
+                const loadingSpinner = document.getElementById('loading-spinner');
+                if (loadingSpinner) {
+                    loadingSpinner.innerHTML = `
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-500">
+                                <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-rog-heading font-semibold text-white mb-2">3D Renderer Error</h3>
+                            <p class="text-gray-400 font-rog-body">Unable to initialize 3D designer. Please refresh the page.</p>
+                            <button onclick="window.location.reload()" class="mt-4 px-4 py-2 bg-rog-red text-white rounded-lg hover:bg-rog-red/80 transition-colors">
+                                Refresh Page
+                            </button>
+                        </div>
+                    `;
+                }
+            }
         }
 
         function createJerseyMesh() {
@@ -951,7 +992,9 @@
 
         function animate() {
             requestAnimationFrame(animate);
-            controls.update();
+            if (controls) {
+                controls.update();
+            }
             renderer.render(scene, camera);
         }
 
@@ -1263,8 +1306,8 @@
 
         function getCurrentDesignData() {
             return {
-                name: document.getElementById('design-name') ? .value || 'Untitled Design',
-                type: document.getElementById('jersey-type') ? .value || 'Custom Jersey',
+                name: document.getElementById('design-name')?.value || 'Untitled Design',
+                type: document.getElementById('jersey-type')?.value || 'Custom Jersey',
                 colors: {
                     primary: jerseyState.jerseyColor,
                     secondary: jerseyState.secondaryColor,
