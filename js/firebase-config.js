@@ -140,7 +140,21 @@ window.FirebaseAuth = {
                 // Don't show alert for user closing popup
             } else if (error.code === 'auth/internal-error') {
                 console.error('Firebase internal error:', error);
-                alert('Authentication service temporarily unavailable. Please try again later or contact support.');
+                console.error('This might be due to Firebase configuration issues or network problems');
+                
+                // Try to reinitialize Firebase
+                console.log('Attempting to reinitialize Firebase...');
+                try {
+                    await this.init();
+                    console.log('Firebase reinitialized successfully');
+                    alert('Authentication service was temporarily unavailable. Please try signing in again.');
+                } catch (reinitError) {
+                    console.error('Failed to reinitialize Firebase:', reinitError);
+                    alert('Authentication service temporarily unavailable. Please refresh the page and try again.');
+                }
+                
+                // Don't throw error, let user try again
+                return;
             } else if (error.code === 'auth/network-request-failed') {
                 alert('Network error. Please check your internet connection and try again.');
             } else if (error.code === 'auth/too-many-requests') {
@@ -189,7 +203,7 @@ window.FirebaseAuth = {
     // Update authentication UI
     updateAuthUI(user) {
         const userData = user || this.getCurrentUser();
-        
+
         // Update profile buttons (desktop header)
         const profileButtons = document.querySelectorAll('#profile-btn');
         profileButtons.forEach(button => {
@@ -292,7 +306,7 @@ window.FirebaseAuth = {
     updateMobileLogoutButton(userData) {
         // Find existing logout button or create one
         let logoutButton = document.getElementById('mobile-logout-btn');
-        
+
         if (userData) {
             // User is signed in - show logout button
             if (!logoutButton) {

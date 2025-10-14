@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Debug - Otomono Jerseys</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/firebase-config.js"></script>
+</head>
+<body class="min-h-screen bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Authentication Debug Tool</h1>
+        
+        <!-- Status Cards -->
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Firebase Status</h2>
+                <div id="firebase-status" class="text-gray-600">Checking...</div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Authentication Status</h2>
+                <div id="auth-status" class="text-gray-600">Checking...</div>
+            </div>
+        </div>
+
+        <!-- Test Buttons -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Test Actions</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <button id="test-init" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Test Firebase Init
+                </button>
+                <button id="test-signin" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    Test Google Sign In
+                </button>
+                <button id="test-signout" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                    Test Sign Out
+                </button>
+                <button id="test-retry" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                    Retry Authentication
+                </button>
+            </div>
+        </div>
+
+        <!-- Error Logs -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Error Logs</h2>
+            <div id="error-logs" class="bg-gray-900 text-red-400 p-4 rounded font-mono text-sm h-48 overflow-y-auto">
+                <div>Error logs will appear here...</div>
+            </div>
+        </div>
+
+        <!-- Console Logs -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Console Logs</h2>
+            <div id="console-logs" class="bg-gray-900 text-green-400 p-4 rounded font-mono text-sm h-64 overflow-y-auto">
+                <div>Console logs will appear here...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Override console methods to show in the page
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        const logContainer = document.getElementById('console-logs');
+        const errorContainer = document.getElementById('error-logs');
+        
+        function addLog(message, type = 'log') {
+            const div = document.createElement('div');
+            div.className = type === 'error' ? 'text-red-400' : type === 'warn' ? 'text-yellow-400' : 'text-green-400';
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logContainer.appendChild(div);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+        
+        function addError(message) {
+            const div = document.createElement('div');
+            div.className = 'text-red-400';
+            div.textContent = `[${new Date().toLocaleTimeString()}] ERROR: ${message}`;
+            errorContainer.appendChild(div);
+            errorContainer.scrollTop = errorContainer.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addLog(args.join(' '));
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addLog(args.join(' '), 'error');
+            addError(args.join(' '));
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addLog(args.join(' '), 'warn');
+        };
+
+        // Test functions
+        document.getElementById('test-init').addEventListener('click', async () => {
+            try {
+                console.log('Testing Firebase initialization...');
+                const result = await window.FirebaseAuth.init();
+                console.log('Firebase init result:', result);
+                updateStatus();
+            } catch (error) {
+                console.error('Firebase init failed:', error);
+                addError(`Firebase init failed: ${error.message}`);
+            }
+        });
+
+        document.getElementById('test-signin').addEventListener('click', async () => {
+            try {
+                console.log('Testing Google Sign In...');
+                const user = await window.FirebaseAuth.signInWithGoogle();
+                console.log('Sign in successful:', user);
+                updateStatus();
+            } catch (error) {
+                console.error('Sign in failed:', error);
+                addError(`Sign in failed: ${error.message} (Code: ${error.code})`);
+            }
+        });
+
+        document.getElementById('test-signout').addEventListener('click', async () => {
+            try {
+                console.log('Testing Sign Out...');
+                await window.FirebaseAuth.signOut();
+                console.log('Sign out successful');
+                updateStatus();
+            } catch (error) {
+                console.error('Sign out failed:', error);
+                addError(`Sign out failed: ${error.message}`);
+            }
+        });
+
+        document.getElementById('test-retry').addEventListener('click', async () => {
+            try {
+                console.log('Retrying authentication...');
+                // Clear any existing auth state
+                localStorage.removeItem('user');
+                // Reinitialize Firebase
+                await window.FirebaseAuth.init();
+                console.log('Firebase reinitialized');
+                updateStatus();
+            } catch (error) {
+                console.error('Retry failed:', error);
+                addError(`Retry failed: ${error.message}`);
+            }
+        });
+
+        function updateStatus() {
+            // Update Firebase status
+            const firebaseStatus = document.getElementById('firebase-status');
+            try {
+                const user = window.FirebaseAuth.getCurrentUser();
+                if (user) {
+                    firebaseStatus.innerHTML = `
+                        <div class="text-green-600 font-semibold">✓ Firebase Connected</div>
+                        <div class="text-sm text-gray-600 mt-2">
+                            <div>User: ${user.displayName || user.email}</div>
+                            <div>UID: ${user.uid}</div>
+                        </div>
+                    `;
+                } else {
+                    firebaseStatus.innerHTML = `
+                        <div class="text-yellow-600 font-semibold">⚠ Firebase Connected (No User)</div>
+                        <div class="text-sm text-gray-600 mt-2">Firebase is working but no user is signed in</div>
+                    `;
+                }
+            } catch (error) {
+                firebaseStatus.innerHTML = `
+                    <div class="text-red-600 font-semibold">✗ Firebase Error</div>
+                    <div class="text-sm text-gray-600 mt-2">${error.message}</div>
+                `;
+            }
+
+            // Update auth status
+            const authStatus = document.getElementById('auth-status');
+            const user = window.FirebaseAuth.getCurrentUser();
+            if (user) {
+                authStatus.innerHTML = `
+                    <div class="text-green-600 font-semibold">✓ User Signed In</div>
+                    <div class="text-sm text-gray-600 mt-2">
+                        <div>Name: ${user.displayName || 'N/A'}</div>
+                        <div>Email: ${user.email || 'N/A'}</div>
+                    </div>
+                `;
+            } else {
+                authStatus.innerHTML = `
+                    <div class="text-red-600 font-semibold">✗ No User Signed In</div>
+                    <div class="text-sm text-gray-600 mt-2">Click "Test Google Sign In" to authenticate</div>
+                `;
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Debug page loaded');
+            updateStatus();
+        });
+
+        // Listen for auth state changes
+        if (window.FirebaseAuth) {
+            window.FirebaseAuth.onAuthStateChanged((user) => {
+                console.log('Auth state changed:', user ? 'User signed in' : 'User signed out');
+                updateStatus();
+            });
+        }
+    </script>
+</body>
+</html>
