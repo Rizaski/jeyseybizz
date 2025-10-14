@@ -545,13 +545,15 @@ window.FirebaseAuth = {
     async handleRedirectResult() {
         try {
             await this.init();
-            const { getRedirectResult } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
-            
+            const {
+                getRedirectResult
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+
             const result = await getRedirectResult(auth);
             if (result) {
                 const user = result.user;
                 console.log('User signed in via redirect:', user.email);
-                
+
                 // Store user data
                 const userData = {
                     uid: user.uid,
@@ -562,12 +564,13 @@ window.FirebaseAuth = {
                     isAuthenticated: true
                 };
                 localStorage.setItem('user', JSON.stringify(userData));
-                
+
                 // Update UI
                 this.updateAuthUI(user);
-                
+
                 // Redirect to customer page
-                window.location.href = 'customer.html';
+                console.log('Redirecting to customer page after successful login');
+                window.location.replace('customer.html');
                 return user;
             }
             return null;
@@ -581,7 +584,7 @@ window.FirebaseAuth = {
     async restoreAuthState() {
         try {
             await this.init();
-            
+
             // First check for redirect result
             const redirectUser = await this.handleRedirectResult();
             if (redirectUser) {
@@ -638,7 +641,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log('No active user session found');
         }
 
-            // No need to check for popup blocker since we're using redirect
+        // No need to check for popup blocker since we're using redirect
 
         // Listen for auth state changes (for real-time updates)
         window.FirebaseAuth.onAuthStateChanged((user) => {
