@@ -17,10 +17,17 @@ let app, auth, provider;
 // Initialize Firebase
 async function initializeFirebase() {
     try {
+        // Check if Firebase is already initialized
+        if (app && auth && provider) {
+            console.log('Firebase already initialized');
+            return true;
+        }
+
         // Import Firebase modules dynamically
         const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
         const { getAuth, GoogleAuthProvider } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
         
+        // Initialize Firebase app
         app = initializeApp(firebaseConfig);
         auth = getAuth(app);
         provider = new GoogleAuthProvider();
@@ -31,9 +38,12 @@ async function initializeFirebase() {
         });
         
         console.log('Firebase initialized successfully');
+        console.log('Auth instance:', auth);
+        console.log('Provider instance:', provider);
         return true;
     } catch (error) {
         console.error('Firebase initialization failed:', error);
+        console.error('Error details:', error.message);
         return false;
     }
 }
@@ -69,25 +79,38 @@ window.FirebaseAuth = {
     // Sign in with Google
     async signInWithGoogle() {
         try {
-            await this.init();
+            console.log('Starting Google sign-in process...');
+            
+            // Initialize Firebase first
+            const initSuccess = await this.init();
+            if (!initSuccess) {
+                throw new Error('Failed to initialize Firebase');
+            }
+
+            console.log('Firebase initialized, checking domain authorization...');
             
             if (!checkDomainAuthorization()) {
                 throw new Error('Domain not authorized');
             }
 
+            console.log('Domain authorized, importing signInWithPopup...');
             const { signInWithPopup } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+            
+            console.log('Starting popup sign-in...');
             const result = await signInWithPopup(auth, provider);
             
             const user = result.user;
-            console.log('User signed in:', user);
+            console.log('User signed in successfully:', user);
             
             // Store user data in localStorage
-            localStorage.setItem('user', JSON.stringify({
+            const userData = {
                 uid: user.uid,
                 email: user.email,
                 displayName: user.displayName,
                 photoURL: user.photoURL
-            }));
+            };
+            localStorage.setItem('user', JSON.stringify(userData));
+            console.log('User data stored in localStorage');
             
             // Update UI
             this.updateAuthUI(user);
@@ -95,12 +118,15 @@ window.FirebaseAuth = {
             return user;
         } catch (error) {
             console.error('Google sign-in error:', error);
+            console.error('Error code:', error.code);
+            console.error('Error message:', error.message);
             
             // Handle specific Firebase errors
             if (error.code === 'auth/unauthorized-domain') {
                 alert('Authentication domain not authorized. Please contact support or try again later.');
             } else if (error.code === 'auth/popup-closed-by-user') {
                 console.log('User closed the popup');
+                // Don't show alert for user closing popup
             } else if (error.code === 'auth/internal-error') {
                 console.error('Firebase internal error:', error);
                 alert('Authentication service temporarily unavailable. Please try again later or contact support.');
@@ -108,9 +134,14 @@ window.FirebaseAuth = {
                 alert('Network error. Please check your internet connection and try again.');
             } else if (error.code === 'auth/too-many-requests') {
                 alert('Too many failed attempts. Please try again later.');
+            } else if (error.code === 'auth/popup-blocked') {
+                alert('Popup was blocked by your browser. Please allow popups for this site and try again.');
+            } else if (error.code === 'auth/cancelled-popup-request') {
+                console.log('Popup request was cancelled');
+                // Don't show alert for cancelled requests
             } else {
                 console.error('Firebase auth error:', error);
-                alert('Authentication failed. Please try again.');
+                alert(`Authentication failed: ${error.message}. Please try again.`);
             }
             throw error;
         }
@@ -227,15 +258,33 @@ window.FirebaseAuth = {
 // Initialize Firebase when the page loads
 document.addEventListener('DOMContentLoaded', async () => {
     try {
+        console.log('DOM loaded, initializing Firebase...');
         await window.FirebaseAuth.init();
+        console.log('Firebase initialized, updating UI...');
         window.FirebaseAuth.updateAuthUI();
         
         // Listen for auth state changes
         window.FirebaseAuth.onAuthStateChanged((user) => {
+            console.log('Auth state changed:', user ? 'User signed in' : 'User signed out');
             window.FirebaseAuth.updateAuthUI(user);
         });
     } catch (error) {
         console.error('Failed to initialize Firebase:', error);
+        console.error('This might be due to network issues or Firebase configuration problems');
+    }
+});
+
+// Add a fallback initialization method
+window.addEventListener('load', async () => {
+    // If Firebase wasn't initialized on DOMContentLoaded, try again
+    if (!window.FirebaseAuth || !window.FirebaseAuth.getCurrentUser) {
+        console.log('Firebase not initialized on DOM load, retrying...');
+        try {
+            await window.FirebaseAuth.init();
+            window.FirebaseAuth.updateAuthUI();
+        } catch (error) {
+            console.error('Fallback Firebase initialization failed:', error);
+        }
     }
 });
 
