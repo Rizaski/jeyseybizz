@@ -146,7 +146,7 @@ window.FirebaseAuth = {
             } else if (error.code === 'auth/too-many-requests') {
                 alert('Too many failed attempts. Please try again later.');
             } else if (error.code === 'auth/popup-blocked') {
-                alert('Popup was blocked by your browser. Please allow popups for this site and try again.');
+                this.showPopupBlockerInstructions();
             } else if (error.code === 'auth/cancelled-popup-request') {
                 console.log('Popup request was cancelled');
                 // Don't show alert for cancelled requests
@@ -217,7 +217,7 @@ window.FirebaseAuth = {
                         Login with Gmail
                     </div>
                 `;
-                button.onclick = () => this.signInWithGoogle();
+                button.onclick = () => this.signInWithGoogleEnhanced();
             }
         });
 
@@ -242,7 +242,7 @@ window.FirebaseAuth = {
                     </svg>
                     <span class="text-white font-rog-heading font-medium">Login with Gmail</span>
                 `;
-                button.onclick = () => this.signInWithGoogle();
+                button.onclick = () => this.signInWithGoogleEnhanced();
             }
         });
     },
@@ -313,6 +313,192 @@ window.FirebaseAuth = {
         }, 100);
     },
 
+    // Show popup blocker instructions
+    showPopupBlockerInstructions() {
+        // Remove existing modal if any
+        const existingModal = document.getElementById('popup-blocker-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        // Create modal
+        const modal = document.createElement('div');
+        modal.id = 'popup-blocker-modal';
+        modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+        modal.innerHTML = `
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Popup Blocked</h3>
+                        <p class="text-sm text-gray-600">Your browser blocked the Gmail login popup</p>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="font-semibold text-gray-900 mb-3">To allow Gmail login, please:</h4>
+                    <div class="space-y-3 text-sm text-gray-700">
+                        <div class="flex items-start">
+                            <span class="font-semibold text-rog-red mr-2">1.</span>
+                            <div>
+                                <strong>Chrome/Edge:</strong> Click the popup blocker icon in the address bar, then select "Always allow popups from this site"
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="font-semibold text-rog-red mr-2">2.</span>
+                            <div>
+                                <strong>Firefox:</strong> Go to Settings → Privacy & Security → Permissions → Block pop-up windows → Add this site to exceptions
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="font-semibold text-rog-red mr-2">3.</span>
+                            <div>
+                                <strong>Safari:</strong> Go to Safari → Preferences → Websites → Pop-up Windows → Allow for this site
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-blue-600 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <p class="text-sm text-blue-800 font-medium">Quick Fix:</p>
+                            <p class="text-sm text-blue-700">Look for a popup blocker icon in your browser's address bar and click "Allow" or "Always allow"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3">
+                    <button id="retry-login" class="flex-1 bg-rog-red text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium">
+                        Try Again
+                    </button>
+                    <button id="close-popup-modal" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                        Close
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Add to page
+        document.body.appendChild(modal);
+
+        // Add event listeners
+        document.getElementById('retry-login').addEventListener('click', () => {
+            modal.remove();
+            // Retry login after a short delay
+            setTimeout(() => {
+                this.signInWithGoogle();
+            }, 500);
+        });
+
+        document.getElementById('close-popup-modal').addEventListener('click', () => {
+            modal.remove();
+        });
+
+        // Close on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    },
+
+    // Detect popup blocker before attempting login
+    async detectPopupBlocker() {
+        return new Promise((resolve) => {
+            const popup = window.open('', '_blank', 'width=1,height=1,left=-1000,top=-1000');
+            
+            if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+                // Popup was blocked
+                resolve(true);
+            } else {
+                // Popup opened successfully
+                popup.close();
+                resolve(false);
+            }
+        });
+    },
+
+    // Enhanced sign in with popup blocker detection
+    async signInWithGoogleEnhanced() {
+        try {
+            console.log('Checking for popup blocker...');
+            
+            // Check if popup blocker is active
+            const isBlocked = await this.detectPopupBlocker();
+            if (isBlocked) {
+                console.log('Popup blocker detected');
+                this.showPopupBlockerInstructions();
+                return;
+            }
+
+            console.log('No popup blocker detected, proceeding with login...');
+            return await this.signInWithGoogle();
+        } catch (error) {
+            console.error('Enhanced sign-in error:', error);
+            throw error;
+        }
+    },
+
+    // Show popup blocker warning banner
+    showPopupBlockerWarning() {
+        // Remove existing warning if any
+        const existingWarning = document.getElementById('popup-blocker-warning');
+        if (existingWarning) {
+            existingWarning.remove();
+        }
+
+        // Create warning banner
+        const warning = document.createElement('div');
+        warning.id = 'popup-blocker-warning';
+        warning.className = 'fixed top-0 left-0 right-0 bg-yellow-500 text-yellow-900 px-4 py-3 z-50 shadow-lg';
+        warning.innerHTML = `
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                    <span class="font-medium">Popup blocker detected! Gmail login may not work. </span>
+                    <button id="fix-popup-blocker" class="ml-2 underline hover:no-underline font-semibold">
+                        Click here to fix
+                    </button>
+                </div>
+                <button id="dismiss-warning" class="ml-4 text-yellow-900 hover:text-yellow-700">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        // Add to page
+        document.body.appendChild(warning);
+
+        // Add event listeners
+        document.getElementById('fix-popup-blocker').addEventListener('click', () => {
+            warning.remove();
+            this.showPopupBlockerInstructions();
+        });
+
+        document.getElementById('dismiss-warning').addEventListener('click', () => {
+            warning.remove();
+        });
+
+        // Auto-dismiss after 10 seconds
+        setTimeout(() => {
+            if (document.getElementById('popup-blocker-warning')) {
+                warning.remove();
+            }
+        }, 10000);
+    },
+
     // Listen for authentication state changes
     async onAuthStateChanged(callback) {
         try {
@@ -342,24 +528,31 @@ window.FirebaseAuth = {
     }
 };
 
-// Initialize Firebase when the page loads
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        console.log('DOM loaded, initializing Firebase...');
-        await window.FirebaseAuth.init();
-        console.log('Firebase initialized, updating UI...');
-        window.FirebaseAuth.updateAuthUI();
+    // Initialize Firebase when the page loads
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            console.log('DOM loaded, initializing Firebase...');
+            await window.FirebaseAuth.init();
+            console.log('Firebase initialized, updating UI...');
+            window.FirebaseAuth.updateAuthUI();
 
-        // Listen for auth state changes
-        window.FirebaseAuth.onAuthStateChanged((user) => {
-            console.log('Auth state changed:', user ? 'User signed in' : 'User signed out');
-            window.FirebaseAuth.updateAuthUI(user);
-        });
-    } catch (error) {
-        console.error('Failed to initialize Firebase:', error);
-        console.error('This might be due to network issues or Firebase configuration problems');
-    }
-});
+            // Check for popup blocker and show warning if needed
+            const isBlocked = await window.FirebaseAuth.detectPopupBlocker();
+            if (isBlocked) {
+                console.log('Popup blocker detected, showing warning...');
+                window.FirebaseAuth.showPopupBlockerWarning();
+            }
+
+            // Listen for auth state changes
+            window.FirebaseAuth.onAuthStateChanged((user) => {
+                console.log('Auth state changed:', user ? 'User signed in' : 'User signed out');
+                window.FirebaseAuth.updateAuthUI(user);
+            });
+        } catch (error) {
+            console.error('Failed to initialize Firebase:', error);
+            console.error('This might be due to network issues or Firebase configuration problems');
+        }
+    });
 
 // Add a fallback initialization method
 window.addEventListener('load', async () => {
@@ -376,5 +569,5 @@ window.addEventListener('load', async () => {
 });
 
 // Make functions globally available for backward compatibility
-window.signInWithGoogle = () => window.FirebaseAuth.signInWithGoogle();
+window.signInWithGoogle = () => window.FirebaseAuth.signInWithGoogleEnhanced();
 window.signOut = () => window.FirebaseAuth.signOut();
