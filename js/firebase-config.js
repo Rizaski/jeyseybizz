@@ -565,6 +565,30 @@ window.FirebaseAuth = {
                 };
                 localStorage.setItem('user', JSON.stringify(userData));
 
+                // Create or update user profile in Firestore
+                if (window.FirebaseDB) {
+                    try {
+                        const existingProfile = await window.FirebaseDB.getUserProfile(user.uid);
+                        if (!existingProfile) {
+                            await window.FirebaseDB.createUserProfile(user);
+                            console.log('New user profile created in Firestore');
+                        } else {
+                            await window.FirebaseDB.updateUserProfile(user.uid, {
+                                lastLogin: new Date().toISOString()
+                            });
+                            console.log('User profile updated in Firestore');
+                        }
+                        
+                        // Track user login
+                        await window.FirebaseDB.trackUserAction(user.uid, 'user_login', {
+                            method: 'google_redirect'
+                        });
+                    } catch (dbError) {
+                        console.error('Error managing user profile:', dbError);
+                        // Continue with authentication even if database fails
+                    }
+                }
+
                 // Update UI
                 this.updateAuthUI(user);
 

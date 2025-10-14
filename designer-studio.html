@@ -25,6 +25,8 @@
     
     <!-- Global Firebase Authentication -->
     <script src="js/firebase-config.js"></script>
+    <!-- Global Firebase Database -->
+    <script src="js/firebase-database.js"></script>
     
     <script>
         tailwind.config = {
@@ -988,20 +990,115 @@
             preview.classList.add('hidden');
         }
 
-        function downloadPNG() {
-            // Simple download implementation
-            const link = document.createElement('a');
-            link.download = `jersey-design-${jerseyState.view}.png`;
-            link.href = renderer.domElement.toDataURL();
-            link.click();
+        async function downloadPNG() {
+            try {
+                // Get current design data
+                const designData = getCurrentDesignData();
+                
+                // Save design to Firestore if user is authenticated
+                if (window.FirebaseDB && window.FirebaseAuth) {
+                    const user = window.FirebaseAuth.getCurrentUser();
+                    if (user) {
+                        try {
+                            await window.FirebaseDB.saveJerseyDesign({
+                                userId: user.uid,
+                                name: designData.name || 'Untitled Design',
+                                type: designData.type || 'Custom Jersey',
+                                colors: designData.colors,
+                                patterns: designData.patterns,
+                                text: designData.text,
+                                numbers: designData.numbers,
+                                logo: designData.logo,
+                                imageData: renderer.domElement.toDataURL(),
+                                isPublic: false,
+                                createdAt: new Date().toISOString()
+                            });
+                            
+                            // Track user action
+                            await window.FirebaseDB.trackUserAction(user.uid, 'design_created', {
+                                designType: designData.type
+                            });
+                            
+                            console.log('Design saved to Firestore');
+                        } catch (error) {
+                            console.error('Error saving design to Firestore:', error);
+                        }
+                    }
+                }
+                
+                // Download the image
+                const link = document.createElement('a');
+                link.download = `jersey-design-${jerseyState.view}.png`;
+                link.href = renderer.domElement.toDataURL();
+                link.click();
+            } catch (error) {
+                console.error('Error downloading PNG:', error);
+                alert('Error downloading PNG');
+            }
         }
 
-        function downloadPDF() {
-            // Simple PDF download implementation
-            const link = document.createElement('a');
-            link.download = `jersey-design-${jerseyState.view}.pdf`;
-            link.href = renderer.domElement.toDataURL();
-            link.click();
+        async function downloadPDF() {
+            try {
+                // Get current design data
+                const designData = getCurrentDesignData();
+                
+                // Save design to Firestore if user is authenticated
+                if (window.FirebaseDB && window.FirebaseAuth) {
+                    const user = window.FirebaseAuth.getCurrentUser();
+                    if (user) {
+                        try {
+                            await window.FirebaseDB.saveJerseyDesign({
+                                userId: user.uid,
+                                name: designData.name || 'Untitled Design',
+                                type: designData.type || 'Custom Jersey',
+                                colors: designData.colors,
+                                patterns: designData.patterns,
+                                text: designData.text,
+                                numbers: designData.numbers,
+                                logo: designData.logo,
+                                imageData: renderer.domElement.toDataURL(),
+                                isPublic: false,
+                                createdAt: new Date().toISOString()
+                            });
+                            
+                            // Track user action
+                            await window.FirebaseDB.trackUserAction(user.uid, 'design_created', {
+                                designType: designData.type
+                            });
+                            
+                            console.log('Design saved to Firestore');
+                        } catch (error) {
+                            console.error('Error saving design to Firestore:', error);
+                        }
+                    }
+                }
+                
+                // Download the PDF
+                const link = document.createElement('a');
+                link.download = `jersey-design-${jerseyState.view}.pdf`;
+                link.href = renderer.domElement.toDataURL();
+                link.click();
+            } catch (error) {
+                console.error('Error downloading PDF:', error);
+                alert('Error downloading PDF');
+            }
+        }
+
+        function getCurrentDesignData() {
+            return {
+                name: document.getElementById('design-name')?.value || 'Untitled Design',
+                type: document.getElementById('jersey-type')?.value || 'Custom Jersey',
+                colors: {
+                    primary: jerseyState.jerseyColor,
+                    secondary: jerseyState.secondaryColor,
+                    accent: jerseyState.accentColor
+                },
+                patterns: jerseyState.patterns,
+                text: jerseyState.text,
+                numbers: jerseyState.numbers,
+                logo: jerseyState.logo,
+                view: jerseyState.view
+            };
         }
 
         // Listen for authentication state changes

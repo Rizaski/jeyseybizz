@@ -22,6 +22,8 @@
 
     <!-- Global Firebase Authentication -->
     <script src="js/firebase-config.js"></script>
+    <!-- Global Firebase Database -->
+    <script src="js/firebase-database.js"></script>
 
     <script>
         tailwind.config = {
@@ -510,21 +512,181 @@
             }
         });
 
-        function updateUserInfo(user) {
-            const userName = document.getElementById('user-name');
-            const userEmail = document.getElementById('user-email');
-            const userInitial = document.getElementById('user-initial');
+           async function updateUserInfo(user) {
+               const userName = document.getElementById('user-name');
+               const userEmail = document.getElementById('user-email');
+               const userInitial = document.getElementById('user-initial');
 
-            if (userName) {
-                userName.textContent = user.displayName || 'User';
-            }
-            if (userEmail) {
-                userEmail.textContent = user.email || 'user@example.com';
-            }
-            if (userInitial) {
-                userInitial.textContent = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
-            }
-        }
+               if (userName) {
+                   userName.textContent = user.displayName || 'User';
+               }
+               if (userEmail) {
+                   userEmail.textContent = user.email || 'user@example.com';
+               }
+               if (userInitial) {
+                   userInitial.textContent = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+               }
+
+               // Load user profile data from Firestore
+               if (window.FirebaseDB) {
+                   try {
+                       const userProfile = await window.FirebaseDB.getUserProfile(user.uid);
+                       if (userProfile) {
+                           updateUserStats(userProfile);
+                           loadUserOrders(user.uid);
+                           loadUserDesigns(user.uid);
+                       }
+                   } catch (error) {
+                       console.error('Error loading user profile:', error);
+                   }
+               }
+           }
+
+           function updateUserStats(profile) {
+               const totalOrdersEl = document.getElementById('total-orders');
+               const totalSpentEl = document.getElementById('total-spent');
+               const jerseysDesignedEl = document.getElementById('jerseys-designed');
+
+               if (totalOrdersEl) {
+                   totalOrdersEl.textContent = profile.totalOrders || 0;
+               }
+               if (totalSpentEl) {
+                   totalSpentEl.textContent = `$${profile.totalSpent || 0}`;
+               }
+               if (jerseysDesignedEl) {
+                   jerseysDesignedEl.textContent = profile.jerseysDesigned || 0;
+               }
+           }
+
+           async function loadUserOrders(uid) {
+               if (!window.FirebaseDB) return;
+
+               try {
+                   const orders = await window.FirebaseDB.getUserOrders(uid);
+                   displayOrders(orders);
+               } catch (error) {
+                   console.error('Error loading user orders:', error);
+               }
+           }
+
+           function displayOrders(orders) {
+               const ordersContainer = document.getElementById('orders-container');
+               if (!ordersContainer) return;
+
+               if (orders.length === 0) {
+                   ordersContainer.innerHTML = `
+                       <div class="text-center py-8">
+                           <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-rog-red">
+                               <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                               </svg>
+                           </div>
+                           <h3 class="text-lg font-rog-heading font-semibold text-white mb-2">No Orders Yet</h3>
+                           <p class="text-gray-400 font-rog-body">Your order history will appear here once you place your first order.</p>
+                       </div>
+                   `;
+                   return;
+               }
+
+               ordersContainer.innerHTML = orders.map(order => `
+                   <div class="bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
+                       <div class="flex justify-between items-start mb-4">
+                           <div>
+                               <h3 class="text-lg font-rog-heading font-semibold text-white">Order #${order.orderId}</h3>
+                               <p class="text-sm text-gray-400 font-rog-body">${new Date(order.createdAt).toLocaleDateString()}</p>
+                           </div>
+                           <span class="px-3 py-1 rounded-full text-xs font-rog-heading font-semibold ${
+                               order.status === 'completed' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                               order.status === 'shipped' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' :
+                               order.status === 'processing' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                               'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                           }">
+                               ${order.status.toUpperCase()}
+                           </span>
+                       </div>
+                       <div class="space-y-2">
+                           <div class="flex justify-between">
+                               <span class="text-gray-400 font-rog-body">Items:</span>
+                               <span class="text-white font-rog-body">${order.items.length}</span>
+                           </div>
+                           <div class="flex justify-between">
+                               <span class="text-gray-400 font-rog-body">Total:</span>
+                               <span class="text-rog-red font-rog-heading font-semibold">$${order.totalAmount}</span>
+                           </div>
+                       </div>
+                   </div>
+               `).join('');
+           }
+
+           async function loadUserDesigns(uid) {
+               if (!window.FirebaseDB) return;
+
+               try {
+                   const designs = await window.FirebaseDB.getUserDesigns(uid);
+                   displayDesigns(designs);
+               } catch (error) {
+                   console.error('Error loading user designs:', error);
+               }
+           }
+
+           function displayDesigns(designs) {
+               const designsContainer = document.getElementById('designs-container');
+               if (!designsContainer) return;
+
+               if (designs.length === 0) {
+                   designsContainer.innerHTML = `
+                       <div class="text-center py-8">
+                           <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-rog-red">
+                               <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
+                               </svg>
+                           </div>
+                           <h3 class="text-lg font-rog-heading font-semibold text-white mb-2">No Designs Yet</h3>
+                           <p class="text-gray-400 font-rog-body">Your jersey designs will appear here once you create your first design.</p>
+                       </div>
+                   `;
+                   return;
+               }
+
+               designsContainer.innerHTML = designs.map(design => `
+                   <div class="bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
+                       <div class="flex justify-between items-start mb-4">
+                           <div>
+                               <h3 class="text-lg font-rog-heading font-semibold text-white">${design.name || 'Untitled Design'}</h3>
+                               <p class="text-sm text-gray-400 font-rog-body">${new Date(design.createdAt).toLocaleDateString()}</p>
+                           </div>
+                           <div class="flex space-x-2">
+                               <button onclick="editDesign('${design.id}')" class="px-3 py-1 bg-rog-red/20 text-rog-red rounded-lg hover:bg-rog-red hover:text-white transition-all duration-300 border border-rog-red/30 text-sm font-rog-heading">
+                                   Edit
+                               </button>
+                               <button onclick="downloadDesign('${design.id}')" class="px-3 py-1 bg-rog-light/20 text-white rounded-lg hover:bg-rog-red transition-all duration-300 border border-rog-red/30 text-sm font-rog-heading">
+                                   Download
+                               </button>
+                           </div>
+                       </div>
+                       <div class="space-y-2">
+                           <div class="flex justify-between">
+                               <span class="text-gray-400 font-rog-body">Type:</span>
+                               <span class="text-white font-rog-body">${design.type || 'Custom Jersey'}</span>
+                           </div>
+                           <div class="flex justify-between">
+                               <span class="text-gray-400 font-rog-body">Status:</span>
+                               <span class="text-rog-red font-rog-heading font-semibold">${design.isPublic ? 'Public' : 'Private'}</span>
+                           </div>
+                       </div>
+                   </div>
+               `).join('');
+           }
+
+           // Design management functions
+           function editDesign(designId) {
+               window.location.href = `designer-studio.html?edit=${designId}`;
+           }
+
+           function downloadDesign(designId) {
+               // Implement design download functionality
+               console.log('Downloading design:', designId);
+           }
 
         // Listen for authentication state changes
         if (window.FirebaseAuth) {

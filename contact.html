@@ -43,6 +43,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Global Firebase Authentication -->
     <script src="js/firebase-config.js"></script>
+    <!-- Global Firebase Database -->
+    <script src="js/firebase-database.js"></script>
 
     <script type="module">
         // Import Firebase modules
@@ -475,6 +477,8 @@
 
     <!-- Global Firebase Authentication -->
     <script src="js/firebase-config.js"></script>
+    <!-- Global Firebase Database -->
+    <script src="js/firebase-database.js"></script>
 </head>
 
 <body class="min-h-screen bg-rog-dark text-white">
@@ -1060,7 +1064,21 @@
 
     <script>
         // Wait for DOM to be fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Track page visit
+            if (window.FirebaseDB && window.FirebaseAuth) {
+                try {
+                    const user = window.FirebaseAuth.getCurrentUser();
+                    const userId = user?.uid || 'anonymous';
+                    await window.FirebaseDB.trackUserAction(userId, 'page_visit', {
+                        page: 'contact',
+                        url: window.location.href,
+                        timestamp: new Date().toISOString()
+                    });
+                } catch (error) {
+                    console.error('Error tracking page visit:', error);
+                }
+            }
             // Mobile menu functionality
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -1260,8 +1278,36 @@
             // Form submission
             const contactForm = document.querySelector('form');
             if (contactForm) {
-                contactForm.addEventListener('submit', (e) => {
+                contactForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
+                    
+                    // Track form submission
+                    if (window.FirebaseDB && window.FirebaseAuth) {
+                        try {
+                            const user = window.FirebaseAuth.getCurrentUser();
+                            const userId = user?.uid || 'anonymous';
+                            
+                            // Get form data
+                            const formData = new FormData(contactForm);
+                            const data = Object.fromEntries(formData);
+                            
+                            await window.FirebaseDB.trackUserAction(userId, 'contact_form_submitted', {
+                                formData: {
+                                    firstName: data.firstName,
+                                    lastName: data.lastName,
+                                    email: data.email,
+                                    subject: data.subject,
+                                    message: data.message
+                                },
+                                timestamp: new Date().toISOString()
+                            });
+                            
+                            console.log('Contact form submission tracked');
+                        } catch (error) {
+                            console.error('Error tracking form submission:', error);
+                        }
+                    }
+                    
                     alert('Thank you for your message! We will get back to you within 24 hours.');
                     contactForm.reset();
                 });
