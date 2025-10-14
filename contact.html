@@ -1069,7 +1069,7 @@
             if (window.FirebaseDB && window.FirebaseAuth) {
                 try {
                     const user = window.FirebaseAuth.getCurrentUser();
-                    const userId = user?.uid || 'anonymous';
+                    const userId = user ? .uid || 'anonymous';
                     await window.FirebaseDB.trackUserAction(userId, 'page_visit', {
                         page: 'contact',
                         url: window.location.href,
@@ -1280,17 +1280,17 @@
             if (contactForm) {
                 contactForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    
+
                     // Track form submission
                     if (window.FirebaseDB && window.FirebaseAuth) {
                         try {
                             const user = window.FirebaseAuth.getCurrentUser();
-                            const userId = user?.uid || 'anonymous';
-                            
+                            const userId = user ? .uid || 'anonymous';
+
                             // Get form data
                             const formData = new FormData(contactForm);
                             const data = Object.fromEntries(formData);
-                            
+
                             await window.FirebaseDB.trackUserAction(userId, 'contact_form_submitted', {
                                 formData: {
                                     firstName: data.firstName,
@@ -1301,13 +1301,13 @@
                                 },
                                 timestamp: new Date().toISOString()
                             });
-                            
+
                             console.log('Contact form submission tracked');
                         } catch (error) {
                             console.error('Error tracking form submission:', error);
                         }
                     }
-                    
+
                     alert('Thank you for your message! We will get back to you within 24 hours.');
                     contactForm.reset();
                 });

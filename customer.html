@@ -512,69 +512,69 @@
             }
         });
 
-           async function updateUserInfo(user) {
-               const userName = document.getElementById('user-name');
-               const userEmail = document.getElementById('user-email');
-               const userInitial = document.getElementById('user-initial');
+        async function updateUserInfo(user) {
+            const userName = document.getElementById('user-name');
+            const userEmail = document.getElementById('user-email');
+            const userInitial = document.getElementById('user-initial');
 
-               if (userName) {
-                   userName.textContent = user.displayName || 'User';
-               }
-               if (userEmail) {
-                   userEmail.textContent = user.email || 'user@example.com';
-               }
-               if (userInitial) {
-                   userInitial.textContent = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
-               }
+            if (userName) {
+                userName.textContent = user.displayName || 'User';
+            }
+            if (userEmail) {
+                userEmail.textContent = user.email || 'user@example.com';
+            }
+            if (userInitial) {
+                userInitial.textContent = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+            }
 
-               // Load user profile data from Firestore
-               if (window.FirebaseDB) {
-                   try {
-                       const userProfile = await window.FirebaseDB.getUserProfile(user.uid);
-                       if (userProfile) {
-                           updateUserStats(userProfile);
-                           loadUserOrders(user.uid);
-                           loadUserDesigns(user.uid);
-                       }
-                   } catch (error) {
-                       console.error('Error loading user profile:', error);
-                   }
-               }
-           }
+            // Load user profile data from Firestore
+            if (window.FirebaseDB) {
+                try {
+                    const userProfile = await window.FirebaseDB.getUserProfile(user.uid);
+                    if (userProfile) {
+                        updateUserStats(userProfile);
+                        loadUserOrders(user.uid);
+                        loadUserDesigns(user.uid);
+                    }
+                } catch (error) {
+                    console.error('Error loading user profile:', error);
+                }
+            }
+        }
 
-           function updateUserStats(profile) {
-               const totalOrdersEl = document.getElementById('total-orders');
-               const totalSpentEl = document.getElementById('total-spent');
-               const jerseysDesignedEl = document.getElementById('jerseys-designed');
+        function updateUserStats(profile) {
+            const totalOrdersEl = document.getElementById('total-orders');
+            const totalSpentEl = document.getElementById('total-spent');
+            const jerseysDesignedEl = document.getElementById('jerseys-designed');
 
-               if (totalOrdersEl) {
-                   totalOrdersEl.textContent = profile.totalOrders || 0;
-               }
-               if (totalSpentEl) {
-                   totalSpentEl.textContent = `$${profile.totalSpent || 0}`;
-               }
-               if (jerseysDesignedEl) {
-                   jerseysDesignedEl.textContent = profile.jerseysDesigned || 0;
-               }
-           }
+            if (totalOrdersEl) {
+                totalOrdersEl.textContent = profile.totalOrders || 0;
+            }
+            if (totalSpentEl) {
+                totalSpentEl.textContent = `$${profile.totalSpent || 0}`;
+            }
+            if (jerseysDesignedEl) {
+                jerseysDesignedEl.textContent = profile.jerseysDesigned || 0;
+            }
+        }
 
-           async function loadUserOrders(uid) {
-               if (!window.FirebaseDB) return;
+        async function loadUserOrders(uid) {
+            if (!window.FirebaseDB) return;
 
-               try {
-                   const orders = await window.FirebaseDB.getUserOrders(uid);
-                   displayOrders(orders);
-               } catch (error) {
-                   console.error('Error loading user orders:', error);
-               }
-           }
+            try {
+                const orders = await window.FirebaseDB.getUserOrders(uid);
+                displayOrders(orders);
+            } catch (error) {
+                console.error('Error loading user orders:', error);
+            }
+        }
 
-           function displayOrders(orders) {
-               const ordersContainer = document.getElementById('orders-container');
-               if (!ordersContainer) return;
+        function displayOrders(orders) {
+            const ordersContainer = document.getElementById('orders-container');
+            if (!ordersContainer) return;
 
-               if (orders.length === 0) {
-                   ordersContainer.innerHTML = `
+            if (orders.length === 0) {
+                ordersContainer.innerHTML = `
                        <div class="text-center py-8">
                            <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-rog-red">
                                <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -585,10 +585,10 @@
                            <p class="text-gray-400 font-rog-body">Your order history will appear here once you place your first order.</p>
                        </div>
                    `;
-                   return;
-               }
+                return;
+            }
 
-               ordersContainer.innerHTML = orders.map(order => `
+            ordersContainer.innerHTML = orders.map(order => `
                    <div class="bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
                        <div class="flex justify-between items-start mb-4">
                            <div>
@@ -616,25 +616,25 @@
                        </div>
                    </div>
                `).join('');
-           }
+        }
 
-           async function loadUserDesigns(uid) {
-               if (!window.FirebaseDB) return;
+        async function loadUserDesigns(uid) {
+            if (!window.FirebaseDB) return;
 
-               try {
-                   const designs = await window.FirebaseDB.getUserDesigns(uid);
-                   displayDesigns(designs);
-               } catch (error) {
-                   console.error('Error loading user designs:', error);
-               }
-           }
+            try {
+                const designs = await window.FirebaseDB.getUserDesigns(uid);
+                displayDesigns(designs);
+            } catch (error) {
+                console.error('Error loading user designs:', error);
+            }
+        }
 
-           function displayDesigns(designs) {
-               const designsContainer = document.getElementById('designs-container');
-               if (!designsContainer) return;
+        function displayDesigns(designs) {
+            const designsContainer = document.getElementById('designs-container');
+            if (!designsContainer) return;
 
-               if (designs.length === 0) {
-                   designsContainer.innerHTML = `
+            if (designs.length === 0) {
+                designsContainer.innerHTML = `
                        <div class="text-center py-8">
                            <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-rog-red">
                                <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -645,10 +645,10 @@
                            <p class="text-gray-400 font-rog-body">Your jersey designs will appear here once you create your first design.</p>
                        </div>
                    `;
-                   return;
-               }
+                return;
+            }
 
-               designsContainer.innerHTML = designs.map(design => `
+            designsContainer.innerHTML = designs.map(design => `
                    <div class="bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
                        <div class="flex justify-between items-start mb-4">
                            <div>
@@ -676,17 +676,17 @@
                        </div>
                    </div>
                `).join('');
-           }
+        }
 
-           // Design management functions
-           function editDesign(designId) {
-               window.location.href = `designer-studio.html?edit=${designId}`;
-           }
+        // Design management functions
+        function editDesign(designId) {
+            window.location.href = `designer-studio.html?edit=${designId}`;
+        }
 
-           function downloadDesign(designId) {
-               // Implement design download functionality
-               console.log('Downloading design:', designId);
-           }
+        function downloadDesign(designId) {
+            // Implement design download functionality
+            console.log('Downloading design:', designId);
+        }
 
         // Listen for authentication state changes
         if (window.FirebaseAuth) {

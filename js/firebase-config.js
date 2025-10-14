@@ -578,7 +578,7 @@ window.FirebaseAuth = {
                             });
                             console.log('User profile updated in Firestore');
                         }
-                        
+
                         // Track user login
                         await window.FirebaseDB.trackUserAction(user.uid, 'user_login', {
                             method: 'google_redirect'

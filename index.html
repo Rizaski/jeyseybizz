@@ -687,7 +687,7 @@
             if (window.FirebaseDB && window.FirebaseAuth) {
                 try {
                     const user = window.FirebaseAuth.getCurrentUser();
-                    const userId = user?.uid || 'anonymous';
+                    const userId = user ? .uid || 'anonymous';
                     await window.FirebaseDB.trackUserAction(userId, 'page_visit', {
                         page: 'index',
                         url: window.location.href,
@@ -1065,9 +1065,9 @@
                     addMessage(message, 'user');
 
                     // Get current user
-                    const user = window.FirebaseAuth?.getCurrentUser();
-                    const userId = user?.uid || 'anonymous';
-                    const userName = user?.displayName || 'Guest';
+                    const user = window.FirebaseAuth ? .getCurrentUser();
+                    const userId = user ? .uid || 'anonymous';
+                    const userName = user ? .displayName || 'Guest';
 
                     // Save message to Firestore
                     await window.FirebaseDB.sendChatMessage({
@@ -1086,7 +1086,7 @@
                     // Simulate bot response
                     setTimeout(async () => {
                         const randomResponse = chatResponses[Math.floor(Math.random() * chatResponses.length)];
-                        
+
                         // Add bot response to UI
                         addMessage(randomResponse, 'bot');
 
@@ -1130,7 +1130,7 @@
                 try {
                     const messages = await window.FirebaseDB.getChatMessages(20);
                     const messagesContainer = document.getElementById('chat-messages');
-                    
+
                     if (messagesContainer && messages.length > 0) {
                         // Clear existing messages except the first welcome message
                         const welcomeMessage = messagesContainer.querySelector('.flex.items-start.space-x-3');
