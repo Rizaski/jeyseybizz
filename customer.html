@@ -224,40 +224,91 @@
 
 <body class="min-h-screen bg-rog-dark text-white">
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+    <header class="sticky top-0 z-50 bg-rog-dark/95 backdrop-blur-sm border-b border-rog-red shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <img src="public/logo.png" alt="Otomono Logo" class="h-8 w-auto" />
-                    <span class="ml-3 text-xl font-rog-display font-bold text-gray-900">Otomono</span>
+                    <img src="public/logo-white.png" alt="Otomono Logo" class="h-8 w-auto" />
                 </div>
 
                 <!-- Navigation -->
                 <nav class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-600 hover:text-rog-red transition-colors font-rog-heading">Home</a>
-                    <a href="services.html" class="text-gray-600 hover:text-rog-red transition-colors font-rog-heading">Services</a>
-                    <a href="about.html" class="text-gray-600 hover:text-rog-red transition-colors font-rog-heading">About</a>
-                    <a href="contact.html" class="text-gray-600 hover:text-rog-red transition-colors font-rog-heading">Contact</a>
+                    <a href="index.html" class="text-gray-300 hover:text-rog-red transition-colors font-rog-heading hover:glow">Home</a>
+                    <a href="services.html" class="text-gray-300 hover:text-rog-red transition-colors font-rog-heading hover:glow">Services</a>
+                    <a href="about.html" class="text-gray-300 hover:text-rog-red transition-colors font-rog-heading hover:glow">About</a>
+                    <a href="contact.html" class="text-gray-300 hover:text-rog-red transition-colors font-rog-heading hover:glow">Contact</a>
+                    <a href="customer.html" class="text-rog-red border-b-2 border-rog-red pb-2 glow font-rog-heading">Dashboard</a>
+                    <a href="designer-studio.html" class="text-rog-red border-b-2 border-rog-red pb-2 glow font-rog-heading">Design Studio</a>
                 </nav>
 
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg bg-rog-light hover:bg-rog-red transition-all duration-200 group relative border border-rog-red">
+                    <svg class="w-5 h-5 text-white group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+
                 <!-- User Actions -->
-                <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-4">
                     <!-- User Profile -->
                     <div class="flex items-center space-x-3">
                         <div class="w-8 h-8 bg-rog-red rounded-full flex items-center justify-center">
                             <span class="text-white text-sm font-rog-heading font-bold" id="user-initial">U</span>
                         </div>
                         <div class="hidden sm:block">
-                            <p class="text-sm font-rog-heading font-semibold text-gray-900" id="user-name">User Name</p>
-                            <p class="text-xs text-gray-500 font-rog-body" id="user-email">user@example.com</p>
+                            <p class="text-sm font-rog-heading font-semibold text-white" id="user-name">User Name</p>
+                            <p class="text-xs text-gray-400 font-rog-body" id="user-email">user@example.com</p>
                         </div>
                     </div>
 
                     <!-- Sign Out Button -->
-                    <button id="sign-out-btn" class="px-4 py-2 text-sm font-rog-heading text-gray-600 hover:text-rog-red transition-colors border border-gray-300 rounded-lg hover:border-rog-red">
+                    <button id="sign-out-btn" class="px-4 py-2 text-sm font-rog-heading text-gray-300 hover:text-rog-red transition-colors border border-rog-red/30 rounded-lg hover:border-rog-red">
                         Sign Out
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="fixed inset-0 z-50 bg-black bg-opacity-75 hidden md:hidden">
+            <div class="fixed top-0 right-0 h-full w-80 bg-rog-dark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out border-l border-rog-red/30">
+                <div class="flex flex-col h-full">
+                    <div class="flex items-center justify-between p-6 border-b border-rog-red/30 bg-rog-dark">
+                        <img src="public/logo-white.png" alt="Otomono Logo" class="h-8 w-auto" />
+                        <button id="mobile-menu-close" class="p-2 rounded-lg hover:bg-rog-red/20 transition-colors border border-rog-red/30">
+                            <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <nav class="flex-1 px-6 py-8 bg-rog-dark">
+                        <div class="space-y-6">
+                            <a href="index.html" class="block text-xl font-rog-heading font-semibold text-white hover:text-rog-red transition-colors py-2 border-b border-rog-red/20 hover:border-rog-red">Home</a>
+                            <a href="services.html" class="block text-xl font-rog-heading font-semibold text-white hover:text-rog-red transition-colors py-2 border-b border-rog-red/20 hover:border-rog-red">Services</a>
+                            <a href="about.html" class="block text-xl font-rog-heading font-semibold text-white hover:text-rog-red transition-colors py-2 border-b border-rog-red/20 hover:border-rog-red">About</a>
+                            <a href="contact.html" class="block text-xl font-rog-heading font-semibold text-white hover:text-rog-red transition-colors py-2 border-b border-rog-red/20 hover:border-rog-red">Contact</a>
+                            <a href="customer.html" class="block text-xl font-rog-heading font-semibold text-rog-red border-b-2 border-rog-red pb-2 glow">Dashboard</a>
+                            <a href="designer-studio.html" class="block text-xl font-rog-heading font-semibold text-rog-red border-b-2 border-rog-red pb-2 glow">Design Studio</a>
+                        </div>
+                        <div class="mt-8 pt-8 border-t border-rog-red/30 space-y-4">
+                            <div class="flex items-center space-x-3 p-4 bg-rog-light/20 backdrop-blur-sm rounded-lg border border-rog-red/30">
+                                <div class="w-10 h-10 bg-rog-red rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm font-rog-heading font-bold" id="mobile-user-initial">U</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-rog-heading font-semibold text-white" id="mobile-user-name">User Name</p>
+                                    <p class="text-xs text-gray-400 font-rog-body" id="mobile-user-email">user@example.com</p>
+                                </div>
+                            </div>
+                            <button id="mobile-sign-out" class="w-full flex items-center justify-center px-4 py-3 bg-rog-light/20 backdrop-blur-sm rounded-lg hover:bg-rog-red/20 transition-all duration-300 border border-rog-red/30 hover:border-rog-red">
+                                <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                                <span class="text-white font-rog-heading font-medium">Sign Out</span>
+                            </button>
+                        </div>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -296,106 +347,10 @@
                         <div class="p-6">
                             <!-- Order Cards -->
                             <div class="space-y-4" id="orders-container">
-                                <!-- Sample Order 1 -->
-                                <div class="order-card rounded-lg p-6">
-                                    <div class="flex items-center justify-between mb-4">
-                                        <div>
-                                            <h3 class="text-lg font-rog-heading font-semibold text-white">Custom Team Jerseys</h3>
-                                            <p class="text-gray-400 font-rog-body text-sm">Order #OTM-2024-001</p>
-                                        </div>
-                                        <span class="status-badge status-processing">Processing</span>
-                                    </div>
-                                    <div class="grid md:grid-cols-3 gap-4 mb-4">
-                                        <div>
-                                            <p class="text-sm text-gray-400 font-rog-body">Quantity</p>
-                                            <p class="text-white font-rog-heading font-semibold">12 Jerseys</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-400 font-rog-body">Total</p>
-                                            <p class="text-white font-rog-heading font-semibold">$480.00</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-400 font-rog-body">Order Date</p>
-                                            <p class="text-white font-rog-heading font-semibold">Dec 15, 2024</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center space-x-2">
-                                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                                            <span class="text-sm text-gray-400 font-rog-body">Expected delivery: Dec 22, 2024</span>
-                                        </div>
-                                        <button class="text-rog-red hover:text-red-400 transition-colors font-rog-heading text-sm">
-                                            View Details
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Sample Order 2 -->
-                                <div class="order-card rounded-lg p-6">
-                                    <div class="flex items-center justify-between mb-4">
-                                        <div>
-                                            <h3 class="text-lg font-rog-heading font-semibold text-white">Personal Jersey</h3>
-                                            <p class="text-gray-400 font-rog-body text-sm">Order #OTM-2024-002</p>
-                                        </div>
-                                        <span class="status-badge status-delivered">Delivered</span>
-                                    </div>
-                                    <div class="grid md:grid-cols-3 gap-4 mb-4">
-                                        <div>
-                                            <p class="text-sm text-gray-400 font-rog-body">Quantity</p>
-                                            <p class="text-white font-rog-heading font-semibold">1 Jersey</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-400 font-rog-body">Total</p>
-                                            <p class="text-white font-rog-heading font-semibold">$45.00</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-400 font-rog-body">Order Date</p>
-                                            <p class="text-white font-rog-heading font-semibold">Dec 1, 2024</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center space-x-2">
-                                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            <span class="text-sm text-gray-400 font-rog-body">Delivered on Dec 8, 2024</span>
-                                        </div>
-                                        <button class="text-rog-red hover:text-red-400 transition-colors font-rog-heading text-sm">
-                                            View Details
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Sample Order 3 -->
-                                <div class="order-card rounded-lg p-6">
-                                    <div class="flex items-center justify-between mb-4">
-                                        <div>
-                                            <h3 class="text-lg font-rog-heading font-semibold text-white">Bulk Team Order</h3>
-                                            <p class="text-gray-400 font-rog-body text-sm">Order #OTM-2024-003</p>
-                                        </div>
-                                        <span class="status-badge status-shipped">Shipped</span>
-                                    </div>
-                                    <div class="grid md:grid-cols-3 gap-4 mb-4">
-                                        <div>
-                                            <p class="text-sm text-gray-400 font-rog-body">Quantity</p>
-                                            <p class="text-white font-rog-heading font-semibold">25 Jerseys</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-400 font-rog-body">Total</p>
-                                            <p class="text-white font-rog-heading font-semibold">$875.00</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-400 font-rog-body">Order Date</p>
-                                            <p class="text-white font-rog-heading font-semibold">Nov 28, 2024</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center space-x-2">
-                                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            <span class="text-sm text-gray-400 font-rog-body">Shipped on Dec 10, 2024</span>
-                                        </div>
-                                        <button class="text-rog-red hover:text-red-400 transition-colors font-rog-heading text-sm">
-                                            Track Package
-                                        </button>
-                                    </div>
+                                <!-- Loading state -->
+                                <div id="orders-loading" class="text-center py-8">
+                                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-rog-red"></div>
+                                    <p class="text-gray-400 font-rog-body mt-2">Loading orders...</p>
                                 </div>
                             </div>
                         </div>
@@ -444,15 +399,31 @@
                         <div class="p-6 space-y-4">
                             <div class="flex items-center justify-between">
                                 <span class="text-gray-600 font-rog-body">Total Orders</span>
-                                <span class="text-2xl font-rog-display font-bold text-rog-red">3</span>
+                                <span class="text-2xl font-rog-display font-bold text-rog-red" id="total-orders">0</span>
                             </div>
                             <div class="flex items-center justify-between">
                                 <span class="text-gray-600 font-rog-body">Total Spent</span>
-                                <span class="text-2xl font-rog-display font-bold text-rog-red">$1,400</span>
+                                <span class="text-2xl font-rog-display font-bold text-rog-red" id="total-spent">$0</span>
                             </div>
                             <div class="flex items-center justify-between">
                                 <span class="text-gray-600 font-rog-body">Jerseys Designed</span>
-                                <span class="text-2xl font-rog-display font-bold text-rog-red">38</span>
+                                <span class="text-2xl font-rog-display font-bold text-rog-red" id="jerseys-designed">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Designs -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-rog-display font-bold text-gray-900">Recent Designs</h3>
+                        </div>
+                        <div class="p-6">
+                            <div id="designs-container">
+                                <!-- Loading state -->
+                                <div id="designs-loading" class="text-center py-4">
+                                    <div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-rog-red"></div>
+                                    <p class="text-gray-400 font-rog-body mt-2 text-sm">Loading designs...</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -464,51 +435,99 @@
     <script>
         // Authentication check with persistent session
         document.addEventListener('DOMContentLoaded', async function() {
-            // Wait for Firebase to initialize and restore auth state
-            await new Promise(resolve => {
-                const checkAuth = () => {
-                    if (window.FirebaseAuth && window.FirebaseAuth.getCurrentUser) {
-                        resolve();
-                    } else {
-                        setTimeout(checkAuth, 100);
-                    }
-                };
-                checkAuth();
-            });
-
-            // Wait a bit for authentication to be processed
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // Check localStorage first
-            const storedUser = localStorage.getItem('user');
-            console.log('Stored user data:', storedUser);
-
-            // Restore authentication state (persistent login)
-            const user = await window.FirebaseAuth.restoreAuthState();
-            console.log('Restored user:', user);
-
-            if (!user) {
-                console.log('No authenticated user, redirecting to home page');
-                window.location.href = 'index.html';
-                return;
-            }
-
-            console.log('User authenticated:', user.email);
-
-            // Update user information in header
-            updateUserInfo(user);
-
-            // Sign out functionality
-            const signOutBtn = document.getElementById('sign-out-btn');
-            if (signOutBtn) {
-                signOutBtn.addEventListener('click', async () => {
-                    try {
-                        await window.FirebaseAuth.signOut();
-                        window.location.href = 'index.html';
-                    } catch (error) {
-                        console.error('Sign out error:', error);
-                    }
+            try {
+                // Wait for Firebase to initialize and restore auth state
+                await new Promise(resolve => {
+                    const checkAuth = () => {
+                        if (window.FirebaseAuth && window.FirebaseAuth.getCurrentUser) {
+                            resolve();
+                        } else {
+                            setTimeout(checkAuth, 100);
+                        }
+                    };
+                    checkAuth();
                 });
+
+                // Wait a bit for authentication to be processed
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Check localStorage first
+                const storedUser = localStorage.getItem('user');
+                console.log('Stored user data:', storedUser);
+
+                // Restore authentication state (persistent login)
+                const user = await window.FirebaseAuth.restoreAuthState();
+                console.log('Restored user:', user);
+
+                if (!user) {
+                    console.log('No authenticated user, redirecting to home page');
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                console.log('User authenticated:', user.email);
+
+                // Update user information in header
+                updateUserInfo(user);
+
+                // Load user data from Firebase
+                await loadUserData(user.uid);
+
+                // Mobile menu functionality
+                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+                const mobileMenu = document.getElementById('mobile-menu');
+                const mobileMenuClose = document.getElementById('mobile-menu-close');
+                const mobileSignOut = document.getElementById('mobile-sign-out');
+
+                if (mobileMenuBtn && mobileMenu) {
+                    mobileMenuBtn.addEventListener('click', () => {
+                        mobileMenu.classList.remove('hidden');
+                    });
+                }
+
+                if (mobileMenuClose && mobileMenu) {
+                    mobileMenuClose.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                }
+
+                // Close mobile menu when clicking outside
+                if (mobileMenu) {
+                    mobileMenu.addEventListener('click', (e) => {
+                        if (e.target === mobileMenu) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    });
+                }
+
+                // Mobile sign out
+                if (mobileSignOut) {
+                    mobileSignOut.addEventListener('click', async () => {
+                        try {
+                            await window.FirebaseAuth.signOut();
+                            window.location.href = 'index.html';
+                        } catch (error) {
+                            console.error('Sign out error:', error);
+                        }
+                    });
+                }
+
+                // Sign out functionality
+                const signOutBtn = document.getElementById('sign-out-btn');
+                if (signOutBtn) {
+                    signOutBtn.addEventListener('click', async () => {
+                        try {
+                            await window.FirebaseAuth.signOut();
+                            window.location.href = 'index.html';
+                        } catch (error) {
+                            console.error('Sign out error:', error);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error initializing customer dashboard:', error);
+                // Redirect to home page if there's an error
+                window.location.href = 'index.html';
             }
         });
 
@@ -516,6 +535,9 @@
             const userName = document.getElementById('user-name');
             const userEmail = document.getElementById('user-email');
             const userInitial = document.getElementById('user-initial');
+            const mobileUserName = document.getElementById('mobile-user-name');
+            const mobileUserEmail = document.getElementById('mobile-user-email');
+            const mobileUserInitial = document.getElementById('mobile-user-initial');
 
             if (userName) {
                 userName.textContent = user.displayName || 'User';
@@ -526,19 +548,45 @@
             if (userInitial) {
                 userInitial.textContent = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
             }
+            if (mobileUserName) {
+                mobileUserName.textContent = user.displayName || 'User';
+            }
+            if (mobileUserEmail) {
+                mobileUserEmail.textContent = user.email || 'user@example.com';
+            }
+            if (mobileUserInitial) {
+                mobileUserInitial.textContent = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+            }
+        }
 
-            // Load user profile data from Firestore
-            if (window.FirebaseDB) {
-                try {
-                    const userProfile = await window.FirebaseDB.getUserProfile(user.uid);
-                    if (userProfile) {
-                        updateUserStats(userProfile);
-                        loadUserOrders(user.uid);
-                        loadUserDesigns(user.uid);
-                    }
-                } catch (error) {
-                    console.error('Error loading user profile:', error);
+        async function loadUserData(uid) {
+            if (!window.FirebaseDB) {
+                console.error('FirebaseDB not available');
+                return;
+            }
+
+            try {
+                // Load user profile data
+                const userProfile = await window.FirebaseDB.getUserProfile(uid);
+                if (userProfile) {
+                    updateUserStats(userProfile);
+                } else {
+                    // Create initial profile if it doesn't exist
+                    await window.FirebaseDB.createUserProfile({
+                        uid: uid,
+                        displayName: window.FirebaseAuth.getCurrentUser() ? .displayName || 'User',
+                        email: window.FirebaseAuth.getCurrentUser() ? .email || 'user@example.com'
+                    });
                 }
+
+                // Load user orders
+                await loadUserOrders(uid);
+
+                // Load user designs
+                await loadUserDesigns(uid);
+
+            } catch (error) {
+                console.error('Error loading user data:', error);
             }
         }
 
@@ -559,13 +607,37 @@
         }
 
         async function loadUserOrders(uid) {
-            if (!window.FirebaseDB) return;
+            if (!window.FirebaseDB) {
+                console.error('FirebaseDB not available');
+                return;
+            }
 
             try {
+                // Hide loading spinner
+                const loadingEl = document.getElementById('orders-loading');
+                if (loadingEl) {
+                    loadingEl.style.display = 'none';
+                }
+
                 const orders = await window.FirebaseDB.getUserOrders(uid);
                 displayOrders(orders);
             } catch (error) {
                 console.error('Error loading user orders:', error);
+                // Show error state
+                const ordersContainer = document.getElementById('orders-container');
+                if (ordersContainer) {
+                    ordersContainer.innerHTML = `
+                        <div class="text-center py-8">
+                            <div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-500">
+                                <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-rog-heading font-semibold text-white mb-2">Error Loading Orders</h3>
+                            <p class="text-gray-400 font-rog-body">There was an error loading your orders. Please try refreshing the page.</p>
+                        </div>
+                    `;
+                }
             }
         }
 
@@ -575,57 +647,105 @@
 
             if (orders.length === 0) {
                 ordersContainer.innerHTML = `
-                       <div class="text-center py-8">
-                           <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-rog-red">
-                               <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                               </svg>
-                           </div>
-                           <h3 class="text-lg font-rog-heading font-semibold text-white mb-2">No Orders Yet</h3>
-                           <p class="text-gray-400 font-rog-body">Your order history will appear here once you place your first order.</p>
-                       </div>
-                   `;
+                    <div class="text-center py-8">
+                        <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-rog-red">
+                            <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-rog-heading font-semibold text-white mb-2">No Orders Yet</h3>
+                        <p class="text-gray-400 font-rog-body">Your order history will appear here once you place your first order.</p>
+                        <a href="designer-studio.html" class="inline-block mt-4 rog-button">
+                            Start Designing
+                        </a>
+                    </div>
+                `;
                 return;
             }
 
             ordersContainer.innerHTML = orders.map(order => `
-                   <div class="bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
-                       <div class="flex justify-between items-start mb-4">
-                           <div>
-                               <h3 class="text-lg font-rog-heading font-semibold text-white">Order #${order.orderId}</h3>
-                               <p class="text-sm text-gray-400 font-rog-body">${new Date(order.createdAt).toLocaleDateString()}</p>
-                           </div>
-                           <span class="px-3 py-1 rounded-full text-xs font-rog-heading font-semibold ${
-                               order.status === 'completed' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
-                               order.status === 'shipped' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' :
-                               order.status === 'processing' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
-                               'bg-gray-500/20 text-gray-400 border border-gray-500/30'
-                           }">
-                               ${order.status.toUpperCase()}
-                           </span>
-                       </div>
-                       <div class="space-y-2">
-                           <div class="flex justify-between">
-                               <span class="text-gray-400 font-rog-body">Items:</span>
-                               <span class="text-white font-rog-body">${order.items.length}</span>
-                           </div>
-                           <div class="flex justify-between">
-                               <span class="text-gray-400 font-rog-body">Total:</span>
-                               <span class="text-rog-red font-rog-heading font-semibold">$${order.totalAmount}</span>
-                           </div>
-                       </div>
-                   </div>
-               `).join('');
+                <div class="order-card rounded-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-rog-heading font-semibold text-white">${order.title || 'Custom Jersey Order'}</h3>
+                            <p class="text-gray-400 font-rog-body text-sm">Order #${order.orderId || order.id}</p>
+                        </div>
+                        <span class="status-badge ${
+                            order.status === 'completed' ? 'status-delivered' :
+                            order.status === 'shipped' ? 'status-shipped' :
+                            order.status === 'processing' ? 'status-processing' :
+                            order.status === 'pending' ? 'status-pending' :
+                            'status-cancelled'
+                        }">${order.status || 'pending'}</span>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <p class="text-sm text-gray-400 font-rog-body">Quantity</p>
+                            <p class="text-white font-rog-heading font-semibold">${order.quantity || order.items?.length || 1} ${order.quantity > 1 ? 'Jerseys' : 'Jersey'}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-400 font-rog-body">Total</p>
+                            <p class="text-white font-rog-heading font-semibold">$${order.totalAmount || order.total || '0.00'}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-400 font-rog-body">Order Date</p>
+                            <p class="text-white font-rog-heading font-semibold">${new Date(order.createdAt || order.orderDate).toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 ${
+                                order.status === 'completed' ? 'bg-green-500' :
+                                order.status === 'shipped' ? 'bg-green-500' :
+                                order.status === 'processing' ? 'bg-blue-500 animate-pulse' :
+                                'bg-gray-500'
+                            } rounded-full"></div>
+                            <span class="text-sm text-gray-400 font-rog-body">
+                                ${order.status === 'completed' ? `Delivered on ${new Date(order.deliveredAt || order.updatedAt).toLocaleDateString()}` :
+                                  order.status === 'shipped' ? `Shipped on ${new Date(order.shippedAt || order.updatedAt).toLocaleDateString()}` :
+                                  order.status === 'processing' ? `Expected delivery: ${new Date(order.expectedDelivery || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)).toLocaleDateString()}` :
+                                  'Processing order...'}
+                            </span>
+                        </div>
+                        <button class="text-rog-red hover:text-red-400 transition-colors font-rog-heading text-sm" onclick="viewOrderDetails('${order.id || order.orderId}')">
+                            ${order.status === 'shipped' ? 'Track Package' : 'View Details'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
         }
 
         async function loadUserDesigns(uid) {
-            if (!window.FirebaseDB) return;
+            if (!window.FirebaseDB) {
+                console.error('FirebaseDB not available');
+                return;
+            }
 
             try {
+                // Hide loading spinner
+                const loadingEl = document.getElementById('designs-loading');
+                if (loadingEl) {
+                    loadingEl.style.display = 'none';
+                }
+
                 const designs = await window.FirebaseDB.getUserDesigns(uid);
                 displayDesigns(designs);
             } catch (error) {
                 console.error('Error loading user designs:', error);
+                // Show error state
+                const designsContainer = document.getElementById('designs-container');
+                if (designsContainer) {
+                    designsContainer.innerHTML = `
+                        <div class="text-center py-4">
+                            <div class="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-2 border border-red-500">
+                                <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                </svg>
+                            </div>
+                            <p class="text-gray-400 font-rog-body text-sm">Error loading designs</p>
+                        </div>
+                    `;
+                }
             }
         }
 
@@ -635,47 +755,58 @@
 
             if (designs.length === 0) {
                 designsContainer.innerHTML = `
-                       <div class="text-center py-8">
-                           <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-rog-red">
-                               <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
-                               </svg>
-                           </div>
-                           <h3 class="text-lg font-rog-heading font-semibold text-white mb-2">No Designs Yet</h3>
-                           <p class="text-gray-400 font-rog-body">Your jersey designs will appear here once you create your first design.</p>
-                       </div>
-                   `;
+                    <div class="text-center py-4">
+                        <div class="w-12 h-12 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-2 border border-rog-red">
+                            <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-sm font-rog-heading font-semibold text-white mb-1">No Designs Yet</h3>
+                        <p class="text-gray-400 font-rog-body text-xs">Create your first design to get started</p>
+                        <a href="designer-studio.html" class="inline-block mt-2 px-3 py-1 bg-rog-red text-white rounded text-xs font-rog-heading hover:bg-rog-red/80 transition-colors">
+                            Start Designing
+                        </a>
+                    </div>
+                `;
                 return;
             }
 
-            designsContainer.innerHTML = designs.map(design => `
-                   <div class="bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
-                       <div class="flex justify-between items-start mb-4">
-                           <div>
-                               <h3 class="text-lg font-rog-heading font-semibold text-white">${design.name || 'Untitled Design'}</h3>
-                               <p class="text-sm text-gray-400 font-rog-body">${new Date(design.createdAt).toLocaleDateString()}</p>
-                           </div>
-                           <div class="flex space-x-2">
-                               <button onclick="editDesign('${design.id}')" class="px-3 py-1 bg-rog-red/20 text-rog-red rounded-lg hover:bg-rog-red hover:text-white transition-all duration-300 border border-rog-red/30 text-sm font-rog-heading">
-                                   Edit
-                               </button>
-                               <button onclick="downloadDesign('${design.id}')" class="px-3 py-1 bg-rog-light/20 text-white rounded-lg hover:bg-rog-red transition-all duration-300 border border-rog-red/30 text-sm font-rog-heading">
-                                   Download
-                               </button>
-                           </div>
-                       </div>
-                       <div class="space-y-2">
-                           <div class="flex justify-between">
-                               <span class="text-gray-400 font-rog-body">Type:</span>
-                               <span class="text-white font-rog-body">${design.type || 'Custom Jersey'}</span>
-                           </div>
-                           <div class="flex justify-between">
-                               <span class="text-gray-400 font-rog-body">Status:</span>
-                               <span class="text-rog-red font-rog-heading font-semibold">${design.isPublic ? 'Public' : 'Private'}</span>
-                           </div>
-                       </div>
-                   </div>
-               `).join('');
+            // Show only recent designs (limit to 3)
+            const recentDesigns = designs.slice(0, 3);
+
+            designsContainer.innerHTML = recentDesigns.map(design => `
+                <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-rog-red transition-all duration-300">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h4 class="text-sm font-rog-heading font-semibold text-gray-900">${design.name || 'Untitled Design'}</h4>
+                            <p class="text-xs text-gray-500 font-rog-body">${new Date(design.createdAt).toLocaleDateString()}</p>
+                        </div>
+                        <div class="flex space-x-1">
+                            <button onclick="editDesign('${design.id}')" class="px-2 py-1 bg-rog-red/10 text-rog-red rounded text-xs font-rog-heading hover:bg-rog-red hover:text-white transition-all duration-300">
+                                Edit
+                            </button>
+                            <button onclick="downloadDesign('${design.id}')" class="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs font-rog-heading hover:bg-gray-300 transition-all duration-300">
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span class="text-gray-500 font-rog-body">${design.type || 'Custom Jersey'}</span>
+                        <span class="text-rog-red font-rog-heading font-semibold">${design.isPublic ? 'Public' : 'Private'}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add "View All" link if there are more designs
+            if (designs.length > 3) {
+                designsContainer.innerHTML += `
+                    <div class="text-center mt-3">
+                        <a href="#" onclick="viewAllDesigns()" class="text-rog-red hover:text-rog-red/80 text-xs font-rog-heading">
+                            View All ${designs.length} Designs
+                        </a>
+                    </div>
+                `;
+            }
         }
 
         // Design management functions
@@ -686,6 +817,20 @@
         function downloadDesign(designId) {
             // Implement design download functionality
             console.log('Downloading design:', designId);
+            // This would trigger the download of the design file
+            alert('Design download functionality will be implemented');
+        }
+
+        function viewAllDesigns() {
+            // Navigate to a designs page or show all designs in a modal
+            console.log('Viewing all designs');
+            alert('View all designs functionality will be implemented');
+        }
+
+        function viewOrderDetails(orderId) {
+            // Show order details in a modal or navigate to order details page
+            console.log('Viewing order details:', orderId);
+            alert(`Order details for ${orderId} will be shown`);
         }
 
         // Listen for authentication state changes

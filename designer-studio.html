@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jersey Designer Studio - Otomono Jerseys</title>
     <meta name="description" content="Design custom jerseys with our advanced 3D designer studio">
     <meta name="author" content="Otomono Jerseys">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="public/favicon.png">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Three.js for 3D rendering -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    
+
     <!-- Global Firebase Authentication -->
     <script src="js/firebase-config.js"></script>
     <!-- Global Firebase Database -->
     <script src="js/firebase-database.js"></script>
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -50,7 +51,7 @@
             }
         }
     </script>
-    
+
     <style>
         * {
             margin: 0;
@@ -65,11 +66,20 @@
             overflow-x: hidden;
         }
 
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-family: 'Orbitron', sans-serif;
         }
 
-        p, span, div, a, li {
+        p,
+        span,
+        div,
+        a,
+        li {
             font-family: 'Inter', sans-serif;
         }
 
@@ -223,7 +233,7 @@
             position: relative;
             width: 100%;
             height: 100vh;
-            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            background: #ffffff;
         }
 
         .canvas-controls {
@@ -335,47 +345,104 @@
         }
 
         @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
         }
     </style>
 </head>
 
 <body class="min-h-screen bg-rog-dark text-white">
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+    <header class="sticky top-0 z-50 bg-rog-dark/95 backdrop-blur-sm border-b border-rog-red shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <img src="public/logo.png" alt="Otomono Logo" class="h-8 w-auto" />
-                    <span class="ml-3 text-xl font-rog-display font-bold text-gray-900">Otomono</span>
+                    <img src="public/logo-white.png" alt="Otomono Logo" class="h-8 w-auto" />
                 </div>
 
                 <!-- Navigation -->
                 <nav class="hidden md:flex items-center space-x-8">
-                    <a href="customer.html" class="text-gray-600 hover:text-rog-red transition-colors font-rog-heading">Dashboard</a>
-                    <a href="index.html" class="text-gray-600 hover:text-rog-red transition-colors font-rog-heading">Home</a>
-                    <a href="services.html" class="text-gray-600 hover:text-rog-red transition-colors font-rog-heading">Services</a>
-                    <a href="contact.html" class="text-gray-600 hover:text-rog-red transition-colors font-rog-heading">Contact</a>
+                    <a href="index.html" class="text-gray-300 hover:text-rog-red transition-colors font-rog-heading hover:glow">Home</a>
+                    <a href="services.html" class="text-gray-300 hover:text-rog-red transition-colors font-rog-heading hover:glow">Services</a>
+                    <a href="about.html" class="text-gray-300 hover:text-rog-red transition-colors font-rog-heading hover:glow">About</a>
+                    <a href="contact.html" class="text-gray-300 hover:text-rog-red transition-colors font-rog-heading hover:glow">Contact</a>
+                    <a href="customer.html" class="text-rog-red border-b-2 border-rog-red pb-2 glow font-rog-heading">Dashboard</a>
+                    <a href="designer-studio.html" class="text-rog-red border-b-2 border-rog-red pb-2 glow font-rog-heading">Design Studio</a>
                 </nav>
 
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg bg-rog-light hover:bg-rog-red transition-all duration-200 group relative border border-rog-red">
+                    <svg class="w-5 h-5 text-white group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+
                 <!-- User Actions -->
-                <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-4">
                     <!-- User Profile -->
                     <div class="flex items-center space-x-3">
                         <div class="w-8 h-8 bg-rog-red rounded-full flex items-center justify-center">
                             <span class="text-white text-sm font-rog-heading font-bold" id="user-initial">U</span>
                         </div>
                         <div class="hidden sm:block">
-                            <p class="text-sm font-rog-heading font-semibold text-gray-900" id="user-name">User Name</p>
+                            <p class="text-sm font-rog-heading font-semibold text-white" id="user-name">User Name</p>
+                            <p class="text-xs text-gray-400 font-rog-body" id="user-email">user@example.com</p>
                         </div>
                     </div>
-                    
+
                     <!-- Sign Out Button -->
-                    <button id="sign-out-btn" class="px-4 py-2 text-sm font-rog-heading text-gray-600 hover:text-rog-red transition-colors border border-gray-300 rounded-lg hover:border-rog-red">
+                    <button id="sign-out-btn" class="px-4 py-2 text-sm font-rog-heading text-gray-300 hover:text-rog-red transition-colors border border-rog-red/30 rounded-lg hover:border-rog-red">
                         Sign Out
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="fixed inset-0 z-50 bg-black bg-opacity-75 hidden md:hidden">
+            <div class="fixed top-0 right-0 h-full w-80 bg-rog-dark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out border-l border-rog-red/30">
+                <div class="flex flex-col h-full">
+                    <div class="flex items-center justify-between p-6 border-b border-rog-red/30 bg-rog-dark">
+                        <img src="public/logo-white.png" alt="Otomono Logo" class="h-8 w-auto" />
+                        <button id="mobile-menu-close" class="p-2 rounded-lg hover:bg-rog-red/20 transition-colors border border-rog-red/30">
+                            <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <nav class="flex-1 px-6 py-8 bg-rog-dark">
+                        <div class="space-y-6">
+                            <a href="index.html" class="block text-xl font-rog-heading font-semibold text-white hover:text-rog-red transition-colors py-2 border-b border-rog-red/20 hover:border-rog-red">Home</a>
+                            <a href="services.html" class="block text-xl font-rog-heading font-semibold text-white hover:text-rog-red transition-colors py-2 border-b border-rog-red/20 hover:border-rog-red">Services</a>
+                            <a href="about.html" class="block text-xl font-rog-heading font-semibold text-white hover:text-rog-red transition-colors py-2 border-b border-rog-red/20 hover:border-rog-red">About</a>
+                            <a href="contact.html" class="block text-xl font-rog-heading font-semibold text-white hover:text-rog-red transition-colors py-2 border-b border-rog-red/20 hover:border-rog-red">Contact</a>
+                            <a href="customer.html" class="block text-xl font-rog-heading font-semibold text-rog-red border-b-2 border-rog-red pb-2 glow">Dashboard</a>
+                            <a href="designer-studio.html" class="block text-xl font-rog-heading font-semibold text-rog-red border-b-2 border-rog-red pb-2 glow">Design Studio</a>
+                        </div>
+                        <div class="mt-8 pt-8 border-t border-rog-red/30 space-y-4">
+                            <div class="flex items-center space-x-3 p-4 bg-rog-light/20 backdrop-blur-sm rounded-lg border border-rog-red/30">
+                                <div class="w-10 h-10 bg-rog-red rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm font-rog-heading font-bold" id="mobile-user-initial">U</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-rog-heading font-semibold text-white" id="mobile-user-name">User Name</p>
+                                    <p class="text-xs text-gray-400 font-rog-body" id="mobile-user-email">user@example.com</p>
+                                </div>
+                            </div>
+                            <button id="mobile-sign-out" class="w-full flex items-center justify-center px-4 py-3 bg-rog-light/20 backdrop-blur-sm rounded-lg hover:bg-rog-red/20 transition-all duration-300 border border-rog-red/30 hover:border-rog-red">
+                                <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                                <span class="text-white font-rog-heading font-medium">Sign Out</span>
+                            </button>
+                        </div>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -635,7 +702,7 @@
         <div class="flex-1 canvas-container">
             <canvas id="jersey-canvas"></canvas>
             <div class="loading-spinner" id="loading-spinner"></div>
-            
+
             <!-- Canvas Controls -->
             <div class="canvas-controls">
                 <button id="flip-view" class="control-button rog-button">
@@ -698,11 +765,30 @@
         };
 
         // Templates
-        const templates = [
-            { id: 0, name: "Classic Stripes", primary: "#1e40af", secondary: "#ffffff" },
-            { id: 1, name: "Bold Red", primary: "#dc2626", secondary: "#ffffff" },
-            { id: 2, name: "Forest Green", primary: "#16a34a", secondary: "#ffffff" },
-            { id: 3, name: "Black & Gold", primary: "#000000", secondary: "#fbbf24" }
+        const templates = [{
+                id: 0,
+                name: "Classic Stripes",
+                primary: "#1e40af",
+                secondary: "#ffffff"
+            },
+            {
+                id: 1,
+                name: "Bold Red",
+                primary: "#dc2626",
+                secondary: "#ffffff"
+            },
+            {
+                id: 2,
+                name: "Forest Green",
+                primary: "#16a34a",
+                secondary: "#ffffff"
+            },
+            {
+                id: 3,
+                name: "Black & Gold",
+                primary: "#000000",
+                secondary: "#fbbf24"
+            }
         ];
 
         // Three.js Scene Setup
@@ -725,13 +811,29 @@
 
         function updateUserInfo(user) {
             const userName = document.getElementById('user-name');
+            const userEmail = document.getElementById('user-email');
             const userInitial = document.getElementById('user-initial');
+            const mobileUserName = document.getElementById('mobile-user-name');
+            const mobileUserEmail = document.getElementById('mobile-user-email');
+            const mobileUserInitial = document.getElementById('mobile-user-initial');
 
             if (userName) {
                 userName.textContent = user.displayName || 'User';
             }
+            if (userEmail) {
+                userEmail.textContent = user.email || 'user@example.com';
+            }
             if (userInitial) {
                 userInitial.textContent = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+            }
+            if (mobileUserName) {
+                mobileUserName.textContent = user.displayName || 'User';
+            }
+            if (mobileUserEmail) {
+                mobileUserEmail.textContent = user.email || 'user@example.com';
+            }
+            if (mobileUserInitial) {
+                mobileUserInitial.textContent = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
             }
         }
 
@@ -739,13 +841,19 @@
             // Initialize Three.js scene
             const canvas = document.getElementById('jersey-canvas');
             const container = canvas.parentElement;
-            
+
+            console.log('Initializing Three.js scene...');
+            console.log('Container dimensions:', container.clientWidth, 'x', container.clientHeight);
+
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-            
+            renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                antialias: true
+            });
+
             renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setClearColor(0x0a0a0a);
+            renderer.setClearColor(0xffffff);
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -753,15 +861,19 @@
             camera.position.set(0, 0, 6);
 
             // Add lights
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
 
-            const spotLight = new THREE.SpotLight(0xffffff, 2, 20, Math.PI / 6, 1, 1);
-            spotLight.position.set(5, 8, 5);
-            spotLight.castShadow = true;
-            spotLight.shadow.mapSize.width = 2048;
-            spotLight.shadow.mapSize.height = 2048;
-            scene.add(spotLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 5, 5);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            scene.add(directionalLight);
+
+            const pointLight = new THREE.PointLight(0xffffff, 0.5);
+            pointLight.position.set(-5, 5, 5);
+            scene.add(pointLight);
 
             // Create jersey mesh
             createJerseyMesh();
@@ -777,8 +889,13 @@
             // Start render loop
             animate();
 
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize);
+
             // Hide loading spinner
             document.getElementById('loading-spinner').style.display = 'none';
+
+            console.log('Three.js scene initialized successfully');
         }
 
         function createJerseyMesh() {
@@ -786,37 +903,49 @@
             const jerseyGeometry = new THREE.BoxGeometry(2.8, 3.2, 0.4);
             const jerseyMaterial = new THREE.MeshStandardMaterial({
                 color: jerseyState.jerseyColor,
-                roughness: 0.85,
-                metalness: 0.05
+                roughness: 0.3,
+                metalness: 0.1
             });
 
             jerseyMesh = new THREE.Mesh(jerseyGeometry, jerseyMaterial);
             jerseyMesh.castShadow = true;
             jerseyMesh.receiveShadow = true;
+            jerseyMesh.position.set(0, 0, 0);
             scene.add(jerseyMesh);
 
             // Add collar
             const collarGeometry = new THREE.CylinderGeometry(0.45, 0.5, 0.25, 32);
-            const collarMaterial = new THREE.MeshStandardMaterial({ color: jerseyState.secondaryColor });
+            const collarMaterial = new THREE.MeshStandardMaterial({
+                color: jerseyState.secondaryColor,
+                roughness: 0.3,
+                metalness: 0.1
+            });
             const collar = new THREE.Mesh(collarGeometry, collarMaterial);
             collar.position.set(0, 1.6, 0);
             collar.castShadow = true;
+            collar.receiveShadow = true;
             scene.add(collar);
 
             // Add sleeves
             const sleeveGeometry = new THREE.CylinderGeometry(0.35, 0.45, 1.6, 16);
-            const sleeveMaterial = new THREE.MeshStandardMaterial({ color: jerseyState.jerseyColor });
-            
+            const sleeveMaterial = new THREE.MeshStandardMaterial({
+                color: jerseyState.jerseyColor,
+                roughness: 0.3,
+                metalness: 0.1
+            });
+
             const leftSleeve = new THREE.Mesh(sleeveGeometry, sleeveMaterial);
             leftSleeve.position.set(-1.7, 0.9, 0);
             leftSleeve.rotation.z = -0.4;
             leftSleeve.castShadow = true;
+            leftSleeve.receiveShadow = true;
             scene.add(leftSleeve);
 
             const rightSleeve = new THREE.Mesh(sleeveGeometry, sleeveMaterial);
             rightSleeve.position.set(1.7, 0.9, 0);
             rightSleeve.rotation.z = 0.4;
             rightSleeve.castShadow = true;
+            rightSleeve.receiveShadow = true;
             scene.add(rightSleeve);
         }
 
@@ -824,6 +953,15 @@
             requestAnimationFrame(animate);
             controls.update();
             renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            const canvas = document.getElementById('jersey-canvas');
+            const container = canvas.parentElement;
+
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
         }
 
         function setupEventListeners() {
@@ -904,7 +1042,7 @@
             // View flip
             document.getElementById('flip-view').addEventListener('click', function() {
                 jerseyState.view = jerseyState.view === 'front' ? 'back' : 'front';
-                this.innerHTML = jerseyState.view === 'front' ? 
+                this.innerHTML = jerseyState.view === 'front' ?
                     '<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>View Back' :
                     '<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>View Front';
             });
@@ -912,6 +1050,45 @@
             // Download buttons
             document.getElementById('download-png').addEventListener('click', downloadPNG);
             document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+            const mobileSignOut = document.getElementById('mobile-sign-out');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.remove('hidden');
+                });
+            }
+
+            if (mobileMenuClose && mobileMenu) {
+                mobileMenuClose.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            }
+
+            // Close mobile menu when clicking outside
+            if (mobileMenu) {
+                mobileMenu.addEventListener('click', (e) => {
+                    if (e.target === mobileMenu) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Mobile sign out
+            if (mobileSignOut) {
+                mobileSignOut.addEventListener('click', async function() {
+                    try {
+                        await window.FirebaseAuth.signOut();
+                        window.location.href = 'index.html';
+                    } catch (error) {
+                        console.error('Sign out error:', error);
+                    }
+                });
+            }
 
             // Sign out
             document.getElementById('sign-out-btn').addEventListener('click', async function() {
@@ -926,7 +1103,7 @@
 
         function setActiveTool(tool) {
             jerseyState.activeTool = tool;
-            
+
             // Update button states
             document.querySelectorAll('.tool-button').forEach(btn => {
                 btn.classList.remove('active');
@@ -943,7 +1120,7 @@
         function selectTemplate(templateId) {
             jerseyState.selectedTemplate = templateId;
             const template = templates[templateId];
-            
+
             jerseyState.jerseyColor = template.primary;
             jerseyState.secondaryColor = template.secondary;
 
@@ -994,7 +1171,7 @@
             try {
                 // Get current design data
                 const designData = getCurrentDesignData();
-                
+
                 // Save design to Firestore if user is authenticated
                 if (window.FirebaseDB && window.FirebaseAuth) {
                     const user = window.FirebaseAuth.getCurrentUser();
@@ -1013,19 +1190,19 @@
                                 isPublic: false,
                                 createdAt: new Date().toISOString()
                             });
-                            
+
                             // Track user action
                             await window.FirebaseDB.trackUserAction(user.uid, 'design_created', {
                                 designType: designData.type
                             });
-                            
+
                             console.log('Design saved to Firestore');
                         } catch (error) {
                             console.error('Error saving design to Firestore:', error);
                         }
                     }
                 }
-                
+
                 // Download the image
                 const link = document.createElement('a');
                 link.download = `jersey-design-${jerseyState.view}.png`;
@@ -1041,7 +1218,7 @@
             try {
                 // Get current design data
                 const designData = getCurrentDesignData();
-                
+
                 // Save design to Firestore if user is authenticated
                 if (window.FirebaseDB && window.FirebaseAuth) {
                     const user = window.FirebaseAuth.getCurrentUser();
@@ -1060,19 +1237,19 @@
                                 isPublic: false,
                                 createdAt: new Date().toISOString()
                             });
-                            
+
                             // Track user action
                             await window.FirebaseDB.trackUserAction(user.uid, 'design_created', {
                                 designType: designData.type
                             });
-                            
+
                             console.log('Design saved to Firestore');
                         } catch (error) {
                             console.error('Error saving design to Firestore:', error);
                         }
                     }
                 }
-                
+
                 // Download the PDF
                 const link = document.createElement('a');
                 link.download = `jersey-design-${jerseyState.view}.pdf`;
@@ -1086,8 +1263,8 @@
 
         function getCurrentDesignData() {
             return {
-                name: document.getElementById('design-name')?.value || 'Untitled Design',
-                type: document.getElementById('jersey-type')?.value || 'Custom Jersey',
+                name: document.getElementById('design-name') ? .value || 'Untitled Design',
+                type: document.getElementById('jersey-type') ? .value || 'Custom Jersey',
                 colors: {
                     primary: jerseyState.jerseyColor,
                     secondary: jerseyState.secondaryColor,
@@ -1111,4 +1288,5 @@
         }
     </script>
 </body>
+
 </html>
