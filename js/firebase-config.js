@@ -64,16 +64,44 @@ async function initializeFirebase() {
 // Check domain authorization
 function checkDomainAuthorization() {
     const currentDomain = window.location.hostname;
-    const isLocalhost = currentDomain === 'localhost' || currentDomain === '127.0.0.1';
-    const isGitHubPages = currentDomain.includes('github.io');
-
-    if (isLocalhost) {
-        console.log('Running on localhost - make sure to add localhost to Firebase authorized domains');
-    } else if (isGitHubPages) {
-        console.log('Running on GitHub Pages - make sure to add your GitHub Pages domain to Firebase authorized domains');
+    const currentOrigin = window.location.origin;
+    
+    // Comprehensive domain checking for deployed sites
+    const authorizedPatterns = [
+        'localhost',
+        '127.0.0.1',
+        'github.io',
+        'netlify.app',
+        'vercel.app',
+        'firebaseapp.com'
+    ];
+    
+    // Check if current domain matches any authorized pattern
+    const isAuthorized = authorizedPatterns.some(pattern => {
+        if (pattern.includes('.')) {
+            return currentDomain.endsWith('.' + pattern) || currentDomain === pattern;
+        }
+        return currentDomain.includes(pattern);
+    });
+    
+    // For deployed sites, be more lenient
+    const isDeployed = currentDomain.includes('.') && 
+                       currentDomain !== 'localhost' && 
+                       currentDomain !== '127.0.0.1';
+    
+    if (isDeployed && !isAuthorized) {
+        console.warn('Domain not in authorized list, but allowing for deployed site:', currentDomain);
+        return true; // Allow deployed sites
     }
-
-    return true; // Continue with authentication attempt
+    
+    console.log('Domain authorization check:', {
+        domain: currentDomain,
+        origin: currentOrigin,
+        authorized: isAuthorized,
+        isDeployed: isDeployed
+    });
+    
+    return isAuthorized;
 }
 
 // Global authentication functions
@@ -110,7 +138,7 @@ window.FirebaseAuth = {
             const currentDomain = window.location.hostname;
             const isLocalhost = currentDomain === 'localhost' || currentDomain === '127.0.0.1';
             const isDeployed = currentDomain.includes('.') && !isLocalhost;
-            
+
             console.log('Current domain:', currentDomain, 'Is deployed:', isDeployed);
 
             // For deployed sites, be more lenient with domain checking
@@ -122,15 +150,17 @@ window.FirebaseAuth = {
             }
 
             console.log('Domain check passed, starting authentication...');
-            
+
             // Try popup first for better UX, fallback to redirect
             try {
-                const { signInWithPopup } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+                const {
+                    signInWithPopup
+                } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
                 console.log('Attempting popup sign-in...');
-                
+
                 const result = await signInWithPopup(auth, provider);
                 console.log('Popup sign-in successful:', result.user.email);
-                
+
                 // Handle successful authentication
                 const user = result.user;
                 const userData = {
@@ -142,7 +172,7 @@ window.FirebaseAuth = {
                     isAuthenticated: true
                 };
                 localStorage.setItem('user', JSON.stringify(userData));
-                
+
                 // Create or update user profile in Firestore
                 if (window.FirebaseDB) {
                     try {
@@ -156,7 +186,7 @@ window.FirebaseAuth = {
                             });
                             console.log('User profile updated in Firestore');
                         }
-                        
+
                         // Track user login
                         await window.FirebaseDB.trackUserAction(user.uid, 'user_login', {
                             method: 'google_popup'
@@ -166,24 +196,26 @@ window.FirebaseAuth = {
                         // Continue with authentication even if database fails
                     }
                 }
-                
+
                 this.updateAuthUI(user);
-                
+
                 // Redirect to customer page
                 console.log('Redirecting to customer page after successful login');
                 window.location.replace('customer.html');
                 return result;
-                
+
             } catch (popupError) {
                 console.log('Popup sign-in failed, trying redirect method...', popupError);
-                
+
                 // Fallback to redirect method
-                const { signInWithRedirect } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+                const {
+                    signInWithRedirect
+                } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
                 console.log('Starting redirect sign-in...');
                 await signInWithRedirect(auth, provider);
                 return; // Don't continue as redirect will navigate away
             }
-            
+
         } catch (error) {
             console.error('Google sign-in error:', error);
             console.error('Error code:', error.code);
