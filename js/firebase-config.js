@@ -65,7 +65,7 @@ async function initializeFirebase() {
 function checkDomainAuthorization() {
     const currentDomain = window.location.hostname;
     const currentOrigin = window.location.origin;
-    
+
     // Comprehensive domain checking for deployed sites
     const authorizedPatterns = [
         'localhost',
@@ -75,7 +75,7 @@ function checkDomainAuthorization() {
         'vercel.app',
         'firebaseapp.com'
     ];
-    
+
     // Check if current domain matches any authorized pattern
     const isAuthorized = authorizedPatterns.some(pattern => {
         if (pattern.includes('.')) {
@@ -83,24 +83,24 @@ function checkDomainAuthorization() {
         }
         return currentDomain.includes(pattern);
     });
-    
+
     // For deployed sites, be more lenient
-    const isDeployed = currentDomain.includes('.') && 
-                       currentDomain !== 'localhost' && 
-                       currentDomain !== '127.0.0.1';
-    
+    const isDeployed = currentDomain.includes('.') &&
+        currentDomain !== 'localhost' &&
+        currentDomain !== '127.0.0.1';
+
     if (isDeployed && !isAuthorized) {
         console.warn('Domain not in authorized list, but allowing for deployed site:', currentDomain);
         return true; // Allow deployed sites
     }
-    
+
     console.log('Domain authorization check:', {
         domain: currentDomain,
         origin: currentOrigin,
         authorized: isAuthorized,
         isDeployed: isDeployed
     });
-    
+
     return isAuthorized;
 }
 
