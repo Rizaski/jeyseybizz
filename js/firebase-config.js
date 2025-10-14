@@ -244,27 +244,27 @@ window.FirebaseAuth = {
         // Create dropdown menu
         const dropdown = document.createElement('div');
         dropdown.id = 'account-dropdown';
-        dropdown.className = 'absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50';
+        dropdown.className = 'absolute top-full right-0 mt-2 w-48 bg-rog-dark rounded-lg shadow-lg border border-rog-red/30 z-50';
         dropdown.innerHTML = `
             <div class="py-2">
-                <div class="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
-                    <div class="font-semibold">${this.getCurrentUser()?.displayName || 'User'}</div>
-                    <div class="text-gray-500">${this.getCurrentUser()?.email || ''}</div>
+                <div class="px-4 py-2 text-sm text-gray-300 border-b border-rog-red/30">
+                    <div class="font-rog-heading font-semibold text-white">${this.getCurrentUser()?.displayName || 'User'}</div>
+                    <div class="text-gray-400 font-rog-body">${this.getCurrentUser()?.email || ''}</div>
                 </div>
-                <a href="customer.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="customer.html" class="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-rog-red/20 transition-colors font-rog-body">
+                    <svg class="w-4 h-4 mr-3 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                     Account Dashboard
                 </a>
-                <a href="designer-studio.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="designer-studio.html" class="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-rog-red/20 transition-colors font-rog-body">
+                    <svg class="w-4 h-4 mr-3 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
                     Jersey Designer
                 </a>
-                <div class="border-t border-gray-100"></div>
-                <button onclick="window.FirebaseAuth.signOut()" class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                <div class="border-t border-rog-red/30"></div>
+                <button onclick="window.FirebaseAuth.signOut()" class="flex items-center w-full px-4 py-2 text-sm text-rog-red hover:bg-rog-red/20 transition-colors font-rog-body">
                     <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
@@ -311,60 +311,60 @@ window.FirebaseAuth = {
         modal.id = 'popup-blocker-modal';
         modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
         modal.innerHTML = `
-            <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div class="bg-rog-dark rounded-lg shadow-xl max-w-md w-full p-6 border border-rog-red/30">
                 <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-rog-red/20 rounded-full flex items-center justify-center mr-4 border border-rog-red">
+                        <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Popup Blocked</h3>
-                        <p class="text-sm text-gray-600">Your browser blocked the Gmail login popup</p>
+                        <h3 class="text-lg font-rog-display font-bold text-white glow">Popup Blocked</h3>
+                        <p class="text-sm text-gray-300 font-rog-body">Your browser blocked the Gmail login popup</p>
                     </div>
                 </div>
                 
                 <div class="mb-6">
-                    <h4 class="font-semibold text-gray-900 mb-3">To allow Gmail login, please:</h4>
-                    <div class="space-y-3 text-sm text-gray-700">
+                    <h4 class="font-rog-heading font-semibold text-rog-red mb-3">To allow Gmail login, please:</h4>
+                    <div class="space-y-3 text-sm text-gray-300 font-rog-body">
                         <div class="flex items-start">
-                            <span class="font-semibold text-rog-red mr-2">1.</span>
+                            <span class="font-rog-heading font-bold text-rog-red mr-2">1.</span>
                             <div>
-                                <strong>Chrome/Edge:</strong> Click the popup blocker icon in the address bar, then select "Always allow popups from this site"
+                                <strong class="text-white">Chrome/Edge:</strong> Click the popup blocker icon in the address bar, then select "Always allow popups from this site"
                             </div>
                         </div>
                         <div class="flex items-start">
-                            <span class="font-semibold text-rog-red mr-2">2.</span>
+                            <span class="font-rog-heading font-bold text-rog-red mr-2">2.</span>
                             <div>
-                                <strong>Firefox:</strong> Go to Settings → Privacy & Security → Permissions → Block pop-up windows → Add this site to exceptions
+                                <strong class="text-white">Firefox:</strong> Go to Settings → Privacy & Security → Permissions → Block pop-up windows → Add this site to exceptions
                             </div>
                         </div>
                         <div class="flex items-start">
-                            <span class="font-semibold text-rog-red mr-2">3.</span>
+                            <span class="font-rog-heading font-bold text-rog-red mr-2">3.</span>
                             <div>
-                                <strong>Safari:</strong> Go to Safari → Preferences → Websites → Pop-up Windows → Allow for this site
+                                <strong class="text-white">Safari:</strong> Go to Safari → Preferences → Websites → Pop-up Windows → Allow for this site
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <div class="bg-rog-red/10 border border-rog-red/30 rounded-lg p-4 mb-6">
                     <div class="flex items-start">
-                        <svg class="w-5 h-5 text-blue-600 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-rog-red mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <div>
-                            <p class="text-sm text-blue-800 font-medium">Quick Fix:</p>
-                            <p class="text-sm text-blue-700">Look for a popup blocker icon in your browser's address bar and click "Allow" or "Always allow"</p>
+                            <p class="text-sm text-rog-red font-rog-heading font-medium">Quick Fix:</p>
+                            <p class="text-sm text-gray-300 font-rog-body">Look for a popup blocker icon in your browser's address bar and click "Allow" or "Always allow"</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex space-x-3">
-                    <button id="retry-login" class="flex-1 bg-rog-red text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium">
+                    <button id="retry-login" class="flex-1 rog-button px-4 py-2 rounded-lg font-rog-heading font-semibold transition-all duration-300 shadow-lg hover:shadow-xl">
                         Try Again
                     </button>
-                    <button id="close-popup-modal" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    <button id="close-popup-modal" class="px-4 py-2 bg-rog-light/20 backdrop-blur-sm border border-rog-red/30 text-white rounded-lg hover:bg-rog-red/20 transition-all duration-300 hover:border-rog-red font-rog-heading">
                         Close
                     </button>
                 </div>
@@ -443,19 +443,19 @@ window.FirebaseAuth = {
         // Create warning banner
         const warning = document.createElement('div');
         warning.id = 'popup-blocker-warning';
-        warning.className = 'fixed top-0 left-0 right-0 bg-yellow-500 text-yellow-900 px-4 py-3 z-50 shadow-lg';
+        warning.className = 'fixed top-0 left-0 right-0 bg-rog-red text-white px-4 py-3 z-50 shadow-lg border-b border-rog-red/30';
         warning.innerHTML = `
             <div class="max-w-7xl mx-auto flex items-center justify-between">
                 <div class="flex items-center">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                     </svg>
-                    <span class="font-medium">Popup blocker detected! Gmail login may not work. </span>
-                    <button id="fix-popup-blocker" class="ml-2 underline hover:no-underline font-semibold">
+                    <span class="font-rog-heading font-medium">Popup blocker detected! Gmail login may not work. </span>
+                    <button id="fix-popup-blocker" class="ml-2 underline hover:no-underline font-rog-heading font-semibold text-yellow-300 hover:text-white transition-colors">
                         Click here to fix
                     </button>
                 </div>
-                <button id="dismiss-warning" class="ml-4 text-yellow-900 hover:text-yellow-700">
+                <button id="dismiss-warning" class="ml-4 text-white hover:text-yellow-300 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
