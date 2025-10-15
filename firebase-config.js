@@ -35,7 +35,7 @@ provider.setCustomParameters({
 // Authentication functions
 export const signInWithGoogle = async () => {
     try {
-        const result = await signInWithPopup(auth, provider);
+        const result = await signIn(auth, provider);
         const user = result.user;
         console.log('User signed in:', user);
         return user;
