@@ -331,7 +331,7 @@
                                     <p class="text-xs text-gray-400 font-rog-body" id="mobile-user-email">user@example.com</p>
                                 </div>
                             </div>
-                            
+
                             <!-- Mobile Navigation Links -->
                             <div class="space-y-2">
                                 <a href="customer.html" class="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-rog-red/20 transition-colors font-rog-body rounded-lg">
@@ -347,7 +347,7 @@
                                     Jersey Designer Studio
                                 </a>
                             </div>
-                            
+
                             <!-- Mobile Sign Out -->
                             <button id="mobile-sign-out" class="w-full flex items-center justify-center px-4 py-3 bg-rog-light/20 backdrop-blur-sm rounded-lg hover:bg-rog-red/20 transition-all duration-300 border border-rog-red/30 hover:border-rog-red">
                                 <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -577,17 +577,30 @@
                         e.preventDefault();
                         e.stopPropagation();
                         console.log('Profile button clicked, toggling dropdown');
-                        userProfileDropdown.classList.toggle('hidden');
+                        
+                        // Toggle dropdown visibility
+                        if (userProfileDropdown.classList.contains('hidden')) {
+                            userProfileDropdown.classList.remove('hidden');
+                            console.log('Dropdown opened');
+                        } else {
+                            userProfileDropdown.classList.add('hidden');
+                            console.log('Dropdown closed');
+                        }
                     });
                     
                     // Close dropdown when clicking outside
                     document.addEventListener('click', (e) => {
                         if (!userProfileBtn.contains(e.target) && !userProfileDropdown.contains(e.target)) {
-                            userProfileDropdown.classList.add('hidden');
+                            if (!userProfileDropdown.classList.contains('hidden')) {
+                                userProfileDropdown.classList.add('hidden');
+                                console.log('Dropdown closed by outside click');
+                            }
                         }
                     });
                 } else {
                     console.error('Profile dropdown elements not found');
+                    console.log('userProfileBtn:', userProfileBtn);
+                    console.log('userProfileDropdown:', userProfileDropdown);
                 }
 
                 // Sign out functionality
@@ -628,28 +641,61 @@
             const dropdownUserEmail = document.getElementById('dropdown-user-email');
 
             console.log('Updating user info with:', user);
+            console.log('User photoURL:', user.photoURL);
+            console.log('User displayName:', user.displayName);
+            console.log('User email:', user.email);
 
-            // Update profile images
-            const profileImage = user.photoURL || `https://via.placeholder.com/32/ff0040/ffffff?text=${(user.displayName || user.email || 'U').charAt(0).toUpperCase()}`;
+            // Update profile images - use actual photoURL if available
+            let profileImage = user.photoURL;
+            if (!profileImage) {
+                // Create a fallback image with user's initial
+                const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+                profileImage = `https://via.placeholder.com/32/ff0040/ffffff?text=${initial}`;
+            }
+            
+            console.log('Final profile image URL:', profileImage);
             
             if (userProfileImage) {
                 userProfileImage.src = profileImage;
+                userProfileImage.onerror = () => {
+                    console.log('Profile image failed to load, using fallback');
+                    const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+                    userProfileImage.src = `https://via.placeholder.com/32/ff0040/ffffff?text=${initial}`;
+                };
+                userProfileImage.onload = () => {
+                    console.log('Desktop profile image loaded successfully');
+                };
                 console.log('Updated desktop profile image:', profileImage);
             }
             
             if (dropdownProfileImage) {
                 dropdownProfileImage.src = profileImage;
+                dropdownProfileImage.onerror = () => {
+                    console.log('Dropdown profile image failed to load, using fallback');
+                    const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+                    dropdownProfileImage.src = `https://via.placeholder.com/40/ff0040/ffffff?text=${initial}`;
+                };
+                dropdownProfileImage.onload = () => {
+                    console.log('Dropdown profile image loaded successfully');
+                };
                 console.log('Updated dropdown profile image:', profileImage);
             }
             
             if (mobileUserProfileImage) {
-                const mobileProfileImage = user.photoURL || `https://via.placeholder.com/40/ff0040/ffffff?text=${(user.displayName || user.email || 'U').charAt(0).toUpperCase()}`;
-                mobileUserProfileImage.src = mobileProfileImage;
-                console.log('Updated mobile profile image:', mobileProfileImage);
+                mobileUserProfileImage.src = profileImage;
+                mobileUserProfileImage.onerror = () => {
+                    console.log('Mobile profile image failed to load, using fallback');
+                    const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+                    mobileUserProfileImage.src = `https://via.placeholder.com/40/ff0040/ffffff?text=${initial}`;
+                };
+                mobileUserProfileImage.onload = () => {
+                    console.log('Mobile profile image loaded successfully');
+                };
+                console.log('Updated mobile profile image:', profileImage);
             }
 
             // Update user names and emails
-            const displayName = user.displayName || 'User';
+            const displayName = user.displayName || user.email?.split('@')[0] || 'User';
             const email = user.email || 'user@example.com';
 
             if (mobileUserName) {
