@@ -22,6 +22,10 @@
 
     <!-- Global Firebase Authentication -->
     <script src="js/firebase-config.js"></script>
+    
+    <!-- Global Login Handler - Force redirect to login page -->
+    <script src="js/global-login.js"></script>
+    
     <!-- Global Firebase Database -->
     <script src="js/firebase-database.js"></script>
 
@@ -253,9 +257,7 @@
                 <div class="hidden md:flex items-center space-x-4">
                     <!-- User Profile -->
                     <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-rog-red rounded-full flex items-center justify-center">
-                            <span class="text-white text-sm font-rog-heading font-bold" id="user-initial">U</span>
-                        </div>
+                        <img id="user-profile-image" src="" alt="Profile" class="w-8 h-8 rounded-full border border-rog-red/30 object-cover">
                         <div class="hidden sm:block">
                             <p class="text-sm font-rog-heading font-semibold text-white" id="user-name">User Name</p>
                             <p class="text-xs text-gray-400 font-rog-body" id="user-email">user@example.com</p>
@@ -293,9 +295,7 @@
                         </div>
                         <div class="mt-8 pt-8 border-t border-rog-red/30 space-y-4">
                             <div class="flex items-center space-x-3 p-4 bg-rog-light/20 backdrop-blur-sm rounded-lg border border-rog-red/30">
-                                <div class="w-10 h-10 bg-rog-red rounded-full flex items-center justify-center">
-                                    <span class="text-white text-sm font-rog-heading font-bold" id="mobile-user-initial">U</span>
-                                </div>
+                                <img id="mobile-user-profile-image" src="" alt="Profile" class="w-10 h-10 rounded-full border border-rog-red/30 object-cover">
                                 <div>
                                     <p class="text-sm font-rog-heading font-semibold text-white" id="mobile-user-name">User Name</p>
                                     <p class="text-xs text-gray-400 font-rog-body" id="mobile-user-email">user@example.com</p>
@@ -502,27 +502,41 @@
 
                 // Mobile sign out
                 if (mobileSignOut) {
-                    mobileSignOut.addEventListener('click', async () => {
+                    console.log('Adding mobile sign-out event listener');
+                    mobileSignOut.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Mobile sign out button clicked');
                         try {
                             await window.FirebaseAuth.signOut();
+                            console.log('Mobile sign out successful, redirecting...');
                             window.location.href = 'index.html';
                         } catch (error) {
-                            console.error('Sign out error:', error);
+                            console.error('Mobile sign out error:', error);
                         }
                     });
+                } else {
+                    console.error('Mobile sign out button not found');
                 }
 
                 // Sign out functionality
                 const signOutBtn = document.getElementById('sign-out-btn');
                 if (signOutBtn) {
-                    signOutBtn.addEventListener('click', async () => {
+                    console.log('Adding sign-out event listener');
+                    signOutBtn.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Sign out button clicked');
                         try {
                             await window.FirebaseAuth.signOut();
+                            console.log('Sign out successful, redirecting...');
                             window.location.href = 'index.html';
                         } catch (error) {
                             console.error('Sign out error:', error);
                         }
                     });
+                } else {
+                    console.error('Sign out button not found');
                 }
             } catch (error) {
                 console.error('Error initializing customer dashboard:', error);
@@ -534,10 +548,12 @@
         async function updateUserInfo(user) {
             const userName = document.getElementById('user-name');
             const userEmail = document.getElementById('user-email');
-            const userInitial = document.getElementById('user-initial');
+            const userProfileImage = document.getElementById('user-profile-image');
             const mobileUserName = document.getElementById('mobile-user-name');
             const mobileUserEmail = document.getElementById('mobile-user-email');
-            const mobileUserInitial = document.getElementById('mobile-user-initial');
+            const mobileUserProfileImage = document.getElementById('mobile-user-profile-image');
+
+            console.log('Updating user info with:', user);
 
             if (userName) {
                 userName.textContent = user.displayName || 'User';
@@ -545,8 +561,10 @@
             if (userEmail) {
                 userEmail.textContent = user.email || 'user@example.com';
             }
-            if (userInitial) {
-                userInitial.textContent = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+            if (userProfileImage) {
+                const profileImage = user.photoURL || `https://via.placeholder.com/32/ff0040/ffffff?text=${(user.displayName || user.email || 'U').charAt(0).toUpperCase()}`;
+                userProfileImage.src = profileImage;
+                console.log('Updated desktop profile image:', profileImage);
             }
             if (mobileUserName) {
                 mobileUserName.textContent = user.displayName || 'User';
@@ -554,8 +572,10 @@
             if (mobileUserEmail) {
                 mobileUserEmail.textContent = user.email || 'user@example.com';
             }
-            if (mobileUserInitial) {
-                mobileUserInitial.textContent = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+            if (mobileUserProfileImage) {
+                const profileImage = user.photoURL || `https://via.placeholder.com/40/ff0040/ffffff?text=${(user.displayName || user.email || 'U').charAt(0).toUpperCase()}`;
+                mobileUserProfileImage.src = profileImage;
+                console.log('Updated mobile profile image:', profileImage);
             }
         }
 
