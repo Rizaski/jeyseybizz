@@ -233,11 +233,8 @@
                         <span class="text-gray-700 font-medium">Login with Gmail</span>
                     `;
                     mobileGmailLoginBtn.onclick = () => {
-                        if (window.signInWithGoogle) {
-                            window.signInWithGoogle();
-                        } else {
-                            alert('Firebase authentication not loaded yet. Please try again.');
-                        }
+                        // Redirect to dedicated authentication page
+                        window.location.href = 'auth.html';
                     };
                 }
             }
@@ -1260,20 +1257,15 @@
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
 
-            // Gmail login with Firebase - Updated to use global Firebase
-            const gmailLoginBtn = document.getElementById('gmail-login');
-            if (gmailLoginBtn && loginModal) {
-                gmailLoginBtn.addEventListener('click', async () => {
-                    try {
-                        await window.FirebaseAuth.signInWithGoogle();
-                        loginModal.classList.add('hidden');
-                    } catch (error) {
-                        console.error('Authentication failed:', error);
-                        alert('Authentication temporarily unavailable. Please use the contact form below to send us a message.');
-                        loginModal.classList.add('hidden');
-                    }
-                });
-            }
+        // Gmail login - Redirect to auth page
+        const gmailLoginBtn = document.getElementById('gmail-login');
+        if (gmailLoginBtn && loginModal) {
+            gmailLoginBtn.addEventListener('click', () => {
+                // Close modal and redirect to auth page
+                loginModal.classList.add('hidden');
+                window.location.href = 'auth.html';
+            });
+        }
 
             // Form submission
             const contactForm = document.querySelector('form');

@@ -932,24 +932,14 @@
                 });
             }
 
-            // Mobile Gmail login - Updated to use global Firebase
-            const mobileGmailBtn = document.getElementById('mobile-gmail-login');
-            if (mobileGmailBtn) {
-                mobileGmailBtn.addEventListener('click', async () => {
-                    try {
-                        const user = window.FirebaseAuth.getCurrentUser();
-                        if (user) {
-                            // User is signed in, sign out
-                            await window.FirebaseAuth.signOut();
-                        } else {
-                            // User is not signed in, sign in with Google
-                            await window.FirebaseAuth.signInWithGoogle();
-                        }
-                    } catch (error) {
-                        console.error('Authentication error:', error);
-                    }
-                });
-            }
+        // Mobile Gmail login - Redirect to auth page
+        const mobileGmailBtn = document.getElementById('mobile-gmail-login');
+        if (mobileGmailBtn) {
+            mobileGmailBtn.addEventListener('click', () => {
+                // Redirect to dedicated authentication page
+                window.location.href = 'auth.html';
+            });
+        }
 
             // Floating chat button functionality (Mobile only)
             const floatingChatBtn = document.getElementById('floating-chat-btn');
@@ -966,23 +956,13 @@
                 });
             }
 
-            // Profile/Login functionality - Updated to use global Firebase
-            if (profileBtn) {
-                profileBtn.addEventListener('click', async () => {
-                    try {
-                        const user = window.FirebaseAuth.getCurrentUser();
-                        if (user) {
-                            // User is signed in, show profile or sign out
-                            await window.FirebaseAuth.signOut();
-                        } else {
-                            // User is not signed in, sign in with Google
-                            await window.FirebaseAuth.signInWithGoogle();
-                        }
-                    } catch (error) {
-                        console.error('Authentication error:', error);
-                    }
-                });
-            }
+        // Profile/Login functionality - Redirect to auth page
+        if (profileBtn) {
+            profileBtn.addEventListener('click', () => {
+                // Redirect to dedicated authentication page
+                window.location.href = 'auth.html';
+            });
+        }
 
             const closeLoginBtn = document.getElementById('close-login');
             if (closeLoginBtn && loginModal) {

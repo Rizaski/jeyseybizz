@@ -675,39 +675,19 @@
             const profileBtn = document.getElementById('profile-btn');
             const mobileGmailBtn = document.getElementById('mobile-gmail-login');
 
-            // Profile/Login functionality - Updated to use global Firebase
+            // Profile/Login functionality - Redirect to auth page
             if (profileBtn) {
-                profileBtn.addEventListener('click', async () => {
-                    try {
-                        const user = window.FirebaseAuth.getCurrentUser();
-                        if (user) {
-                            // User is signed in, show profile or sign out
-                            await window.FirebaseAuth.signOut();
-                        } else {
-                            // User is not signed in, sign in with Google
-                            await window.FirebaseAuth.signInWithGoogle();
-                        }
-                    } catch (error) {
-                        console.error('Authentication error:', error);
-                    }
+                profileBtn.addEventListener('click', () => {
+                    // Redirect to dedicated authentication page
+                    window.location.href = 'auth.html';
                 });
             }
 
-            // Mobile Gmail login - Updated to use global Firebase
+            // Mobile Gmail login - Redirect to auth page
             if (mobileGmailBtn) {
-                mobileGmailBtn.addEventListener('click', async () => {
-                    try {
-                        const user = window.FirebaseAuth.getCurrentUser();
-                        if (user) {
-                            // User is signed in, sign out
-                            await window.FirebaseAuth.signOut();
-                        } else {
-                            // User is not signed in, sign in with Google
-                            await window.FirebaseAuth.signInWithGoogle();
-                        }
-                    } catch (error) {
-                        console.error('Authentication error:', error);
-                    }
+                mobileGmailBtn.addEventListener('click', () => {
+                    // Redirect to dedicated authentication page
+                    window.location.href = 'auth.html';
                 });
             }
         });
