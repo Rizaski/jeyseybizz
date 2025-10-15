@@ -233,8 +233,8 @@
                         <span class="text-gray-700 font-medium">Login with Gmail</span>
                     `;
                     mobileGmailLoginBtn.onclick = () => {
-                        // Redirect to dedicated authentication page
-                        window.location.href = 'auth.html';
+                        // Redirect to unified login page
+                        window.location.href = 'login.html';
                     };
                 }
             }
@@ -1257,13 +1257,13 @@
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
 
-        // Gmail login - Redirect to auth page
+        // Gmail login - Redirect to unified login page
         const gmailLoginBtn = document.getElementById('gmail-login');
         if (gmailLoginBtn && loginModal) {
             gmailLoginBtn.addEventListener('click', () => {
-                // Close modal and redirect to auth page
+                // Close modal and redirect to unified login page
                 loginModal.classList.add('hidden');
-                window.location.href = 'auth.html';
+                window.location.href = 'login.html';
             });
         }
 

@@ -811,19 +811,19 @@
             const profileBtn = document.getElementById('profile-btn');
             const mobileGmailBtn = document.getElementById('mobile-gmail-login');
 
-            // Profile/Login functionality - Redirect to auth page
+            // Profile/Login functionality - Redirect to unified login page
             if (profileBtn) {
                 profileBtn.addEventListener('click', () => {
-                    // Redirect to dedicated authentication page
-                    window.location.href = 'auth.html';
+                    // Redirect to unified login page
+                    window.location.href = 'login.html';
                 });
             }
 
-            // Mobile Gmail login - Redirect to auth page
+            // Mobile Gmail login - Redirect to unified login page
             if (mobileGmailBtn) {
                 mobileGmailBtn.addEventListener('click', () => {
-                    // Redirect to dedicated authentication page
-                    window.location.href = 'auth.html';
+                    // Redirect to unified login page
+                    window.location.href = 'login.html';
                 });
             }
 
@@ -1008,13 +1008,13 @@
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
 
-            // Gmail login - Redirect to auth page
+            // Gmail login - Redirect to unified login page
             const gmailLoginBtn = document.getElementById('gmail-login');
             if (gmailLoginBtn && loginModal) {
                 gmailLoginBtn.addEventListener('click', () => {
-                    // Close modal and redirect to auth page
+                    // Close modal and redirect to unified login page
                     loginModal.classList.add('hidden');
-                    window.location.href = 'auth.html';
+                    window.location.href = 'login.html';
                 });
             }
 
