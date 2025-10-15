@@ -962,6 +962,16 @@ window.FirebaseAuth = {
         // For deployed sites, use redirect method directly to avoid popup blockers
         if (isDeployed) {
             console.log('Deployed site detected, using redirect method to avoid popup blockers');
+            console.log('Current domain:', window.location.hostname);
+            console.log('Current origin:', window.location.origin);
+            
+            // Check if domain is authorized
+            if (!this.isDomainAuthorized()) {
+                console.error('Domain not authorized for Firebase authentication');
+                this.showDomainNotAuthorizedModal();
+                return;
+            }
+            
             this.showRedirectModal();
             return;
         }
@@ -1170,6 +1180,83 @@ window.FirebaseAuth = {
         });
 
         document.getElementById('cancel-popup-modal').addEventListener('click', () => {
+            modal.remove();
+        });
+    },
+
+    // Check if current domain is authorized for Firebase
+    isDomainAuthorized() {
+        const currentDomain = window.location.hostname;
+        const authorizedDomains = [
+            'localhost',
+            '127.0.0.1',
+            'otomono.vercel.app',
+            'otomono-c9938.firebaseapp.com'
+        ];
+        
+        return authorizedDomains.some(domain => 
+            currentDomain === domain || currentDomain.endsWith('.' + domain)
+        );
+    },
+
+    // Show domain not authorized modal
+    showDomainNotAuthorizedModal() {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+        modal.id = 'domain-not-authorized-modal';
+
+        modal.innerHTML = `
+            <div class="bg-rog-dark rounded-2xl shadow-2xl w-full max-w-md p-6 border border-rog-red/30">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-rog-red">
+                        <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-rog-display font-bold text-white glow mb-2">Domain Not Authorized</h3>
+                    <p class="text-gray-300 font-rog-body">This domain needs to be added to Firebase authorized domains</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="bg-rog-light/20 backdrop-blur-sm rounded-lg p-4 border border-rog-red/30">
+                        <h4 class="font-rog-heading font-semibold text-rog-red mb-2">Current Domain</h4>
+                        <p class="text-sm text-gray-300 font-rog-body">
+                            <strong class="text-white">${window.location.hostname}</strong>
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <h4 class="font-rog-heading font-semibold text-white">Steps to Fix:</h4>
+                        <ol class="text-sm text-gray-300 space-y-2 font-rog-body">
+                            <li>1. Go to <a href="https://console.firebase.google.com" target="_blank" class="text-rog-red hover:underline">Firebase Console</a></li>
+                            <li>2. Select project: <strong class="text-white">otomono-c9938</strong></li>
+                            <li>3. Go to Authentication → Settings → Authorized domains</li>
+                            <li>4. Add: <strong class="text-white">${window.location.hostname}</strong></li>
+                            <li>5. Save and refresh this page</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button id="retry-domain-check" class="flex-1 rog-button px-4 py-3 rounded-lg font-rog-heading font-semibold transition-all duration-300 shadow-lg hover:shadow-xl">
+                            Check Again
+                        </button>
+                        <button id="close-domain-modal" class="px-4 py-3 bg-rog-light/20 backdrop-blur-sm border border-rog-red/30 text-white rounded-lg hover:bg-rog-red/20 transition-all duration-300 hover:border-rog-red font-rog-heading">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Event listeners
+        document.getElementById('retry-domain-check').addEventListener('click', () => {
+            modal.remove();
+            this.proceedWithGoogleSignIn();
+        });
+
+        document.getElementById('close-domain-modal').addEventListener('click', () => {
             modal.remove();
         });
     },
