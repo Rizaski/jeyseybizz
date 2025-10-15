@@ -208,6 +208,11 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
+        // Test Firebase initialization
+        console.log('Firebase initialized:', app.name);
+        console.log('Auth instance:', auth);
+        console.log('Provider configured:', provider);
+
         // Get DOM elements
         const googleSigninBtn = document.getElementById('google-signin-btn');
         const loading = document.getElementById('loading');
@@ -217,6 +222,7 @@
         // Check if we're returning from a redirect
         async function checkRedirectResult() {
             try {
+                console.log('Checking for redirect result...');
                 const result = await getRedirectResult(auth);
                 if (result) {
                     console.log('Authentication successful via redirect:', result.user.email);
@@ -224,10 +230,12 @@
                     setTimeout(() => {
                         redirectToDashboard(result.user);
                     }, 2000);
+                } else {
+                    console.log('No redirect result found');
                 }
             } catch (error) {
                 console.error('Redirect result error:', error);
-                showError('Authentication failed. Please try again.');
+                showError(`Redirect authentication failed: ${error.message}. Please try again.`);
             }
         }
 
@@ -273,24 +281,34 @@
             showLoading();
             
             try {
+                console.log('Starting Google authentication...');
+                
                 // Try popup first
-                const result = await signInWithPopup(auth, provider);
-                console.log('Authentication successful via popup:', result.user.email);
-                showSuccess();
-                setTimeout(() => {
-                    redirectToDashboard(result.user);
-                }, 2000);
+                try {
+                    const result = await signInWithPopup(auth, provider);
+                    console.log('Authentication successful via popup:', result.user.email);
+                    showSuccess();
+                    setTimeout(() => {
+                        redirectToDashboard(result.user);
+                    }, 2000);
+                    return;
+                } catch (popupError) {
+                    console.log('Popup failed, trying redirect:', popupError.message);
+                    
+                    // If popup fails, use redirect
+                    try {
+                        await signInWithRedirect(auth, provider);
+                        // Note: User will be redirected to Google, then back to this page
+                        // The checkRedirectResult function will handle the result
+                    } catch (redirectError) {
+                        console.error('Both popup and redirect failed:', redirectError);
+                        showError(`Authentication failed: ${redirectError.message}. Please try again.`);
+                    }
+                }
                 
             } catch (error) {
-                console.error('Popup failed, trying redirect:', error);
-                
-                // If popup fails, use redirect
-                try {
-                    await signInWithRedirect(auth, provider);
-                } catch (redirectError) {
-                    console.error('Redirect also failed:', redirectError);
-                    showError('Authentication failed. Please try again.');
-                }
+                console.error('Authentication error:', error);
+                showError(`Authentication failed: ${error.message}. Please try again.`);
             }
         }
 
@@ -299,6 +317,12 @@
 
         // Check for redirect result on page load
         checkRedirectResult();
+
+        // Add a simple test button for debugging
+        console.log('Auth page loaded successfully');
+        console.log('Google signin button:', googleSigninBtn);
+        console.log('Loading element:', loading);
+        console.log('Error message element:', errorMessage);
     </script>
 </body>
 </html>
