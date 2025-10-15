@@ -1141,18 +1141,6 @@
                     console.log('No authenticated user, showing login button');
                 }
 
-                // Additional check after a delay to ensure profile is updated
-                setTimeout(async () => {
-                    try {
-                        const delayedUser = await window.FirebaseAuth.restoreAuthState();
-                        if (delayedUser && !document.getElementById('user-profile-image').src) {
-                            console.log('Delayed authentication check - updating profile');
-                            updateUserInfo(delayedUser);
-                        }
-                    } catch (error) {
-                        console.error('Error in delayed authentication check:', error);
-                    }
-                }, 2000);
 
                 // Track page visit
                 if (window.FirebaseDB && window.FirebaseAuth) {
@@ -1594,30 +1582,16 @@
             }
 
             if (userProfileImage) {
-                console.log('Setting desktop profile image to:', profileImage);
                 userProfileImage.src = profileImage;
                 userProfileImage.onerror = () => {
                     console.log('Profile image failed to load, using fallback');
                     const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
-                    const fallbackImage = `https://via.placeholder.com/32/ff0040/ffffff?text=${initial}`;
-                    userProfileImage.src = fallbackImage;
-                    console.log('Set fallback image:', fallbackImage);
+                    userProfileImage.src = `https://via.placeholder.com/32/ff0040/ffffff?text=${initial}`;
                 };
                 userProfileImage.onload = () => {
-                    console.log('Desktop profile image loaded successfully:', userProfileImage.src);
+                    console.log('Desktop profile image loaded successfully');
                 };
                 console.log('Updated desktop profile image:', profileImage);
-                
-                // Force update if image doesn't load within 3 seconds
-                setTimeout(() => {
-                    if (!userProfileImage.src || userProfileImage.src === '') {
-                        console.log('Profile image still not set, forcing update');
-                        const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
-                        userProfileImage.src = `https://via.placeholder.com/32/ff0040/ffffff?text=${initial}`;
-                    }
-                }, 3000);
-            } else {
-                console.error('userProfileImage element not found!');
             }
 
             if (dropdownProfileImage) {
@@ -1674,35 +1648,6 @@
             });
         }
 
-        // Additional check when page is fully loaded
-        window.addEventListener('load', async () => {
-            console.log('Page fully loaded - checking authentication state');
-            try {
-                const user = await window.FirebaseAuth.restoreAuthState();
-                if (user) {
-                    console.log('Page load - user found, updating profile');
-                    updateUserInfo(user);
-                }
-            } catch (error) {
-                console.error('Error checking auth state on page load:', error);
-            }
-        });
-
-        // Force profile update every 5 seconds if not set
-        setInterval(() => {
-            const profileImg = document.getElementById('user-profile-image');
-            if (profileImg && (!profileImg.src || profileImg.src === '')) {
-                console.log('Profile image not set, attempting to restore auth state');
-                window.FirebaseAuth.restoreAuthState().then(user => {
-                    if (user) {
-                        console.log('Interval check - updating profile');
-                        updateUserInfo(user);
-                    }
-                }).catch(error => {
-                    console.error('Error in interval auth check:', error);
-                });
-            }
-        }, 5000);
     </script>
 </body>
 
