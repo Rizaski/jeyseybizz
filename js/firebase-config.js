@@ -948,40 +948,201 @@ window.FirebaseAuth = {
 
     // Proceed with Google sign-in after sign-up popup
     async proceedWithGoogleSignIn() {
-        // Detect if we're on a deployed site (more likely to have popup blockers)
-        const isDeployed = window.location.hostname !== 'localhost' && 
-                          window.location.hostname !== '127.0.0.1' &&
-                          !window.location.hostname.includes('localhost');
-        
-        console.log('Authentication method detection:', {
-            hostname: window.location.hostname,
-            isDeployed: isDeployed,
-            userAgent: navigator.userAgent
-        });
+        // Always use new window approach for better user experience
+        console.log('Opening Gmail authentication in new window...');
+        this.openGmailAuthWindow();
+    },
 
-        // For deployed sites, use redirect method directly to avoid popup blockers
-        if (isDeployed) {
-            console.log('Deployed site detected, using redirect method to avoid popup blockers');
-            console.log('Current domain:', window.location.hostname);
-            console.log('Current origin:', window.location.origin);
-            
-            // Check if domain is authorized
-            if (!this.isDomainAuthorized()) {
-                console.error('Domain not authorized for Firebase authentication');
-                this.showDomainNotAuthorizedModal();
-                return;
-            }
-            
-            this.showRedirectModal();
+    // Open Gmail authentication in new window
+    openGmailAuthWindow() {
+        // Create a new window for Gmail authentication
+        const authWindow = window.open(
+            'about:blank',
+            'gmailAuth',
+            'width=500,height=600,scrollbars=yes,resizable=yes,status=yes,location=yes,toolbar=no,menubar=no'
+        );
+
+        if (!authWindow) {
+            console.error('Failed to open authentication window - popup blocked');
+            this.showPopupBlockerModal();
             return;
         }
 
-        // For localhost, try popup first with popup blocker detection
+        // Show loading message in new window
+        authWindow.document.write(`
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Gmail Authentication - Otomono</title>
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body {
+                        font-family: 'Inter', sans-serif;
+                        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        min-height: 100vh;
+                        text-align: center;
+                    }
+                    .container {
+                        max-width: 400px;
+                        padding: 2rem;
+                    }
+                    .logo {
+                        width: 60px;
+                        height: 60px;
+                        background: linear-gradient(135deg, #ff0040, #dc143c);
+                        border-radius: 50%;
+                        margin: 0 auto 1.5rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 24px;
+                        font-weight: bold;
+                    }
+                    h1 {
+                        font-size: 1.5rem;
+                        margin-bottom: 0.5rem;
+                        color: #ff0040;
+                    }
+                    p {
+                        color: #ccc;
+                        margin-bottom: 2rem;
+                    }
+                    .spinner {
+                        width: 40px;
+                        height: 40px;
+                        border: 3px solid #333;
+                        border-top: 3px solid #ff0040;
+                        border-radius: 50%;
+                        animation: spin 1s linear infinite;
+                        margin: 0 auto;
+                    }
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                    .error {
+                        color: #ff4444;
+                        margin-top: 1rem;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="logo">O</div>
+                    <h1>Gmail Authentication</h1>
+                    <p>Please wait while we redirect you to Google for secure authentication...</p>
+                    <div class="spinner"></div>
+                    <div id="error" class="error" style="display: none;">
+                        Authentication failed. Please close this window and try again.
+                    </div>
+                </div>
+            </body>
+            </html>
+        `);
+
+        // Start the authentication process
+        this.performGmailAuth(authWindow);
+
+        // Listen for authentication result
+        this.setupAuthWindowListener(authWindow);
+    },
+
+    // Setup listener for authentication window
+    setupAuthWindowListener(authWindow) {
+        // Check if authentication window is closed
+        const checkClosed = setInterval(() => {
+            if (authWindow.closed) {
+                clearInterval(checkClosed);
+                console.log('Authentication window closed');
+                // Check if user is authenticated
+                this.checkAuthResult();
+            }
+        }, 1000);
+
+        // Listen for messages from the authentication window
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'AUTH_SUCCESS') {
+                console.log('Authentication successful from new window');
+                authWindow.close();
+                this.handleSuccessfulAuth(event.data.user, 'google_new_window');
+            } else if (event.data.type === 'AUTH_ERROR') {
+                console.error('Authentication error from new window:', event.data.error);
+                authWindow.close();
+                this.showGenericErrorModal('Authentication failed. Please try again.');
+            }
+        });
+    },
+
+    // Check authentication result
+    async checkAuthResult() {
         try {
-            await this.attemptPopupSignIn();
+            const user = auth.currentUser;
+            if (user) {
+                console.log('User authenticated successfully:', user.email);
+                await this.handleSuccessfulAuth(user, 'google_new_window');
+            }
         } catch (error) {
-            console.log('Popup sign-in failed, falling back to redirect:', error);
-            this.showPopupBlockerModal();
+            console.error('Error checking authentication result:', error);
+        }
+    },
+
+    // Perform Gmail authentication in the new window
+    async performGmailAuth(authWindow) {
+        try {
+            // Check if domain is authorized
+            if (!this.isDomainAuthorized()) {
+                console.error('Domain not authorized for Firebase authentication');
+                authWindow.document.getElementById('error').style.display = 'block';
+                authWindow.document.querySelector('.spinner').style.display = 'none';
+                return;
+            }
+
+            // Initialize Firebase in the new window
+            const {
+                initializeApp,
+                getAuth,
+                GoogleAuthProvider,
+                signInWithRedirect,
+                getRedirectResult
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+
+            // Initialize Firebase in the new window
+            const authApp = initializeApp(firebaseConfig);
+            const authInstance = getAuth(authApp);
+            const googleProvider = new GoogleAuthProvider();
+
+            // Check if we're returning from a redirect
+            const result = await getRedirectResult(authInstance);
+            if (result) {
+                console.log('Authentication successful in new window:', result.user.email);
+                // Send success message to parent window
+                window.opener.postMessage({
+                    type: 'AUTH_SUCCESS',
+                    user: result.user
+                }, '*');
+                return;
+            }
+
+            // Start redirect authentication
+            console.log('Starting Gmail authentication in new window...');
+            await signInWithRedirect(authInstance, googleProvider);
+            
+        } catch (error) {
+            console.error('Gmail authentication error:', error);
+            authWindow.document.getElementById('error').style.display = 'block';
+            authWindow.document.querySelector('.spinner').style.display = 'none';
+            
+            // Send error message to parent window
+            window.opener.postMessage({
+                type: 'AUTH_ERROR',
+                error: error.message
+            }, '*');
         }
     },
 
