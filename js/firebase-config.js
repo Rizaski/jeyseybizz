@@ -239,16 +239,20 @@ window.FirebaseAuth = {
     // Update authentication UI
     updateAuthUI(user) {
         const userData = user || this.getCurrentUser();
+        console.log('Updating auth UI with user data:', userData);
 
         // Update login buttons (desktop header)
         const loginButtons = document.querySelectorAll('#login-btn');
         loginButtons.forEach(button => {
             if (userData) {
                 // User is signed in - show user profile with dropdown
+                const profileImage = userData.photoURL || `https://via.placeholder.com/32/ff0040/ffffff?text=${(userData.displayName || userData.email || 'U').charAt(0).toUpperCase()}`;
+                console.log('Profile image URL:', profileImage);
+                console.log('User photoURL:', userData.photoURL);
                 button.innerHTML = `
                     <div class="flex items-center space-x-2">
-                        <img src="${userData.photoURL || 'https://via.placeholder.com/32/ff0040/ffffff?text=' + (userData.displayName || userData.email).charAt(0).toUpperCase()}" 
-                             alt="Profile" class="w-6 h-6 rounded-full border border-rog-red/30">
+                        <img src="${profileImage}" 
+                             alt="Profile" class="w-6 h-6 rounded-full border border-rog-red/30 object-cover">
                         <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
@@ -257,7 +261,9 @@ window.FirebaseAuth = {
                         ${userData.displayName || userData.email}
                     </div>
                 `;
-                button.onclick = () => {
+                button.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     // Show dropdown menu
                     this.toggleAccountDropdown(button);
                 };
@@ -271,7 +277,11 @@ window.FirebaseAuth = {
                         Login
                     </div>
                 `;
-                button.onclick = () => window.location.href = 'login.html';
+                button.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.location.href = 'login.html';
+                };
             }
         });
 
@@ -279,14 +289,17 @@ window.FirebaseAuth = {
         const mobileLoginButtons = document.querySelectorAll('#mobile-login-btn');
         mobileLoginButtons.forEach(button => {
             if (userData) {
+                const profileImage = userData.photoURL || `https://via.placeholder.com/32/ff0040/ffffff?text=${(userData.displayName || userData.email || 'U').charAt(0).toUpperCase()}`;
                 button.innerHTML = `
                     <div class="flex items-center space-x-2">
-                        <img src="${userData.photoURL || 'https://via.placeholder.com/32/ff0040/ffffff?text=' + (userData.displayName || userData.email).charAt(0).toUpperCase()}" 
-                             alt="Profile" class="w-5 h-5 rounded-full border border-rog-red/30">
+                        <img src="${profileImage}" 
+                             alt="Profile" class="w-5 h-5 rounded-full border border-rog-red/30 object-cover">
                         <span class="text-white font-rog-heading font-medium">${userData.displayName || 'Account'}</span>
                     </div>
                 `;
-                button.onclick = () => {
+                button.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     // Show mobile dropdown menu
                     this.toggleMobileAccountDropdown(button);
                 };
@@ -297,7 +310,11 @@ window.FirebaseAuth = {
                     </svg>
                     <span class="text-white font-rog-heading font-medium">Login</span>
                 `;
-                button.onclick = () => window.location.href = 'login.html';
+                button.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.location.href = 'login.html';
+                };
             }
         });
     },
@@ -319,8 +336,8 @@ window.FirebaseAuth = {
             <div class="py-2">
                 <div class="px-4 py-3 text-sm text-gray-300 border-b border-rog-red/30">
                     <div class="flex items-center space-x-3">
-                        <img src="${this.getCurrentUser()?.photoURL || 'https://via.placeholder.com/40/ff0040/ffffff?text=' + (this.getCurrentUser()?.displayName || this.getCurrentUser()?.email).charAt(0).toUpperCase()}" 
-                             alt="Profile" class="w-8 h-8 rounded-full border border-rog-red/30">
+                        <img src="${this.getCurrentUser()?.photoURL || `https://via.placeholder.com/40/ff0040/ffffff?text=${(this.getCurrentUser()?.displayName || this.getCurrentUser()?.email || 'U').charAt(0).toUpperCase()}`}" 
+                             alt="Profile" class="w-8 h-8 rounded-full border border-rog-red/30 object-cover">
                         <div>
                             <div class="font-rog-heading font-semibold text-white">${this.getCurrentUser()?.displayName || 'User'}</div>
                             <div class="text-gray-400 font-rog-body text-xs">${this.getCurrentUser()?.email || ''}</div>
@@ -403,8 +420,8 @@ window.FirebaseAuth = {
         dropdown.innerHTML = `
             <div class="p-4">
                 <div class="flex items-center space-x-3 mb-4 pb-3 border-b border-rog-red/30">
-                    <img src="${this.getCurrentUser()?.photoURL || 'https://via.placeholder.com/40/ff0040/ffffff?text=' + (this.getCurrentUser()?.displayName || this.getCurrentUser()?.email).charAt(0).toUpperCase()}" 
-                         alt="Profile" class="w-10 h-10 rounded-full border border-rog-red/30">
+                    <img src="${this.getCurrentUser()?.photoURL || `https://via.placeholder.com/40/ff0040/ffffff?text=${(this.getCurrentUser()?.displayName || this.getCurrentUser()?.email || 'U').charAt(0).toUpperCase()}`}" 
+                         alt="Profile" class="w-10 h-10 rounded-full border border-rog-red/30 object-cover">
                     <div>
                         <div class="font-rog-heading font-semibold text-white">${this.getCurrentUser()?.displayName || 'User'}</div>
                         <div class="text-gray-400 font-rog-body text-sm">${this.getCurrentUser()?.email || ''}</div>
