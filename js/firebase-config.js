@@ -240,15 +240,19 @@ window.FirebaseAuth = {
     updateAuthUI(user) {
         const userData = user || this.getCurrentUser();
 
-        // Update profile buttons (desktop header)
-        const profileButtons = document.querySelectorAll('#profile-btn');
-        profileButtons.forEach(button => {
+        // Update login buttons (desktop header)
+        const loginButtons = document.querySelectorAll('#login-btn');
+        loginButtons.forEach(button => {
             if (userData) {
-                // User is signed in - show Account dropdown
+                // User is signed in - show user profile with dropdown
                 button.innerHTML = `
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="${userData.photoURL || 'https://via.placeholder.com/32/ff0040/ffffff?text=' + (userData.displayName || userData.email).charAt(0).toUpperCase()}" 
+                             alt="Profile" class="w-6 h-6 rounded-full border border-rog-red/30">
+                        <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
                     <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-rog-dark text-rog-red text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red">
                         ${userData.displayName || userData.email}
                     </div>
@@ -264,35 +268,36 @@ window.FirebaseAuth = {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                     <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-rog-dark text-rog-red text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red">
-                        Login with Gmail
+                        Login
                     </div>
                 `;
-                button.onclick = () => this.signInWithGoogleEnhanced();
+                button.onclick = () => window.location.href = 'login.html';
             }
         });
 
-        // Update mobile menu buttons
-        const mobileButtons = document.querySelectorAll('#mobile-gmail-login');
-        mobileButtons.forEach(button => {
+        // Update mobile login buttons
+        const mobileLoginButtons = document.querySelectorAll('#mobile-login-btn');
+        mobileLoginButtons.forEach(button => {
             if (userData) {
                 button.innerHTML = `
-                    <svg class="w-5 h-5 text-rog-red mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    <span class="text-white font-rog-heading font-medium">Account</span>
+                    <div class="flex items-center space-x-2">
+                        <img src="${userData.photoURL || 'https://via.placeholder.com/32/ff0040/ffffff?text=' + (userData.displayName || userData.email).charAt(0).toUpperCase()}" 
+                             alt="Profile" class="w-5 h-5 rounded-full border border-rog-red/30">
+                        <span class="text-white font-rog-heading font-medium">${userData.displayName || 'Account'}</span>
+                    </div>
                 `;
                 button.onclick = () => {
-                    // Redirect to customer page
-                    window.location.href = 'customer.html';
+                    // Show mobile dropdown menu
+                    this.toggleMobileAccountDropdown(button);
                 };
             } else {
                 button.innerHTML = `
-                    <svg class="w-5 h-5 text-rog-red mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
-                    <span class="text-white font-rog-heading font-medium">Login with Gmail</span>
+                    <span class="text-white font-rog-heading font-medium">Login</span>
                 `;
-                button.onclick = () => this.signInWithGoogleEnhanced();
+                button.onclick = () => window.location.href = 'login.html';
             }
         });
     },
@@ -309,27 +314,33 @@ window.FirebaseAuth = {
         // Create dropdown menu
         const dropdown = document.createElement('div');
         dropdown.id = 'account-dropdown';
-        dropdown.className = 'absolute top-full right-0 mt-2 w-48 bg-rog-dark rounded-lg shadow-lg border border-rog-red/30 z-50';
+        dropdown.className = 'absolute top-full right-0 mt-2 w-56 bg-rog-dark rounded-lg shadow-lg border border-rog-red/30 z-50';
         dropdown.innerHTML = `
             <div class="py-2">
-                <div class="px-4 py-2 text-sm text-gray-300 border-b border-rog-red/30">
-                    <div class="font-rog-heading font-semibold text-white">${this.getCurrentUser()?.displayName || 'User'}</div>
-                    <div class="text-gray-400 font-rog-body">${this.getCurrentUser()?.email || ''}</div>
+                <div class="px-4 py-3 text-sm text-gray-300 border-b border-rog-red/30">
+                    <div class="flex items-center space-x-3">
+                        <img src="${this.getCurrentUser()?.photoURL || 'https://via.placeholder.com/40/ff0040/ffffff?text=' + (this.getCurrentUser()?.displayName || this.getCurrentUser()?.email).charAt(0).toUpperCase()}" 
+                             alt="Profile" class="w-8 h-8 rounded-full border border-rog-red/30">
+                        <div>
+                            <div class="font-rog-heading font-semibold text-white">${this.getCurrentUser()?.displayName || 'User'}</div>
+                            <div class="text-gray-400 font-rog-body text-xs">${this.getCurrentUser()?.email || ''}</div>
+                        </div>
+                    </div>
                 </div>
-                <a href="customer.html" class="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-rog-red/20 transition-colors font-rog-body">
+                <a href="customer.html" class="flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-rog-red/20 transition-colors font-rog-body">
                     <svg class="w-4 h-4 mr-3 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
-                    Account Dashboard
+                    Customer Dashboard
                 </a>
-                <a href="designer-studio.html" class="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-rog-red/20 transition-colors font-rog-body">
+                <a href="designer-studio.html" class="flex items-center px-4 py-3 text-sm text-gray-300 hover:bg-rog-red/20 transition-colors font-rog-body">
                     <svg class="w-4 h-4 mr-3 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
-                    Jersey Designer
+                    Jersey Designer Studio
                 </a>
-                <div class="border-t border-rog-red/30"></div>
-                <button onclick="window.FirebaseAuth.signOut()" class="flex items-center w-full px-4 py-2 text-sm text-rog-red hover:bg-rog-red/20 transition-colors font-rog-body">
+                <div class="border-t border-rog-red/30 my-2"></div>
+                <button id="sign-out-btn" class="flex items-center w-full px-4 py-3 text-sm text-rog-red hover:bg-rog-red/20 transition-colors font-rog-body">
                     <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
@@ -349,6 +360,19 @@ window.FirebaseAuth = {
         button.parentElement.style.position = 'relative';
         button.parentElement.appendChild(dropdown);
 
+        // Add event listener for sign-out button
+        const signOutBtn = dropdown.querySelector('#sign-out-btn');
+        if (signOutBtn) {
+            signOutBtn.addEventListener('click', async () => {
+                try {
+                    await this.signOut();
+                    dropdown.remove();
+                } catch (error) {
+                    console.error('Sign out error:', error);
+                }
+            });
+        }
+
         // Close dropdown when clicking outside
         const closeDropdown = (event) => {
             if (!dropdown.contains(event.target) && !button.contains(event.target)) {
@@ -361,6 +385,70 @@ window.FirebaseAuth = {
         setTimeout(() => {
             document.addEventListener('click', closeDropdown);
         }, 100);
+    },
+
+    // Toggle mobile account dropdown
+    toggleMobileAccountDropdown(button) {
+        // Remove existing dropdown
+        const existingDropdown = document.getElementById('mobile-account-dropdown');
+        if (existingDropdown) {
+            existingDropdown.remove();
+            return;
+        }
+
+        // Create mobile dropdown menu
+        const dropdown = document.createElement('div');
+        dropdown.id = 'mobile-account-dropdown';
+        dropdown.className = 'mt-4 bg-rog-light/20 backdrop-blur-sm rounded-lg border border-rog-red/30';
+        dropdown.innerHTML = `
+            <div class="p-4">
+                <div class="flex items-center space-x-3 mb-4 pb-3 border-b border-rog-red/30">
+                    <img src="${this.getCurrentUser()?.photoURL || 'https://via.placeholder.com/40/ff0040/ffffff?text=' + (this.getCurrentUser()?.displayName || this.getCurrentUser()?.email).charAt(0).toUpperCase()}" 
+                         alt="Profile" class="w-10 h-10 rounded-full border border-rog-red/30">
+                    <div>
+                        <div class="font-rog-heading font-semibold text-white">${this.getCurrentUser()?.displayName || 'User'}</div>
+                        <div class="text-gray-400 font-rog-body text-sm">${this.getCurrentUser()?.email || ''}</div>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <a href="customer.html" class="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-rog-red/20 transition-colors font-rog-body rounded-lg">
+                        <svg class="w-4 h-4 mr-3 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Customer Dashboard
+                    </a>
+                    <a href="designer-studio.html" class="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-rog-red/20 transition-colors font-rog-body rounded-lg">
+                        <svg class="w-4 h-4 mr-3 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Jersey Designer Studio
+                    </a>
+                    <div class="border-t border-rog-red/30 my-2"></div>
+                    <button id="mobile-sign-out-btn" class="flex items-center w-full px-3 py-2 text-sm text-rog-red hover:bg-rog-red/20 transition-colors font-rog-body rounded-lg">
+                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Add to button's parent
+        button.parentElement.appendChild(dropdown);
+
+        // Add event listener for sign-out button
+        const signOutBtn = dropdown.querySelector('#mobile-sign-out-btn');
+        if (signOutBtn) {
+            signOutBtn.addEventListener('click', async () => {
+                try {
+                    await this.signOut();
+                    dropdown.remove();
+                } catch (error) {
+                    console.error('Sign out error:', error);
+                }
+            });
+        }
     },
 
     // Show popup blocker instructions
