@@ -516,9 +516,11 @@
                 console.log('User authenticated:', user.email);
 
                 // Update user information in header
+                console.log('Updating user info in customer dashboard...');
                 updateUserInfo(user);
 
                 // Load user data from Firebase
+                console.log('Loading user data from Firebase...');
                 await loadUserData(user.uid);
 
                 // Mobile menu functionality
@@ -630,15 +632,24 @@
         });
 
         async function updateUserInfo(user) {
+            console.log('updateUserInfo called with user:', user);
+            
             const userProfileImage = document.getElementById('user-profile-image');
             const mobileUserName = document.getElementById('mobile-user-name');
             const mobileUserEmail = document.getElementById('mobile-user-email');
             const mobileUserProfileImage = document.getElementById('mobile-user-profile-image');
-
+            
             // Dropdown elements
             const dropdownProfileImage = document.getElementById('dropdown-profile-image');
             const dropdownUserName = document.getElementById('dropdown-user-name');
             const dropdownUserEmail = document.getElementById('dropdown-user-email');
+
+            console.log('Profile elements found:');
+            console.log('userProfileImage:', userProfileImage);
+            console.log('dropdownProfileImage:', dropdownProfileImage);
+            console.log('mobileUserProfileImage:', mobileUserProfileImage);
+            console.log('dropdownUserName:', dropdownUserName);
+            console.log('dropdownUserEmail:', dropdownUserEmail);
 
             console.log('Updating user info with:', user);
             console.log('User photoURL:', user.photoURL);
@@ -652,8 +663,14 @@
                 const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
                 profileImage = `https://via.placeholder.com/32/ff0040/ffffff?text=${initial}`;
             }
-
+            
             console.log('Final profile image URL:', profileImage);
+            
+            // Ensure we have a valid user object
+            if (!user) {
+                console.error('No user data provided to updateUserInfo');
+                return;
+            }
 
             if (userProfileImage) {
                 userProfileImage.src = profileImage;
@@ -695,7 +712,7 @@
             }
 
             // Update user names and emails
-            const displayName = user.displayName || user.email ? .split('@')[0] || 'User';
+            const displayName = user.displayName || (user.email ? user.email.split('@')[0] : 'User');
             const email = user.email || 'user@example.com';
 
             if (mobileUserName) {
@@ -727,8 +744,8 @@
                     // Create initial profile if it doesn't exist
                     await window.FirebaseDB.createUserProfile({
                         uid: uid,
-                        displayName: window.FirebaseAuth.getCurrentUser() ? .displayName || 'User',
-                        email: window.FirebaseAuth.getCurrentUser() ? .email || 'user@example.com'
+                        displayName: window.FirebaseAuth.getCurrentUser() ? window.FirebaseAuth.getCurrentUser().displayName : 'User',
+                        email: window.FirebaseAuth.getCurrentUser() ? window.FirebaseAuth.getCurrentUser().email : 'user@example.com'
                     });
                 }
 
