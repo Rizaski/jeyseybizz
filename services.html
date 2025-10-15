@@ -657,19 +657,29 @@
             // Unified Login functionality - Redirect to unified login page
             const loginBtn = document.getElementById('login-btn');
             if (loginBtn) {
-                loginBtn.addEventListener('click', () => {
+                console.log('Services page: Login button found, adding event listener');
+                loginBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Services page: Login button clicked, redirecting to login.html');
                     // Redirect to unified login page
                     window.location.href = 'login.html';
                 });
+            } else {
+                console.error('Services page: Login button not found!');
             }
 
             // Mobile Login - Redirect to unified login page
             const mobileLoginBtn = document.getElementById('mobile-login-btn');
             if (mobileLoginBtn) {
-                mobileLoginBtn.addEventListener('click', () => {
+                console.log('Services page: Mobile login button found, adding event listener');
+                mobileLoginBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Services page: Mobile login button clicked, redirecting to login.html');
                     // Redirect to unified login page
                     window.location.href = 'login.html';
                 });
+            } else {
+                console.error('Services page: Mobile login button not found!');
             }
         });
 
