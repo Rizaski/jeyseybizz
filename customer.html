@@ -570,14 +570,14 @@
                 // Profile dropdown functionality
                 const userProfileBtn = document.getElementById('user-profile-btn');
                 const userProfileDropdown = document.getElementById('user-profile-dropdown');
-                
+
                 if (userProfileBtn && userProfileDropdown) {
                     console.log('Adding profile dropdown event listener');
                     userProfileBtn.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         console.log('Profile button clicked, toggling dropdown');
-                        
+
                         // Toggle dropdown visibility
                         if (userProfileDropdown.classList.contains('hidden')) {
                             userProfileDropdown.classList.remove('hidden');
@@ -587,7 +587,7 @@
                             console.log('Dropdown closed');
                         }
                     });
-                    
+
                     // Close dropdown when clicking outside
                     document.addEventListener('click', (e) => {
                         if (!userProfileBtn.contains(e.target) && !userProfileDropdown.contains(e.target)) {
@@ -634,7 +634,7 @@
             const mobileUserName = document.getElementById('mobile-user-name');
             const mobileUserEmail = document.getElementById('mobile-user-email');
             const mobileUserProfileImage = document.getElementById('mobile-user-profile-image');
-            
+
             // Dropdown elements
             const dropdownProfileImage = document.getElementById('dropdown-profile-image');
             const dropdownUserName = document.getElementById('dropdown-user-name');
@@ -652,9 +652,9 @@
                 const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
                 profileImage = `https://via.placeholder.com/32/ff0040/ffffff?text=${initial}`;
             }
-            
+
             console.log('Final profile image URL:', profileImage);
-            
+
             if (userProfileImage) {
                 userProfileImage.src = profileImage;
                 userProfileImage.onerror = () => {
@@ -667,7 +667,7 @@
                 };
                 console.log('Updated desktop profile image:', profileImage);
             }
-            
+
             if (dropdownProfileImage) {
                 dropdownProfileImage.src = profileImage;
                 dropdownProfileImage.onerror = () => {
@@ -680,7 +680,7 @@
                 };
                 console.log('Updated dropdown profile image:', profileImage);
             }
-            
+
             if (mobileUserProfileImage) {
                 mobileUserProfileImage.src = profileImage;
                 mobileUserProfileImage.onerror = () => {
@@ -695,7 +695,7 @@
             }
 
             // Update user names and emails
-            const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+            const displayName = user.displayName || user.email ? .split('@')[0] || 'User';
             const email = user.email || 'user@example.com';
 
             if (mobileUserName) {
