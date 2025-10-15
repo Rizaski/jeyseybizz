@@ -1236,14 +1236,6 @@
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
 
-        // Unified Login - Redirect to unified login page
-        const loginBtn = document.getElementById('login-btn');
-        if (loginBtn) {
-            loginBtn.addEventListener('click', () => {
-                // Redirect to unified login page
-                window.location.href = 'login.html';
-            });
-        }
 
             // Form submission
             const contactForm = document.querySelector('form');
@@ -1309,6 +1301,34 @@
                         });
                     }
                 });
+            }
+
+            // Unified Login functionality - Redirect to unified login page
+            const loginBtn = document.getElementById('login-btn');
+            if (loginBtn) {
+                console.log('Contact page: Login button found, adding event listener');
+                loginBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Contact page: Login button clicked, redirecting to login.html');
+                    // Redirect to unified login page
+                    window.location.href = 'login.html';
+                });
+            } else {
+                console.error('Contact page: Login button not found!');
+            }
+
+            // Mobile Login - Redirect to unified login page
+            const mobileLoginBtn = document.getElementById('mobile-login-btn');
+            if (mobileLoginBtn) {
+                console.log('Contact page: Mobile login button found, adding event listener');
+                mobileLoginBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Contact page: Mobile login button clicked, redirecting to login.html');
+                    // Redirect to unified login page
+                    window.location.href = 'login.html';
+                });
+            } else {
+                console.error('Contact page: Mobile login button not found!');
             }
         }); // End of DOMContentLoaded
     </script>

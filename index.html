@@ -911,14 +911,6 @@
                 });
             }
 
-        // Mobile Login - Redirect to unified login page
-        const mobileLoginBtn = document.getElementById('mobile-login-btn');
-        if (mobileLoginBtn) {
-            mobileLoginBtn.addEventListener('click', () => {
-                // Redirect to unified login page
-                window.location.href = 'login.html';
-            });
-        }
 
             // Floating chat button functionality (Mobile only)
             const floatingChatBtn = document.getElementById('floating-chat-btn');
@@ -928,6 +920,34 @@
                 });
             }
 
+            // Unified Login functionality - Redirect to unified login page
+            const loginBtn = document.getElementById('login-btn');
+            if (loginBtn) {
+                console.log('Login button found, adding event listener');
+                loginBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Login button clicked, redirecting to login.html');
+                    // Redirect to unified login page
+                    window.location.href = 'login.html';
+                });
+            } else {
+                console.error('Login button not found!');
+            }
+
+            // Mobile Login - Redirect to unified login page
+            const mobileLoginBtn = document.getElementById('mobile-login-btn');
+            if (mobileLoginBtn) {
+                console.log('Mobile login button found, adding event listener');
+                mobileLoginBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Mobile login button clicked, redirecting to login.html');
+                    // Redirect to unified login page
+                    window.location.href = 'login.html';
+                });
+            } else {
+                console.error('Mobile login button not found!');
+            }
+
             const closeChatBtn = document.getElementById('close-chat');
             if (closeChatBtn && chatModal) {
                 closeChatBtn.addEventListener('click', () => {
@@ -935,14 +955,6 @@
                 });
             }
 
-        // Unified Login functionality - Redirect to unified login page
-        const loginBtn = document.getElementById('login-btn');
-        if (loginBtn) {
-            loginBtn.addEventListener('click', () => {
-                // Redirect to unified login page
-                window.location.href = 'login.html';
-            });
-        }
 
             const closeLoginBtn = document.getElementById('close-login');
             if (closeLoginBtn && loginModal) {
