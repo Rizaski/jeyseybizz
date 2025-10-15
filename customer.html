@@ -633,12 +633,12 @@
 
         async function updateUserInfo(user) {
             console.log('updateUserInfo called with user:', user);
-            
+
             const userProfileImage = document.getElementById('user-profile-image');
             const mobileUserName = document.getElementById('mobile-user-name');
             const mobileUserEmail = document.getElementById('mobile-user-email');
             const mobileUserProfileImage = document.getElementById('mobile-user-profile-image');
-            
+
             // Dropdown elements
             const dropdownProfileImage = document.getElementById('dropdown-profile-image');
             const dropdownUserName = document.getElementById('dropdown-user-name');
@@ -663,9 +663,9 @@
                 const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
                 profileImage = `https://via.placeholder.com/32/ff0040/ffffff?text=${initial}`;
             }
-            
+
             console.log('Final profile image URL:', profileImage);
-            
+
             // Ensure we have a valid user object
             if (!user) {
                 console.error('No user data provided to updateUserInfo');
