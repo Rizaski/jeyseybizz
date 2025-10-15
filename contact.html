@@ -159,7 +159,7 @@
         function updateUserUI(user) {
             const profileBtn = document.getElementById('profile-btn');
             const gmailLoginBtn = document.getElementById('gmail-login');
-            const mobileGmailLoginBtn = document.getElementById('mobile-gmail-login');
+            const mobileLoginBtn = document.getElementById('mobile-login-btn');
             
             if (user) {
                 // User is signed in
@@ -232,7 +232,7 @@
                         </svg>
                         <span class="text-gray-700 font-medium">Login with Gmail</span>
                     `;
-                    mobileGmailLoginBtn.onclick = () => {
+                    mobileLoginBtn.onclick = () => {
                         // Redirect to unified login page
                         window.location.href = 'login.html';
                     };
@@ -507,24 +507,9 @@
 
                 <!-- Action Buttons -->
                 <div class="hidden md:flex items-center space-x-3">
-                    <!-- User Profile Button -->
-                    <button id="profile-btn" class="p-2 rounded-lg bg-rog-light hover:bg-rog-red transition-all duration-200 group relative border border-rog-red">
-                        <svg class="w-5 h-5 text-white group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-rog-dark text-rog-red text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red">
-                            Login with Gmail
-                        </div>
-                    </button>
-
-                    <!-- Staff Login Button -->
-                    <button id="staff-login-btn" class="p-2 rounded-lg bg-rog-light hover:bg-rog-red transition-all duration-200 group relative border border-rog-red">
-                        <svg class="w-5 h-5 text-white group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-rog-dark text-rog-red text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red">
-                            Staff Login
-                        </div>
+                    <!-- Unified Login Button -->
+                    <button id="login-btn" class="rog-button px-6 py-2 rounded-lg font-rog-heading font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl">
+                        Login
                     </button>
 
                     <!-- Customer Service Button -->
@@ -570,17 +555,11 @@
 
                     <!-- Mobile Action Buttons -->
                     <div class="mt-8 pt-8 border-t border-rog-red/30 space-y-4">
-                        <button id="mobile-gmail-login" class="w-full flex items-center justify-center px-4 py-3 bg-rog-light/20 backdrop-blur-sm rounded-lg hover:bg-rog-red/20 transition-all duration-300 border border-rog-red/30 hover:border-rog-red">
-                            <svg class="w-5 h-5 text-rog-red mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <button id="mobile-login-btn" class="w-full flex items-center justify-center px-4 py-3 rog-button rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
-                            <span class="text-white font-rog-heading font-medium">Login with Gmail</span>
-                        </button>
-                        <button class="w-full flex items-center justify-center px-4 py-3 rog-button rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                            </svg>
-                            <span class="font-rog-heading font-medium">Staff Login</span>
+                            <span class="font-rog-heading font-medium">Login</span>
                         </button>
 
                         <!-- Mobile Chat Button -->
@@ -1257,12 +1236,11 @@
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
 
-        // Gmail login - Redirect to unified login page
-        const gmailLoginBtn = document.getElementById('gmail-login');
-        if (gmailLoginBtn && loginModal) {
-            gmailLoginBtn.addEventListener('click', () => {
-                // Close modal and redirect to unified login page
-                loginModal.classList.add('hidden');
+        // Unified Login - Redirect to unified login page
+        const loginBtn = document.getElementById('login-btn');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', () => {
+                // Redirect to unified login page
                 window.location.href = 'login.html';
             });
         }
