@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrderManager Test - Otomono Jerseys</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="js/order-manager.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
+        }
+
+        .test-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8), rgba(10, 10, 10, 0.9));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 0, 64, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .test-button {
+            background: linear-gradient(135deg, #ff0040, #dc143c);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .test-button:hover {
+            background: linear-gradient(135deg, #dc143c, #b91c3c);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gray-900 text-white">
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-red-500 mb-4">OrderManager Test</h1>
+            <p class="text-gray-400">Test the OrderManager system for guaranteed order saving</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Test Controls -->
+            <div class="test-card rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-white mb-6">Test Controls</h2>
+
+                <div class="space-y-4">
+                    <button onclick="testOrderSave()" class="test-button w-full">
+                        <i class="fas fa-save mr-2"></i> Test Order Save
+                    </button>
+
+                    <button onclick="testOrderLoad()" class="test-button w-full">
+                        <i class="fas fa-download mr-2"></i> Test Order Load
+                    </button>
+
+                    <button onclick="testOrderUpdate()" class="test-button w-full">
+                        <i class="fas fa-edit mr-2"></i> Test Order Update
+                    </button>
+
+                    <button onclick="testOrderSync()" class="test-button w-full">
+                        <i class="fas fa-sync mr-2"></i> Test Order Sync
+                    </button>
+                </div>
+            </div>
+
+            <!-- Test Results -->
+            <div class="test-card rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-white mb-6">Test Results</h2>
+
+                <div id="test-results" class="space-y-4">
+                    <div class="text-gray-400 text-center">
+                        Click a test button to see results here
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Form Test -->
+        <div class="test-card rounded-lg p-6 mt-8">
+            <h2 class="text-2xl font-bold text-white mb-6">Order Form Test</h2>
+
+            <form id="test-order-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-400 text-sm mb-2">Customer Name</label>
+                    <input type="text" id="test-customer-name" class="w-full bg-gray-700 border border-gray-600 text-white px-4 py-2 rounded-lg" value="Test Customer">
+                </div>
+
+                <div>
+                    <label class="block text-gray-400 text-sm mb-2">Email</label>
+                    <input type="email" id="test-customer-email" class="w-full bg-gray-700 border border-gray-600 text-white px-4 py-2 rounded-lg" value="test@example.com">
+                </div>
+
+                <div>
+                    <label class="block text-gray-400 text-sm mb-2">Mobile</label>
+                    <input type="tel" id="test-mobile" class="w-full bg-gray-700 border border-gray-600 text-white px-4 py-2 rounded-lg" value="+1234567890">
+                </div>
+
+                <div>
+                    <label class="block text-gray-400 text-sm mb-2">Quantity</label>
+                    <input type="number" id="test-quantity" class="w-full bg-gray-700 border border-gray-600 text-white px-4 py-2 rounded-lg" value="1" min="1">
+                </div>
+
+                <div>
+                    <label class="block text-gray-400 text-sm mb-2">Material</label>
+                    <select id="test-material" class="w-full bg-gray-700 border border-gray-600 text-white px-4 py-2 rounded-lg">
+                        <option value="Waffle">Waffle</option>
+                        <option value="Combweb">Combweb</option>
+                        <option value="Vortex Jacquard">Vortex Jacquard</option>
+                        <option value="Mesh">Mesh</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-gray-400 text-sm mb-2">Status</label>
+                    <select id="test-status" class="w-full bg-gray-700 border border-gray-600 text-white px-4 py-2 rounded-lg">
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                    </select>
+                </div>
+
+                <div class="md:col-span-2">
+                    <button type="button" onclick="testFormSubmit()" class="test-button w-full">
+                        <i class="fas fa-paper-plane mr-2"></i> Submit Test Order
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Orders List -->
+        <div class="test-card rounded-lg p-6 mt-8">
+            <h2 class="text-2xl font-bold text-white mb-6">Orders List</h2>
+
+            <div id="orders-list" class="space-y-4">
+                <div class="text-gray-400 text-center">
+                    Click "Test Order Load" to see orders here
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test functions
+        async function testOrderSave() {
+            try {
+                addTestResult('Testing order save...', 'info');
+
+                const testOrder = {
+                    orderId: 'TEST-' + Date.now(),
+                    customerName: 'Test Customer',
+                    mobileNumber: '+1234567890',
+                    customerEmail: 'test@example.com',
+                    quantity: 1,
+                    materialPreference: 'Waffle',
+                    status: 'pending',
+                    date: new Date().toISOString().split('T')[0],
+                    createdAt: new Date().toISOString()
+                };
+
+                const result = await orderManager.saveOrder(testOrder);
+                addTestResult(`✅ Order saved successfully!<br>ID: ${result.id || result.orderId}<br>Saved to: ${result.savedTo}`, 'success');
+
+            } catch (error) {
+                addTestResult(`❌ Order save failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOrderLoad() {
+            try {
+                addTestResult('Loading orders...', 'info');
+
+                const orders = await orderManager.getAllOrders();
+                addTestResult(`✅ Loaded ${orders.length} orders successfully`, 'success');
+
+                // Display orders
+                const ordersList = document.getElementById('orders-list');
+                if (orders.length === 0) {
+                    ordersList.innerHTML = '<div class="text-gray-400 text-center">No orders found</div>';
+                } else {
+                    ordersList.innerHTML = orders.map(order => `
+                        <div class="bg-gray-700 p-4 rounded-lg">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-bold text-white">${order.id || order.orderId}</h3>
+                                    <p class="text-gray-400">${order.customerName} - ${order.customerEmail}</p>
+                                    <p class="text-sm text-gray-500">Qty: ${order.quantity} | Material: ${order.materialPreference}</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="px-2 py-1 rounded text-xs ${order.status === 'pending' ? 'bg-yellow-500' : order.status === 'processing' ? 'bg-blue-500' : 'bg-green-500'}">${order.status}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+            } catch (error) {
+                addTestResult(`❌ Order load failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOrderUpdate() {
+            try {
+                addTestResult('Testing order update...', 'info');
+
+                // First, get all orders
+                const orders = await orderManager.getAllOrders();
+                if (orders.length === 0) {
+                    addTestResult('❌ No orders found to update', 'error');
+                    return;
+                }
+
+                // Update the first order
+                const firstOrder = orders[0];
+                const newStatus = firstOrder.status === 'pending' ? 'processing' : 'pending';
+
+                await orderManager.updateOrderStatus(firstOrder.id || firstOrder.orderId, newStatus);
+                addTestResult(`✅ Order updated successfully!<br>Order: ${firstOrder.id || firstOrder.orderId}<br>New Status: ${newStatus}`, 'success');
+
+            } catch (error) {
+                addTestResult(`❌ Order update failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOrderSync() {
+            try {
+                addTestResult('Testing order sync...', 'info');
+
+                await orderManager.syncPendingOrders();
+                addTestResult('✅ Order sync completed successfully', 'success');
+
+            } catch (error) {
+                addTestResult(`❌ Order sync failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testFormSubmit() {
+            try {
+                addTestResult('Testing form submission...', 'info');
+
+                const orderData = {
+                    orderId: 'FORM-TEST-' + Date.now(),
+                    customerName: document.getElementById('test-customer-name').value,
+                    mobileNumber: document.getElementById('test-mobile').value,
+                    customerEmail: document.getElementById('test-customer-email').value,
+                    quantity: parseInt(document.getElementById('test-quantity').value),
+                    materialPreference: document.getElementById('test-material').value,
+                    status: document.getElementById('test-status').value,
+                    date: new Date().toISOString().split('T')[0],
+                    createdAt: new Date().toISOString()
+                };
+
+                const result = await orderManager.saveOrder(orderData);
+                addTestResult(`✅ Form order saved successfully!<br>ID: ${result.id || result.orderId}<br>Customer: ${orderData.customerName}<br>Saved to: ${result.savedTo}`, 'success');
+
+            } catch (error) {
+                addTestResult(`❌ Form submission failed: ${error.message}`, 'error');
+            }
+        }
+
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('test-results');
+            const resultDiv = document.createElement('div');
+
+            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+            const icon = type === 'success' ? 'fa-check' : type === 'error' ? 'fa-times' : 'fa-info';
+
+            resultDiv.className = `p-4 rounded-lg ${bgColor} text-white`;
+            resultDiv.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas ${icon} mr-2"></i>
+                    <div>${message}</div>
+                </div>
+            `;
+
+            resultsDiv.appendChild(resultDiv);
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            addTestResult('OrderManager Test Page Loaded', 'info');
+            addTestResult('OrderManager available: ' + (typeof orderManager !== 'undefined' ? 'Yes' : 'No'), 'info');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Rules Implementation - Otomono Jerseys</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
+        }
+
+        .guide-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8), rgba(10, 10, 10, 0.9));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 0, 64, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .code-block {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff0040;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .copy-btn:hover {
+            background: #ff1a5c;
+        }
+
+        .step-card {
+            border-left: 4px solid #ff0040;
+            background: rgba(255, 0, 64, 0.1);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gray-900 text-white">
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-red-500 mb-4">🚨 URGENT: Fix Firebase Permissions</h1>
+            <p class="text-gray-400">Your admin panel is blocked by Firebase security rules</p>
+        </div>
+
+        <!-- Current Error -->
+        <div class="guide-card rounded-lg p-6 mb-8 border-red-500">
+            <h2 class="text-2xl font-bold text-red-400 mb-4">❌ Current Error</h2>
+            <div class="bg-red-500/20 border border-red-500 rounded-lg p-4">
+                <p class="text-white font-semibold">"Error saving order: Missing or insufficient permissions."</p>
+                <p class="text-gray-300 mt-2">This means your Firestore security rules are blocking all access to the database.</p>
+            </div>
+        </div>
+
+        <!-- Quick Fix -->
+        <div class="guide-card rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-white mb-6">⚡ IMMEDIATE FIX (Copy & Paste)</h2>
+            <p class="text-gray-300 mb-4">Copy this rule set and paste it into your Firebase Console:</p>
+
+            <div class="relative">
+                <button class="copy-btn" onclick="copyToClipboard('quick-fix-rules')">Copy All</button>
+                <div id="quick-fix-rules" class="code-block">
+                    <pre><code>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="mt-4 p-4 bg-yellow-500/10 border border-yellow-500 rounded-lg">
+                <p class="text-yellow-400"><strong>⚠️ Development Only:</strong> This allows unrestricted access. Perfect for testing and development.</p>
+            </div>
+        </div>
+
+        <!-- Step-by-Step Instructions -->
+        <div class="guide-card rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-white mb-6">📋 Step-by-Step Fix</h2>
+
+            <div class="space-y-6">
+                <div class="step-card rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-white mb-3">Step 1: Open Firebase Console</h3>
+                    <p class="text-gray-300 mb-4">Click this link: <a href="https://console.firebase.google.com" class="text-blue-400 hover:underline font-semibold" target="_blank">https://console.firebase.google.com</a></p>
+                    <p class="text-gray-300">Select your project: <strong class="text-red-400">otomono-c9938</strong></p>
+                </div>
+
+                <div class="step-card rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-white mb-3">Step 2: Navigate to Firestore Rules</h3>
+                    <p class="text-gray-300 mb-4">In the left sidebar, click <strong>"Firestore Database"</strong></p>
+                    <p class="text-gray-300">Then click the <strong>"Rules"</strong> tab at the top</p>
+                </div>
+
+                <div class="step-card rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-white mb-3">Step 3: Replace All Rules</h3>
+                    <p class="text-gray-300 mb-4">Delete everything in the rules editor and paste this:</p>
+                    <div class="code-block">
+                        <pre><code>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="step-card rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-white mb-3">Step 4: Publish Rules</h3>
+                    <p class="text-gray-300 mb-4">Click the <strong class="text-green-400">"Publish"</strong> button</p>
+                    <p class="text-gray-300">Wait for the rules to deploy (usually 5-10 seconds)</p>
+                </div>
+
+                <div class="step-card rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-white mb-3">Step 5: Test Your Admin Panel</h3>
+                    <p class="text-gray-300 mb-4">Go back to: <a href="http://localhost:8002/admin-panel.html" class="text-blue-400 hover:underline font-semibold" target="_blank">http://localhost:8002/admin-panel.html</a></p>
+                    <p class="text-gray-300">Try creating an order - it should work now!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Production Rules (Optional) -->
+        <div class="guide-card rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-white mb-6">🔒 Production Rules (Optional)</h2>
+            <p class="text-gray-300 mb-4">For production use, use these more secure rules:</p>
+
+            <div class="relative">
+                <button class="copy-btn" onclick="copyToClipboard('production-rules')">Copy All</button>
+                <div id="production-rules" class="code-block">
+                    <pre><code>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ORDERS COLLECTION - Full Access
+    match /orders/{orderId} {
+      allow read, write: if true;
+    }
+    
+    // USERS COLLECTION - Full Access
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+    
+    // SYSTEM SETTINGS - Full Access
+    match /systemSettings/{settingId} {
+      allow read, write: if true;
+    }
+    
+    // CUSTOMER ORDERS - Public Access
+    match /customerOrders/{orderId} {
+      allow read, write: if true;
+    }
+    
+    // PRODUCTS COLLECTION - Full Access
+    match /products/{productId} {
+      allow read, write: if true;
+    }
+    
+    // ANALYTICS COLLECTION - Full Access
+    match /analytics/{analyticsId} {
+      allow read, write: if true;
+    }
+    
+    // NOTIFICATIONS COLLECTION - Full Access
+    match /notifications/{notificationId} {
+      allow read, write: if true;
+    }
+    
+    // BACKUP COLLECTION - Full Access
+    match /backups/{backupId} {
+      allow read, write: if true;
+    }
+    
+    // LOGS COLLECTION - Full Access
+    match /logs/{logId} {
+      allow read, write: if true;
+    }
+    
+    // CATCH-ALL RULE FOR FUTURE COLLECTIONS
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testing Checklist -->
+        <div class="guide-card rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-white mb-6">✅ Test Your Fix</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">Admin Panel Tests</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="rounded">
+                            <span class="text-gray-300">Create new order</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="rounded">
+                            <span class="text-gray-300">Load existing orders</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="rounded">
+                            <span class="text-gray-300">Update order status</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="rounded">
+                            <span class="text-gray-300">Delete order</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="rounded">
+                            <span class="text-gray-300">View dashboard metrics</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">Expected Results</h3>
+                    <div class="space-y-2 text-green-400">
+                        <p>✅ No permission errors</p>
+                        <p>✅ Orders save successfully</p>
+                        <p>✅ Orders load from Firebase</p>
+                        <p>✅ Real-time updates work</p>
+                        <p>✅ All CRUD operations work</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="guide-card rounded-lg p-6">
+            <h2 class="text-2xl font-bold text-white mb-6">🔗 Quick Links</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="http://localhost:8002/admin-panel.html" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg text-center transition-colors">
+                    <i class="fas fa-tachometer-alt mr-2"></i> Test Admin Panel
+                </a>
+                <a href="https://console.firebase.google.com" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-center transition-colors">
+                    <i class="fas fa-database mr-2"></i> Firebase Console
+                </a>
+                <a href="http://localhost:8002/firebase-test.html" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg text-center transition-colors">
+                    <i class="fas fa-vial mr-2"></i> Firebase Test
+                </a>
+                <a href="http://localhost:8002/order-diagnostic.html" class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg text-center transition-colors">
+                    <i class="fas fa-stethoscope mr-2"></i> Order Diagnostic
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+
+            navigator.clipboard.writeText(text).then(function() {
+                // Show success feedback
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = '#10b981';
+
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#ff0040';
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Could not copy text: ', err);
+                alert('Failed to copy to clipboard');
+            });
+        }
+    </script>
+</body>
+
+</html>

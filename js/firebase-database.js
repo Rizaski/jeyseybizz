@@ -3,12 +3,13 @@
 
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDrLm4hxslT2H_jaT6eQrAEK8swP55h6_c",
-    authDomain: "jeysey-39fb6.firebaseapp.com",
-    projectId: "jeysey-39fb6",
-    storageBucket: "jeysey-39fb6.firebasestorage.app",
-    messagingSenderId: "71940333413",
-    appId: "1:71940333413:web:c9986db4e5e314d8124b8c"
+    apiKey: "AIzaSyBNWEchdrKX9A2WdMa3VTnpbKgo0_eWqHE",
+    authDomain: "otomono-c9938.firebaseapp.com",
+    projectId: "otomono-c9938",
+    storageBucket: "otomono-c9938.firebasestorage.app",
+    messagingSenderId: "348906539551",
+    appId: "1:348906539551:web:e249c40d0ae9e2964a632a",
+    measurementId: "G-YVL497L1V3"
 };
 
 // Global Firebase instances
@@ -21,17 +22,25 @@ async function initializeFirebase() {
             console.log('Firebase already initialized');
             return true;
         }
-        
-        const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-        const { getFirestore } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-        const { getStorage } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js');
-        const { getAuth } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
-        
+
+        const {
+            initializeApp
+        } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+        const {
+            getFirestore
+        } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        const {
+            getStorage
+        } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js');
+        const {
+            getAuth
+        } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+
         app = initializeApp(firebaseConfig);
         db = getFirestore(app);
         storage = getStorage(app);
         auth = getAuth(app);
-        
+
         console.log('Firebase Database initialized successfully');
         return true;
     } catch (error) {
@@ -51,8 +60,11 @@ window.FirebaseDB = {
     async createUserProfile(user) {
         try {
             await this.init();
-            const { doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                doc,
+                setDoc
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             const userProfile = {
                 uid: user.uid,
                 email: user.email,
@@ -83,8 +95,11 @@ window.FirebaseDB = {
     async getUserProfile(uid) {
         try {
             await this.init();
-            const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                doc,
+                getDoc
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             const userDoc = await getDoc(doc(db, 'users', uid));
             if (userDoc.exists()) {
                 return userDoc.data();
@@ -99,8 +114,11 @@ window.FirebaseDB = {
     async updateUserProfile(uid, updates) {
         try {
             await this.init();
-            const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                doc,
+                updateDoc
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             await updateDoc(doc(db, 'users', uid), {
                 ...updates,
                 lastUpdated: new Date().toISOString()
@@ -116,8 +134,11 @@ window.FirebaseDB = {
     async createOrder(orderData) {
         try {
             await this.init();
-            const { collection, addDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                collection,
+                addDoc
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             const order = {
                 ...orderData,
                 orderId: this.generateOrderId(),
@@ -129,13 +150,16 @@ window.FirebaseDB = {
 
             const docRef = await addDoc(collection(db, 'orders'), order);
             console.log('Order created:', docRef.id);
-            
+
             // Update user's order count
             await this.updateUserProfile(orderData.userId, {
-                totalOrders: (await this.getUserProfile(orderData.userId))?.totalOrders + 1 || 1
+                totalOrders: (await this.getUserProfile(orderData.userId)) ? .totalOrders + 1 || 1
             });
 
-            return { id: docRef.id, ...order };
+            return {
+                id: docRef.id,
+                ...order
+            };
         } catch (error) {
             console.error('Error creating order:', error);
             throw error;
@@ -145,20 +169,29 @@ window.FirebaseDB = {
     async getUserOrders(uid) {
         try {
             await this.init();
-            const { collection, query, where, getDocs, orderBy } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                collection,
+                query,
+                where,
+                getDocs,
+                orderBy
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             const ordersQuery = query(
                 collection(db, 'orders'),
                 where('userId', '==', uid),
                 orderBy('createdAt', 'desc')
             );
-            
+
             const querySnapshot = await getDocs(ordersQuery);
             const orders = [];
             querySnapshot.forEach((doc) => {
-                orders.push({ id: doc.id, ...doc.data() });
+                orders.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
             });
-            
+
             return orders;
         } catch (error) {
             console.error('Error getting user orders:', error);
@@ -169,8 +202,11 @@ window.FirebaseDB = {
     async updateOrderStatus(orderId, status) {
         try {
             await this.init();
-            const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                doc,
+                updateDoc
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             await updateDoc(doc(db, 'orders', orderId), {
                 status: status,
                 updatedAt: new Date().toISOString()
@@ -186,8 +222,11 @@ window.FirebaseDB = {
     async saveJerseyDesign(designData) {
         try {
             await this.init();
-            const { collection, addDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                collection,
+                addDoc
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             const design = {
                 ...designData,
                 createdAt: new Date().toISOString(),
@@ -198,13 +237,16 @@ window.FirebaseDB = {
 
             const docRef = await addDoc(collection(db, 'jerseyDesigns'), design);
             console.log('Jersey design saved:', docRef.id);
-            
+
             // Update user's design count
             await this.updateUserProfile(designData.userId, {
-                jerseysDesigned: (await this.getUserProfile(designData.userId))?.jerseysDesigned + 1 || 1
+                jerseysDesigned: (await this.getUserProfile(designData.userId)) ? .jerseysDesigned + 1 || 1
             });
 
-            return { id: docRef.id, ...design };
+            return {
+                id: docRef.id,
+                ...design
+            };
         } catch (error) {
             console.error('Error saving jersey design:', error);
             throw error;
@@ -214,20 +256,29 @@ window.FirebaseDB = {
     async getUserDesigns(uid) {
         try {
             await this.init();
-            const { collection, query, where, getDocs, orderBy } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                collection,
+                query,
+                where,
+                getDocs,
+                orderBy
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             const designsQuery = query(
                 collection(db, 'jerseyDesigns'),
                 where('userId', '==', uid),
                 orderBy('createdAt', 'desc')
             );
-            
+
             const querySnapshot = await getDocs(designsQuery);
             const designs = [];
             querySnapshot.forEach((doc) => {
-                designs.push({ id: doc.id, ...doc.data() });
+                designs.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
             });
-            
+
             return designs;
         } catch (error) {
             console.error('Error getting user designs:', error);
@@ -238,21 +289,31 @@ window.FirebaseDB = {
     async getPublicDesigns() {
         try {
             await this.init();
-            const { collection, query, where, getDocs, orderBy, limit } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                collection,
+                query,
+                where,
+                getDocs,
+                orderBy,
+                limit
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             const designsQuery = query(
                 collection(db, 'jerseyDesigns'),
                 where('isPublic', '==', true),
                 orderBy('createdAt', 'desc'),
                 limit(20)
             );
-            
+
             const querySnapshot = await getDocs(designsQuery);
             const designs = [];
             querySnapshot.forEach((doc) => {
-                designs.push({ id: doc.id, ...doc.data() });
+                designs.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
             });
-            
+
             return designs;
         } catch (error) {
             console.error('Error getting public designs:', error);
@@ -264,8 +325,11 @@ window.FirebaseDB = {
     async sendChatMessage(messageData) {
         try {
             await this.init();
-            const { collection, addDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                collection,
+                addDoc
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             const message = {
                 ...messageData,
                 timestamp: new Date().toISOString(),
@@ -274,7 +338,10 @@ window.FirebaseDB = {
 
             const docRef = await addDoc(collection(db, 'chatMessages'), message);
             console.log('Chat message sent:', docRef.id);
-            return { id: docRef.id, ...message };
+            return {
+                id: docRef.id,
+                ...message
+            };
         } catch (error) {
             console.error('Error sending chat message:', error);
             throw error;
@@ -284,20 +351,29 @@ window.FirebaseDB = {
     async getChatMessages(limit = 50) {
         try {
             await this.init();
-            const { collection, query, orderBy, limit: firestoreLimit, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                collection,
+                query,
+                orderBy,
+                limit: firestoreLimit,
+                getDocs
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             const messagesQuery = query(
                 collection(db, 'chatMessages'),
                 orderBy('timestamp', 'desc'),
                 firestoreLimit(limit)
             );
-            
+
             const querySnapshot = await getDocs(messagesQuery);
             const messages = [];
             querySnapshot.forEach((doc) => {
-                messages.push({ id: doc.id, ...doc.data() });
+                messages.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
             });
-            
+
             return messages.reverse(); // Return in chronological order
         } catch (error) {
             console.error('Error getting chat messages:', error);
@@ -309,17 +385,25 @@ window.FirebaseDB = {
     async listenToChatMessages(callback) {
         try {
             await this.init();
-            const { collection, query, orderBy, onSnapshot } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                collection,
+                query,
+                orderBy,
+                onSnapshot
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             const messagesQuery = query(
                 collection(db, 'chatMessages'),
                 orderBy('timestamp', 'desc')
             );
-            
+
             return onSnapshot(messagesQuery, (snapshot) => {
                 const messages = [];
                 snapshot.forEach((doc) => {
-                    messages.push({ id: doc.id, ...doc.data() });
+                    messages.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
                 });
                 callback(messages.reverse());
             });
@@ -333,8 +417,11 @@ window.FirebaseDB = {
     async trackUserAction(userId, action, data = {}) {
         try {
             await this.init();
-            const { collection, addDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                collection,
+                addDoc
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             const analyticsData = {
                 userId: userId,
                 action: action,
@@ -355,14 +442,20 @@ window.FirebaseDB = {
     async getSiteAnalytics() {
         try {
             await this.init();
-            const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            
+            const {
+                collection,
+                getDocs
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
             const analyticsSnapshot = await getDocs(collection(db, 'analytics'));
             const analytics = [];
             analyticsSnapshot.forEach((doc) => {
-                analytics.push({ id: doc.id, ...doc.data() });
+                analytics.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
             });
-            
+
             return analytics;
         } catch (error) {
             console.error('Error getting site analytics:', error);
@@ -379,12 +472,16 @@ window.FirebaseDB = {
     async uploadFile(file, path) {
         try {
             await this.init();
-            const { ref, uploadBytes, getDownloadURL } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js');
-            
+            const {
+                ref,
+                uploadBytes,
+                getDownloadURL
+            } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js');
+
             const storageRef = ref(storage, path);
             const snapshot = await uploadBytes(storageRef, file);
             const downloadURL = await getDownloadURL(snapshot.ref);
-            
+
             console.log('File uploaded:', downloadURL);
             return downloadURL;
         } catch (error) {
@@ -398,7 +495,7 @@ window.FirebaseDB = {
         try {
             await this.init();
             console.log('Firebase Database ready');
-            
+
             // Set up real-time listeners if user is authenticated
             if (window.FirebaseAuth && window.FirebaseAuth.getCurrentUser()) {
                 const user = window.FirebaseAuth.getCurrentUser();

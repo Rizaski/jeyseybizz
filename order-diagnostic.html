@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Diagnostic - Otomono Jerseys</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="js/order-manager.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
+        }
+
+        .diagnostic-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8), rgba(10, 10, 10, 0.9));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 0, 64, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .status-good {
+            color: #10b981;
+        }
+
+        .status-warning {
+            color: #f59e0b;
+        }
+
+        .status-error {
+            color: #ef4444;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gray-900 text-white">
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-red-500 mb-4">Order System Diagnostic</h1>
+            <p class="text-gray-400">Comprehensive system health check for order management</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- System Status -->
+            <div class="diagnostic-card rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-white mb-6">System Status</h2>
+                <div id="system-status" class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span>OrderManager Available:</span>
+                        <span id="order-manager-status" class="status-warning">Checking...</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>Firebase Config:</span>
+                        <span id="firebase-config-status" class="status-warning">Checking...</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>Local Storage:</span>
+                        <span id="local-storage-status" class="status-warning">Checking...</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>Network Connection:</span>
+                        <span id="network-status" class="status-warning">Checking...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Firebase Connection Test -->
+            <div class="diagnostic-card rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-white mb-6">Firebase Connection</h2>
+                <div id="firebase-test" class="space-y-4">
+                    <button onclick="testFirebaseConnection()" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-database mr-2"></i> Test Firebase Connection
+                    </button>
+                    <div id="firebase-results" class="text-sm text-gray-400">
+                        Click the button above to test Firebase connectivity
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Operations Test -->
+            <div class="diagnostic-card rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-white mb-6">Order Operations</h2>
+                <div class="space-y-4">
+                    <button onclick="testOrderSave()" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-save mr-2"></i> Test Order Save
+                    </button>
+                    <button onclick="testOrderLoad()" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-download mr-2"></i> Test Order Load
+                    </button>
+                    <button onclick="testOrderSync()" class="w-full bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-sync mr-2"></i> Test Order Sync
+                    </button>
+                </div>
+            </div>
+
+            <!-- Storage Analysis -->
+            <div class="diagnostic-card rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-white mb-6">Storage Analysis</h2>
+                <div id="storage-analysis" class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span>Firestore Orders:</span>
+                        <span id="firestore-count" class="text-gray-400">-</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>Realtime DB Orders:</span>
+                        <span id="rtdb-count" class="text-gray-400">-</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>Local Storage Orders:</span>
+                        <span id="local-count" class="text-gray-400">-</span>
+                    </div>
+                    <button onclick="analyzeStorage()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-search mr-2"></i> Analyze Storage
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Logs -->
+        <div class="diagnostic-card rounded-lg p-6 mt-8">
+            <h2 class="text-2xl font-bold text-white mb-6">Diagnostic Logs</h2>
+            <div id="diagnostic-logs" class="bg-gray-800 p-4 rounded-lg max-h-64 overflow-y-auto">
+                <div class="text-gray-400">System diagnostic logs will appear here...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Diagnostic functions
+        function addLog(message, type = 'info') {
+            const logsDiv = document.getElementById('diagnostic-logs');
+            const logEntry = document.createElement('div');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? 'text-red-400' : type === 'success' ? 'text-green-400' : type === 'warning' ? 'text-yellow-400' : 'text-gray-300';
+
+            logEntry.className = `text-sm ${color} mb-1`;
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            logsDiv.appendChild(logEntry);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        function updateStatus(elementId, status, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status-${status}`;
+        }
+
+        async function runSystemDiagnostics() {
+            addLog('Starting system diagnostics...', 'info');
+
+            // Check OrderManager
+            if (typeof orderManager !== 'undefined') {
+                updateStatus('order-manager-status', 'good', 'Available');
+                addLog('OrderManager is available', 'success');
+            } else {
+                updateStatus('order-manager-status', 'error', 'Not Available');
+                addLog('OrderManager is not available', 'error');
+            }
+
+            // Check Firebase Config
+            try {
+                if (typeof firebaseConfig !== 'undefined') {
+                    updateStatus('firebase-config-status', 'good', 'Configured');
+                    addLog('Firebase configuration is available', 'success');
+                } else {
+                    updateStatus('firebase-config-status', 'warning', 'Partial');
+                    addLog('Firebase configuration may be incomplete', 'warning');
+                }
+            } catch (error) {
+                updateStatus('firebase-config-status', 'error', 'Error');
+                addLog('Firebase configuration error: ' + error.message, 'error');
+            }
+
+            // Check Local Storage
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                updateStatus('local-storage-status', 'good', 'Available');
+                addLog('Local Storage is available', 'success');
+            } catch (error) {
+                updateStatus('local-storage-status', 'error', 'Not Available');
+                addLog('Local Storage error: ' + error.message, 'error');
+            }
+
+            // Check Network
+            if (navigator.onLine) {
+                updateStatus('network-status', 'good', 'Online');
+                addLog('Network connection is available', 'success');
+            } else {
+                updateStatus('network-status', 'warning', 'Offline');
+                addLog('Network connection is offline', 'warning');
+            }
+        }
+
+        async function testFirebaseConnection() {
+            addLog('Testing Firebase connection...', 'info');
+
+            try {
+                const testOrder = {
+                    orderId: 'DIAGNOSTIC-' + Date.now(),
+                    customerName: 'Diagnostic Test',
+                    customerEmail: 'test@diagnostic.com',
+                    quantity: 1,
+                    materialPreference: 'Test',
+                    status: 'pending',
+                    createdAt: new Date().toISOString()
+                };
+
+                const result = await orderManager.saveOrder(testOrder);
+                addLog(`Firebase connection successful! Order saved: ${result.id || result.orderId}`, 'success');
+                document.getElementById('firebase-results').innerHTML = `
+                    <div class="text-green-400">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        Connection successful! Order ID: ${result.id || result.orderId}
+                    </div>
+                `;
+            } catch (error) {
+                addLog(`Firebase connection failed: ${error.message}`, 'error');
+                document.getElementById('firebase-results').innerHTML = `
+                    <div class="text-red-400">
+                        <i class="fas fa-times-circle mr-2"></i>
+                        Connection failed: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testOrderSave() {
+            addLog('Testing order save operation...', 'info');
+
+            try {
+                const testOrder = {
+                    orderId: 'SAVE-TEST-' + Date.now(),
+                    customerName: 'Save Test Customer',
+                    customerEmail: 'save@test.com',
+                    quantity: 1,
+                    materialPreference: 'Waffle',
+                    status: 'pending',
+                    createdAt: new Date().toISOString()
+                };
+
+                const result = await orderManager.saveOrder(testOrder);
+                addLog(`Order save successful! ID: ${result.id || result.orderId}, Saved to: ${result.savedTo}`, 'success');
+            } catch (error) {
+                addLog(`Order save failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOrderLoad() {
+            addLog('Testing order load operation...', 'info');
+
+            try {
+                const orders = await orderManager.getAllOrders();
+                addLog(`Order load successful! Found ${orders.length} orders`, 'success');
+            } catch (error) {
+                addLog(`Order load failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOrderSync() {
+            addLog('Testing order sync operation...', 'info');
+
+            try {
+                await orderManager.syncPendingOrders();
+                addLog('Order sync completed successfully', 'success');
+            } catch (error) {
+                addLog(`Order sync failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function analyzeStorage() {
+            addLog('Analyzing storage systems...', 'info');
+
+            try {
+                // Check Firestore
+                try {
+                    const orders = await orderManager.getAllOrders();
+                    document.getElementById('firestore-count').textContent = orders.length;
+                    addLog(`Firestore analysis: ${orders.length} orders found`, 'info');
+                } catch (error) {
+                    document.getElementById('firestore-count').textContent = 'Error';
+                    addLog(`Firestore analysis failed: ${error.message}`, 'error');
+                }
+
+                // Check Local Storage
+                try {
+                    const pendingOrders = JSON.parse(localStorage.getItem('pendingOrders') || '[]');
+                    document.getElementById('local-count').textContent = pendingOrders.length;
+                    addLog(`Local Storage analysis: ${pendingOrders.length} pending orders`, 'info');
+                } catch (error) {
+                    document.getElementById('local-count').textContent = 'Error';
+                    addLog(`Local Storage analysis failed: ${error.message}`, 'error');
+                }
+
+                // Realtime DB count (simplified)
+                document.getElementById('rtdb-count').textContent = 'N/A';
+                addLog('Storage analysis completed', 'success');
+            } catch (error) {
+                addLog(`Storage analysis failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Initialize diagnostics on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('Diagnostic page loaded', 'info');
+            runSystemDiagnostics();
+        });
+    </script>
+</body>
+
+</html>

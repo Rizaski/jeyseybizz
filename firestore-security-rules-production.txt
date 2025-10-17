@@ -1,0 +1,115 @@
+// Otomono Jerseys - Production Firestore Security Rules (Authentication Required)
+// Use this version for production environments with user authentication
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===========================================
+    // ORDERS COLLECTION - Authenticated Access
+    // ===========================================
+    match /orders/{orderId} {
+      // Allow read/write access only for authenticated users
+      allow read, write: if request.auth != null;
+      
+      // Allow public read access for customer order tracking
+      allow read: if true;
+    }
+    
+    // ===========================================
+    // USERS COLLECTION - User-Specific Access
+    // ===========================================
+    match /users/{userId} {
+      // Users can read/write their own data
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      
+      // Admins can read/write all user data
+      allow read, write: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // ===========================================
+    // SYSTEM SETTINGS - Admin Only
+    // ===========================================
+    match /systemSettings/{settingId} {
+      // Only admins can access system settings
+      allow read, write: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // ===========================================
+    // CUSTOMER ORDERS - Public Access
+    // ===========================================
+    match /customerOrders/{orderId} {
+      // Allow public read access for customer order tracking
+      allow read: if true;
+      
+      // Allow authenticated users to create orders
+      allow create: if request.auth != null;
+      
+      // Allow admins to update/delete orders
+      allow update, delete: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // ===========================================
+    // PRODUCTS COLLECTION - Public Read, Admin Write
+    // ===========================================
+    match /products/{productId} {
+      // Allow public read access to product catalog
+      allow read: if true;
+      
+      // Only admins can modify products
+      allow write: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // ===========================================
+    // ANALYTICS COLLECTION - Admin Only
+    // ===========================================
+    match /analytics/{analyticsId} {
+      // Only admins can access analytics
+      allow read, write: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // ===========================================
+    // NOTIFICATIONS COLLECTION - User-Specific
+    // ===========================================
+    match /notifications/{notificationId} {
+      // Users can read their own notifications
+      allow read: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+      
+      // Admins can read/write all notifications
+      allow read, write: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // ===========================================
+    // BACKUP COLLECTION - Admin Only
+    // ===========================================
+    match /backups/{backupId} {
+      // Only admins can access backup data
+      allow read, write: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // ===========================================
+    // LOGS COLLECTION - Admin Only
+    // ===========================================
+    match /logs/{logId} {
+      // Only admins can access system logs
+      allow read, write: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+  }
+}

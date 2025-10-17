@@ -1,0 +1,98 @@
+// Otomono Jerseys - Complete Firestore Security Rules
+// Copy and paste these rules into your Firebase Console > Firestore > Rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===========================================
+    // ORDERS COLLECTION - Full Access
+    // ===========================================
+    match /orders/{orderId} {
+      // Allow read/write access to all orders
+      // This enables the admin panel to create, read, update, and delete orders
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // USERS COLLECTION - Full Access
+    // ===========================================
+    match /users/{userId} {
+      // Allow read/write access to user profiles
+      // This enables user management in the admin panel
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // SYSTEM SETTINGS - Full Access
+    // ===========================================
+    match /systemSettings/{settingId} {
+      // Allow read/write access to system configuration
+      // This enables admin panel settings management
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // CUSTOMER ORDERS - Public Access
+    // ===========================================
+    match /customerOrders/{orderId} {
+      // Allow public read access for customer order tracking
+      // Allow write access for new order submissions
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // PRODUCTS COLLECTION - Full Access
+    // ===========================================
+    match /products/{productId} {
+      // Allow read/write access to product catalog
+      // This enables product management in admin panel
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // ANALYTICS COLLECTION - Full Access
+    // ===========================================
+    match /analytics/{analyticsId} {
+      // Allow read/write access to analytics data
+      // This enables dashboard metrics and reporting
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // NOTIFICATIONS COLLECTION - Full Access
+    // ===========================================
+    match /notifications/{notificationId} {
+      // Allow read/write access to notification system
+      // This enables admin notifications and alerts
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // BACKUP COLLECTION - Full Access
+    // ===========================================
+    match /backups/{backupId} {
+      // Allow read/write access to backup data
+      // This enables data backup and recovery features
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // LOGS COLLECTION - Full Access
+    // ===========================================
+    match /logs/{logId} {
+      // Allow read/write access to system logs
+      // This enables admin panel logging and debugging
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // CATCH-ALL RULE FOR FUTURE COLLECTIONS
+    // ===========================================
+    match /{document=**} {
+      // Allow access to any other collections that might be added
+      // This ensures the application remains flexible for future features
+      allow read, write: if true;
+    }
+  }
+}

@@ -1,6 +1,5 @@
 @echo off
-echo Starting Otomono Jerseys Server...
+echo Starting Otomono Jerseys Development Server...
 echo.
-python serve.py
+python server.py
 pause
-

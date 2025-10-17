@@ -37,12 +37,12 @@ def main():
     script_dir = Path(__file__).parent
     os.chdir(script_dir)
     
-    print(f"🚀 Starting Otomono Jerseys Server...")
-    print(f"📁 Serving files from: {script_dir}")
-    print(f"🌐 Server running at: http://{HOST}:{PORT}")
-    print(f"📄 Main page: http://{HOST}:{PORT}/index.html")
-    print(f"🔧 Services page: http://{HOST}:{PORT}/services.html")
-    print(f"⏹️  Press Ctrl+C to stop the server")
+    print(f"Starting Otomono Jerseys Server...")
+    print(f"Serving files from: {script_dir}")
+    print(f"Server running at: http://{HOST}:{PORT}")
+    print(f"Main page: http://{HOST}:{PORT}/index.html")
+    print(f"Services page: http://{HOST}:{PORT}/services.html")
+    print(f"Press Ctrl+C to stop the server")
     print("-" * 50)
     
     try:
@@ -50,21 +50,21 @@ def main():
             # Try to open browser automatically
             try:
                 webbrowser.open(f'http://{HOST}:{PORT}')
-                print(f"🌐 Opened browser automatically")
+                print(f"Opened browser automatically")
             except:
-                print(f"⚠️  Could not open browser automatically")
+                print(f"Could not open browser automatically")
             
             httpd.serve_forever()
             
     except KeyboardInterrupt:
-        print(f"\n⏹️  Server stopped by user")
+        print(f"\nServer stopped by user")
         sys.exit(0)
     except OSError as e:
         if e.errno == 48:  # Address already in use
-            print(f"❌ Port {PORT} is already in use")
-            print(f"💡 Try a different port or stop the existing server")
+            print(f"Port {PORT} is already in use")
+            print(f"Try a different port or stop the existing server")
         else:
-            print(f"❌ Server error: {e}")
+            print(f"Server error: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Order Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/order-manager.js"></script>
+</head>
+
+<body class="bg-gray-900 text-white p-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">Quick Order Test</h1>
+
+        <button onclick="createTestOrder()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold">
+            Create Test Order
+        </button>
+
+        <div id="result" class="mt-4 p-4 bg-gray-800 rounded-lg"></div>
+    </div>
+
+    <script>
+        async function createTestOrder() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Creating test order...';
+
+            try {
+                const orderData = {
+                    customerName: 'Test Customer',
+                    customerEmail: 'test@example.com',
+                    mobileNumber: '+1234567890',
+                    quantity: 1,
+                    materialPreference: 'Waffle',
+                    status: 'pending'
+                };
+
+                const result = await orderManager.saveOrder(orderData);
+                resultDiv.innerHTML = `
+                    <div class="text-green-400">
+                        ✅ Order created successfully!<br>
+                        ID: ${result.id}<br>
+                        Saved to: ${result.savedTo}
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="text-red-400">
+                        ❌ Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>

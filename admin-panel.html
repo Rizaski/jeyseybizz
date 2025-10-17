@@ -1,0 +1,4043 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otomono Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, orderBy, where, onSnapshot, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getDatabase, ref, set, get, push, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNWEchdrKX9A2WdMa3VTnpbKgo0_eWqHE",
+            authDomain: "otomono-c9938.firebaseapp.com",
+            projectId: "otomono-c9938",
+            storageBucket: "otomono-c9938.firebasestorage.app",
+            messagingSenderId: "348906539551",
+            appId: "1:348906539551:web:e249c40d0ae9e2964a632a",
+            measurementId: "G-YVL497L1V3"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const rtdb = getDatabase(app);
+
+        // Make Firebase available globally
+        window.firebase = {
+            auth,
+            db,
+            rtdb,
+            signInWithEmailAndPassword,
+            createUserWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged,
+            updatePassword,
+            reauthenticateWithCredential,
+            EmailAuthProvider,
+            collection,
+            addDoc,
+            getDocs,
+            getDoc,
+            doc,
+            updateDoc,
+            deleteDoc,
+            query,
+            orderBy,
+            where,
+            onSnapshot,
+            setDoc,
+            ref,
+            set,
+            get,
+            push,
+            remove
+        };
+
+        console.log('Firebase initialized successfully');
+    </script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rog-red': '#ff0040',
+                        'rog-dark': '#0a0a0a',
+                        'rog-gray': '#1a1a1a',
+                        'rog-light': '#2a2a2a'
+                    },
+                    fontFamily: {
+                        'rog': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
+        }
+
+        /* ROG Color Variables */
+        :root {
+            --rog-red: #ff0040;
+            --rog-dark: #0a0a0a;
+            --rog-gray: #1a1a1a;
+            --rog-light: #2a2a2a;
+        }
+
+        /* Main Container - Max Width */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(26, 26, 26, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--rog-red);
+            box-shadow: 0 4px 20px rgba(255, 0, 64, 0.3);
+        }
+
+        .header-logo {
+            background: linear-gradient(45deg, var(--rog-red), #ff4080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background: linear-gradient(180deg, var(--rog-dark) 0%, var(--rog-gray) 100%);
+            border-right: 2px solid var(--rog-red);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .sidebar-item {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            background: linear-gradient(90deg, rgba(255, 0, 64, 0.1) 0%, transparent 100%);
+            border-left-color: var(--rog-red);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(90deg, rgba(255, 0, 64, 0.2) 0%, transparent 100%);
+            border-left-color: var(--rog-red);
+        }
+
+        /* Content Area */
+        .content-area {
+            background: linear-gradient(135deg, var(--rog-dark) 0%, var(--rog-gray) 100%);
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Cards */
+        .rog-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(42, 42, 42, 0.8) 100%);
+            border: 1px solid rgba(255, 0, 64, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .rog-card:hover {
+            border-color: var(--rog-red);
+            box-shadow: 0 8px 32px rgba(255, 0, 64, 0.2);
+        }
+
+        /* Buttons */
+        .rog-button {
+            background: linear-gradient(45deg, var(--rog-red), #ff4080);
+            border: none;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 0, 64, 0.3);
+        }
+
+        .rog-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 0, 64, 0.4);
+        }
+
+        .rog-button-secondary {
+            background: linear-gradient(135deg, var(--rog-gray) 0%, var(--rog-light) 100%);
+            border: 1px solid rgba(255, 0, 64, 0.3);
+            color: white;
+        }
+
+        .rog-button-secondary:hover {
+            border-color: var(--rog-red);
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.1) 0%, var(--rog-light) 100%);
+        }
+
+        /* Tables */
+        .rog-table {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(42, 42, 42, 0.9) 100%);
+            border: 1px solid rgba(255, 0, 64, 0.2);
+            border-radius: 8px;
+        }
+
+        .rog-table th {
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.1) 0%, rgba(255, 0, 64, 0.05) 100%);
+            color: var(--rog-red);
+            font-weight: 700;
+            border-bottom: 2px solid var(--rog-red);
+        }
+
+        .rog-table td {
+            border-bottom: 1px solid rgba(255, 0, 64, 0.1);
+        }
+
+        .rog-table tr:hover {
+            background: rgba(255, 0, 64, 0.05);
+        }
+
+        /* Status Badges */
+        .status-pending {
+            background: linear-gradient(45deg, #f59e0b, #fbbf24);
+            color: white;
+        }
+
+        .status-processing {
+            background: linear-gradient(45deg, #3b82f6, #60a5fa);
+            color: white;
+        }
+
+        .status-completed {
+            background: linear-gradient(45deg, #10b981, #34d399);
+            color: white;
+        }
+
+        .status-cancelled {
+            background: linear-gradient(45deg, #ef4444, #f87171);
+            color: white;
+        }
+
+        /* Desktop Sidebar */
+        .sidebar {
+            position: relative;
+            width: 256px;
+            min-height: 100vh;
+        }
+
+        .content-area {
+            flex: 1;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 0.5rem;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 50;
+                width: 280px;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .content-area {
+                margin-left: 0;
+            }
+
+            .rog-card {
+                margin: 0.5rem 0;
+            }
+
+            .rog-table {
+                font-size: 0.875rem;
+            }
+
+            .rog-table th,
+            .rog-table td {
+                padding: 0.5rem;
+            }
+        }
+
+        /* Header Visibility - Desktop First */
+        .desktop-header {
+            display: flex !important;
+        }
+
+        .mobile-header {
+            display: none !important;
+        }
+
+        /* Mobile View - Hide Desktop, Show Mobile */
+        @media (max-width: 768px) {
+            .desktop-header {
+                display: none !important;
+            }
+
+            .mobile-header {
+                display: flex !important;
+            }
+        }
+
+        /* Ensure desktop header is visible on larger screens */
+        @media (min-width: 769px) {
+            .desktop-header {
+                display: flex !important;
+            }
+
+            .mobile-header {
+                display: none !important;
+            }
+        }
+
+        /* Additional breakpoints for better control */
+        @media (max-width: 480px) {
+            .desktop-header {
+                display: none !important;
+            }
+
+            .mobile-header {
+                display: flex !important;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 768px) {
+            .desktop-header {
+                display: none !important;
+            }
+
+            .mobile-header {
+                display: flex !important;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .desktop-header {
+                display: flex !important;
+            }
+
+            .mobile-header {
+                display: none !important;
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .desktop-header {
+                display: flex !important;
+            }
+
+            .mobile-header {
+                display: none !important;
+            }
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            width: 30px;
+            height: 30px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background: var(--rog-red);
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Overlay for mobile */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+        }
+
+        .mobile-overlay.active {
+            display: block;
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--rog-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--rog-red);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff4080;
+        }
+
+        /* Otomono Branded Modals */
+        .otomono-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .otomono-modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 2px solid var(--rog-red);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(255, 0, 64, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        .otomono-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--rog-red);
+        }
+
+        .otomono-modal-title {
+            color: var(--rog-red);
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .otomono-modal-close {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .otomono-modal-close:hover {
+            color: var(--rog-red);
+        }
+
+        .otomono-modal-message {
+            color: #fff;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .otomono-modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .otomono-button {
+            background: linear-gradient(45deg, var(--rog-red), #ff4080);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 0, 64, 0.3);
+        }
+
+        .otomono-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 0, 64, 0.4);
+        }
+
+        .otomono-button-secondary {
+            background: linear-gradient(135deg, #333 0%, #444 100%);
+            border: 1px solid #666;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .otomono-button-secondary:hover {
+            border-color: var(--rog-red);
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.1) 0%, #444 100%);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-rog-dark text-white">
+    <!-- Mobile Overlay -->
+    <div id="mobileOverlay" class="mobile-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Header -->
+    <header class="header sticky top-0 z-40">
+        <div class="main-container">
+            <!-- Desktop Header -->
+            <div class="desktop-header flex items-center justify-between h-20">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-rog-red to-pink-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-cog text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold header-logo">ADMIN PANEL</h1>
+                            <p class="text-sm text-gray-400">Management Dashboard</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button class="rog-button px-6 py-2 rounded-lg" onclick="showCreateOrderForm()">
+                        <i class="fas fa-plus mr-2"></i>New Order
+                    </button>
+                    <button class="rog-button-secondary px-4 py-2 rounded-lg" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <div class="relative">
+                        <button class="w-10 h-10 bg-gradient-to-br from-rog-red to-pink-500 rounded-full flex items-center justify-center" onclick="toggleUserDropdown()">
+                            <i class="fas fa-user text-white"></i>
+                        </button>
+                        <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-rog-gray rounded-lg shadow-lg border border-rog-red hidden">
+                            <div class="p-4 border-b border-gray-700">
+                                <p class="text-sm text-gray-400">Signed in as</p>
+                                <p class="font-semibold" id="adminName">Admin User</p>
+                            </div>
+                            <div class="p-2">
+                                <a href="#" class="block px-3 py-2 text-sm hover:bg-rog-light rounded">Profile</a>
+                                <a href="#" class="block px-3 py-2 text-sm hover:bg-rog-light rounded">Settings</a>
+                                <a href="#" class="block px-3 py-2 text-sm hover:bg-rog-light rounded">Help</a>
+                                <hr class="my-2 border-gray-700">
+                                <a href="#" class="block px-3 py-2 text-sm hover:bg-rog-light rounded text-red-400" onclick="logout()">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Header -->
+            <div class="mobile-header flex items-center justify-between h-16 px-4">
+                <div class="flex items-center space-x-3">
+                    <div class="hamburger" onclick="toggleSidebar()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="w-8 h-8 bg-gradient-to-br from-rog-red to-pink-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-cog text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold header-logo">ADMIN</h1>
+                        <p class="text-xs text-gray-400">Dashboard</p>
+                    </div>
+                </div>
+                <button class="w-8 h-8 bg-gradient-to-br from-rog-red to-pink-500 rounded-full flex items-center justify-center" onclick="toggleUserDropdown()">
+                    <i class="fas fa-user text-white text-sm"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar w-64 min-h-screen">
+            <div class="p-6">
+                <div class="space-y-2">
+                    <button class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3" onclick="showSection('dashboard')">
+                        <i class="fas fa-tachometer-alt text-rog-red"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3" onclick="showSection('orders')">
+                        <i class="fas fa-shopping-cart text-rog-red"></i>
+                        <span>Orders</span>
+                    </button>
+                    <button class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3" onclick="showSection('users')">
+                        <i class="fas fa-users text-rog-red"></i>
+                        <span>Users</span>
+                    </button>
+                    <button class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3" onclick="showSection('analytics')">
+                        <i class="fas fa-chart-bar text-rog-red"></i>
+                        <span>Analytics</span>
+                    </button>
+                    <button class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3" onclick="showSection('settings')">
+                        <i class="fas fa-cog text-rog-red"></i>
+                        <span>Settings</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content-area flex-1 p-6">
+            <div class="main-container">
+                <!-- Dashboard Section -->
+                <div id="dashboard" class="section fade-in">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-white mb-2">Dashboard</h2>
+                        <p class="text-gray-400">Welcome to your admin dashboard</p>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="rog-card p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400">Total Orders</p>
+                                    <p class="text-2xl font-bold text-white" id="totalOrders">0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-br from-rog-red to-pink-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-shopping-cart text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rog-card p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400">Active Users</p>
+                                    <p class="text-2xl font-bold text-white" id="activeUsers">0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-users text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rog-card p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400">Pending Orders</p>
+                                    <p class="text-2xl font-bold text-white" id="pendingOrders">0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-clock text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rog-card p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400">Completed</p>
+                                    <p class="text-2xl font-bold text-white" id="completedOrders">0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders -->
+                    <div class="rog-card p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-white">Recent Orders</h3>
+                            <button class="rog-button px-4 py-2 rounded-lg" onclick="showSection('orders')">
+                                View All
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="rog-table w-full">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left py-3 px-4">Order ID</th>
+                                        <th class="text-left py-3 px-4">Customer</th>
+                                        <th class="text-left py-3 px-4">Status</th>
+                                        <th class="text-left py-3 px-4">Date</th>
+                                        <th class="text-left py-3 px-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentOrdersTable">
+                                    <!-- Recent orders will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Section -->
+                <div id="orders" class="section hidden">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-white mb-2">Orders</h2>
+                        <p class="text-gray-400">Manage all orders</p>
+                    </div>
+
+                    <!-- Orders Table -->
+                    <div class="rog-card p-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
+                            <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                                <input type="text" placeholder="Search orders..." class="px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-rog-red focus:outline-none">
+                                <select class="px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
+                                    <option value="">All Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="processing">Processing</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="rog-button px-4 py-2 rounded-lg" onclick="showCreateOrderForm()">
+                                    <i class="fas fa-plus mr-2"></i>New Order
+                                </button>
+                                <button class="rog-button-secondary px-4 py-2 rounded-lg" onclick="refreshOrders()">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="rog-table w-full">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left py-3 px-4">Order ID</th>
+                                        <th class="text-left py-3 px-4">Customer</th>
+                                        <th class="text-left py-3 px-4">Mobile</th>
+                                        <th class="text-left py-3 px-4">Quantity</th>
+                                        <th class="text-left py-3 px-4">Material</th>
+                                        <th class="text-left py-3 px-4">Status</th>
+                                        <th class="text-left py-3 px-4">Date</th>
+                                        <th class="text-left py-3 px-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTable">
+                                    <!-- Orders will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Section -->
+                <div id="users" class="section hidden">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-white mb-2">Users</h2>
+                        <p class="text-gray-400">Manage user accounts</p>
+                    </div>
+
+                    <div class="rog-card p-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
+                            <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                                <input type="text" placeholder="Search users..." class="px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-rog-red focus:outline-none">
+                                <select class="px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
+                                    <option value="">All Roles</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="manager">Manager</option>
+                                    <option value="customer">Customer</option>
+                                </select>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="rog-button px-4 py-2 rounded-lg" onclick="showAddUserForm()">
+                                    <i class="fas fa-user-plus mr-2"></i>Add User
+                                </button>
+                                <button class="rog-button-secondary px-4 py-2 rounded-lg" onclick="refreshUsers()">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="rog-table w-full">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left py-3 px-4">User</th>
+                                        <th class="text-left py-3 px-4">Email</th>
+                                        <th class="text-left py-3 px-4">Role</th>
+                                        <th class="text-left py-3 px-4">Status</th>
+                                        <th class="text-left py-3 px-4">Created</th>
+                                        <th class="text-left py-3 px-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTable">
+                                    <!-- Users will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Section -->
+                <div id="analytics" class="section hidden">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-white mb-2">Analytics & Reports</h2>
+                        <p class="text-gray-400">Comprehensive analytics and detailed reports</p>
+                    </div>
+
+                    <!-- Analytics Overview Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="rog-card p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400">Total Revenue</p>
+                                    <p class="text-2xl font-bold text-white" id="totalRevenue">$0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-dollar-sign text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rog-card p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400">Orders This Month</p>
+                                    <p class="text-2xl font-bold text-white" id="monthlyOrders">0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-chart-line text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rog-card p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400">Active Users</p>
+                                    <p class="text-2xl font-bold text-white" id="activeUsersCount">0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-users text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rog-card p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400">Conversion Rate</p>
+                                    <p class="text-2xl font-bold text-white" id="conversionRate">0%</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-percentage text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Section -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <div class="rog-card p-6">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                                <i class="fas fa-chart-bar mr-2 text-rog-red"></i>
+                                Order Trends (Last 7 Days)
+                            </h3>
+                            <div class="h-64" id="orderTrendsChart">
+                                <canvas id="orderTrendsCanvas"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="rog-card p-6">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                                <i class="fas fa-chart-pie mr-2 text-rog-red"></i>
+                                Order Status Distribution
+                            </h3>
+                            <div class="h-64" id="statusDistributionChart">
+                                <canvas id="statusDistributionCanvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Material Preferences Chart -->
+                    <div class="rog-card p-6 mb-8">
+                        <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                            <i class="fas fa-chart-area mr-2 text-rog-red"></i>
+                            Material Preferences
+                        </h3>
+                        <div class="h-64" id="materialPreferencesChart">
+                            <canvas id="materialPreferencesCanvas"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Reports Section -->
+                    <div class="rog-card p-6">
+                        <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                            <i class="fas fa-file-alt mr-2 text-rog-red"></i>
+                            Generate Reports
+                        </h3>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <button onclick="generateOrderReport()" class="rog-button p-4 rounded-lg text-left">
+                                <i class="fas fa-shopping-cart text-2xl mb-2"></i>
+                                <h4 class="font-semibold">Order Report</h4>
+                                <p class="text-sm opacity-80">Complete order analysis</p>
+                            </button>
+
+                            <button onclick="generateUserReport()" class="rog-button p-4 rounded-lg text-left">
+                                <i class="fas fa-users text-2xl mb-2"></i>
+                                <h4 class="font-semibold">User Report</h4>
+                                <p class="text-sm opacity-80">User activity analysis</p>
+                            </button>
+
+                            <button onclick="generateMaterialReport()" class="rog-button p-4 rounded-lg text-left">
+                                <i class="fas fa-tshirt text-2xl mb-2"></i>
+                                <h4 class="font-semibold">Material Report</h4>
+                                <p class="text-sm opacity-80">Material preference analysis</p>
+                            </button>
+
+                            <button onclick="generateRevenueReport()" class="rog-button p-4 rounded-lg text-left">
+                                <i class="fas fa-dollar-sign text-2xl mb-2"></i>
+                                <h4 class="font-semibold">Revenue Report</h4>
+                                <p class="text-sm opacity-80">Financial analysis</p>
+                            </button>
+
+                            <button onclick="generateStatusReport()" class="rog-button p-4 rounded-lg text-left">
+                                <i class="fas fa-chart-pie text-2xl mb-2"></i>
+                                <h4 class="font-semibold">Status Report</h4>
+                                <p class="text-sm opacity-80">Order status analysis</p>
+                            </button>
+
+                            <button onclick="generateCustomReport()" class="rog-button p-4 rounded-lg text-left">
+                                <i class="fas fa-cog text-2xl mb-2"></i>
+                                <h4 class="font-semibold">Custom Report</h4>
+                                <p class="text-sm opacity-80">Custom date range analysis</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="settings" class="section hidden">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-white mb-2">Settings</h2>
+                        <p class="text-gray-400">Manage your account settings and preferences</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Account Information -->
+                        <div class="rog-card p-6">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                                <i class="fas fa-user mr-2 text-rog-red"></i>
+                                Account Information
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                                    <input type="email" id="userEmail" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" readonly>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Role</label>
+                                    <input type="text" id="userRole" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" readonly>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Last Login</label>
+                                    <input type="text" id="lastLogin" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Change Password -->
+                        <div class="rog-card p-6">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                                <i class="fas fa-lock mr-2 text-rog-red"></i>
+                                Change Password
+                            </h3>
+                            <form id="changePasswordForm" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Current Password</label>
+                                    <div class="relative">
+                                        <input type="password" id="currentPassword" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" required>
+                                        <button type="button" onclick="togglePasswordVisibility('currentPassword')" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+                                            <i class="fas fa-eye" id="currentPasswordIcon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">New Password</label>
+                                    <div class="relative">
+                                        <input type="password" id="newPassword" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" required minlength="6">
+                                        <button type="button" onclick="togglePasswordVisibility('newPassword')" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+                                            <i class="fas fa-eye" id="newPasswordIcon"></i>
+                                        </button>
+                                    </div>
+                                    <p class="text-xs text-gray-400 mt-1">Password must be at least 6 characters long</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Confirm New Password</label>
+                                    <div class="relative">
+                                        <input type="password" id="confirmPassword" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" required>
+                                        <button type="button" onclick="togglePasswordVisibility('confirmPassword')" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+                                            <i class="fas fa-eye" id="confirmPasswordIcon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-3">
+                                    <button type="submit" class="rog-button px-6 py-2 rounded-lg">
+                                        <i class="fas fa-save mr-2"></i>
+                                        Change Password
+                                    </button>
+                                    <button type="button" onclick="clearPasswordForm()" class="rog-button-secondary px-6 py-2 rounded-lg">
+                                        <i class="fas fa-times mr-2"></i>
+                                        Clear
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- System Settings -->
+                        <div class="rog-card p-6">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                                <i class="fas fa-cog mr-2 text-rog-red"></i>
+                                System Settings
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Site Name</label>
+                                    <input type="text" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" value="Otomono Jerseys">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Email Notifications</label>
+                                    <div class="flex items-center space-x-4">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2" checked>
+                                            <span class="text-sm text-gray-300">Enable email notifications</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Theme</label>
+                                    <select class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
+                                        <option value="dark">Dark Theme</option>
+                                        <option value="light">Light Theme</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Security Information -->
+                        <div class="rog-card p-6">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                                <i class="fas fa-shield-alt mr-2 text-rog-red"></i>
+                                Security Information
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="bg-green-900 border border-green-700 rounded-lg p-4">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-check-circle text-green-400 mr-2"></i>
+                                        <span class="text-green-300">Account is secure</span>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-400">
+                                    <p>• Your password is encrypted and secure</p>
+                                    <p>• Two-factor authentication is available</p>
+                                    <p>• Session expires after 24 hours of inactivity</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="createOrderModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="rog-card p-6 w-full max-w-md">
+                <h3 class="text-xl font-bold text-white mb-4">Create New Order</h3>
+                <form id="createOrderForm">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Customer Name</label>
+                            <input type="text" name="customerName" required class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                            <input type="email" name="customerEmail" required class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Mobile</label>
+                            <input type="tel" name="mobileNumber" required class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Quantity</label>
+                            <input type="number" name="quantity" required min="1" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Material Preference</label>
+                            <select name="materialPreference" required class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
+                                <option value="">Select Material</option>
+                                <option value="waffle">Waffle</option>
+                                <option value="combweb">Combweb</option>
+                                <option value="vortex-jacquard">Vortex Jacquard</option>
+                                <option value="mesh">Mesh</option>
+                                <option value="iceburg">Iceburg</option>
+                                <option value="nano-check">Nano Check</option>
+                                <option value="closehole">Closehole</option>
+                                <option value="drytec">Drytec</option>
+                                <option value="wetlook">Wetlook</option>
+                                <option value="baby-pk">Baby Pk</option>
+                                <option value="cool-tech">Cool Tech</option>
+                                <option value="net">Net</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4 mt-6">
+                        <button type="submit" class="rog-button flex-1 px-4 py-2 rounded-lg">
+                            <i class="fas fa-save mr-2"></i>Create Order
+                        </button>
+                        <button type="button" onclick="closeCreateOrderModal()" class="rog-button-secondary px-4 py-2 rounded-lg">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="addUserModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="rog-card p-6 w-full max-w-md">
+                <h3 class="text-xl font-bold text-white mb-4">Add New User</h3>
+                <form id="addUserForm">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+                            <input type="text" name="fullName" required class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                            <input type="email" name="email" required class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                            <input type="password" name="password" required class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Role</label>
+                            <select name="role" required class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
+                                <option value="">Select Role</option>
+                                <option value="admin">Admin</option>
+                                <option value="manager">Manager</option>
+                                <option value="customer">Customer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4 mt-6">
+                        <button type="submit" class="rog-button flex-1 px-4 py-2 rounded-lg">
+                            <i class="fas fa-user-plus mr-2"></i>Create User
+                        </button>
+                        <button type="button" onclick="closeAddUserModal()" class="rog-button-secondary px-4 py-2 rounded-lg">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentSection = 'dashboard';
+        let sidebarOpen = false;
+        let firebaseReady = false;
+        let currentUser = null;
+
+        // Wait for Firebase to be ready
+        function waitForFirebase() {
+            return new Promise((resolve) => {
+                const checkFirebase = () => {
+                    if (window.firebase) {
+                        firebaseReady = true;
+                        console.log('Firebase is ready');
+                        resolve();
+                    } else {
+                        setTimeout(checkFirebase, 100);
+                    }
+                };
+                checkFirebase();
+            });
+        }
+
+        // Test function to verify admin panel functionality
+        function testAdminPanel() {
+            console.log('=== ADMIN PANEL DIAGNOSTIC ===');
+
+            // Check if sections exist
+            const sections = ['dashboard', 'orders', 'users', 'analytics', 'settings'];
+            sections.forEach(section => {
+                const element = document.getElementById(section);
+                console.log(`Section '${section}':`, element ? 'EXISTS' : 'MISSING');
+            });
+
+            // Check if sidebar items exist
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            console.log('Sidebar items found:', sidebarItems.length);
+
+            // Check if forms exist
+            const createOrderForm = document.getElementById('createOrderForm');
+            const addUserForm = document.getElementById('addUserForm');
+            console.log('Create Order Form:', createOrderForm ? 'EXISTS' : 'MISSING');
+            console.log('Add User Form:', addUserForm ? 'EXISTS' : 'MISSING');
+
+            // Test navigation
+            console.log('Testing navigation...');
+            showSection('dashboard');
+
+            console.log('=== END DIAGNOSTIC ===');
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Admin Panel - Initializing...');
+
+            // Force correct header visibility on load
+            forceHeaderVisibility();
+
+            // Wait for Firebase to be ready
+            await waitForFirebase();
+
+            // Setup Firebase auth state listener
+            setupFirebaseAuth();
+
+            // Check authentication with better error handling
+            try {
+                const isAuthenticated = checkAdminAuth();
+                console.log('Authentication check result:', isAuthenticated);
+
+                if (isAuthenticated) {
+                    console.log('Admin Panel - Ready!');
+                    loadDashboardData();
+                    setupEventListeners();
+                } else {
+                    console.log('Not authenticated, checking localStorage...');
+                    // Try to load anyway for debugging
+                    loadDashboardData();
+                    setupEventListeners();
+                }
+            } catch (error) {
+                console.error('Error during initialization:', error);
+                // Load anyway for debugging
+                loadDashboardData();
+                setupEventListeners();
+            }
+
+            // Run diagnostic test
+            setTimeout(() => {
+                testAdminPanel();
+            }, 1000);
+        });
+
+        // Firebase Authentication Setup
+        function setupFirebaseAuth() {
+            if (!firebaseReady) return;
+
+            window.firebase.onAuthStateChanged(window.firebase.auth, (user) => {
+                if (user) {
+                    currentUser = user;
+                    console.log('User authenticated:', user.email);
+                    updateUserDisplay(user);
+                } else {
+                    currentUser = null;
+                    console.log('User not authenticated');
+                    // Check localStorage as fallback
+                    checkLocalStorageAuth();
+                }
+            });
+        }
+
+        // Check localStorage authentication as fallback
+        function checkLocalStorageAuth() {
+            const adminUser = localStorage.getItem('adminUser');
+            if (adminUser) {
+                try {
+                    const userData = JSON.parse(adminUser);
+                    console.log('Using localStorage auth:', userData);
+                    updateUserDisplay(userData);
+                    return true;
+                } catch (error) {
+                    console.error('Error parsing admin data:', error);
+                    localStorage.removeItem('adminUser');
+                }
+            }
+            return false;
+        }
+
+        // Update user display
+        function updateUserDisplay(user) {
+            const adminNameElement = document.getElementById('adminName');
+            if (adminNameElement) {
+                adminNameElement.textContent = user.displayName || user.name || user.email || 'Admin';
+            }
+        }
+
+        // Authentication check
+        function checkAdminAuth() {
+            // First check Firebase auth
+            if (currentUser) {
+                return true;
+            }
+
+            // Fallback to localStorage
+            return checkLocalStorageAuth();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            console.log('Setting up event listeners...');
+
+            try {
+                // Form submissions
+                const createOrderForm = document.getElementById('createOrderForm');
+                const addUserForm = document.getElementById('addUserForm');
+
+                if (createOrderForm) {
+                    createOrderForm.addEventListener('submit', handleCreateOrder);
+                    console.log('Create order form listener added');
+                } else {
+                    console.warn('Create order form not found');
+                }
+
+                if (addUserForm) {
+                    addUserForm.addEventListener('submit', handleAddUser);
+                    console.log('Add user form listener added');
+                } else {
+                    console.warn('Add user form not found');
+                }
+
+                // Close modals on outside click
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('fixed')) {
+                        closeAllModals();
+                    }
+                });
+
+                // Test navigation by adding click listeners to sidebar items
+                document.querySelectorAll('.sidebar-item').forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        console.log('Sidebar item clicked:', e.target);
+                    });
+                });
+
+                console.log('Event listeners setup complete');
+            } catch (error) {
+                console.error('Error setting up event listeners:', error);
+            }
+        }
+
+        // Navigation functions
+        function showSection(sectionName) {
+            console.log('Switching to section:', sectionName);
+
+            try {
+                // Hide all sections
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.add('hidden');
+                });
+
+                // Remove active class from all sidebar items
+                document.querySelectorAll('.sidebar-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+
+                // Show selected section
+                const targetSection = document.getElementById(sectionName);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                    targetSection.classList.add('fade-in');
+                    console.log('Section shown:', sectionName);
+                } else {
+                    console.error('Section not found:', sectionName);
+                }
+
+                // Add active class to clicked sidebar item
+                if (event && event.target) {
+                    const sidebarItem = event.target.closest('.sidebar-item');
+                    if (sidebarItem) {
+                        sidebarItem.classList.add('active');
+                    }
+                }
+
+                currentSection = sectionName;
+
+                // Load section data
+                switch (sectionName) {
+                    case 'dashboard':
+                        console.log('Loading dashboard data...');
+                        loadDashboardData();
+                        break;
+                    case 'orders':
+                        console.log('Loading orders data...');
+                        loadOrdersData();
+                        break;
+                    case 'users':
+                        console.log('Loading users data...');
+                        loadUsersData();
+                        break;
+                    case 'analytics':
+                        console.log('Loading analytics data...');
+                        loadAnalyticsData();
+                        break;
+                    case 'settings':
+                        console.log('Loading settings data...');
+                        loadSettingsData();
+                        break;
+                    default:
+                        console.log('Unknown section:', sectionName);
+                }
+            } catch (error) {
+                console.error('Error switching to section:', sectionName, error);
+            }
+        }
+
+        // Sidebar toggle for mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            const hamburger = document.querySelector('.hamburger');
+
+            // Only toggle on mobile screens
+            if (window.innerWidth <= 768) {
+                sidebarOpen = !sidebarOpen;
+
+                if (sidebarOpen) {
+                    sidebar.classList.add('open');
+                    overlay.classList.add('active');
+                    hamburger.classList.add('active');
+                } else {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                    hamburger.classList.remove('active');
+                }
+            }
+        }
+
+        // User dropdown toggle
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close all modals
+        function closeAllModals() {
+            document.querySelectorAll('[id$="Modal"]').forEach(modal => {
+                modal.classList.add('hidden');
+            });
+        }
+
+        // Modal functions
+        function showCreateOrderForm() {
+            document.getElementById('createOrderModal').classList.remove('hidden');
+        }
+
+        function closeCreateOrderModal() {
+            document.getElementById('createOrderModal').classList.add('hidden');
+        }
+
+        function showAddUserForm() {
+            document.getElementById('addUserModal').classList.remove('hidden');
+        }
+
+        function closeAddUserModal() {
+            document.getElementById('addUserModal').classList.add('hidden');
+        }
+
+        // Firebase Data Management
+        async function loadDashboardData() {
+            try {
+                if (!firebaseReady) {
+                    console.log('Firebase not ready, using fallback data');
+                    loadFallbackDashboardData();
+                    return;
+                }
+
+                // Load orders from Firestore
+                const orders = await loadOrdersFromFirebase();
+
+                // Calculate statistics
+                const totalOrders = orders.length;
+                const pendingOrders = orders.filter(order => order.status === 'pending').length;
+                const completedOrders = orders.filter(order => order.status === 'completed').length;
+                const activeUsers = await getActiveUsersCount();
+
+                // Update dashboard
+                document.getElementById('totalOrders').textContent = totalOrders;
+                document.getElementById('activeUsers').textContent = activeUsers;
+                document.getElementById('pendingOrders').textContent = pendingOrders;
+                document.getElementById('completedOrders').textContent = completedOrders;
+
+                // Load recent orders
+                loadRecentOrders(orders.slice(0, 5));
+
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                loadFallbackDashboardData();
+            }
+        }
+
+        async function loadOrdersFromFirebase() {
+            try {
+                const ordersRef = window.firebase.collection(window.firebase.db, 'orders');
+                const q = window.firebase.query(ordersRef, window.firebase.orderBy('createdAt', 'desc'));
+                const querySnapshot = await window.firebase.getDocs(q);
+
+                const orders = [];
+                querySnapshot.forEach((doc) => {
+                    orders.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                return orders;
+            } catch (error) {
+                console.error('Error loading orders from Firebase:', error);
+                return [];
+            }
+        }
+
+        async function getActiveUsersCount() {
+            try {
+                const usersRef = window.firebase.collection(window.firebase.db, 'users');
+                const querySnapshot = await window.firebase.getDocs(usersRef);
+                return querySnapshot.size;
+            } catch (error) {
+                console.error('Error loading users count:', error);
+                return 0;
+            }
+        }
+
+        function loadFallbackDashboardData() {
+            document.getElementById('totalOrders').textContent = '0';
+            document.getElementById('activeUsers').textContent = '0';
+            document.getElementById('pendingOrders').textContent = '0';
+            document.getElementById('completedOrders').textContent = '0';
+            loadRecentOrders([]);
+        }
+
+        function loadRecentOrders(orders) {
+            const tableBody = document.getElementById('recentOrdersTable');
+
+            if (!orders || orders.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-400">No recent orders</td></tr>';
+                return;
+            }
+
+            tableBody.innerHTML = orders.map(order => `
+                <tr class="hover:bg-rog-light/50">
+                    <td class="py-3 px-4">${order.orderId || order.id}</td>
+                    <td class="py-3 px-4">${order.customerName}</td>
+                    <td class="py-3 px-4">
+                        <span class="status-${order.status} px-2 py-1 rounded-full text-xs font-semibold">
+                            ${order.status || 'pending'}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4">${new Date(order.createdAt).toLocaleDateString()}</td>
+                    <td class="py-3 px-4">
+                        <div class="flex space-x-2">
+                            <button class="rog-button-secondary px-2 py-1 rounded text-xs" onclick="viewOrder('${order.id}')" title="View Order">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="rog-button-secondary px-2 py-1 rounded text-xs" onclick="generateOrderClientLink('${order.id}')" title="Generate Client Link">
+                                <i class="fas fa-link"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function loadOrdersData() {
+            try {
+                const orders = await loadOrdersFromFirebase();
+                const tableBody = document.getElementById('ordersTable');
+
+                if (orders.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="8" class="text-center py-8 text-gray-400">No orders found</td></tr>';
+                    return;
+                }
+
+                tableBody.innerHTML = orders.map(order => `
+                    <tr class="hover:bg-rog-light/50">
+                        <td class="py-3 px-4">${order.orderId || order.id}</td>
+                        <td class="py-3 px-4">${order.customerName}</td>
+                        <td class="py-3 px-4">${order.mobileNumber || 'N/A'}</td>
+                        <td class="py-3 px-4">${order.quantity}</td>
+                        <td class="py-3 px-4">${order.materialPreference}</td>
+                        <td class="py-3 px-4">
+                            <span class="status-${order.status} px-2 py-1 rounded-full text-xs font-semibold">
+                                ${order.status || 'pending'}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4">${new Date(order.createdAt).toLocaleDateString()}</td>
+                        <td class="py-3 px-4">
+                            <div class="flex space-x-2">
+                                <button class="rog-button-secondary px-2 py-1 rounded text-xs" onclick="viewOrder('${order.id}')" title="View Order">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="rog-button-secondary px-2 py-1 rounded text-xs" onclick="editOrder('${order.id}')" title="Edit Order">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="rog-button-secondary px-2 py-1 rounded text-xs" onclick="generateOrderClientLink('${order.id}')" title="Generate Client Link">
+                                    <i class="fas fa-link"></i>
+                                </button>
+                                <button class="rog-button-secondary px-2 py-1 rounded text-xs" onclick="deleteOrder('${order.id}')" title="Delete Order">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading orders data:', error);
+                const tableBody = document.getElementById('ordersTable');
+                tableBody.innerHTML = '<tr><td colspan="8" class="text-center py-8 text-gray-400">Error loading orders</td></tr>';
+            }
+        }
+
+        async function loadUsersData() {
+            try {
+                if (!firebaseReady) {
+                    const tableBody = document.getElementById('usersTable');
+                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-400">Firebase not available</td></tr>';
+                    return;
+                }
+
+                const usersRef = window.firebase.collection(window.firebase.db, 'users');
+                const querySnapshot = await window.firebase.getDocs(usersRef);
+
+                const users = [];
+                querySnapshot.forEach((doc) => {
+                    users.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                const tableBody = document.getElementById('usersTable');
+
+                if (users.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-400">No users found</td></tr>';
+                    return;
+                }
+
+                tableBody.innerHTML = users.map(user => `
+                    <tr class="hover:bg-rog-light/50">
+                        <td class="py-3 px-4">${user.name || user.displayName || 'N/A'}</td>
+                        <td class="py-3 px-4">${user.email}</td>
+                        <td class="py-3 px-4">
+                            <span class="px-2 py-1 rounded-full text-xs font-semibold bg-blue-500 text-white">
+                                ${user.role || 'user'}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4">
+                            <span class="px-2 py-1 rounded-full text-xs font-semibold bg-green-500 text-white">
+                                Active
+                            </span>
+                        </td>
+                        <td class="py-3 px-4">${new Date(user.createdAt).toLocaleDateString()}</td>
+                        <td class="py-3 px-4">
+                            <div class="flex space-x-2">
+                                <button class="rog-button-secondary px-2 py-1 rounded text-xs" onclick="editUser('${user.id}')">
+                                    Edit
+                                </button>
+                                <button class="rog-button-secondary px-2 py-1 rounded text-xs" onclick="deleteUser('${user.id}')">
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading users data:', error);
+                const tableBody = document.getElementById('usersTable');
+                tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-400">Error loading users</td></tr>';
+            }
+        }
+
+        async function loadAnalyticsData() {
+            try {
+                console.log('Loading analytics data...');
+
+                if (!firebaseReady) {
+                    console.log('Firebase not ready, using fallback data');
+                    loadFallbackAnalyticsData();
+                    return;
+                }
+
+                // Load orders and users data
+                const orders = await loadOrdersFromFirebase();
+                const users = await loadUsersFromFirebase();
+
+                // Calculate analytics
+                const analytics = calculateAnalytics(orders, users);
+
+                // Update overview cards
+                updateAnalyticsOverview(analytics);
+
+                // Create charts
+                createOrderTrendsChart(analytics.orderTrends);
+                createStatusDistributionChart(analytics.statusDistribution);
+                createMaterialPreferencesChart(analytics.materialPreferences);
+
+            } catch (error) {
+                console.error('Error loading analytics data:', error);
+                loadFallbackAnalyticsData();
+            }
+        }
+
+        async function loadUsersFromFirebase() {
+            try {
+                const usersRef = window.firebase.collection(window.firebase.db, 'users');
+                const querySnapshot = await window.firebase.getDocs(usersRef);
+
+                const users = [];
+                querySnapshot.forEach((doc) => {
+                    users.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                return users;
+            } catch (error) {
+                console.error('Error loading users from Firebase:', error);
+                return [];
+            }
+        }
+
+        function calculateAnalytics(orders, users) {
+            const now = new Date();
+            const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+            const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+            // Filter orders for this month
+            const monthlyOrders = orders.filter(order => {
+                const orderDate = new Date(order.createdAt);
+                return orderDate >= oneMonthAgo;
+            });
+
+            // Calculate revenue (assuming average order value)
+            const averageOrderValue = 150; // This would come from actual pricing
+            const totalRevenue = orders.length * averageOrderValue;
+
+            // Order trends (last 7 days)
+            const orderTrends = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+                const dayOrders = orders.filter(order => {
+                    const orderDate = new Date(order.createdAt);
+                    return orderDate.toDateString() === date.toDateString();
+                });
+                orderTrends.push({
+                    date: date.toLocaleDateString('en-US', {
+                        weekday: 'short'
+                    }),
+                    count: dayOrders.length
+                });
+            }
+
+            // Status distribution
+            const statusCounts = {};
+            orders.forEach(order => {
+                const status = order.status || 'pending';
+                statusCounts[status] = (statusCounts[status] || 0) + 1;
+            });
+
+            const statusDistribution = Object.entries(statusCounts).map(([status, count]) => ({
+                status: status.charAt(0).toUpperCase() + status.slice(1),
+                count: count,
+                percentage: ((count / orders.length) * 100).toFixed(1)
+            }));
+
+            // Material preferences
+            const materialCounts = {};
+            orders.forEach(order => {
+                const material = order.materialPreference || 'Unknown';
+                materialCounts[material] = (materialCounts[material] || 0) + 1;
+            });
+
+            const materialPreferences = Object.entries(materialCounts).map(([material, count]) => ({
+                material: material,
+                count: count,
+                percentage: ((count / orders.length) * 100).toFixed(1)
+            }));
+
+            // Conversion rate (orders per user)
+            const conversionRate = users.length > 0 ? ((orders.length / users.length) * 100).toFixed(1) : 0;
+
+            return {
+                totalRevenue,
+                monthlyOrders: monthlyOrders.length,
+                activeUsers: users.length,
+                conversionRate: parseFloat(conversionRate),
+                orderTrends,
+                statusDistribution,
+                materialPreferences
+            };
+        }
+
+        function updateAnalyticsOverview(analytics) {
+            document.getElementById('totalRevenue').textContent = `$${analytics.totalRevenue.toLocaleString()}`;
+            document.getElementById('monthlyOrders').textContent = analytics.monthlyOrders;
+            document.getElementById('activeUsersCount').textContent = analytics.activeUsers;
+            document.getElementById('conversionRate').textContent = `${analytics.conversionRate}%`;
+        }
+
+        function createOrderTrendsChart(data) {
+            const ctx = document.getElementById('orderTrendsCanvas').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => d.date),
+                    datasets: [{
+                        label: 'Orders',
+                        data: data.map(d => d.count),
+                        borderColor: '#ff0040',
+                        backgroundColor: 'rgba(255, 0, 64, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createStatusDistributionChart(data) {
+            const ctx = document.getElementById('statusDistributionCanvas').getContext('2d');
+
+            const colors = ['#ff0040', '#00ff40', '#0040ff', '#ff4000', '#40ff00', '#4000ff'];
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.map(d => d.status),
+                    datasets: [{
+                        data: data.map(d => d.count),
+                        backgroundColor: colors.slice(0, data.length),
+                        borderColor: '#1a1a1a',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#ffffff',
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createMaterialPreferencesChart(data) {
+            const ctx = document.getElementById('materialPreferencesCanvas').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.material),
+                    datasets: [{
+                        label: 'Orders',
+                        data: data.map(d => d.count),
+                        backgroundColor: 'rgba(255, 0, 64, 0.8)',
+                        borderColor: '#ff0040',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#ffffff',
+                                maxRotation: 45
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function loadFallbackAnalyticsData() {
+            // Set fallback values
+            document.getElementById('totalRevenue').textContent = '$0';
+            document.getElementById('monthlyOrders').textContent = '0';
+            document.getElementById('activeUsersCount').textContent = '0';
+            document.getElementById('conversionRate').textContent = '0%';
+
+            // Create empty charts
+            createOrderTrendsChart([]);
+            createStatusDistributionChart([]);
+            createMaterialPreferencesChart([]);
+        }
+
+        function loadSettingsData() {
+            console.log('Loading settings data...');
+
+            // Load user information
+            loadUserInformation();
+
+            // Setup password change form
+            setupPasswordChangeForm();
+        }
+
+        // Load user information for settings
+        function loadUserInformation() {
+            try {
+                // Get current user
+                const user = currentUser || JSON.parse(localStorage.getItem('adminUser') || '{}');
+
+                if (user.email) {
+                    document.getElementById('userEmail').value = user.email;
+                    document.getElementById('userRole').value = user.role || 'Administrator';
+                    document.getElementById('lastLogin').value = user.lastLogin || new Date().toLocaleString();
+                } else {
+                    // Fallback values
+                    document.getElementById('userEmail').value = 'admin@otomono.com';
+                    document.getElementById('userRole').value = 'Administrator';
+                    document.getElementById('lastLogin').value = new Date().toLocaleString();
+                }
+            } catch (error) {
+                console.error('Error loading user information:', error);
+                // Set fallback values
+                document.getElementById('userEmail').value = 'admin@otomono.com';
+                document.getElementById('userRole').value = 'Administrator';
+                document.getElementById('lastLogin').value = new Date().toLocaleString();
+            }
+        }
+
+        // Setup password change form
+        function setupPasswordChangeForm() {
+            const form = document.getElementById('changePasswordForm');
+            if (form) {
+                form.addEventListener('submit', handlePasswordChange);
+            }
+        }
+
+        // Handle password change form submission
+        async function handlePasswordChange(e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validation
+            if (!currentPassword) {
+                showOtomonoAlert('Please enter your current password', 'Validation Error');
+                return;
+            }
+
+            if (!newPassword) {
+                showOtomonoAlert('Please enter a new password', 'Validation Error');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                showOtomonoAlert('New password must be at least 6 characters long', 'Validation Error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showOtomonoAlert('New passwords do not match', 'Validation Error');
+                return;
+            }
+
+            if (currentPassword === newPassword) {
+                showOtomonoAlert('New password must be different from current password', 'Validation Error');
+                return;
+            }
+
+            try {
+                showOtomonoAlert('Changing password...', 'Password Change');
+
+                // Change password using Firebase
+                await changeUserPassword(currentPassword, newPassword);
+
+                showOtomonoSuccess('Password changed successfully!');
+                clearPasswordForm();
+
+            } catch (error) {
+                console.error('Error changing password:', error);
+                handlePasswordChangeError(error);
+            }
+        }
+
+        // Change user password with Firebase
+        async function changeUserPassword(currentPassword, newPassword) {
+            try {
+                if (!firebaseReady) {
+                    throw new Error('Firebase not available. Please try again later.');
+                }
+
+                const user = window.firebase.auth.currentUser;
+                if (!user) {
+                    throw new Error('No authenticated user found. Please log in again.');
+                }
+
+                // Re-authenticate user with current password
+                const credential = window.firebase.EmailAuthProvider.credential(user.email, currentPassword);
+                await window.firebase.reauthenticateWithCredential(user, credential);
+
+                // Update password
+                await window.firebase.updatePassword(user, newPassword);
+
+                console.log('Password changed successfully');
+
+            } catch (error) {
+                console.error('Password change error:', error);
+                throw error;
+            }
+        }
+
+        // Handle password change errors
+        function handlePasswordChangeError(error) {
+            let errorMessage = 'An error occurred while changing password.';
+
+            switch (error.code) {
+                case 'auth/wrong-password':
+                    errorMessage = 'Current password is incorrect.';
+                    break;
+                case 'auth/weak-password':
+                    errorMessage = 'New password is too weak. Please choose a stronger password.';
+                    break;
+                case 'auth/requires-recent-login':
+                    errorMessage = 'Please log out and log in again before changing your password.';
+                    break;
+                case 'auth/too-many-requests':
+                    errorMessage = 'Too many attempts. Please try again later.';
+                    break;
+                case 'auth/user-mismatch':
+                    errorMessage = 'User authentication failed. Please log in again.';
+                    break;
+                case 'auth/user-not-found':
+                    errorMessage = 'User not found. Please log in again.';
+                    break;
+                case 'auth/invalid-credential':
+                    errorMessage = 'Invalid credentials. Please check your current password.';
+                    break;
+                case 'auth/network-request-failed':
+                    errorMessage = 'Network error. Please check your connection and try again.';
+                    break;
+                default:
+                    if (error.message) {
+                        errorMessage = error.message;
+                    }
+            }
+
+            showOtomonoAlert(errorMessage, 'Password Change Error');
+        }
+
+        // Toggle password visibility
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(inputId + 'Icon');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Clear password form
+        function clearPasswordForm() {
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+
+            // Reset password visibility
+            ['currentPassword', 'newPassword', 'confirmPassword'].forEach(id => {
+                const input = document.getElementById(id);
+                const icon = document.getElementById(id + 'Icon');
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            });
+        }
+
+        // Report Generation Functions
+        async function generateOrderReport() {
+            try {
+                showOtomonoAlert('Generating Order Report...', 'Report Generation');
+
+                const orders = await loadOrdersFromFirebase();
+                const reportData = generateOrderReportData(orders);
+
+                // Show export options
+                showReportOptions('Order Report', reportData, 'order');
+
+            } catch (error) {
+                console.error('Error generating order report:', error);
+                showOtomonoAlert('Error generating order report: ' + error.message);
+            }
+        }
+
+        async function generateUserReport() {
+            try {
+                showOtomonoAlert('Generating User Report...', 'Report Generation');
+
+                const users = await loadUsersFromFirebase();
+                const reportData = generateUserReportData(users);
+
+                // Show export options
+                showReportOptions('User Report', reportData, 'user');
+
+            } catch (error) {
+                console.error('Error generating user report:', error);
+                showOtomonoAlert('Error generating user report: ' + error.message);
+            }
+        }
+
+        async function generateMaterialReport() {
+            try {
+                showOtomonoAlert('Generating Material Report...', 'Report Generation');
+
+                const orders = await loadOrdersFromFirebase();
+                const reportData = generateMaterialReportData(orders);
+
+                // Show export options
+                showReportOptions('Material Report', reportData, 'material');
+
+            } catch (error) {
+                console.error('Error generating material report:', error);
+                showOtomonoAlert('Error generating material report: ' + error.message);
+            }
+        }
+
+        async function generateRevenueReport() {
+            try {
+                showOtomonoAlert('Generating Revenue Report...', 'Report Generation');
+
+                const orders = await loadOrdersFromFirebase();
+                const reportData = generateRevenueReportData(orders);
+
+                // Show export options
+                showReportOptions('Revenue Report', reportData, 'revenue');
+
+            } catch (error) {
+                console.error('Error generating revenue report:', error);
+                showOtomonoAlert('Error generating revenue report: ' + error.message);
+            }
+        }
+
+        async function generateStatusReport() {
+            try {
+                showOtomonoAlert('Generating Status Report...', 'Report Generation');
+
+                const orders = await loadOrdersFromFirebase();
+                const reportData = generateStatusReportData(orders);
+
+                // Show export options
+                showReportOptions('Status Report', reportData, 'status');
+
+            } catch (error) {
+                console.error('Error generating status report:', error);
+                showOtomonoAlert('Error generating status report: ' + error.message);
+            }
+        }
+
+        async function generateCustomReport() {
+            showOtomonoInput(
+                'Enter date range (e.g., "2024-01-01 to 2024-01-31")',
+                'Custom Report',
+                'YYYY-MM-DD to YYYY-MM-DD',
+                async (dateRange) => {
+                    if (!dateRange) return;
+
+                    try {
+                        showOtomonoAlert('Generating Custom Report...', 'Report Generation');
+
+                        const orders = await loadOrdersFromFirebase();
+                        const reportData = generateCustomReportData(orders, dateRange);
+
+                        // Show export options
+                        showReportOptions('Custom Report', reportData, 'custom', dateRange);
+
+                    } catch (error) {
+                        console.error('Error generating custom report:', error);
+                        showOtomonoAlert('Error generating custom report: ' + error.message);
+                    }
+                }
+            );
+        }
+
+        // Report Data Generation Functions
+        function generateOrderReportData(orders) {
+            const now = new Date();
+            const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+
+            const monthlyOrders = orders.filter(order => {
+                const orderDate = new Date(order.createdAt);
+                return orderDate >= oneMonthAgo;
+            });
+
+            const statusCounts = {};
+            orders.forEach(order => {
+                const status = order.status || 'pending';
+                statusCounts[status] = (statusCounts[status] || 0) + 1;
+            });
+
+            return {
+                totalOrders: orders.length,
+                monthlyOrders: monthlyOrders.length,
+                statusBreakdown: statusCounts,
+                recentOrders: orders.slice(0, 10),
+                generatedAt: new Date().toLocaleString()
+            };
+        }
+
+        function generateUserReportData(users) {
+            const roleCounts = {};
+            users.forEach(user => {
+                const role = user.role || 'customer';
+                roleCounts[role] = (roleCounts[role] || 0) + 1;
+            });
+
+            return {
+                totalUsers: users.length,
+                roleBreakdown: roleCounts,
+                recentUsers: users.slice(0, 10),
+                generatedAt: new Date().toLocaleString()
+            };
+        }
+
+        function generateMaterialReportData(orders) {
+            const materialCounts = {};
+            orders.forEach(order => {
+                const material = order.materialPreference || 'Unknown';
+                materialCounts[material] = (materialCounts[material] || 0) + 1;
+            });
+
+            const sortedMaterials = Object.entries(materialCounts)
+                .sort(([, a], [, b]) => b - a)
+                .map(([material, count]) => ({
+                    material,
+                    count,
+                    percentage: ((count / orders.length) * 100).toFixed(1)
+                }));
+
+            return {
+                totalOrders: orders.length,
+                materialBreakdown: sortedMaterials,
+                topMaterial: sortedMaterials[0] ? sortedMaterials[0].material : 'N/A',
+                generatedAt: new Date().toLocaleString()
+            };
+        }
+
+        function generateRevenueReportData(orders) {
+            const averageOrderValue = 150;
+            const totalRevenue = orders.length * averageOrderValue;
+
+            const now = new Date();
+            const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+
+            const monthlyOrders = orders.filter(order => {
+                const orderDate = new Date(order.createdAt);
+                return orderDate >= oneMonthAgo;
+            });
+
+            const monthlyRevenue = monthlyOrders.length * averageOrderValue;
+
+            return {
+                totalRevenue,
+                monthlyRevenue,
+                averageOrderValue,
+                totalOrders: orders.length,
+                monthlyOrders: monthlyOrders.length,
+                generatedAt: new Date().toLocaleString()
+            };
+        }
+
+        function generateStatusReportData(orders) {
+            const statusCounts = {};
+            orders.forEach(order => {
+                const status = order.status || 'pending';
+                statusCounts[status] = (statusCounts[status] || 0) + 1;
+            });
+
+            const statusBreakdown = Object.entries(statusCounts).map(([status, count]) => ({
+                status: status.charAt(0).toUpperCase() + status.slice(1),
+                count,
+                percentage: ((count / orders.length) * 100).toFixed(1)
+            }));
+
+            return {
+                totalOrders: orders.length,
+                statusBreakdown,
+                generatedAt: new Date().toLocaleString()
+            };
+        }
+
+        function generateCustomReportData(orders, dateRange) {
+            // Parse date range
+            const [startDateStr, endDateStr] = dateRange.split(' to ');
+            const startDate = new Date(startDateStr);
+            const endDate = new Date(endDateStr);
+
+            const filteredOrders = orders.filter(order => {
+                const orderDate = new Date(order.createdAt);
+                return orderDate >= startDate && orderDate <= endDate;
+            });
+
+            const statusCounts = {};
+            filteredOrders.forEach(order => {
+                const status = order.status || 'pending';
+                statusCounts[status] = (statusCounts[status] || 0) + 1;
+            });
+
+            return {
+                dateRange,
+                totalOrders: filteredOrders.length,
+                statusBreakdown: statusCounts,
+                orders: filteredOrders,
+                generatedAt: new Date().toLocaleString()
+            };
+        }
+
+        // Report HTML Generation Functions
+        function generateOrderReportHTML(data) {
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Order Report - Otomono</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; background: #1a1a1a; color: white; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .section { margin-bottom: 30px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+                        th { background: #ff0040; color: white; }
+                        .stats { display: flex; justify-content: space-around; margin: 20px 0; }
+                        .stat { text-align: center; }
+                        .stat-value { font-size: 24px; font-weight: bold; color: #ff0040; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>Order Report</h1>
+                        <p>Generated on: ${data.generatedAt}</p>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-value">${data.totalOrders}</div>
+                            <div>Total Orders</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${data.monthlyOrders}</div>
+                            <div>This Month</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Status Breakdown</h2>
+                        <table>
+                            <tr><th>Status</th><th>Count</th><th>Percentage</th></tr>
+                            ${Object.entries(data.statusBreakdown).map(([status, count]) => `
+                                <tr>
+                                    <td>${status.charAt(0).toUpperCase() + status.slice(1)}</td>
+                                    <td>${count}</td>
+                                    <td>${((count / data.totalOrders) * 100).toFixed(1)}%</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Recent Orders</h2>
+                        <table>
+                            <tr><th>Order ID</th><th>Customer</th><th>Status</th><th>Date</th></tr>
+                            ${data.recentOrders.map(order => `
+                                <tr>
+                                    <td>${order.orderId || order.id}</td>
+                                    <td>${order.customerName}</td>
+                                    <td>${order.status || 'pending'}</td>
+                                    <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+
+        function generateUserReportHTML(data) {
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>User Report - Otomono</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; background: #1a1a1a; color: white; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .section { margin-bottom: 30px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+                        th { background: #ff0040; color: white; }
+                        .stats { display: flex; justify-content: space-around; margin: 20px 0; }
+                        .stat { text-align: center; }
+                        .stat-value { font-size: 24px; font-weight: bold; color: #ff0040; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>User Report</h1>
+                        <p>Generated on: ${data.generatedAt}</p>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-value">${data.totalUsers}</div>
+                            <div>Total Users</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Role Breakdown</h2>
+                        <table>
+                            <tr><th>Role</th><th>Count</th><th>Percentage</th></tr>
+                            ${Object.entries(data.roleBreakdown).map(([role, count]) => `
+                                <tr>
+                                    <td>${role.charAt(0).toUpperCase() + role.slice(1)}</td>
+                                    <td>${count}</td>
+                                    <td>${((count / data.totalUsers) * 100).toFixed(1)}%</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Recent Users</h2>
+                        <table>
+                            <tr><th>Name</th><th>Email</th><th>Role</th><th>Created</th></tr>
+                            ${data.recentUsers.map(user => `
+                                <tr>
+                                    <td>${user.name || 'N/A'}</td>
+                                    <td>${user.email}</td>
+                                    <td>${user.role || 'customer'}</td>
+                                    <td>${new Date(user.createdAt || user.created).toLocaleDateString()}</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+
+        function generateMaterialReportHTML(data) {
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Material Report - Otomono</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; background: #1a1a1a; color: white; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .section { margin-bottom: 30px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+                        th { background: #ff0040; color: white; }
+                        .stats { display: flex; justify-content: space-around; margin: 20px 0; }
+                        .stat { text-align: center; }
+                        .stat-value { font-size: 24px; font-weight: bold; color: #ff0040; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>Material Preferences Report</h1>
+                        <p>Generated on: ${data.generatedAt}</p>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-value">${data.totalOrders}</div>
+                            <div>Total Orders</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${data.topMaterial}</div>
+                            <div>Top Material</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Material Preferences</h2>
+                        <table>
+                            <tr><th>Material</th><th>Orders</th><th>Percentage</th></tr>
+                            ${data.materialBreakdown.map(item => `
+                                <tr>
+                                    <td>${item.material}</td>
+                                    <td>${item.count}</td>
+                                    <td>${item.percentage}%</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+
+        function generateRevenueReportHTML(data) {
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Revenue Report - Otomono</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; background: #1a1a1a; color: white; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .section { margin-bottom: 30px; }
+                        .stats { display: flex; justify-content: space-around; margin: 20px 0; }
+                        .stat { text-align: center; }
+                        .stat-value { font-size: 24px; font-weight: bold; color: #ff0040; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>Revenue Report</h1>
+                        <p>Generated on: ${data.generatedAt}</p>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-value">$${data.totalRevenue.toLocaleString()}</div>
+                            <div>Total Revenue</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">$${data.monthlyRevenue.toLocaleString()}</div>
+                            <div>Monthly Revenue</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">$${data.averageOrderValue}</div>
+                            <div>Avg Order Value</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Order Statistics</h2>
+                        <p><strong>Total Orders:</strong> ${data.totalOrders}</p>
+                        <p><strong>Monthly Orders:</strong> ${data.monthlyOrders}</p>
+                        <p><strong>Average Order Value:</strong> $${data.averageOrderValue}</p>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+
+        function generateStatusReportHTML(data) {
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Status Report - Otomono</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; background: #1a1a1a; color: white; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .section { margin-bottom: 30px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+                        th { background: #ff0040; color: white; }
+                        .stats { display: flex; justify-content: space-around; margin: 20px 0; }
+                        .stat { text-align: center; }
+                        .stat-value { font-size: 24px; font-weight: bold; color: #ff0040; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>Order Status Report</h1>
+                        <p>Generated on: ${data.generatedAt}</p>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-value">${data.totalOrders}</div>
+                            <div>Total Orders</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Status Distribution</h2>
+                        <table>
+                            <tr><th>Status</th><th>Count</th><th>Percentage</th></tr>
+                            ${data.statusBreakdown.map(item => `
+                                <tr>
+                                    <td>${item.status}</td>
+                                    <td>${item.count}</td>
+                                    <td>${item.percentage}%</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+
+        function generateCustomReportHTML(data, dateRange) {
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Custom Report - Otomono</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; background: #1a1a1a; color: white; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .section { margin-bottom: 30px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+                        th { background: #ff0040; color: white; }
+                        .stats { display: flex; justify-content: space-around; margin: 20px 0; }
+                        .stat { text-align: center; }
+                        .stat-value { font-size: 24px; font-weight: bold; color: #ff0040; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>Custom Report</h1>
+                        <p><strong>Date Range:</strong> ${dateRange}</p>
+                        <p>Generated on: ${data.generatedAt}</p>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-value">${data.totalOrders}</div>
+                            <div>Orders in Range</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Status Breakdown</h2>
+                        <table>
+                            <tr><th>Status</th><th>Count</th><th>Percentage</th></tr>
+                            ${Object.entries(data.statusBreakdown).map(([status, count]) => `
+                                <tr>
+                                    <td>${status.charAt(0).toUpperCase() + status.slice(1)}</td>
+                                    <td>${count}</td>
+                                    <td>${((count / data.totalOrders) * 100).toFixed(1)}%</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Orders in Date Range</h2>
+                        <table>
+                            <tr><th>Order ID</th><th>Customer</th><th>Status</th><th>Date</th></tr>
+                            ${data.orders.map(order => `
+                                <tr>
+                                    <td>${order.orderId || order.id}</td>
+                                    <td>${order.customerName}</td>
+                                    <td>${order.status || 'pending'}</td>
+                                    <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+
+        // Form handlers with Firebase integration
+        async function handleCreateOrder(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const orderData = Object.fromEntries(formData);
+
+            try {
+                if (!firebaseReady) {
+                    showOtomonoAlert('Firebase not available. Please try again later.');
+                    return;
+                }
+
+                // Add timestamp and order ID
+                orderData.createdAt = new Date().toISOString();
+                orderData.orderId = 'ORD-' + Date.now();
+                orderData.status = 'pending';
+
+                // Save to Firestore
+                const docRef = await window.firebase.addDoc(
+                    window.firebase.collection(window.firebase.db, 'orders'),
+                    orderData
+                );
+
+                console.log('Order created with ID:', docRef.id);
+                showOtomonoSuccess('Order created successfully!');
+                closeCreateOrderModal();
+                e.target.reset();
+
+                // Refresh data
+                if (currentSection === 'dashboard') {
+                    loadDashboardData();
+                } else if (currentSection === 'orders') {
+                    loadOrdersData();
+                }
+
+            } catch (error) {
+                console.error('Error creating order:', error);
+                showOtomonoAlert('Error creating order: ' + error.message);
+            }
+        }
+
+        async function handleAddUser(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const userData = Object.fromEntries(formData);
+
+            try {
+                if (!firebaseReady) {
+                    showOtomonoAlert('Firebase not available. Please try again later.');
+                    return;
+                }
+
+                // Create user with Firebase Auth
+                const userCredential = await window.firebase.createUserWithEmailAndPassword(
+                    window.firebase.auth,
+                    userData.email,
+                    userData.password
+                );
+
+                // Save additional user data to Firestore
+                await window.firebase.setDoc(window.firebase.doc(window.firebase.db, 'users', userCredential.user.uid), {
+                    name: userData.fullName,
+                    email: userData.email,
+                    role: userData.role,
+                    createdAt: new Date().toISOString(),
+                    status: 'active'
+                });
+
+                console.log('User created with ID:', userCredential.user.uid);
+                showOtomonoSuccess('User created successfully!');
+                closeAddUserModal();
+                e.target.reset();
+
+                // Refresh users data
+                if (currentSection === 'users') {
+                    loadUsersData();
+                }
+
+            } catch (error) {
+                console.error('Error creating user:', error);
+                showOtomonoAlert('Error creating user: ' + error.message);
+            }
+        }
+
+        // Order Management Functions
+        async function viewOrder(orderId) {
+            try {
+                const orderRef = window.firebase.doc(window.firebase.db, 'orders', orderId);
+                const orderSnap = await window.firebase.getDoc(orderRef);
+
+                if (orderSnap.exists()) {
+                    const orderData = {
+                        id: orderSnap.id,
+                        ...orderSnap.data()
+                    };
+                    console.log('Order details:', orderData);
+                    showOrderDetailsModal(orderData);
+                } else {
+                    showOtomonoAlert('Order not found');
+                }
+            } catch (error) {
+                console.error('Error viewing order:', error);
+                showOtomonoAlert('Error loading order details: ' + error.message);
+            }
+        }
+
+        async function editOrder(orderId) {
+            const statusOptions = [{
+                    value: 'pending',
+                    label: 'Pending'
+                },
+                {
+                    value: 'processing',
+                    label: 'Processing'
+                },
+                {
+                    value: 'completed',
+                    label: 'Completed'
+                },
+                {
+                    value: 'cancelled',
+                    label: 'Cancelled'
+                },
+                {
+                    value: 'shipped',
+                    label: 'Shipped'
+                },
+                {
+                    value: 'delivered',
+                    label: 'Delivered'
+                }
+            ];
+
+            showOtomonoSelect(
+                'Select new status for this order',
+                'Update Order Status',
+                statusOptions,
+                'pending',
+                async (newStatus) => {
+                    if (!newStatus) return;
+
+                    try {
+                        const orderRef = window.firebase.doc(window.firebase.db, 'orders', orderId);
+                        await window.firebase.updateDoc(orderRef, {
+                            status: newStatus,
+                            updatedAt: new Date().toISOString()
+                        });
+
+                        showOtomonoSuccess('Order status updated successfully!');
+                        loadOrdersData();
+                    } catch (error) {
+                        console.error('Error updating order:', error);
+                        showOtomonoAlert('Error updating order: ' + error.message);
+                    }
+                }
+            );
+        }
+
+        async function deleteOrder(orderId) {
+            showOtomonoConfirm(
+                'Are you sure you want to delete this order?',
+                'Delete Order',
+                async () => {
+                    try {
+                        const orderRef = window.firebase.doc(window.firebase.db, 'orders', orderId);
+                        await window.firebase.deleteDoc(orderRef);
+
+                        showOtomonoSuccess('Order deleted successfully!');
+                        loadOrdersData();
+                    } catch (error) {
+                        console.error('Error deleting order:', error);
+                        showOtomonoAlert('Error deleting order');
+                    }
+                }
+            );
+        }
+
+        // User Management Functions
+        async function editUser(userId) {
+            const roleOptions = [{
+                    value: 'admin',
+                    label: 'Admin'
+                },
+                {
+                    value: 'manager',
+                    label: 'Manager'
+                },
+                {
+                    value: 'customer',
+                    label: 'Customer'
+                },
+                {
+                    value: 'staff',
+                    label: 'Staff'
+                }
+            ];
+
+            showOtomonoSelect(
+                'Select new role for this user',
+                'Update User Role',
+                roleOptions,
+                'admin',
+                async (newRole) => {
+                    if (!newRole) return;
+
+                    try {
+                        const userRef = window.firebase.doc(window.firebase.db, 'users', userId);
+                        await window.firebase.updateDoc(userRef, {
+                            role: newRole,
+                            updatedAt: new Date().toISOString()
+                        });
+
+                        showOtomonoSuccess('User role updated successfully!');
+                        loadUsersData();
+                    } catch (error) {
+                        console.error('Error updating user:', error);
+                        showOtomonoAlert('Error updating user: ' + error.message);
+                    }
+                }
+            );
+        }
+
+        async function deleteUser(userId) {
+            showOtomonoConfirm(
+                'Are you sure you want to delete this user?',
+                'Delete User',
+                async () => {
+                    try {
+                        const userRef = window.firebase.doc(window.firebase.db, 'users', userId);
+                        await window.firebase.deleteDoc(userRef);
+
+                        showOtomonoSuccess('User deleted successfully!');
+                        loadUsersData();
+                    } catch (error) {
+                        console.error('Error deleting user:', error);
+                        showOtomonoAlert('Error deleting user');
+                    }
+                }
+            );
+        }
+
+        // Generate Client Link Functionality
+        function generateClientLink() {
+            const baseUrl = window.location.origin;
+            const clientLink = `${baseUrl}/client-order-form.html`;
+
+            // Show modal with link
+            showClientLinkModal(clientLink);
+        }
+
+        function showClientLinkModal(clientLink) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="rog-card p-6 w-full max-w-md">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-white">Generate Client Link</h3>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-4">
+                        <p class="text-gray-300">Share this link with clients to collect jersey details:</p>
+                        <div class="bg-rog-light p-3 rounded-lg">
+                            <code class="text-rog-red break-all">${clientLink}</code>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button onclick="copyToClipboard('${clientLink}'); this.closest('.fixed').remove()" class="rog-button flex-1 px-4 py-2 rounded-lg">
+                                <i class="fas fa-copy mr-2"></i>Copy Link
+                            </button>
+                            <button onclick="this.closest('.fixed').remove()" class="rog-button-secondary px-4 py-2 rounded-lg">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showOtomonoSuccess('Link copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                showOtomonoAlert('Failed to copy link');
+            });
+        }
+
+        // Otomono Branded Modal Functions
+        function showOtomonoAlert(message, title = 'Alert') {
+            const modal = document.createElement('div');
+            modal.className = 'otomono-modal';
+            modal.innerHTML = `
+                <div class="otomono-modal-content">
+                    <div class="otomono-modal-header">
+                        <div class="otomono-modal-title">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            ${title}
+                        </div>
+                        <button class="otomono-modal-close" onclick="closeOtomonoModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="otomono-modal-message">
+                        ${message}
+                    </div>
+                    <div class="otomono-modal-buttons">
+                        <button class="otomono-button" onclick="closeOtomonoModal()">
+                            OK
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showOtomonoSuccess(message, title = 'Success') {
+            const modal = document.createElement('div');
+            modal.className = 'otomono-modal';
+            modal.innerHTML = `
+                <div class="otomono-modal-content">
+                    <div class="otomono-modal-header">
+                        <div class="otomono-modal-title">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            ${title}
+                        </div>
+                        <button class="otomono-modal-close" onclick="closeOtomonoModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="otomono-modal-message">
+                        ${message}
+                    </div>
+                    <div class="otomono-modal-buttons">
+                        <button class="otomono-button" onclick="closeOtomonoModal()">
+                            OK
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showOtomonoConfirm(message, title = 'Confirm', onConfirm = null) {
+            const modal = document.createElement('div');
+            modal.className = 'otomono-modal';
+            modal.innerHTML = `
+                <div class="otomono-modal-content">
+                    <div class="otomono-modal-header">
+                        <div class="otomono-modal-title">
+                            <i class="fas fa-question-circle mr-2"></i>
+                            ${title}
+                        </div>
+                        <button class="otomono-modal-close" onclick="closeOtomonoModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="otomono-modal-message">
+                        ${message}
+                    </div>
+                    <div class="otomono-modal-buttons">
+                        <button class="otomono-button-secondary" onclick="closeOtomonoModal()">
+                            Cancel
+                        </button>
+                        <button class="otomono-button" onclick="confirmOtomonoAction()">
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Store the confirm callback
+            window.otomonoConfirmCallback = onConfirm;
+        }
+
+        function confirmOtomonoAction() {
+            if (window.otomonoConfirmCallback) {
+                window.otomonoConfirmCallback();
+            }
+            closeOtomonoModal();
+        }
+
+        function showOtomonoInput(message, title = 'Input', placeholder = '', onConfirm = null) {
+            const modal = document.createElement('div');
+            modal.className = 'otomono-modal';
+            modal.innerHTML = `
+                <div class="otomono-modal-content">
+                    <div class="otomono-modal-header">
+                        <div class="otomono-modal-title">
+                            <i class="fas fa-edit mr-2"></i>
+                            ${title}
+                        </div>
+                        <button class="otomono-modal-close" onclick="closeOtomonoModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="otomono-modal-message">
+                        ${message}
+                    </div>
+                    <div class="mb-4">
+                        <input type="text" id="otomonoInput" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" placeholder="${placeholder}" autofocus>
+                    </div>
+                    <div class="otomono-modal-buttons">
+                        <button class="otomono-button-secondary" onclick="closeOtomonoModal()">
+                            Cancel
+                        </button>
+                        <button class="otomono-button" onclick="confirmOtomonoInput()">
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Store the confirm callback
+            window.otomonoInputCallback = onConfirm;
+
+            // Focus the input and add keyboard support
+            setTimeout(() => {
+                const input = document.getElementById('otomonoInput');
+                input.focus();
+
+                // Add keyboard event listeners
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        confirmOtomonoInput();
+                    } else if (e.key === 'Escape') {
+                        closeOtomonoModal();
+                    }
+                });
+            }, 100);
+        }
+
+        function showOtomonoSelect(message, title = 'Select', options = [], defaultValue = '', onConfirm = null) {
+            const modal = document.createElement('div');
+            modal.className = 'otomono-modal';
+            modal.innerHTML = `
+                <div class="otomono-modal-content">
+                    <div class="otomono-modal-header">
+                        <div class="otomono-modal-title">
+                            <i class="fas fa-list mr-2"></i>
+                            ${title}
+                        </div>
+                        <button class="otomono-modal-close" onclick="closeOtomonoModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="otomono-modal-message">
+                        ${message}
+                    </div>
+                    <div class="mb-4">
+                        <select id="otomonoSelect" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" autofocus>
+                            ${options.map(option => `
+                                <option value="${option.value}" ${option.value === defaultValue ? 'selected' : ''}>
+                                    ${option.label}
+                                </option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    <div class="otomono-modal-buttons">
+                        <button class="otomono-button-secondary" onclick="closeOtomonoModal()">
+                            Cancel
+                        </button>
+                        <button class="otomono-button" onclick="confirmOtomonoSelect()">
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Store the confirm callback
+            window.otomonoSelectCallback = onConfirm;
+
+            // Focus the select and add keyboard support
+            setTimeout(() => {
+                const select = document.getElementById('otomonoSelect');
+                select.focus();
+
+                // Add keyboard event listeners
+                select.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        confirmOtomonoSelect();
+                    } else if (e.key === 'Escape') {
+                        closeOtomonoModal();
+                    }
+                });
+            }, 100);
+        }
+
+        function confirmOtomonoInput() {
+            const input = document.getElementById('otomonoInput');
+            const value = input.value.trim();
+
+            if (window.otomonoInputCallback) {
+                window.otomonoInputCallback(value);
+            }
+            closeOtomonoModal();
+        }
+
+        function confirmOtomonoSelect() {
+            const select = document.getElementById('otomonoSelect');
+            const value = select.value;
+
+            if (window.otomonoSelectCallback) {
+                window.otomonoSelectCallback(value);
+            }
+            closeOtomonoModal();
+        }
+
+        function closeOtomonoModal() {
+            const modals = document.querySelectorAll('.otomono-modal');
+            modals.forEach(modal => modal.remove());
+            window.otomonoConfirmCallback = null;
+            window.otomonoInputCallback = null;
+            window.otomonoSelectCallback = null;
+        }
+
+        // Report Export Options Modal
+        function showReportOptions(reportTitle, reportData, reportType, dateRange = null) {
+            const modal = document.createElement('div');
+            modal.className = 'otomono-modal';
+            modal.innerHTML = `
+                <div class="otomono-modal-content" style="max-width: 500px;">
+                    <div class="otomono-modal-header">
+                        <div class="otomono-modal-title">
+                            <i class="fas fa-download mr-2"></i>
+                            Export ${reportTitle}
+                        </div>
+                        <button class="otomono-modal-close" onclick="closeOtomonoModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="otomono-modal-message">
+                        Choose your preferred export format:
+                    </div>
+                    <div class="grid grid-cols-1 gap-4 mb-6">
+                        <button onclick="exportToHTML('${reportType}', reportData, '${dateRange || ''}')" class="rog-button p-4 rounded-lg text-left">
+                            <i class="fas fa-file-code text-2xl mb-2"></i>
+                            <h4 class="font-semibold">View in Browser</h4>
+                            <p class="text-sm opacity-80">Open report in new window</p>
+                        </button>
+                        <button onclick="exportToPDF('${reportType}', reportData, '${dateRange || ''}')" class="rog-button p-4 rounded-lg text-left">
+                            <i class="fas fa-file-pdf text-2xl mb-2"></i>
+                            <h4 class="font-semibold">Download as PDF</h4>
+                            <p class="text-sm opacity-80">Save as PDF file</p>
+                        </button>
+                    </div>
+                    <div class="otomono-modal-buttons">
+                        <button class="otomono-button-secondary" onclick="closeOtomonoModal()">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Store report data globally for export functions
+            window.reportData = reportData;
+        }
+
+        // Export to HTML (existing functionality)
+        function exportToHTML(reportType, reportData, dateRange) {
+            closeOtomonoModal();
+
+            let htmlContent = '';
+            switch (reportType) {
+                case 'order':
+                    htmlContent = generateOrderReportHTML(reportData);
+                    break;
+                case 'user':
+                    htmlContent = generateUserReportHTML(reportData);
+                    break;
+                case 'material':
+                    htmlContent = generateMaterialReportHTML(reportData);
+                    break;
+                case 'revenue':
+                    htmlContent = generateRevenueReportHTML(reportData);
+                    break;
+                case 'status':
+                    htmlContent = generateStatusReportHTML(reportData);
+                    break;
+                case 'custom':
+                    htmlContent = generateCustomReportHTML(reportData, dateRange);
+                    break;
+            }
+
+            const reportWindow = window.open('', '_blank', 'width=800,height=600');
+            reportWindow.document.write(htmlContent);
+            reportWindow.document.close();
+
+            showOtomonoSuccess('Report opened in new window!');
+        }
+
+        // Export to PDF
+        function exportToPDF(reportType, reportData, dateRange) {
+            closeOtomonoModal();
+
+            try {
+                const {
+                    jsPDF
+                } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Set up PDF styling
+                doc.setFont('helvetica');
+                doc.setFontSize(20);
+                doc.setTextColor(255, 0, 64); // ROG Red
+
+                // Add title
+                let title = '';
+                switch (reportType) {
+                    case 'order':
+                        title = 'Order Report';
+                        break;
+                    case 'user':
+                        title = 'User Report';
+                        break;
+                    case 'material':
+                        title = 'Material Report';
+                        break;
+                    case 'revenue':
+                        title = 'Revenue Report';
+                        break;
+                    case 'status':
+                        title = 'Status Report';
+                        break;
+                    case 'custom':
+                        title = 'Custom Report';
+                        break;
+                }
+
+                doc.text(title, 20, 30);
+
+                // Add generation date
+                doc.setFontSize(12);
+                doc.setTextColor(0, 0, 0);
+                doc.text(`Generated on: ${new Date().toLocaleString()}`, 20, 45);
+
+                if (dateRange) {
+                    doc.text(`Date Range: ${dateRange}`, 20, 55);
+                }
+
+                let yPosition = 70;
+
+                // Generate PDF content based on report type
+                switch (reportType) {
+                    case 'order':
+                        generateOrderPDF(doc, reportData, yPosition);
+                        break;
+                    case 'user':
+                        generateUserPDF(doc, reportData, yPosition);
+                        break;
+                    case 'material':
+                        generateMaterialPDF(doc, reportData, yPosition);
+                        break;
+                    case 'revenue':
+                        generateRevenuePDF(doc, reportData, yPosition);
+                        break;
+                    case 'status':
+                        generateStatusPDF(doc, reportData, yPosition);
+                        break;
+                    case 'custom':
+                        generateCustomPDF(doc, reportData, yPosition, dateRange);
+                        break;
+                }
+
+                // Save the PDF
+                const fileName = `${title.replace(' ', '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+                doc.save(fileName);
+
+                showOtomonoSuccess('PDF report downloaded successfully!');
+
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                showOtomonoAlert('Error generating PDF: ' + error.message);
+            }
+        }
+
+        // PDF Generation Functions for each report type
+        function generateOrderPDF(doc, data, yPosition) {
+            // Summary statistics
+            doc.setFontSize(16);
+            doc.setTextColor(255, 0, 64);
+            doc.text('Summary', 20, yPosition);
+
+            yPosition += 20;
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+
+            doc.text(`Total Orders: ${data.totalOrders}`, 20, yPosition);
+            yPosition += 15;
+            doc.text(`Monthly Orders: ${data.monthlyOrders}`, 20, yPosition);
+            yPosition += 25;
+
+            // Status breakdown
+            doc.setFontSize(14);
+            doc.setTextColor(255, 0, 64);
+            doc.text('Status Breakdown', 20, yPosition);
+            yPosition += 20;
+
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+
+            Object.entries(data.statusBreakdown).forEach(([status, count]) => {
+                const percentage = ((count / data.totalOrders) * 100).toFixed(1);
+                doc.text(`${status.charAt(0).toUpperCase() + status.slice(1)}: ${count} (${percentage}%)`, 20, yPosition);
+                yPosition += 12;
+            });
+
+            yPosition += 10;
+
+            // Recent orders table
+            if (data.recentOrders && data.recentOrders.length > 0) {
+                doc.setFontSize(14);
+                doc.setTextColor(255, 0, 64);
+                doc.text('Recent Orders', 20, yPosition);
+                yPosition += 20;
+
+                doc.setFontSize(8);
+                doc.text('Order ID', 20, yPosition);
+                doc.text('Customer', 60, yPosition);
+                doc.text('Status', 120, yPosition);
+                doc.text('Date', 160, yPosition);
+                yPosition += 10;
+
+                // Draw line
+                doc.line(20, yPosition, 190, yPosition);
+                yPosition += 5;
+
+                data.recentOrders.slice(0, 10).forEach(order => {
+                    if (yPosition > 250) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+
+                    doc.text(order.orderId || order.id, 20, yPosition);
+                    doc.text(order.customerName, 60, yPosition);
+                    doc.text(order.status || 'pending', 120, yPosition);
+                    doc.text(new Date(order.createdAt).toLocaleDateString(), 160, yPosition);
+                    yPosition += 10;
+                });
+            }
+        }
+
+        function generateUserPDF(doc, data, yPosition) {
+            // Summary statistics
+            doc.setFontSize(16);
+            doc.setTextColor(255, 0, 64);
+            doc.text('Summary', 20, yPosition);
+
+            yPosition += 20;
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+
+            doc.text(`Total Users: ${data.totalUsers}`, 20, yPosition);
+            yPosition += 25;
+
+            // Role breakdown
+            doc.setFontSize(14);
+            doc.setTextColor(255, 0, 64);
+            doc.text('Role Breakdown', 20, yPosition);
+            yPosition += 20;
+
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+
+            Object.entries(data.roleBreakdown).forEach(([role, count]) => {
+                const percentage = ((count / data.totalUsers) * 100).toFixed(1);
+                doc.text(`${role.charAt(0).toUpperCase() + role.slice(1)}: ${count} (${percentage}%)`, 20, yPosition);
+                yPosition += 12;
+            });
+
+            yPosition += 10;
+
+            // Recent users table
+            if (data.recentUsers && data.recentUsers.length > 0) {
+                doc.setFontSize(14);
+                doc.setTextColor(255, 0, 64);
+                doc.text('Recent Users', 20, yPosition);
+                yPosition += 20;
+
+                doc.setFontSize(8);
+                doc.text('Name', 20, yPosition);
+                doc.text('Email', 60, yPosition);
+                doc.text('Role', 120, yPosition);
+                doc.text('Created', 160, yPosition);
+                yPosition += 10;
+
+                // Draw line
+                doc.line(20, yPosition, 190, yPosition);
+                yPosition += 5;
+
+                data.recentUsers.slice(0, 10).forEach(user => {
+                    if (yPosition > 250) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+
+                    doc.text(user.name || 'N/A', 20, yPosition);
+                    doc.text(user.email, 60, yPosition);
+                    doc.text(user.role || 'customer', 120, yPosition);
+                    doc.text(new Date(user.createdAt || user.created).toLocaleDateString(), 160, yPosition);
+                    yPosition += 10;
+                });
+            }
+        }
+
+        function generateMaterialPDF(doc, data, yPosition) {
+            // Summary statistics
+            doc.setFontSize(16);
+            doc.setTextColor(255, 0, 64);
+            doc.text('Summary', 20, yPosition);
+
+            yPosition += 20;
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+
+            doc.text(`Total Orders: ${data.totalOrders}`, 20, yPosition);
+            yPosition += 15;
+            doc.text(`Top Material: ${data.topMaterial}`, 20, yPosition);
+            yPosition += 25;
+
+            // Material preferences
+            doc.setFontSize(14);
+            doc.setTextColor(255, 0, 64);
+            doc.text('Material Preferences', 20, yPosition);
+            yPosition += 20;
+
+            doc.setFontSize(8);
+            doc.text('Material', 20, yPosition);
+            doc.text('Orders', 80, yPosition);
+            doc.text('Percentage', 120, yPosition);
+            yPosition += 10;
+
+            // Draw line
+            doc.line(20, yPosition, 190, yPosition);
+            yPosition += 5;
+
+            data.materialBreakdown.forEach(item => {
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+
+                doc.text(item.material, 20, yPosition);
+                doc.text(item.count.toString(), 80, yPosition);
+                doc.text(`${item.percentage}%`, 120, yPosition);
+                yPosition += 10;
+            });
+        }
+
+        function generateRevenuePDF(doc, data, yPosition) {
+            // Summary statistics
+            doc.setFontSize(16);
+            doc.setTextColor(255, 0, 64);
+            doc.text('Revenue Summary', 20, yPosition);
+
+            yPosition += 20;
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+
+            doc.text(`Total Revenue: $${data.totalRevenue.toLocaleString()}`, 20, yPosition);
+            yPosition += 15;
+            doc.text(`Monthly Revenue: $${data.monthlyRevenue.toLocaleString()}`, 20, yPosition);
+            yPosition += 15;
+            doc.text(`Average Order Value: $${data.averageOrderValue}`, 20, yPosition);
+            yPosition += 25;
+
+            // Order statistics
+            doc.setFontSize(14);
+            doc.setTextColor(255, 0, 64);
+            doc.text('Order Statistics', 20, yPosition);
+            yPosition += 20;
+
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+
+            doc.text(`Total Orders: ${data.totalOrders}`, 20, yPosition);
+            yPosition += 15;
+            doc.text(`Monthly Orders: ${data.monthlyOrders}`, 20, yPosition);
+            yPosition += 15;
+            doc.text(`Average Order Value: $${data.averageOrderValue}`, 20, yPosition);
+        }
+
+        function generateStatusPDF(doc, data, yPosition) {
+            // Summary statistics
+            doc.setFontSize(16);
+            doc.setTextColor(255, 0, 64);
+            doc.text('Status Summary', 20, yPosition);
+
+            yPosition += 20;
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+
+            doc.text(`Total Orders: ${data.totalOrders}`, 20, yPosition);
+            yPosition += 25;
+
+            // Status breakdown
+            doc.setFontSize(14);
+            doc.setTextColor(255, 0, 64);
+            doc.text('Status Distribution', 20, yPosition);
+            yPosition += 20;
+
+            doc.setFontSize(8);
+            doc.text('Status', 20, yPosition);
+            doc.text('Count', 80, yPosition);
+            doc.text('Percentage', 120, yPosition);
+            yPosition += 10;
+
+            // Draw line
+            doc.line(20, yPosition, 190, yPosition);
+            yPosition += 5;
+
+            data.statusBreakdown.forEach(item => {
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+
+                doc.text(item.status, 20, yPosition);
+                doc.text(item.count.toString(), 80, yPosition);
+                doc.text(`${item.percentage}%`, 120, yPosition);
+                yPosition += 10;
+            });
+        }
+
+        function generateCustomPDF(doc, data, yPosition, dateRange) {
+            // Summary statistics
+            doc.setFontSize(16);
+            doc.setTextColor(255, 0, 64);
+            doc.text('Custom Report Summary', 20, yPosition);
+
+            yPosition += 20;
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+
+            doc.text(`Date Range: ${dateRange}`, 20, yPosition);
+            yPosition += 15;
+            doc.text(`Orders in Range: ${data.totalOrders}`, 20, yPosition);
+            yPosition += 25;
+
+            // Status breakdown
+            doc.setFontSize(14);
+            doc.setTextColor(255, 0, 64);
+            doc.text('Status Breakdown', 20, yPosition);
+            yPosition += 20;
+
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+
+            Object.entries(data.statusBreakdown).forEach(([status, count]) => {
+                const percentage = ((count / data.totalOrders) * 100).toFixed(1);
+                doc.text(`${status.charAt(0).toUpperCase() + status.slice(1)}: ${count} (${percentage}%)`, 20, yPosition);
+                yPosition += 12;
+            });
+
+            yPosition += 10;
+
+            // Orders in date range table
+            if (data.orders && data.orders.length > 0) {
+                doc.setFontSize(14);
+                doc.setTextColor(255, 0, 64);
+                doc.text('Orders in Date Range', 20, yPosition);
+                yPosition += 20;
+
+                doc.setFontSize(8);
+                doc.text('Order ID', 20, yPosition);
+                doc.text('Customer', 60, yPosition);
+                doc.text('Status', 120, yPosition);
+                doc.text('Date', 160, yPosition);
+                yPosition += 10;
+
+                // Draw line
+                doc.line(20, yPosition, 190, yPosition);
+                yPosition += 5;
+
+                data.orders.slice(0, 15).forEach(order => {
+                    if (yPosition > 250) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+
+                    doc.text(order.orderId || order.id, 20, yPosition);
+                    doc.text(order.customerName, 60, yPosition);
+                    doc.text(order.status || 'pending', 120, yPosition);
+                    doc.text(new Date(order.createdAt).toLocaleDateString(), 160, yPosition);
+                    yPosition += 10;
+                });
+            }
+        }
+
+        // Enhanced View Order Functionality
+        async function viewOrder(orderId) {
+            try {
+                if (!firebaseReady) {
+                    showOtomonoAlert('Firebase not available. Please try again later.');
+                    return;
+                }
+
+                const orderRef = window.firebase.doc(window.firebase.db, 'orders', orderId);
+                const orderSnap = await window.firebase.getDoc(orderRef);
+
+                if (orderSnap.exists()) {
+                    const orderData = {
+                        id: orderSnap.id,
+                        ...orderSnap.data()
+                    };
+                    showOrderDetailsModal(orderData);
+                } else {
+                    showOtomonoAlert('Order not found');
+                }
+            } catch (error) {
+                console.error('Error viewing order:', error);
+                showOtomonoAlert('Error loading order details: ' + error.message);
+            }
+        }
+
+        function showOrderDetailsModal(order) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="rog-card p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold text-white">Order Details</h3>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Initial Order Details -->
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
+                            <i class="fas fa-shopping-cart mr-2 text-rog-red"></i>
+                            Initial Order Details
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-rog-light p-4 rounded-lg">
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div><strong class="text-gray-300">Order ID:</strong> <span class="text-white">${order.orderId || order.id}</span></div>
+                                    <div><strong class="text-gray-300">Customer:</strong> <span class="text-white">${order.customerName}</span></div>
+                                    <div><strong class="text-gray-300">Email:</strong> <span class="text-white">${order.customerEmail}</span></div>
+                                    <div><strong class="text-gray-300">Mobile:</strong> <span class="text-white">${order.mobileNumber || 'N/A'}</span></div>
+                                    <div><strong class="text-gray-300">Quantity:</strong> <span class="text-white">${order.quantity}</span></div>
+                                    <div><strong class="text-gray-300">Material:</strong> <span class="text-white">${order.materialPreference}</span></div>
+                                    <div><strong class="text-gray-300">Status:</strong> 
+                                        <span class="status-${order.status} px-2 py-1 rounded-full text-xs font-semibold">
+                                            ${order.status || 'pending'}
+                                        </span>
+                                    </div>
+                                    <div><strong class="text-gray-300">Created:</strong> <span class="text-white">${new Date(order.createdAt).toLocaleDateString()}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Jersey Details Section -->
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
+                            <i class="fas fa-tshirt mr-2 text-rog-red"></i>
+                            Jersey Details
+                        </h4>
+                        ${generateJerseyDetailsHTML(order)}
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex space-x-3">
+                        <button onclick="generateOrderClientLink('${order.id}')" class="rog-button px-4 py-2 rounded-lg">
+                            <i class="fas fa-link mr-2"></i>Generate Client Link
+                        </button>
+                        <button onclick="editOrder('${order.id}')" class="rog-button-secondary px-4 py-2 rounded-lg">
+                            <i class="fas fa-edit mr-2"></i>Edit Order
+                        </button>
+                        <button onclick="this.closest('.fixed').remove()" class="rog-button-secondary px-4 py-2 rounded-lg">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function generateJerseyDetailsHTML(order) {
+            if (order.jerseys && order.jerseys.length > 0) {
+                return `
+                    <div class="bg-rog-light p-4 rounded-lg">
+                        <div class="space-y-4">
+                            ${order.jerseys.map((jersey, index) => `
+                                <div class="border border-gray-600 rounded-lg p-4">
+                                    <h5 class="font-semibold text-white mb-3">Jersey ${index + 1}</h5>
+                                    <div class="grid grid-cols-2 gap-4 text-sm">
+                                        <div><strong class="text-gray-300">Type:</strong> <span class="text-white">${jersey.jerseyType || 'N/A'}</span></div>
+                                        <div><strong class="text-gray-300">Name:</strong> <span class="text-white">${jersey.jerseyName || 'N/A'}</span></div>
+                                        <div><strong class="text-gray-300">Number:</strong> <span class="text-white">${jersey.jerseyNumber || 'N/A'}</span></div>
+                                        <div><strong class="text-gray-300">Size Category:</strong> <span class="text-white">${jersey.sizeCategory || 'N/A'}</span></div>
+                                        <div><strong class="text-gray-300">Size:</strong> <span class="text-white">${jersey.size || 'N/A'}</span></div>
+                                        <div><strong class="text-gray-300">Sleeve:</strong> <span class="text-white">${jersey.sleeve || 'N/A'}</span></div>
+                                        <div><strong class="text-gray-300">Shorts:</strong> <span class="text-white">${jersey.shorts || 'N/A'}</span></div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="bg-rog-light p-4 rounded-lg text-center">
+                        <i class="fas fa-tshirt text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-400 mb-4">No jersey details submitted yet</p>
+                        <button onclick="generateOrderClientLink('${order.id}')" class="rog-button px-4 py-2 rounded-lg">
+                            <i class="fas fa-link mr-2"></i>Generate Client Link
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Generate specific order client link
+        function generateOrderClientLink(orderId) {
+            const baseUrl = window.location.origin;
+            const clientLink = `${baseUrl}/client-order-form.html?orderId=${orderId}`;
+
+            // Show modal with specific order link
+            showOrderClientLinkModal(clientLink, orderId);
+        }
+
+        function showOrderClientLinkModal(clientLink, orderId) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="rog-card p-6 w-full max-w-md">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-white">Client Link for Order ${orderId}</h3>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-4">
+                        <p class="text-gray-300">Share this link with the client to collect jersey details for this specific order:</p>
+                        <div class="bg-rog-light p-3 rounded-lg">
+                            <code class="text-rog-red break-all text-sm">${clientLink}</code>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button onclick="copyToClipboard('${clientLink}'); this.closest('.fixed').remove()" class="rog-button flex-1 px-4 py-2 rounded-lg">
+                                <i class="fas fa-copy mr-2"></i>Copy Link
+                            </button>
+                            <button onclick="this.closest('.fixed').remove()" class="rog-button-secondary px-4 py-2 rounded-lg">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Utility functions
+        function refreshData() {
+            console.log('Refreshing data...');
+            loadDashboardData();
+        }
+
+        function refreshOrders() {
+            console.log('Refreshing orders...');
+            loadOrdersData();
+        }
+
+        function refreshUsers() {
+            console.log('Refreshing users...');
+            loadUsersData();
+        }
+
+        async function logout() {
+            try {
+                if (firebaseReady && currentUser) {
+                    await window.firebase.signOut(window.firebase.auth);
+                }
+                localStorage.removeItem('adminUser');
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error during logout:', error);
+                localStorage.removeItem('adminUser');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('userDropdown');
+            if (!e.target.closest('.relative')) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Force correct header visibility
+        function forceHeaderVisibility() {
+            const desktopHeader = document.querySelector('.desktop-header');
+            const mobileHeader = document.querySelector('.mobile-header');
+
+            if (window.innerWidth <= 768) {
+                // Mobile view
+                if (desktopHeader) desktopHeader.style.display = 'none';
+                if (mobileHeader) mobileHeader.style.display = 'flex';
+            } else {
+                // Desktop view
+                if (desktopHeader) desktopHeader.style.display = 'flex';
+                if (mobileHeader) mobileHeader.style.display = 'none';
+            }
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            const hamburger = document.querySelector('.hamburger');
+
+            // Force correct header visibility
+            forceHeaderVisibility();
+
+            if (window.innerWidth > 768) {
+                // Desktop view - reset mobile sidebar state
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                hamburger.classList.remove('active');
+                sidebarOpen = false;
+            }
+        });
+
+        // Initialize with dashboard
+        showSection('dashboard');
+    </script>
+</body>
+
+</html>

@@ -1,186 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Authentication Test - Otomono Jerseys</title>
+    <title>Firebase Connection Test - Otomono Jerseys</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="js/order-manager.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .test-result { margin: 10px 0; padding: 10px; border-radius: 8px; }
-        .success { background-color: #10B981; color: white; }
-        .error { background-color: #EF4444; color: white; }
-        .warning { background-color: #F59E0B; color: white; }
-        .info { background-color: #3B82F6; color: white; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
+        }
+
+        .test-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8), rgba(10, 10, 10, 0.9));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 0, 64, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .test-button {
+            background: linear-gradient(135deg, #ff0040, #dc143c);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .test-button:hover {
+            background: linear-gradient(135deg, #dc143c, #b91c3c);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-8">
-    <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-800 mb-8">Firebase Authentication Test</h1>
-        
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <h2 class="text-xl font-semibold mb-4">Environment Information</h2>
-            <div id="env-info"></div>
+
+<body class="min-h-screen bg-gray-900 text-white">
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-red-500 mb-4">Firebase Connection Test</h1>
+            <p class="text-gray-400">Test Firebase connectivity and order operations</p>
         </div>
 
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <h2 class="text-xl font-semibold mb-4">Firebase Configuration Test</h2>
-            <div id="config-test"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Connection Test -->
+            <div class="test-card rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-white mb-6">Connection Test</h2>
+                <div class="space-y-4">
+                    <button onclick="testFirebaseInit()" class="test-button w-full">
+                        <i class="fas fa-plug mr-2"></i> Test Firebase Init
+                    </button>
+                    <button onclick="testOrderSave()" class="test-button w-full">
+                        <i class="fas fa-save mr-2"></i> Test Order Save
+                    </button>
+                    <button onclick="testOrderLoad()" class="test-button w-full">
+                        <i class="fas fa-download mr-2"></i> Test Order Load
+                    </button>
+                </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <h2 class="text-xl font-semibold mb-4">Authentication Test</h2>
-            <button id="test-auth" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
-                Test Google Authentication
-            </button>
-            <div id="auth-test" class="mt-4"></div>
+            <!-- Results -->
+            <div class="test-card rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-white mb-6">Test Results</h2>
+                <div id="test-results" class="space-y-4">
+                    <div class="text-gray-400 text-center">
+                        Click a test button to see results here
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-lg p-6">
-            <h2 class="text-xl font-semibold mb-4">Debug Information</h2>
-            <div id="debug-info"></div>
+        <!-- Detailed Logs -->
+        <div class="test-card rounded-lg p-6 mt-8">
+            <h2 class="text-2xl font-bold text-white mb-6">Detailed Logs</h2>
+            <div id="detailed-logs" class="bg-gray-800 p-4 rounded-lg max-h-64 overflow-y-auto">
+                <div class="text-gray-400">Test logs will appear here...</div>
+            </div>
         </div>
     </div>
 
-    <!-- Firebase Scripts -->
-    <script src="js/firebase-config.js"></script>
-    <script src="js/firebase-database.js"></script>
-
     <script>
-        // Test environment information
-        function testEnvironment() {
-            const envInfo = document.getElementById('env-info');
-            const info = {
-                'Current URL': window.location.href,
-                'Hostname': window.location.hostname,
-                'Protocol': window.location.protocol,
-                'User Agent': navigator.userAgent,
-                'Online Status': navigator.onLine ? 'Online' : 'Offline',
-                'Cookies Enabled': navigator.cookieEnabled ? 'Yes' : 'No',
-                'Local Storage': typeof(Storage) !== 'undefined' ? 'Available' : 'Not Available'
-            };
+        function addResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('test-results');
+            const resultDiv = document.createElement('div');
 
-            envInfo.innerHTML = Object.entries(info).map(([key, value]) => 
-                `<div class="flex justify-between py-2 border-b"><span class="font-medium">${key}:</span><span>${value}</span></div>`
-            ).join('');
+            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+            const icon = type === 'success' ? 'fa-check' : type === 'error' ? 'fa-times' : 'fa-info';
+
+            resultDiv.className = `p-4 rounded-lg ${bgColor} text-white mb-2`;
+            resultDiv.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas ${icon} mr-2"></i>
+                    <div>${message}</div>
+                </div>
+            `;
+
+            resultsDiv.appendChild(resultDiv);
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
         }
 
-        // Test Firebase configuration
-        async function testFirebaseConfig() {
-            const configTest = document.getElementById('config-test');
-            const results = [];
+        function addLog(message, type = 'info') {
+            const logsDiv = document.getElementById('detailed-logs');
+            const logEntry = document.createElement('div');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? 'text-red-400' : type === 'success' ? 'text-green-400' : type === 'warning' ? 'text-yellow-400' : 'text-gray-300';
+
+            logEntry.className = `text-sm ${color} mb-1`;
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            logsDiv.appendChild(logEntry);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        async function testFirebaseInit() {
+            addLog('Testing Firebase initialization...', 'info');
 
             try {
-                // Test Firebase initialization
-                results.push({ test: 'Firebase Initialization', status: 'testing', message: 'Testing...' });
-                updateTestResults(configTest, results);
+                const result = await initializeFirebase();
+                addLog('Firebase initialized successfully', 'success');
+                addLog(`App: ${result.app ? 'OK' : 'FAIL'}`, 'info');
+                addLog(`Database: ${result.db ? 'OK' : 'FAIL'}`, 'info');
+                addLog(`Auth: ${result.auth ? 'OK' : 'FAIL'}`, 'info');
 
-                const initSuccess = await window.FirebaseAuth.init();
-                if (initSuccess) {
-                    results[0] = { test: 'Firebase Initialization', status: 'success', message: 'Firebase initialized successfully' };
-                } else {
-                    results[0] = { test: 'Firebase Initialization', status: 'error', message: 'Failed to initialize Firebase' };
+                addResult('Firebase initialization successful!', 'success');
+            } catch (error) {
+                addLog(`Firebase initialization failed: ${error.message}`, 'error');
+                addResult(`Firebase initialization failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOrderSave() {
+            addLog('Testing order save operation...', 'info');
+
+            try {
+                const testOrder = {
+                    orderId: 'FIREBASE-TEST-' + Date.now(),
+                    customerName: 'Firebase Test Customer',
+                    customerEmail: 'firebase@test.com',
+                    quantity: 1,
+                    materialPreference: 'Waffle',
+                    status: 'pending',
+                    createdAt: new Date().toISOString()
+                };
+
+                addLog(`Saving test order: ${testOrder.orderId}`, 'info');
+                const result = await orderManager.saveOrder(testOrder);
+
+                addLog(`Order saved successfully! ID: ${result.id || result.orderId}`, 'success');
+                addLog(`Saved to: ${result.savedTo}`, 'success');
+
+                addResult(`Order saved successfully!<br>ID: ${result.id || result.orderId}<br>Saved to: ${result.savedTo}`, 'success');
+            } catch (error) {
+                addLog(`Order save failed: ${error.message}`, 'error');
+                addResult(`Order save failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOrderLoad() {
+            addLog('Testing order load operation...', 'info');
+
+            try {
+                const orders = await orderManager.getAllOrders();
+                addLog(`Loaded ${orders.length} orders successfully`, 'success');
+
+                if (orders.length > 0) {
+                    addLog(`First order: ${orders[0].id || orders[0].orderId}`, 'info');
                 }
 
-                // Test domain authorization
-                results.push({ test: 'Domain Authorization', status: 'testing', message: 'Testing...' });
-                updateTestResults(configTest, results);
-
-                const domainCheck = checkDomainAuthorization();
-                results[1] = { 
-                    test: 'Domain Authorization', 
-                    status: domainCheck ? 'success' : 'warning', 
-                    message: domainCheck ? 'Domain is authorized' : 'Domain may not be authorized - check Firebase console' 
-                };
-
-                // Test network connectivity
-                results.push({ test: 'Network Connectivity', status: 'testing', message: 'Testing...' });
-                updateTestResults(configTest, results);
-
-                const networkOk = await window.FirebaseAuth.testNetworkConnection();
-                results[2] = { 
-                    test: 'Network Connectivity', 
-                    status: networkOk ? 'success' : 'error', 
-                    message: networkOk ? 'Network connection is working' : 'Network connection failed' 
-                };
-
+                addResult(`Order load successful!<br>Found ${orders.length} orders`, 'success');
             } catch (error) {
-                results.push({ test: 'Configuration Test', status: 'error', message: `Error: ${error.message}` });
-            }
-
-            updateTestResults(configTest, results);
-        }
-
-        // Test authentication
-        async function testAuthentication() {
-            const authTest = document.getElementById('auth-test');
-            const results = [];
-
-            try {
-                results.push({ test: 'Google Authentication', status: 'testing', message: 'Testing Google sign-in...' });
-                updateTestResults(authTest, results);
-
-                // Try authentication
-                await window.FirebaseAuth.signInWithGoogle();
-                
-            } catch (error) {
-                results[0] = { 
-                    test: 'Google Authentication', 
-                    status: 'error', 
-                    message: `Authentication failed: ${error.message}` 
-                };
-                updateTestResults(authTest, results);
+                addLog(`Order load failed: ${error.message}`, 'error');
+                addResult(`Order load failed: ${error.message}`, 'error');
             }
         }
 
-        // Update test results display
-        function updateTestResults(container, results) {
-            container.innerHTML = results.map(result => 
-                `<div class="test-result ${result.status}">
-                    <strong>${result.test}:</strong> ${result.message}
-                </div>`
-            ).join('');
-        }
-
-        // Add debug information
-        function addDebugInfo() {
-            const debugInfo = document.getElementById('debug-info');
-            const debug = {
-                'Firebase Config Available': typeof window.FirebaseAuth !== 'undefined' ? 'Yes' : 'No',
-                'Firebase DB Available': typeof window.FirebaseDB !== 'undefined' ? 'Yes' : 'No',
-                'Local Storage User': localStorage.getItem('user') ? 'User data found' : 'No user data',
-                'Console Errors': 'Check browser console for detailed error messages'
-            };
-
-            debugInfo.innerHTML = Object.entries(debug).map(([key, value]) => 
-                `<div class="flex justify-between py-2 border-b"><span class="font-medium">${key}:</span><span>${value}</span></div>`
-            ).join('');
-        }
-
-        // Initialize tests
-        document.addEventListener('DOMContentLoaded', async () => {
-            testEnvironment();
-            await testFirebaseConfig();
-            addDebugInfo();
-
-            // Add event listener for auth test button
-            document.getElementById('test-auth').addEventListener('click', testAuthentication);
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('Firebase test page loaded', 'info');
+            addLog('OrderManager available: ' + (typeof orderManager !== 'undefined' ? 'Yes' : 'No'), 'info');
         });
-
-        // Domain authorization check (copied from firebase-config.js)
-        function checkDomainAuthorization() {
-            const currentDomain = window.location.hostname;
-            const isLocalhost = currentDomain === 'localhost' || currentDomain === '127.0.0.1';
-            const isGitHubPages = currentDomain.includes('github.io');
-
-            if (isLocalhost) {
-                console.log('Running on localhost - make sure to add localhost to Firebase authorized domains');
-            } else if (isGitHubPages) {
-                console.log('Running on GitHub Pages - make sure to add your GitHub Pages domain to Firebase authorized domains');
-            }
-
-            return true; // Continue with authentication attempt
-        }
     </script>
 </body>
+
 </html>
