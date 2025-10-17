@@ -1,0 +1,245 @@
+// Firebase Firestore Security Rules - DEPLOYMENT VERSION
+// These rules are more permissive for deployment and testing
+// IMPORTANT: For production, implement proper authentication and authorization
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Orders Collection - Allow all read/write for deployment
+    match /orders/{orderId} {
+      allow read, write: if true;
+    }
+    
+    // Users Collection - Allow all read/write for deployment
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+    
+    // Jersey Details Collection - Allow all read/write for deployment
+    match /jerseyDetails/{detailId} {
+      allow read, write: if true;
+    }
+    
+    // Client Orders Collection - Allow all read/write for deployment
+    match /clientOrders/{orderId} {
+      allow read, write: if true;
+    }
+    
+    // Analytics Collection - Allow all read/write for deployment
+    match /analytics/{analyticsId} {
+      allow read, write: if true;
+    }
+    
+    // Reports Collection - Allow all read/write for deployment
+    match /reports/{reportId} {
+      allow read, write: if true;
+    }
+    
+    // Settings Collection - Allow all read/write for deployment
+    match /settings/{settingId} {
+      allow read, write: if true;
+    }
+    
+    // Notifications Collection - Allow all read/write for deployment
+    match /notifications/{notificationId} {
+      allow read, write: if true;
+    }
+    
+    // Logs Collection - Allow all read/write for deployment
+    match /logs/{logId} {
+      allow read, write: if true;
+    }
+    
+    // Fallback rule for any other collections
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+
+// Firebase Realtime Database Rules - DEPLOYMENT VERSION
+{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "orders": {
+      ".read": true,
+      ".write": true,
+      "$orderId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "users": {
+      ".read": true,
+      ".write": true,
+      "$userId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "jerseyDetails": {
+      ".read": true,
+      ".write": true,
+      "$detailId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "clientOrders": {
+      ".read": true,
+      ".write": true,
+      "$orderId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "analytics": {
+      ".read": true,
+      ".write": true
+    },
+    "reports": {
+      ".read": true,
+      ".write": true
+    },
+    "settings": {
+      ".read": true,
+      ".write": true
+    },
+    "notifications": {
+      ".read": true,
+      ".write": true
+    },
+    "logs": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}
+
+// Firebase Authentication Configuration for Deployment
+// 1. Go to Firebase Console > Authentication > Settings
+// 2. Add your deployment domains to "Authorized domains":
+//    - your-domain.com
+//    - your-domain.netlify.app
+//    - your-domain.vercel.app
+//    - your-domain.github.io
+//    - localhost (for development)
+
+// 3. Enable the following sign-in methods:
+//    - Email/Password
+//    - Anonymous (optional)
+
+// 4. Configure OAuth providers if needed:
+//    - Google
+//    - Facebook
+//    - Twitter
+//    - GitHub
+
+// 5. Set up App Check (optional but recommended):
+//    - Go to Firebase Console > App Check
+//    - Register your app
+//    - Configure enforcement
+
+// CORS Configuration for Different Hosting Platforms
+
+// For Netlify (netlify.toml):
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+
+// For Vercel (vercel.json):
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ]
+}
+
+// For GitHub Pages (.htaccess):
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization"
+
+// Environment Variables for Deployment
+// Add these to your hosting platform's environment variables:
+
+// Firebase Configuration
+FIREBASE_API_KEY=your_api_key_here
+FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
+FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+FIREBASE_APP_ID=your_app_id
+
+// Optional: Custom domain configuration
+FIREBASE_DATABASE_URL=https://your_project_id-default-rtdb.firebaseio.com/
+
+// Troubleshooting Steps for Deployment Issues:
+
+// 1. Check Firebase Console Configuration:
+//    - Verify project ID matches
+//    - Check API keys are correct
+//    - Ensure domains are authorized
+
+// 2. Test Firebase Connection:
+//    - Open browser console
+//    - Check for Firebase initialization errors
+//    - Verify authentication state
+
+// 3. Check Network Requests:
+//    - Open browser DevTools > Network tab
+//    - Look for failed Firebase requests
+//    - Check CORS errors
+
+// 4. Verify Security Rules:
+//    - Go to Firebase Console > Firestore > Rules
+//    - Copy and paste the rules above
+//    - Publish the rules
+
+// 5. Test Authentication:
+//    - Try fallback credentials: admin@otomono.com / admin123
+//    - Check localStorage for user data
+//    - Verify admin panel loads
+
+// 6. Check Console Logs:
+//    - Look for "Firebase initialized successfully"
+//    - Check for "Using fallback authentication"
+//    - Verify data loading messages
+
+// 7. Common Deployment Issues:
+//    - CORS errors: Configure hosting platform CORS
+//    - Domain not authorized: Add domain to Firebase Console
+//    - API key issues: Verify configuration
+//    - Network timeouts: Check internet connection
+//    - Security rules: Use permissive rules for testing
+
+// 8. Production Security Considerations:
+//    - Implement proper user authentication
+//    - Add role-based access control
+//    - Use more restrictive security rules
+//    - Enable App Check for additional security
+//    - Implement rate limiting
+//    - Add input validation and sanitization
