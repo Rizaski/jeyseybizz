@@ -13,9 +13,185 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
-    <!-- Fallback for FontAwesome icons -->
+    <!-- ROG Styling and Icon Fallbacks -->
     <style>
-        /* Fallback icons using Unicode symbols */
+        /* ROG Color Palette */
+        :root {
+            --rog-red: #ff0040;
+            --rog-red-dark: #cc0033;
+            --rog-red-light: #ff4080;
+            --rog-dark: #0a0a0a;
+            --rog-gray: #1a1a1a;
+            --rog-light: #2a2a2a;
+            --rog-accent: #ff4080;
+            --rog-glow: rgba(255, 0, 64, 0.3);
+            --rog-shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Global ROG Styling */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--rog-dark) 0%, var(--rog-gray) 100%);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ROG Grid System */
+        .rog-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .rog-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .rog-grid-1 { grid-template-columns: 1fr; }
+        .rog-grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .rog-grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .rog-grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+        @media (max-width: 768px) {
+            .rog-grid-2, .rog-grid-3, .rog-grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ROG Cards */
+        .rog-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(42, 42, 42, 0.9) 100%);
+            border: 1px solid rgba(255, 0, 64, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .rog-card:hover {
+            border-color: var(--rog-red);
+            box-shadow: 0 8px 32px var(--rog-glow);
+            transform: translateY(-2px);
+        }
+
+        /* ROG Buttons */
+        .rog-button {
+            background: linear-gradient(45deg, var(--rog-red), var(--rog-red-light));
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--rog-glow);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rog-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--rog-glow);
+            background: linear-gradient(45deg, var(--rog-red-dark), var(--rog-red));
+        }
+
+        .rog-button-secondary {
+            background: linear-gradient(135deg, var(--rog-gray) 0%, var(--rog-light) 100%);
+            border: 1px solid rgba(255, 0, 64, 0.3);
+            color: white;
+        }
+
+        .rog-button-secondary:hover {
+            border-color: var(--rog-red);
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.1) 0%, var(--rog-light) 100%);
+        }
+
+        /* ROG Tables */
+        .rog-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(26, 26, 26, 0.8);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .rog-table th {
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.1) 0%, rgba(255, 0, 64, 0.05) 100%);
+            color: var(--rog-red);
+            font-weight: 700;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--rog-red);
+        }
+
+        .rog-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 0, 64, 0.1);
+            color: #ffffff;
+        }
+
+        .rog-table tr:hover {
+            background: rgba(255, 0, 64, 0.05);
+        }
+
+        /* ROG Status Badges */
+        .rog-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rog-badge-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .rog-badge-processing {
+            background: rgba(0, 123, 255, 0.2);
+            color: #007bff;
+            border: 1px solid rgba(0, 123, 255, 0.3);
+        }
+
+        .rog-badge-completed {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .rog-badge-cancelled {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        /* ROG Icons with Fallbacks */
+        .rog-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.5rem;
+            height: 1.5rem;
+            font-size: 1rem;
+        }
+
+        /* FontAwesome Fallback Icons */
         .fa-dashboard::before { content: "📊"; }
         .fa-shopping-cart::before { content: "🛒"; }
         .fa-users::before { content: "👥"; }
@@ -38,7 +214,6 @@
         .fa-times::before { content: "❌"; }
         .fa-save::before { content: "💾"; }
         .fa-list::before { content: "📋"; }
-        .fa-edit::before { content: "✏️"; }
         .fa-chart-pie::before { content: "🥧"; }
         .fa-chart-line::before { content: "📈"; }
         .fa-chart-area::before { content: "📊"; }
@@ -46,10 +221,53 @@
         .fa-dollar-sign::before { content: "💰"; }
         .fa-percentage::before { content: "📊"; }
         .fa-ruler::before { content: "📏"; }
-        .fa-shopping-cart::before { content: "🛒"; }
         .fa-file-alt::before { content: "📄"; }
-        .fa-cog::before { content: "⚙️"; }
         .fa-eye-slash::before { content: "🙈"; }
+
+        /* ROG Animations */
+        @keyframes rog-glow {
+            0%, 100% { box-shadow: 0 0 5px var(--rog-glow); }
+            50% { box-shadow: 0 0 20px var(--rog-glow), 0 0 30px var(--rog-glow); }
+        }
+
+        .rog-glow {
+            animation: rog-glow 2s ease-in-out infinite;
+        }
+
+        /* ROG Responsive Design */
+        @media (max-width: 768px) {
+            .rog-container {
+                padding: 0 0.5rem;
+            }
+            
+            .rog-card {
+                padding: 1rem;
+            }
+            
+            .rog-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* ROG Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--rog-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--rog-red);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--rog-red-light);
+        }
     </style>
 
     <!-- Firebase SDK -->
@@ -742,14 +960,14 @@
         <main class="content-area flex-1 p-6">
             <div class="main-container">
                 <!-- Dashboard Section -->
-                <div id="dashboard" class="section fade-in">
+                <div id="dashboard" class="section fade-in rog-container">
                     <div class="mb-8">
                         <h2 class="text-3xl font-bold text-white mb-2">Dashboard</h2>
                         <p class="text-gray-400">Welcome to your admin dashboard</p>
                     </div>
 
                     <!-- Stats Cards -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="rog-grid rog-grid-4 mb-8">
                         <div class="rog-card p-6">
                             <div class="flex items-center justify-between">
                                 <div>
@@ -827,14 +1045,14 @@
                 </div>
 
                 <!-- Orders Section -->
-                <div id="orders" class="section hidden">
+                <div id="orders" class="section hidden rog-container">
                     <div class="mb-8">
                         <h2 class="text-3xl font-bold text-white mb-2">Orders</h2>
                         <p class="text-gray-400">Manage all orders</p>
                     </div>
 
                     <!-- Orders Table -->
-                    <div class="rog-card p-6">
+                    <div class="rog-card">
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
                             <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                                 <input type="text" placeholder="Search orders..." class="px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-rog-red focus:outline-none">
@@ -1432,6 +1650,88 @@
             console.log('🔧 Firebase Diagnostics completed');
         }
 
+        // ROG Styles Application and Icon Loading
+        function applyROGStyles() {
+            console.log('🎨 Applying ROG styles...');
+            
+            // Ensure all cards have ROG styling
+            const cards = document.querySelectorAll('.rog-card');
+            cards.forEach(card => {
+                if (!card.classList.contains('rog-card')) {
+                    card.classList.add('rog-card');
+                }
+            });
+            
+            // Ensure all buttons have ROG styling
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                if (button.textContent.includes('New Order') || button.textContent.includes('Create Order')) {
+                    button.classList.add('rog-button');
+                } else if (button.textContent.includes('Cancel') || button.textContent.includes('Close')) {
+                    button.classList.add('rog-button-secondary');
+                }
+            });
+            
+            // Ensure all tables have ROG styling
+            const tables = document.querySelectorAll('table');
+            tables.forEach(table => {
+                if (!table.classList.contains('rog-table')) {
+                    table.classList.add('rog-table');
+                }
+            });
+            
+            // Apply ROG grid system
+            const grids = document.querySelectorAll('.grid');
+            grids.forEach(grid => {
+                if (grid.classList.contains('grid-cols-4')) {
+                    grid.classList.add('rog-grid', 'rog-grid-4');
+                } else if (grid.classList.contains('grid-cols-3')) {
+                    grid.classList.add('rog-grid', 'rog-grid-3');
+                } else if (grid.classList.contains('grid-cols-2')) {
+                    grid.classList.add('rog-grid', 'rog-grid-2');
+                }
+            });
+            
+            // Apply status badges
+            const statusElements = document.querySelectorAll('[class*="status"]');
+            statusElements.forEach(element => {
+                const status = element.textContent.toLowerCase();
+                if (status.includes('pending')) {
+                    element.classList.add('rog-badge', 'rog-badge-pending');
+                } else if (status.includes('processing')) {
+                    element.classList.add('rog-badge', 'rog-badge-processing');
+                } else if (status.includes('completed')) {
+                    element.classList.add('rog-badge', 'rog-badge-completed');
+                } else if (status.includes('cancelled')) {
+                    element.classList.add('rog-badge', 'rog-badge-cancelled');
+                }
+            });
+            
+            console.log('✅ ROG styles applied successfully');
+        }
+
+        // Icon Loading Check
+        function checkIconLoading() {
+            console.log('🔍 Checking icon loading...');
+            
+            // Check if FontAwesome is loaded
+            const fontAwesomeLoaded = document.querySelector('link[href*="font-awesome"]') !== null;
+            console.log('FontAwesome CDN loaded:', fontAwesomeLoaded);
+            
+            // Check for fallback icons
+            const fallbackIcons = document.querySelectorAll('.fa-dashboard, .fa-shopping-cart, .fa-users, .fa-chart-bar, .fa-cog');
+            console.log('Fallback icons available:', fallbackIcons.length);
+            
+            // Force icon display
+            const allIcons = document.querySelectorAll('i[class*="fa-"]');
+            allIcons.forEach(icon => {
+                icon.style.display = 'inline-block';
+                icon.style.fontSize = '1rem';
+            });
+            
+            console.log('✅ Icon loading check completed');
+        }
+
         // Test function to verify admin panel functionality
         function testAdminPanel() {
             console.log('=== ADMIN PANEL DIAGNOSTIC ===');
@@ -1476,6 +1776,10 @@
             
             // Run comprehensive diagnostics
             runFirebaseDiagnostics();
+            
+            // Apply ROG styles and check icons
+            applyROGStyles();
+            checkIconLoading();
 
             // Setup Firebase auth state listener
             setupFirebaseAuth();
@@ -1928,7 +2232,7 @@
                     <td class="py-3 px-4">${order.orderId || order.id}</td>
                     <td class="py-3 px-4">${order.customerName}</td>
                     <td class="py-3 px-4">
-                        <span class="status-${order.status} px-2 py-1 rounded-full text-xs font-semibold">
+                        <span class="rog-badge rog-badge-${order.status}">
                             ${order.status || 'pending'}
                         </span>
                     </td>
@@ -1965,9 +2269,9 @@
                         <td class="py-3 px-4">${order.quantity}</td>
                         <td class="py-3 px-4">${order.materialPreference}</td>
                         <td class="py-3 px-4">
-                            <span class="status-${order.status} px-2 py-1 rounded-full text-xs font-semibold">
-                                ${order.status || 'pending'}
-                            </span>
+                        <span class="rog-badge rog-badge-${order.status}">
+                            ${order.status || 'pending'}
+                        </span>
                         </td>
                         <td class="py-3 px-4">${new Date(order.createdAt).toLocaleDateString()}</td>
                         <td class="py-3 px-4">
@@ -1988,6 +2292,12 @@
                         </td>
                     </tr>
                 `).join('');
+                
+                // Reapply ROG styles after content update
+                setTimeout(() => {
+                    applyROGStyles();
+                    checkIconLoading();
+                }, 100);
 
             } catch (error) {
                 console.error('Error loading orders data:', error);
@@ -4205,9 +4515,9 @@
                                     <div><strong class="text-gray-300">Quantity:</strong> <span class="text-white">${order.quantity}</span></div>
                                     <div><strong class="text-gray-300">Material:</strong> <span class="text-white">${order.materialPreference}</span></div>
                                     <div><strong class="text-gray-300">Status:</strong> 
-                                        <span class="status-${order.status} px-2 py-1 rounded-full text-xs font-semibold">
-                                            ${order.status || 'pending'}
-                                        </span>
+                        <span class="rog-badge rog-badge-${order.status}">
+                            ${order.status || 'pending'}
+                        </span>
                                     </div>
                                     <div><strong class="text-gray-300">Created:</strong> <span class="text-white">${new Date(order.createdAt).toLocaleDateString()}</span></div>
                                 </div>
