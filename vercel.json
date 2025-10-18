@@ -1,11 +1,24 @@
 {
     "version": 2,
-    "builds": [{
-        "src": "*.html",
-        "use": "@vercel/static"
-    }],
-    "rewrites": [
+    "builds": [
         {
+            "src": "*.html",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "public/**/*",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "jersey-designs/**/*",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "js/**/*",
+            "use": "@vercel/static"
+        }
+    ],
+    "rewrites": [{
             "source": "/admin-panel",
             "destination": "/admin-panel.html"
         },
@@ -16,6 +29,18 @@
         {
             "source": "/contact",
             "destination": "/contact.html"
+        },
+        {
+            "source": "/public/(.*)",
+            "destination": "/public/$1"
+        },
+        {
+            "source": "/jersey-designs/(.*)",
+            "destination": "/jersey-designs/$1"
+        },
+        {
+            "source": "/js/(.*)",
+            "destination": "/js/$1"
         }
     ],
     "headers": [{
