@@ -7,6 +7,7 @@
     <title>Login - Otomono</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="firebase-production-config.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -388,19 +389,32 @@
                     measurementId: "G-YVL497L1V3"
                 };
 
-                // Initialize Firebase
-                const app = initializeApp(firebaseConfig);
+                // Initialize Firebase with production-ready configuration
+                let app;
+                try {
+                    app = getApp(); // Try to get existing app
+                    console.log('Using existing Firebase app for Gmail auth');
+                } catch (error) {
+                    app = initializeApp(firebaseConfig, 'gmail-auth-app');
+                    console.log('Initialized new Firebase app for Gmail authentication');
+                }
+                
                 const auth = getAuth(app);
                 const provider = new GoogleAuthProvider();
 
-                // Configure Google provider
+                // Configure Google provider for production
                 provider.setCustomParameters({
-                    prompt: 'select_account'
+                    prompt: 'select_account',
+                    hd: 'gmail.com' // Restrict to Gmail accounts
                 });
+
+                // Add authorized domains for production
+                provider.addScope('email');
+                provider.addScope('profile');
 
                 console.log('Firebase initialized for Gmail authentication');
 
-                // Try popup first
+                // Try popup first (works better in production)
                 try {
                     const result = await signInWithPopup(auth, provider);
                     console.log('Gmail authentication successful via popup:', result.user.email);

@@ -1,40 +1,67 @@
 {
-    "version": 2,
-    "builds": [{
-        "src": "*.html",
-        "use": "@vercel/static"
-    }],
-    "routes": [{
-            "src": "/",
-            "dest": "/index.html"
+  "version": 2,
+  "builds": [
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/admin-panel",
+      "dest": "/admin-panel.html"
+    },
+    {
+      "src": "/login",
+      "dest": "/login.html"
+    },
+    {
+      "src": "/contact",
+      "dest": "/contact.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
         },
         {
-            "src": "/admin-panel",
-            "dest": "/admin-panel.html"
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
         },
         {
-            "src": "/login",
-            "dest": "/login.html"
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
         },
         {
-            "src": "/contact",
-            "dest": "/contact.html"
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization, X-Requested-With"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
         }
-    ],
-    "headers": [{
-        "source": "/(.*)",
-        "headers": [{
-                "key": "X-Content-Type-Options",
-                "value": "nosniff"
-            },
-            {
-                "key": "X-Frame-Options",
-                "value": "DENY"
-            },
-            {
-                "key": "X-XSS-Protection",
-                "value": "1; mode=block"
-            }
-        ]
-    }]
+      ]
+    }
+  ],
+  "functions": {
+    "app/api/**/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  }
 }
