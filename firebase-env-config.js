@@ -4,9 +4,9 @@
 // Environment variables for Vercel
 const getFirebaseConfig = () => {
     // Check if we're in production (Vercel)
-    const isProduction = typeof window !== 'undefined' && 
-        (window.location.hostname.includes('vercel.app') || 
-         window.location.hostname !== 'localhost');
+    const isProduction = typeof window !== 'undefined' &&
+        (window.location.hostname.includes('vercel.app') ||
+            window.location.hostname !== 'localhost');
 
     if (isProduction) {
         // Use environment variables in production
@@ -37,21 +37,58 @@ const getFirebaseConfig = () => {
 async function initializeFirebaseWithEnv() {
     try {
         console.log('Initializing Firebase with environment variables...');
-        
+
         // Get configuration based on environment
         const firebaseConfig = getFirebaseConfig();
         console.log('Firebase config:', firebaseConfig);
 
         // Dynamic imports for better compatibility
-        const { initializeApp, getApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-        const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
-        const { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, orderBy, where, onSnapshot, setDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-        const { getDatabase, ref, set, get, push, remove } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
+        const {
+            initializeApp,
+            getApp
+        } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+        const {
+            getAuth,
+            signInWithEmailAndPassword,
+            createUserWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged,
+            updatePassword,
+            reauthenticateWithCredential,
+            EmailAuthProvider,
+            GoogleAuthProvider,
+            signInWithPopup,
+            signInWithRedirect,
+            getRedirectResult
+        } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+        const {
+            getFirestore,
+            collection,
+            addDoc,
+            getDocs,
+            getDoc,
+            doc,
+            updateDoc,
+            deleteDoc,
+            query,
+            orderBy,
+            where,
+            onSnapshot,
+            setDoc
+        } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        const {
+            getDatabase,
+            ref,
+            set,
+            get,
+            push,
+            remove
+        } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
 
         // Initialize Firebase with environment-specific configuration
         let app;
         const appName = 'production-app';
-        
+
         try {
             app = getApp(appName);
             console.log(`Using existing Firebase app: ${appName}`);
@@ -59,7 +96,7 @@ async function initializeFirebaseWithEnv() {
             app = initializeApp(firebaseConfig, appName);
             console.log(`Initialized new Firebase app: ${appName}`);
         }
-        
+
         const auth = getAuth(app);
         const db = getFirestore(app);
         const rtdb = getDatabase(app);
@@ -111,6 +148,11 @@ async function initializeFirebaseWithEnv() {
             config: firebaseConfig
         };
 
+        // Initialize FirebaseAuth wrapper
+        if (window.FirebaseAuth) {
+            await window.FirebaseAuth.initialize();
+        }
+
         console.log('Firebase initialized successfully with environment variables');
         return true;
     } catch (error) {
@@ -127,7 +169,7 @@ function debugEnvironmentVariables() {
     console.log('Hostname:', window.location.hostname);
     console.log('Is Vercel:', window.location.hostname.includes('vercel.app'));
     console.log('Is Production:', window.location.hostname !== 'localhost');
-    
+
     // Check if environment variables are available
     if (typeof process !== 'undefined' && process.env) {
         console.log('Process.env available:', !!process.env);
@@ -136,7 +178,7 @@ function debugEnvironmentVariables() {
     } else {
         console.log('Process.env not available in browser environment');
     }
-    
+
     console.log('=== End Debug ===');
 }
 

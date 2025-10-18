@@ -20,14 +20,23 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Firebase Configuration Files -->
+    <script src="firebase-env-config.js"></script>
+    <script src="firebase-simple-config.js"></script>
+    <script src="firebase-robust-config.js"></script>
+
     <!-- Global Firebase Authentication -->
     <script src="js/firebase-config.js"></script>
+    <script src="js/firebase-auth-wrapper.js"></script>
 
     <!-- Global Login Handler - Force redirect to login page -->
     <script src="js/global-login.js"></script>
 
     <!-- Global Firebase Database -->
     <script src="js/firebase-database.js"></script>
+
+    <!-- Improved Authentication Handler -->
+    <script src="js/improved-auth-handler.js"></script>
 
     <script>
         tailwind.config = {
@@ -593,7 +602,7 @@
                         e.preventDefault();
                         e.stopPropagation();
                         console.log('Customer page - Mobile menu button clicked');
-                        
+
                         mobileMenu.classList.remove('hidden');
                         setTimeout(() => {
                             const transformElement = mobileMenu.querySelector('.transform');
@@ -613,7 +622,7 @@
                         e.preventDefault();
                         e.stopPropagation();
                         console.log('Customer page - Mobile menu close clicked');
-                        
+
                         const transformElement = mobileMenu.querySelector('.transform');
                         if (transformElement) {
                             transformElement.classList.add('translate-x-full');
