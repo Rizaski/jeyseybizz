@@ -540,6 +540,83 @@
 
             .mobile-header {
                 display: flex !important;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                z-index: 1000 !important;
+                background: var(--rog-dark) !important;
+                border-bottom: 1px solid var(--rog-red) !important;
+            }
+            
+            /* Add padding to main content to account for fixed header */
+            .main-content {
+                padding-top: 64px !important;
+            }
+            
+            /* Mobile table responsiveness */
+            .mobile-table-container {
+                max-width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .mobile-table-container table {
+                min-width: 600px;
+                width: 100%;
+            }
+            
+            .mobile-table-container th,
+            .mobile-table-container td {
+                white-space: nowrap;
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+            
+            /* Mobile dashboard cards */
+            .mobile-dashboard-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .mobile-dashboard-card {
+                background: var(--rog-gray);
+                border: 1px solid var(--rog-red);
+                border-radius: 8px;
+                padding: 1rem;
+                text-align: center;
+            }
+            
+            /* Mobile orders table */
+            .mobile-orders-table {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+            
+            /* Mobile users table */
+            .mobile-users-table {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+            
+            /* Mobile dropdown positioning */
+            #notificationCenter,
+            #liveChat,
+            #userDropdown {
+                position: fixed !important;
+                top: 64px !important;
+                right: 16px !important;
+                left: auto !important;
+                width: calc(100vw - 32px) !important;
+                max-width: 320px !important;
+                z-index: 1001 !important;
+            }
+            
+            /* Mobile chat input */
+            #chat-input {
+                font-size: 16px !important; /* Prevents zoom on iOS */
             }
         }
 
@@ -861,7 +938,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Live Chat -->
                     <div class="relative">
                         <button class="rog-button px-4 py-2 rounded-lg" onclick="toggleLiveChat()">
@@ -888,7 +965,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <button class="rog-button-secondary px-4 py-2 rounded-lg" onclick="refreshData()">
                         <i class="fas fa-sync-alt"></i>
                     </button>
@@ -1051,7 +1128,7 @@
                                 View All
                             </button>
                         </div>
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto mobile-table-container">
                             <table class="rog-table w-full">
                                 <thead>
                                     <tr>
@@ -1100,7 +1177,7 @@
                             </div>
                         </div>
 
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto mobile-table-container">
                             <table class="rog-table w-full">
                                 <thead>
                                     <tr>
@@ -1150,7 +1227,7 @@
                             </div>
                         </div>
 
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto mobile-table-container">
                             <table class="rog-table w-full">
                                 <thead>
                                     <tr>
@@ -1781,6 +1858,8 @@
             const overlay = document.getElementById('mobileOverlay');
             const hamburger = document.querySelector('.hamburger');
 
+            console.log('Toggle sidebar called, current state:', sidebarOpen);
+
             // Only toggle on mobile screens
             if (window.innerWidth <= 768) {
                 sidebarOpen = !sidebarOpen;
@@ -1788,11 +1867,13 @@
                 if (sidebarOpen) {
                     sidebar.classList.add('open');
                     overlay.classList.add('active');
-                    hamburger.classList.add('active');
+                    if (hamburger) hamburger.classList.add('active');
+                    console.log('Sidebar opened');
                 } else {
                     sidebar.classList.remove('open');
                     overlay.classList.remove('active');
-                    hamburger.classList.remove('active');
+                    if (hamburger) hamburger.classList.remove('active');
+                    console.log('Sidebar closed');
                 }
             }
         }
@@ -1800,7 +1881,12 @@
         // User dropdown toggle
         function toggleUserDropdown() {
             const dropdown = document.getElementById('userDropdown');
-            dropdown.classList.toggle('hidden');
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+                console.log('User dropdown toggled');
+            } else {
+                console.error('User dropdown not found');
+            }
         }
 
         // Notification Center Functions
@@ -1821,7 +1907,7 @@
                 timestamp: new Date().toISOString(),
                 read: false
             };
-            
+
             notifications.unshift(notification);
             notificationCount++;
             updateNotificationUI();
@@ -1831,7 +1917,7 @@
             const list = document.getElementById('notification-list');
             const count = document.getElementById('notification-count');
             const mobileCount = document.getElementById('mobile-notification-count');
-            
+
             if (notifications.length === 0) {
                 list.innerHTML = `
                     <div class="p-4 text-center text-gray-400">
@@ -1857,10 +1943,10 @@
                         </div>
                     </div>
                 `).join('');
-                
+
                 count.textContent = notificationCount;
                 count.classList.remove('hidden');
-                
+
                 if (mobileCount) {
                     mobileCount.textContent = notificationCount;
                     mobileCount.classList.remove('hidden');
@@ -1874,6 +1960,7 @@
                 notification.read = true;
                 notificationCount--;
                 updateNotificationUI();
+                console.log('Notification marked as read, count:', notificationCount);
             }
         }
 
@@ -1881,6 +1968,7 @@
             notifications = [];
             notificationCount = 0;
             updateNotificationUI();
+            console.log('All notifications cleared');
         }
 
         // Live Chat Functions
@@ -1889,17 +1977,24 @@
 
         function toggleLiveChat() {
             const chat = document.getElementById('liveChat');
-            chat.classList.toggle('hidden');
-            chatOpen = !chatOpen;
-            
-            if (chatOpen) {
-                loadChatMessages();
+            if (chat) {
+                chat.classList.toggle('hidden');
+                chatOpen = !chatOpen;
+                
+                if (chatOpen) {
+                    loadChatMessages();
+                    console.log('Live chat opened');
+                } else {
+                    console.log('Live chat closed');
+                }
+            } else {
+                console.error('Live chat element not found');
             }
         }
 
         function loadChatMessages() {
             const messagesContainer = document.getElementById('chat-messages');
-            
+
             if (chatMessages.length === 0) {
                 messagesContainer.innerHTML = `
                     <div class="text-center text-gray-400">
@@ -1916,7 +2011,7 @@
                         </div>
                     </div>
                 `).join('');
-                
+
                 // Scroll to bottom
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
@@ -1925,7 +2020,7 @@
         function sendChatMessage() {
             const input = document.getElementById('chat-input');
             const message = input.value.trim();
-            
+
             if (message) {
                 const chatMessage = {
                     id: Date.now(),
@@ -1933,11 +2028,11 @@
                     sender: 'admin',
                     timestamp: new Date().toISOString()
                 };
-                
+
                 chatMessages.push(chatMessage);
                 input.value = '';
                 loadChatMessages();
-                
+
                 // Simulate client response (in real app, this would come from Firebase)
                 setTimeout(() => {
                     const clientResponse = {
@@ -1962,7 +2057,7 @@
                     }
                 });
             }
-            
+
             // Simulate client submissions for demo
             setTimeout(() => {
                 addNotification(
@@ -1971,7 +2066,7 @@
                     'success'
                 );
             }, 5000);
-            
+
             setTimeout(() => {
                 addNotification(
                     'Order Status Updated',
@@ -4413,10 +4508,10 @@
         // Utility functions
         async function refreshData() {
             console.log('Refreshing data...');
-
+            
             // Show ROG loader
-            showROGLoader('Refreshing Dashboard...');
-
+            showROGLoader('Refreshing Data...');
+            
             // Add visual feedback
             const refreshButton = document.querySelector('button[onclick="refreshData()"]');
             if (refreshButton) {
@@ -4425,11 +4520,34 @@
                     icon.classList.add('fa-spin');
                 }
             }
-
+            
             try {
-                await loadDashboardData();
+                // Refresh based on current section
+                const currentSection = getCurrentSection();
+                console.log('Refreshing section:', currentSection);
+                
+                switch (currentSection) {
+                    case 'dashboard':
+                        await loadDashboardData();
+                        break;
+                    case 'orders':
+                        await loadOrdersData();
+                        break;
+                    case 'users':
+                        await loadUsersData();
+                        break;
+                    case 'analytics':
+                        await loadAnalyticsData();
+                        break;
+                    case 'settings':
+                        // Settings don't need refresh
+                        break;
+                    default:
+                        await loadDashboardData();
+                }
+                
                 console.log('Data refreshed successfully');
-
+                
                 // Show success message
                 if (typeof showOtomonoSuccess === 'function') {
                     showOtomonoSuccess('Data refreshed successfully!');
@@ -4449,6 +4567,15 @@
                     }
                 }
             }
+        }
+
+        // Helper function to get current section
+        function getCurrentSection() {
+            const activeTab = document.querySelector('.tab-button.active');
+            if (activeTab) {
+                return activeTab.id.replace('-tab', '');
+            }
+            return 'dashboard';
         }
 
         async function refreshOrders() {
@@ -4561,8 +4688,23 @@
         // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
             const dropdown = document.getElementById('userDropdown');
-            if (!e.target.closest('.relative')) {
+            const notificationCenter = document.getElementById('notificationCenter');
+            const liveChat = document.getElementById('liveChat');
+            
+            // Close user dropdown
+            if (dropdown && !e.target.closest('.relative')) {
                 dropdown.classList.add('hidden');
+            }
+            
+            // Close notification center
+            if (notificationCenter && !e.target.closest('#notificationCenter') && !e.target.closest('button[onclick="toggleNotificationCenter()"]')) {
+                notificationCenter.classList.add('hidden');
+            }
+            
+            // Close live chat
+            if (liveChat && !e.target.closest('#liveChat') && !e.target.closest('button[onclick="toggleLiveChat()"]')) {
+                liveChat.classList.add('hidden');
+                chatOpen = false;
             }
         });
 
