@@ -11,13 +11,79 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+    <!-- Deployment-specific CSS fixes -->
+    <style>
+        /* Ensure critical styles load immediately */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ROG Color Variables */
+        :root {
+            --rog-red: #ff0040;
+            --rog-light: #1a1a1a;
+            --rog-dark: #0a0a0a;
+        }
+
+        /* Critical ROG Button Styles */
+        .rog-button {
+            background: linear-gradient(135deg, var(--rog-red), #ff1a4d);
+            border: 1px solid var(--rog-red);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .rog-button:hover {
+            background: linear-gradient(135deg, #ff1a4d, var(--rog-red));
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 0, 64, 0.3);
+        }
+
+        /* Critical Card Styles */
+        .rog-card {
+            background: var(--rog-light);
+            border: 1px solid #333;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Ensure Tailwind loads */
+        .hidden {
+            display: none !important;
+        }
+
+        .flex {
+            display: flex !important;
+        }
+
+        .grid {
+            display: grid !important;
+        }
+
+        .text-white {
+            color: #ffffff !important;
+        }
+
+        .bg-gray-900 {
+            background-color: #111827 !important;
+        }
+    </style>
+
     <!-- Firebase SDK -->
     <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, orderBy, where, onSnapshot, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import { getDatabase, ref, set, get, push, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBNWEchdrKX9A2WdMa3VTnpbKgo0_eWqHE",
@@ -29,44 +95,59 @@
             measurementId: "G-YVL497L1V3"
         };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const rtdb = getDatabase(app);
+        // Initialize Firebase with error handling
+        let firebaseReady = false;
+        
+        try {
+            // Dynamic imports for better compatibility
+            const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+            const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+            const { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, orderBy, where, onSnapshot, setDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { getDatabase, ref, set, get, push, remove } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
 
-        // Make Firebase available globally
-        window.firebase = {
-            auth,
-            db,
-            rtdb,
-            signInWithEmailAndPassword,
-            createUserWithEmailAndPassword,
-            signOut,
-            onAuthStateChanged,
-            updatePassword,
-            reauthenticateWithCredential,
-            EmailAuthProvider,
-            collection,
-            addDoc,
-            getDocs,
-            getDoc,
-            doc,
-            updateDoc,
-            deleteDoc,
-            query,
-            orderBy,
-            where,
-            onSnapshot,
-            setDoc,
-            ref,
-            set,
-            get,
-            push,
-            remove
-        };
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+            const rtdb = getDatabase(app);
 
-        console.log('Firebase initialized successfully');
+            // Make Firebase available globally
+            window.firebase = {
+                auth,
+                db,
+                rtdb,
+                signInWithEmailAndPassword,
+                createUserWithEmailAndPassword,
+                signOut,
+                onAuthStateChanged,
+                updatePassword,
+                reauthenticateWithCredential,
+                EmailAuthProvider,
+                collection,
+                addDoc,
+                getDocs,
+                getDoc,
+                doc,
+                updateDoc,
+                deleteDoc,
+                query,
+                orderBy,
+                where,
+                onSnapshot,
+                setDoc,
+                ref,
+                set,
+                get,
+                push,
+                remove
+            };
+
+            firebaseReady = true;
+            console.log('Firebase initialized successfully');
+        } catch (error) {
+            console.error('Firebase initialization failed:', error);
+            firebaseReady = false;
+        }
     </script>
 
     <script>
@@ -1233,12 +1314,19 @@
         // Initialize the application
         document.addEventListener('DOMContentLoaded', async function() {
             console.log('Admin Panel - Initializing...');
+            console.log('Environment:', window.location.hostname);
 
             // Force correct header visibility on load
             forceHeaderVisibility();
 
-            // Wait for Firebase to be ready
-            await waitForFirebase();
+            // Wait for Firebase to be ready with timeout
+            try {
+                await waitForFirebase();
+                console.log('Firebase ready');
+            } catch (error) {
+                console.error('Firebase initialization timeout:', error);
+                // Continue with fallback
+            }
 
             // Setup Firebase auth state listener
             setupFirebaseAuth();
@@ -1247,7 +1335,7 @@
             try {
                 const isAuthenticated = checkAdminAuth();
                 console.log('Authentication check result:', isAuthenticated);
-
+                
                 if (isAuthenticated) {
                     console.log('Admin Panel - Ready!');
                     loadDashboardData();
@@ -1264,12 +1352,32 @@
                 loadDashboardData();
                 setupEventListeners();
             }
-
+            
             // Run diagnostic test
             setTimeout(() => {
                 testAdminPanel();
             }, 1000);
         });
+
+        // Deployment-specific Firebase initialization
+        async function waitForFirebase() {
+            return new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('Firebase initialization timeout'));
+                }, 10000); // 10 second timeout
+
+                const checkFirebase = () => {
+                    if (window.firebase && firebaseReady) {
+                        clearTimeout(timeout);
+                        resolve();
+                    } else {
+                        setTimeout(checkFirebase, 100);
+                    }
+                };
+                
+                checkFirebase();
+            });
+        }
 
         // Firebase Authentication Setup
         function setupFirebaseAuth() {
