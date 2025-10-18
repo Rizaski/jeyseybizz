@@ -872,43 +872,43 @@
                         console.error('Error tracking page visit:', error);
                     }
                 }
-            // Mobile menu functionality
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const mobileMenuClose = document.getElementById('mobile-menu-close');
-            const mobileMenuOverlay = document.getElementById('mobile-menu');
+                // Mobile menu functionality
+                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+                const mobileMenu = document.getElementById('mobile-menu');
+                const mobileMenuClose = document.getElementById('mobile-menu-close');
+                const mobileMenuOverlay = document.getElementById('mobile-menu');
 
-            console.log('Mobile menu elements:', {
-                button: mobileMenuBtn,
-                menu: mobileMenu,
-                close: mobileMenuClose,
-                overlay: mobileMenuOverlay
-            });
-
-            // Open mobile menu
-            if (mobileMenuBtn) {
-                mobileMenuBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Mobile menu button clicked');
-                    
-                    if (mobileMenu) {
-                        mobileMenu.classList.remove('hidden');
-                        setTimeout(() => {
-                            const transformElement = mobileMenu.querySelector('.transform');
-                            if (transformElement) {
-                                transformElement.classList.remove('translate-x-full');
-                            }
-                        }, 10);
-                        document.body.style.overflow = 'hidden';
-                        console.log('Mobile menu opened');
-                    } else {
-                        console.error('Mobile menu element not found');
-                    }
+                console.log('Mobile menu elements:', {
+                    button: mobileMenuBtn,
+                    menu: mobileMenu,
+                    close: mobileMenuClose,
+                    overlay: mobileMenuOverlay
                 });
-            } else {
-                console.error('Mobile menu button not found');
-            }
+
+                // Open mobile menu
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Mobile menu button clicked');
+
+                        if (mobileMenu) {
+                            mobileMenu.classList.remove('hidden');
+                            setTimeout(() => {
+                                const transformElement = mobileMenu.querySelector('.transform');
+                                if (transformElement) {
+                                    transformElement.classList.remove('translate-x-full');
+                                }
+                            }, 10);
+                            document.body.style.overflow = 'hidden';
+                            console.log('Mobile menu opened');
+                        } else {
+                            console.error('Mobile menu element not found');
+                        }
+                    });
+                } else {
+                    console.error('Mobile menu button not found');
+                }
 
                 // Close mobile menu
                 function closeMobileMenu() {
@@ -1721,7 +1721,7 @@
                 const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
                 profileImage = `https://via.placeholder.com/32/ff0040/ffffff?text=${initial}`;
             }
-            
+
             console.log('Profile image URL:', profileImage);
 
             console.log('Final profile image URL:', profileImage);
