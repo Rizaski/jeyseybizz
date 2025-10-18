@@ -274,10 +274,10 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, orderBy, where, onSnapshot, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, orderBy, where, onSnapshot, setDoc, enablePersistence } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { getDatabase, ref, set, get, push, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
-        // Firebase configuration
+        // Firebase configuration with deployment optimization
         const firebaseConfig = {
             apiKey: "AIzaSyBNWEchdrKX9A2WdMa3VTnpbKgo0_eWqHE",
             authDomain: "otomono-c9938.firebaseapp.com",
@@ -285,36 +285,130 @@
             storageBucket: "otomono-c9938.firebasestorage.app",
             messagingSenderId: "348906539551",
             appId: "1:348906539551:web:e249c40d0ae9e2964a632a",
-            measurementId: "G-YVL497L1V3"
+            measurementId: "G-YVL497L1V3",
+            databaseURL: "https://otomono-c9938-default-rtdb.firebaseio.com/"
         };
 
-        // Initialize Firebase with error handling
-        let app, auth, db, rtdb;
-        
-        try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            rtdb = getDatabase(app);
-            
-            // Set auth settings for better deployment compatibility
-            auth.settings.appVerificationDisabledForTesting = false;
-            
-            console.log('Firebase initialized successfully');
-        } catch (error) {
-            console.error('Firebase initialization error:', error);
-            // Create fallback configuration
-            app = null;
-            auth = null;
-            db = null;
-            rtdb = null;
-        }
+        // Firebase deployment configuration
+        const firebaseDeploymentConfig = {
+            // Enable offline persistence
+            enableOfflinePersistence: true,
+            // Set cache size
+            cacheSizeBytes: 40 * 1024 * 1024, // 40MB
+            // Enable network retry
+            enableNetworkRetry: true,
+            // Set timeout
+            timeout: 30000, // 30 seconds
+            // Enable debug mode for deployment
+            debug: true
+        };
 
-        // Make Firebase available globally
+        // Initialize Firebase with comprehensive deployment handling
+        let app, auth, db, rtdb;
+        let firebaseReady = false;
+        let firebaseRetryCount = 0;
+        const maxRetries = 3;
+        
+        // Enhanced Firebase initialization with retry logic
+        async function initializeFirebaseWithRetry() {
+            try {
+                console.log('🔥 Initializing Firebase...');
+                
+                // Check if Firebase is already initialized
+                if (window.firebase && window.firebase.app) {
+                    console.log('Firebase already initialized, reusing existing instance');
+                    return true;
+                }
+                
+                // Initialize Firebase app
+                app = initializeApp(firebaseConfig);
+                
+                // Initialize services with deployment settings
+                auth = getAuth(app);
+                db = getFirestore(app);
+                rtdb = getDatabase(app);
+                
+                // Configure auth for deployment
+                auth.settings.appVerificationDisabledForTesting = false;
+                auth.settings.appVerificationDisabledForTesting = false;
+                
+                // Configure Firestore for deployment
+                if (db) {
+                    // Enable offline persistence
+                    try {
+                        await enablePersistence(db, {
+                            synchronizeTabs: true
+                        });
+                        console.log('✅ Firestore offline persistence enabled');
+                    } catch (persistenceError) {
+                        console.warn('⚠️ Firestore persistence not available:', persistenceError.message);
+                    }
+                }
+                
+                // Test Firebase connection
+                await testFirebaseServices();
+                
+                firebaseReady = true;
+                console.log('✅ Firebase initialized successfully');
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Firebase initialization error:', error);
+                firebaseRetryCount++;
+                
+                if (firebaseRetryCount < maxRetries) {
+                    console.log(`🔄 Retrying Firebase initialization (${firebaseRetryCount}/${maxRetries})...`);
+                    await new Promise(resolve => setTimeout(resolve, 2000 * firebaseRetryCount));
+                    return await initializeFirebaseWithRetry();
+                } else {
+                    console.error('❌ Firebase initialization failed after all retries');
+                    firebaseReady = false;
+                    return false;
+                }
+            }
+        }
+        
+        // Test Firebase services
+        async function testFirebaseServices() {
+            try {
+                // Test Auth
+                if (auth) {
+                    console.log('✅ Firebase Auth service ready');
+                }
+                
+                // Test Firestore
+                if (db) {
+                    console.log('✅ Firebase Firestore service ready');
+                }
+                
+                // Test Realtime Database
+                if (rtdb) {
+                    console.log('✅ Firebase Realtime Database service ready');
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('❌ Firebase services test failed:', error);
+                throw error;
+            }
+        }
+        
+        // Initialize Firebase
+        initializeFirebaseWithRetry().then(success => {
+            if (success) {
+                console.log('🎉 Firebase initialization completed successfully');
+            } else {
+                console.log('⚠️ Firebase initialization failed, using fallback mode');
+            }
+        });
+
+        // Make Firebase available globally with deployment support
         window.firebase = {
+            app,
             auth,
             db,
             rtdb,
+            firebaseReady: () => firebaseReady,
             signInWithEmailAndPassword,
             createUserWithEmailAndPassword,
             signOut,
@@ -338,7 +432,12 @@
             set,
             get,
             push,
-            remove
+            remove,
+            // Deployment helpers
+            initializeFirebaseWithRetry,
+            testFirebaseServices,
+            firebaseConfig,
+            firebaseDeploymentConfig
         };
 
         console.log('Firebase initialized successfully');
@@ -1524,21 +1623,26 @@
         function waitForFirebase() {
             return new Promise((resolve) => {
                 let attempts = 0;
-                const maxAttempts = 50; // 5 seconds timeout
+                const maxAttempts = 100; // 10 seconds timeout for deployment
 
                 const checkFirebase = () => {
                     attempts++;
 
-                    if (window.firebase && window.firebase.auth && window.firebase.db) {
+                    // Check if Firebase is ready using the new system
+                    if (window.firebase && window.firebase.firebaseReady && window.firebase.firebaseReady()) {
                         firebaseReady = true;
-                        console.log('Firebase is ready');
+                        console.log('✅ Firebase is ready and operational');
+                        resolve();
+                    } else if (window.firebase && window.firebase.auth && window.firebase.db) {
+                        firebaseReady = true;
+                        console.log('✅ Firebase is ready (legacy check)');
                         resolve();
                     } else if (attempts >= maxAttempts) {
-                        console.warn('Firebase initialization timeout, using fallback mode');
+                        console.warn('⚠️ Firebase initialization timeout, using fallback mode');
                         firebaseReady = false;
                         resolve();
                     } else {
-                        console.log(`Waiting for Firebase... (${attempts}/${maxAttempts})`);
+                        console.log(`🔄 Waiting for Firebase... (${attempts}/${maxAttempts})`);
                         setTimeout(checkFirebase, 100);
                     }
                 };
@@ -1603,7 +1707,7 @@
             }
         }
 
-        // Enhanced Firebase diagnostics
+        // Enhanced Firebase diagnostics with deployment troubleshooting
         function runFirebaseDiagnostics() {
             console.log('🔧 Running Firebase Diagnostics...');
             
@@ -1612,7 +1716,8 @@
                 console.log('✅ Firebase config found:', {
                     projectId: firebaseConfig.projectId,
                     authDomain: firebaseConfig.authDomain,
-                    apiKey: firebaseConfig.apiKey ? '***' + firebaseConfig.apiKey.slice(-4) : 'Not found'
+                    apiKey: firebaseConfig.apiKey ? '***' + firebaseConfig.apiKey.slice(-4) : 'Not found',
+                    databaseURL: firebaseConfig.databaseURL ? 'Present' : 'Missing'
                 });
             } else {
                 console.error('❌ Firebase config not found');
@@ -1622,6 +1727,11 @@
             if (window.firebase) {
                 console.log('✅ Firebase object available');
                 console.log('Available Firebase services:', Object.keys(window.firebase));
+                
+                // Check Firebase readiness
+                if (window.firebase.firebaseReady) {
+                    console.log('Firebase ready status:', window.firebase.firebaseReady());
+                }
             } else {
                 console.error('❌ Firebase object not available');
             }
@@ -1636,6 +1746,13 @@
                 }
             }
             
+            // Check network connectivity
+            if (navigator.onLine) {
+                console.log('✅ Network connection available');
+            } else {
+                console.warn('⚠️ Network connection offline');
+            }
+            
             // Check localStorage for fallback data
             const localOrders = localStorage.getItem('orders');
             const localUsers = localStorage.getItem('users');
@@ -1647,7 +1764,40 @@
                 adminUser: adminUser ? 'Present' : 'None'
             });
             
+            // Check for common deployment issues
+            checkDeploymentIssues();
+            
             console.log('🔧 Firebase Diagnostics completed');
+        }
+
+        // Check for common deployment issues
+        function checkDeploymentIssues() {
+            console.log('🔍 Checking for deployment issues...');
+            
+            // Check if running on HTTPS
+            if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+                console.warn('⚠️ Not running on HTTPS - Firebase may have issues');
+            } else {
+                console.log('✅ Running on HTTPS or localhost');
+            }
+            
+            // Check for CORS issues
+            if (location.hostname.includes('github.io') || location.hostname.includes('netlify.app') || location.hostname.includes('vercel.app')) {
+                console.log('✅ Detected hosting platform:', location.hostname);
+            }
+            
+            // Check Firebase SDK loading
+            const firebaseScripts = document.querySelectorAll('script[src*="firebase"]');
+            console.log('Firebase SDK scripts loaded:', firebaseScripts.length);
+            
+            // Check for Firebase errors in console
+            const originalError = console.error;
+            console.error = function(...args) {
+                if (args[0] && args[0].toString().includes('Firebase')) {
+                    console.warn('🚨 Firebase error detected:', args);
+                }
+                originalError.apply(console, args);
+            };
         }
 
         // ROG Styles Application and Icon Loading
@@ -2114,44 +2264,57 @@
         }
 
         async function loadOrdersFromFirebase() {
-            try {
-                if (!firebaseReady || !window.firebase || !window.firebase.db) {
-                    console.log('Firebase not ready, using fallback data');
-                    return getFallbackOrders();
-                }
-
-                console.log('Attempting to load orders from Firebase...');
-                const ordersRef = window.firebase.collection(window.firebase.db, 'orders');
-                const q = window.firebase.query(ordersRef, window.firebase.orderBy('createdAt', 'desc'));
-                const querySnapshot = await window.firebase.getDocs(q);
-
-                const orders = [];
-                querySnapshot.forEach((doc) => {
-                    orders.push({
-                        id: doc.id,
-                        ...doc.data()
-                    });
-                });
-
-                console.log(`Loaded ${orders.length} orders from Firebase`);
-                return orders;
-            } catch (error) {
-                console.error('Error loading orders from Firebase:', error);
-                
-                // Try alternative data sources
+            const maxRetries = 3;
+            let retryCount = 0;
+            
+            while (retryCount < maxRetries) {
                 try {
-                    console.log('Trying localStorage fallback...');
-                    const localOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-                    if (localOrders.length > 0) {
-                        console.log(`Loaded ${localOrders.length} orders from localStorage`);
-                        return localOrders;
+                    if (!firebaseReady || !window.firebase || !window.firebase.db) {
+                        console.log('Firebase not ready, using fallback data');
+                        return getFallbackOrders();
                     }
-                } catch (localError) {
-                    console.error('localStorage fallback failed:', localError);
+
+                    console.log(`Attempting to load orders from Firebase... (attempt ${retryCount + 1}/${maxRetries})`);
+                    const ordersRef = window.firebase.collection(window.firebase.db, 'orders');
+                    const q = window.firebase.query(ordersRef, window.firebase.orderBy('createdAt', 'desc'));
+                    const querySnapshot = await window.firebase.getDocs(q);
+
+                    const orders = [];
+                    querySnapshot.forEach((doc) => {
+                        orders.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+
+                    console.log(`✅ Loaded ${orders.length} orders from Firebase`);
+                    return orders;
+                } catch (error) {
+                    console.error(`❌ Error loading orders from Firebase (attempt ${retryCount + 1}):`, error);
+                    retryCount++;
+                    
+                    if (retryCount < maxRetries) {
+                        console.log(`🔄 Retrying in ${retryCount * 2} seconds...`);
+                        await new Promise(resolve => setTimeout(resolve, retryCount * 2000));
+                    } else {
+                        console.error('❌ All Firebase retry attempts failed');
+                        
+                        // Try alternative data sources
+                        try {
+                            console.log('Trying localStorage fallback...');
+                            const localOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+                            if (localOrders.length > 0) {
+                                console.log(`✅ Loaded ${localOrders.length} orders from localStorage`);
+                                return localOrders;
+                            }
+                        } catch (localError) {
+                            console.error('localStorage fallback failed:', localError);
+                        }
+                        
+                        // Return sample data for demonstration
+                        return getFallbackOrders();
+                    }
                 }
-                
-                // Return sample data for demonstration
-                return getFallbackOrders();
             }
         }
 
