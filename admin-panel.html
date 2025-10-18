@@ -548,31 +548,31 @@
                 background: var(--rog-dark) !important;
                 border-bottom: 1px solid var(--rog-red) !important;
             }
-            
+
             /* Add padding to main content to account for fixed header */
             .main-content {
                 padding-top: 64px !important;
             }
-            
+
             /* Mobile table responsiveness */
             .mobile-table-container {
                 max-width: 100%;
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
             }
-            
+
             .mobile-table-container table {
                 min-width: 600px;
                 width: 100%;
             }
-            
+
             .mobile-table-container th,
             .mobile-table-container td {
                 white-space: nowrap;
                 padding: 8px 12px;
                 font-size: 14px;
             }
-            
+
             /* Mobile dashboard cards */
             .mobile-dashboard-grid {
                 display: grid;
@@ -580,7 +580,7 @@
                 gap: 1rem;
                 margin-bottom: 1rem;
             }
-            
+
             .mobile-dashboard-card {
                 background: var(--rog-gray);
                 border: 1px solid var(--rog-red);
@@ -588,19 +588,19 @@
                 padding: 1rem;
                 text-align: center;
             }
-            
+
             /* Mobile orders table */
             .mobile-orders-table {
                 max-width: 100%;
                 overflow-x: auto;
             }
-            
+
             /* Mobile users table */
             .mobile-users-table {
                 max-width: 100%;
                 overflow-x: auto;
             }
-            
+
             /* Mobile dropdown positioning */
             #notificationCenter,
             #liveChat,
@@ -613,10 +613,11 @@
                 max-width: 320px !important;
                 z-index: 1001 !important;
             }
-            
+
             /* Mobile chat input */
             #chat-input {
-                font-size: 16px !important; /* Prevents zoom on iOS */
+                font-size: 16px !important;
+                /* Prevents zoom on iOS */
             }
         }
 
@@ -1347,40 +1348,52 @@
                         </h3>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <button onclick="generateOrderReport()" class="rog-button p-4 rounded-lg text-left">
-                                <i class="fas fa-shopping-cart text-2xl mb-2"></i>
-                                <h4 class="font-semibold">Order Report</h4>
-                                <p class="text-sm opacity-80">Complete order analysis</p>
+                            <button onclick="generateOrderReport()" class="rog-button p-6 rounded-lg text-left hover:bg-rog-red/90 transition-all duration-200 group">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-shopping-cart text-3xl text-rog-red mr-3 group-hover:scale-110 transition-transform duration-200"></i>
+                                    <h4 class="font-bold text-lg">Order Report</h4>
+                                </div>
+                                <p class="text-sm text-gray-300 leading-relaxed">Complete order analysis with detailed insights and trends</p>
                             </button>
 
-                            <button onclick="generateUserReport()" class="rog-button p-4 rounded-lg text-left">
-                                <i class="fas fa-users text-2xl mb-2"></i>
-                                <h4 class="font-semibold">User Report</h4>
-                                <p class="text-sm opacity-80">User activity analysis</p>
+                            <button onclick="generateUserReport()" class="rog-button p-6 rounded-lg text-left hover:bg-rog-red/90 transition-all duration-200 group">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-users text-3xl text-rog-red mr-3 group-hover:scale-110 transition-transform duration-200"></i>
+                                    <h4 class="font-bold text-lg">User Report</h4>
+                                </div>
+                                <p class="text-sm text-gray-300 leading-relaxed">User activity analysis and engagement metrics</p>
                             </button>
 
-                            <button onclick="generateMaterialReport()" class="rog-button p-4 rounded-lg text-left">
-                                <i class="fas fa-tshirt text-2xl mb-2"></i>
-                                <h4 class="font-semibold">Material Report</h4>
-                                <p class="text-sm opacity-80">Material preference analysis</p>
+                            <button onclick="generateMaterialReport()" class="rog-button p-6 rounded-lg text-left hover:bg-rog-red/90 transition-all duration-200 group">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-tshirt text-3xl text-rog-red mr-3 group-hover:scale-110 transition-transform duration-200"></i>
+                                    <h4 class="font-bold text-lg">Material Report</h4>
+                                </div>
+                                <p class="text-sm text-gray-300 leading-relaxed">Material preference analysis and inventory insights</p>
                             </button>
 
-                            <button onclick="generateRevenueReport()" class="rog-button p-4 rounded-lg text-left">
-                                <i class="fas fa-dollar-sign text-2xl mb-2"></i>
-                                <h4 class="font-semibold">Revenue Report</h4>
-                                <p class="text-sm opacity-80">Financial analysis</p>
+                            <button onclick="generateRevenueReport()" class="rog-button p-6 rounded-lg text-left hover:bg-rog-red/90 transition-all duration-200 group">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-dollar-sign text-3xl text-rog-red mr-3 group-hover:scale-110 transition-transform duration-200"></i>
+                                    <h4 class="font-bold text-lg">Revenue Report</h4>
+                                </div>
+                                <p class="text-sm text-gray-300 leading-relaxed">Financial analysis and revenue tracking</p>
                             </button>
 
-                            <button onclick="generateStatusReport()" class="rog-button p-4 rounded-lg text-left">
-                                <i class="fas fa-chart-pie text-2xl mb-2"></i>
-                                <h4 class="font-semibold">Status Report</h4>
-                                <p class="text-sm opacity-80">Order status analysis</p>
+                            <button onclick="generateStatusReport()" class="rog-button p-6 rounded-lg text-left hover:bg-rog-red/90 transition-all duration-200 group">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-chart-pie text-3xl text-rog-red mr-3 group-hover:scale-110 transition-transform duration-200"></i>
+                                    <h4 class="font-bold text-lg">Status Report</h4>
+                                </div>
+                                <p class="text-sm text-gray-300 leading-relaxed">Order status analysis and workflow insights</p>
                             </button>
 
-                            <button onclick="generateCustomReport()" class="rog-button p-4 rounded-lg text-left">
-                                <i class="fas fa-cog text-2xl mb-2"></i>
-                                <h4 class="font-semibold">Custom Report</h4>
-                                <p class="text-sm opacity-80">Custom date range analysis</p>
+                            <button onclick="generateCustomReport()" class="rog-button p-6 rounded-lg text-left hover:bg-rog-red/90 transition-all duration-200 group">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-cog text-3xl text-rog-red mr-3 group-hover:scale-110 transition-transform duration-200"></i>
+                                    <h4 class="font-bold text-lg">Custom Report</h4>
+                                </div>
+                                <p class="text-sm text-gray-300 leading-relaxed">Custom date range analysis with flexible parameters</p>
                             </button>
                         </div>
                     </div>
@@ -1980,7 +1993,7 @@
             if (chat) {
                 chat.classList.toggle('hidden');
                 chatOpen = !chatOpen;
-                
+
                 if (chatOpen) {
                     loadChatMessages();
                     console.log('Live chat opened');
@@ -4508,10 +4521,10 @@
         // Utility functions
         async function refreshData() {
             console.log('Refreshing data...');
-            
+
             // Show ROG loader
             showROGLoader('Refreshing Data...');
-            
+
             // Add visual feedback
             const refreshButton = document.querySelector('button[onclick="refreshData()"]');
             if (refreshButton) {
@@ -4520,12 +4533,12 @@
                     icon.classList.add('fa-spin');
                 }
             }
-            
+
             try {
                 // Refresh based on current section
                 const currentSection = getCurrentSection();
                 console.log('Refreshing section:', currentSection);
-                
+
                 switch (currentSection) {
                     case 'dashboard':
                         await loadDashboardData();
@@ -4545,9 +4558,9 @@
                     default:
                         await loadDashboardData();
                 }
-                
+
                 console.log('Data refreshed successfully');
-                
+
                 // Show success message
                 if (typeof showOtomonoSuccess === 'function') {
                     showOtomonoSuccess('Data refreshed successfully!');
@@ -4690,17 +4703,17 @@
             const dropdown = document.getElementById('userDropdown');
             const notificationCenter = document.getElementById('notificationCenter');
             const liveChat = document.getElementById('liveChat');
-            
+
             // Close user dropdown
             if (dropdown && !e.target.closest('.relative')) {
                 dropdown.classList.add('hidden');
             }
-            
+
             // Close notification center
             if (notificationCenter && !e.target.closest('#notificationCenter') && !e.target.closest('button[onclick="toggleNotificationCenter()"]')) {
                 notificationCenter.classList.add('hidden');
             }
-            
+
             // Close live chat
             if (liveChat && !e.target.closest('#liveChat') && !e.target.closest('button[onclick="toggleLiveChat()"]')) {
                 liveChat.classList.add('hidden');
