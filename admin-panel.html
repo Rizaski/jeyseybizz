@@ -5,22 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Otomono Admin Panel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="preconnect" href="https://use.fontawesome.com">
-    
-    <!-- Google Fonts with Local Fallbacks -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" onerror="this.onerror=null;this.href='data:text/css;base64,';">
-    
-    <!-- FontAwesome with Fallback CDN -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" onerror="this.onerror=null;this.href='https://use.fontawesome.com/releases/v6.0.0/css/all.css';">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <!-- ROG Styling and Icon Fallbacks -->
     <style>
         /* Authentic ROG Color Palette from rog.asus.com */
@@ -40,7 +31,7 @@
             --rog-border: rgba(255, 0, 64, 0.3);
             --rog-gradient: linear-gradient(135deg, #ff0040 0%, #ff4080 50%, #ff0040 100%);
             --rog-gradient-dark: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
-            
+
             /* ROG Typography from rog.asus.com */
             --rog-font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             --rog-font-weight-light: 300;
@@ -79,7 +70,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
+            background:
                 radial-gradient(circle at 20% 80%, rgba(255, 0, 64, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(255, 0, 64, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 40% 40%, rgba(255, 0, 64, 0.05) 0%, transparent 50%);
@@ -99,13 +90,27 @@
             gap: 1.5rem;
         }
 
-        .rog-grid-1 { grid-template-columns: 1fr; }
-        .rog-grid-2 { grid-template-columns: repeat(2, 1fr); }
-        .rog-grid-3 { grid-template-columns: repeat(3, 1fr); }
-        .rog-grid-4 { grid-template-columns: repeat(4, 1fr); }
+        .rog-grid-1 {
+            grid-template-columns: 1fr;
+        }
+
+        .rog-grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .rog-grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .rog-grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
 
         @media (max-width: 768px) {
-            .rog-grid-2, .rog-grid-3, .rog-grid-4 {
+
+            .rog-grid-2,
+            .rog-grid-3,
+            .rog-grid-4 {
                 grid-template-columns: 1fr;
             }
         }
@@ -116,7 +121,7 @@
             border: 2px solid var(--rog-border);
             border-radius: 16px;
             padding: 2rem;
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.6),
                 0 0 0 1px rgba(255, 0, 64, 0.1),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -127,21 +132,70 @@
         }
 
         /* ROG Typography Classes */
-        .rog-text-light { font-weight: var(--rog-font-weight-light); }
-        .rog-text-normal { font-weight: var(--rog-font-weight-normal); }
-        .rog-text-medium { font-weight: var(--rog-font-weight-medium); }
-        .rog-text-semibold { font-weight: var(--rog-font-weight-semibold); }
-        .rog-text-bold { font-weight: var(--rog-font-weight-bold); }
-        .rog-text-extrabold { font-weight: var(--rog-font-weight-extrabold); }
-        .rog-text-black { font-weight: var(--rog-font-weight-black); }
+        .rog-text-light {
+            font-weight: var(--rog-font-weight-light);
+        }
+
+        .rog-text-normal {
+            font-weight: var(--rog-font-weight-normal);
+        }
+
+        .rog-text-medium {
+            font-weight: var(--rog-font-weight-medium);
+        }
+
+        .rog-text-semibold {
+            font-weight: var(--rog-font-weight-semibold);
+        }
+
+        .rog-text-bold {
+            font-weight: var(--rog-font-weight-bold);
+        }
+
+        .rog-text-extrabold {
+            font-weight: var(--rog-font-weight-extrabold);
+        }
+
+        .rog-text-black {
+            font-weight: var(--rog-font-weight-black);
+        }
 
         /* ROG Headings */
-        .rog-h1 { font-size: 2.5rem; font-weight: var(--rog-font-weight-bold); line-height: 1.2; }
-        .rog-h2 { font-size: 2rem; font-weight: var(--rog-font-weight-semibold); line-height: 1.3; }
-        .rog-h3 { font-size: 1.5rem; font-weight: var(--rog-font-weight-medium); line-height: 1.4; }
-        .rog-h4 { font-size: 1.25rem; font-weight: var(--rog-font-weight-medium); line-height: 1.4; }
-        .rog-h5 { font-size: 1.125rem; font-weight: var(--rog-font-weight-medium); line-height: 1.5; }
-        .rog-h6 { font-size: 1rem; font-weight: var(--rog-font-weight-semibold); line-height: 1.5; }
+        .rog-h1 {
+            font-size: 2.5rem;
+            font-weight: var(--rog-font-weight-bold);
+            line-height: 1.2;
+        }
+
+        .rog-h2 {
+            font-size: 2rem;
+            font-weight: var(--rog-font-weight-semibold);
+            line-height: 1.3;
+        }
+
+        .rog-h3 {
+            font-size: 1.5rem;
+            font-weight: var(--rog-font-weight-medium);
+            line-height: 1.4;
+        }
+
+        .rog-h4 {
+            font-size: 1.25rem;
+            font-weight: var(--rog-font-weight-medium);
+            line-height: 1.4;
+        }
+
+        .rog-h5 {
+            font-size: 1.125rem;
+            font-weight: var(--rog-font-weight-medium);
+            line-height: 1.5;
+        }
+
+        .rog-h6 {
+            font-size: 1rem;
+            font-weight: var(--rog-font-weight-semibold);
+            line-height: 1.5;
+        }
 
         .rog-card::before {
             content: '';
@@ -160,7 +214,7 @@
 
         .rog-card:hover {
             border-color: var(--rog-red);
-            box-shadow: 
+            box-shadow:
                 0 12px 48px rgba(0, 0, 0, 0.8),
                 0 0 20px var(--rog-glow),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -178,7 +232,7 @@
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
+            box-shadow:
                 0 6px 20px rgba(0, 0, 0, 0.4),
                 0 0 10px var(--rog-glow),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -209,7 +263,7 @@
 
         .rog-button:hover {
             transform: translateY(-3px) scale(1.05);
-            box-shadow: 
+            box-shadow:
                 0 12px 32px rgba(0, 0, 0, 0.6),
                 0 0 20px var(--rog-glow),
                 inset 0 1px 0 rgba(255, 255, 255, 0.3);
@@ -238,7 +292,7 @@
             background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(42, 42, 42, 0.95) 100%);
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 
+            box-shadow:
                 0 12px 48px rgba(0, 0, 0, 0.6),
                 0 0 0 1px var(--rog-border),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -359,191 +413,848 @@
         }
 
         /* Enhanced FontAwesome Fallback Icons with Font Family */
-        .fa-dashboard::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-shopping-cart::before { content: "🛒"; font-family: Arial, sans-serif; }
-        .fa-users::before { content: "👥"; font-family: Arial, sans-serif; }
-        .fa-chart-bar::before { content: "📈"; font-family: Arial, sans-serif; }
-        .fa-cog::before { content: "⚙️"; font-family: Arial, sans-serif; }
-        .fa-plus::before { content: "➕"; font-family: Arial, sans-serif; }
-        .fa-edit::before { content: "✏️"; font-family: Arial, sans-serif; }
-        .fa-trash::before { content: "🗑️"; font-family: Arial, sans-serif; }
-        .fa-eye::before { content: "👁️"; font-family: Arial, sans-serif; }
-        .fa-link::before { content: "🔗"; font-family: Arial, sans-serif; }
-        .fa-refresh::before { content: "🔄"; font-family: Arial, sans-serif; }
-        .fa-bars::before { content: "☰"; font-family: Arial, sans-serif; }
-        .fa-user::before { content: "👤"; font-family: Arial, sans-serif; }
-        .fa-lock::before { content: "🔒"; font-family: Arial, sans-serif; }
-        .fa-shield-alt::before { content: "🛡️"; font-family: Arial, sans-serif; }
-        .fa-download::before { content: "⬇️"; font-family: Arial, sans-serif; }
-        .fa-file-pdf::before { content: "📄"; font-family: Arial, sans-serif; }
-        .fa-file-code::before { content: "💻"; font-family: Arial, sans-serif; }
-        .fa-check-circle::before { content: "✅"; font-family: Arial, sans-serif; }
-        .fa-times::before { content: "❌"; font-family: Arial, sans-serif; }
-        .fa-save::before { content: "💾"; font-family: Arial, sans-serif; }
-        .fa-list::before { content: "📋"; font-family: Arial, sans-serif; }
-        .fa-chart-pie::before { content: "🥧"; font-family: Arial, sans-serif; }
-        .fa-chart-line::before { content: "📈"; font-family: Arial, sans-serif; }
-        .fa-chart-area::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-tshirt::before { content: "👕"; font-family: Arial, sans-serif; }
-        .fa-dollar-sign::before { content: "💰"; font-family: Arial, sans-serif; }
-        .fa-percentage::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-ruler::before { content: "📏"; font-family: Arial, sans-serif; }
-        .fa-file-alt::before { content: "📄"; font-family: Arial, sans-serif; }
-        .fa-eye-slash::before { content: "🙈"; font-family: Arial, sans-serif; }
-        .fa-tachometer-alt::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-sync-alt::before { content: "🔄"; font-family: Arial, sans-serif; }
-        .fa-bell::before { content: "🔔"; font-family: Arial, sans-serif; }
-        .fa-search::before { content: "🔍"; font-family: Arial, sans-serif; }
-        .fa-filter::before { content: "🔽"; font-family: Arial, sans-serif; }
-        .fa-sort::before { content: "↕️"; font-family: Arial, sans-serif; }
-        .fa-arrow-up::before { content: "⬆️"; font-family: Arial, sans-serif; }
-        .fa-arrow-down::before { content: "⬇️"; font-family: Arial, sans-serif; }
-        .fa-arrow-left::before { content: "⬅️"; font-family: Arial, sans-serif; }
-        .fa-arrow-right::before { content: "➡️"; font-family: Arial, sans-serif; }
-        .fa-home::before { content: "🏠"; font-family: Arial, sans-serif; }
-        .fa-sign-out-alt::before { content: "🚪"; font-family: Arial, sans-serif; }
-        .fa-cog::before { content: "⚙️"; font-family: Arial, sans-serif; }
-        .fa-wrench::before { content: "🔧"; font-family: Arial, sans-serif; }
-        .fa-tools::before { content: "🛠️"; font-family: Arial, sans-serif; }
-        .fa-info-circle::before { content: "ℹ️"; font-family: Arial, sans-serif; }
-        .fa-exclamation-triangle::before { content: "⚠️"; font-family: Arial, sans-serif; }
-        .fa-question-circle::before { content: "❓"; font-family: Arial, sans-serif; }
-        .fa-heart::before { content: "❤️"; font-family: Arial, sans-serif; }
-        .fa-star::before { content: "⭐"; font-family: Arial, sans-serif; }
-        .fa-thumbs-up::before { content: "👍"; font-family: Arial, sans-serif; }
-        .fa-thumbs-down::before { content: "👎"; font-family: Arial, sans-serif; }
-        .fa-comment::before { content: "💬"; font-family: Arial, sans-serif; }
-        .fa-envelope::before { content: "✉️"; font-family: Arial, sans-serif; }
-        .fa-phone::before { content: "📞"; font-family: Arial, sans-serif; }
-        .fa-calendar::before { content: "📅"; font-family: Arial, sans-serif; }
-        .fa-clock::before { content: "🕐"; font-family: Arial, sans-serif; }
-        .fa-map-marker-alt::before { content: "📍"; font-family: Arial, sans-serif; }
-        .fa-globe::before { content: "🌐"; font-family: Arial, sans-serif; }
-        .fa-wifi::before { content: "📶"; font-family: Arial, sans-serif; }
-        .fa-battery-full::before { content: "🔋"; font-family: Arial, sans-serif; }
-        .fa-volume-up::before { content: "🔊"; font-family: Arial, sans-serif; }
-        .fa-volume-down::before { content: "🔉"; font-family: Arial, sans-serif; }
-        .fa-volume-mute::before { content: "🔇"; font-family: Arial, sans-serif; }
-        .fa-play::before { content: "▶️"; font-family: Arial, sans-serif; }
-        .fa-pause::before { content: "⏸️"; font-family: Arial, sans-serif; }
-        .fa-stop::before { content: "⏹️"; font-family: Arial, sans-serif; }
-        .fa-forward::before { content: "⏩"; font-family: Arial, sans-serif; }
-        .fa-backward::before { content: "⏪"; font-family: Arial, sans-serif; }
-        .fa-expand::before { content: "⛶"; font-family: Arial, sans-serif; }
-        .fa-compress::before { content: "⛷️"; font-family: Arial, sans-serif; }
-        .fa-fullscreen::before { content: "⛶"; font-family: Arial, sans-serif; }
-        .fa-exit-fullscreen::before { content: "⛷️"; font-family: Arial, sans-serif; }
-        .fa-zoom-in::before { content: "🔍+"; font-family: Arial, sans-serif; }
-        .fa-zoom-out::before { content: "🔍-"; font-family: Arial, sans-serif; }
-        .fa-rotate::before { content: "🔄"; font-family: Arial, sans-serif; }
-        .fa-flip::before { content: "🔄"; font-family: Arial, sans-serif; }
-        .fa-mirror::before { content: "🪞"; font-family: Arial, sans-serif; }
-        .fa-copy::before { content: "📋"; font-family: Arial, sans-serif; }
-        .fa-paste::before { content: "📋"; font-family: Arial, sans-serif; }
-        .fa-cut::before { content: "✂️"; font-family: Arial, sans-serif; }
-        .fa-undo::before { content: "↶"; font-family: Arial, sans-serif; }
-        .fa-redo::before { content: "↷"; font-family: Arial, sans-serif; }
-        .fa-print::before { content: "🖨️"; font-family: Arial, sans-serif; }
-        .fa-share::before { content: "📤"; font-family: Arial, sans-serif; }
-        .fa-external-link-alt::before { content: "🔗"; font-family: Arial, sans-serif; }
-        .fa-window-maximize::before { content: "⛶"; font-family: Arial, sans-serif; }
-        .fa-window-minimize::before { content: "⛷️"; font-family: Arial, sans-serif; }
-        .fa-window-restore::before { content: "⛷️"; font-family: Arial, sans-serif; }
-        .fa-window-close::before { content: "❌"; font-family: Arial, sans-serif; }
-        .fa-toggle-on::before { content: "🔛"; font-family: Arial, sans-serif; }
-        .fa-toggle-off::before { content: "🔲"; font-family: Arial, sans-serif; }
-        .fa-check::before { content: "✅"; font-family: Arial, sans-serif; }
-        .fa-times-circle::before { content: "❌"; font-family: Arial, sans-serif; }
-        .fa-exclamation-circle::before { content: "⚠️"; font-family: Arial, sans-serif; }
-        .fa-question::before { content: "❓"; font-family: Arial, sans-serif; }
-        .fa-info::before { content: "ℹ️"; font-family: Arial, sans-serif; }
-        .fa-ban::before { content: "🚫"; font-family: Arial, sans-serif; }
-        .fa-shield::before { content: "🛡️"; font-family: Arial, sans-serif; }
-        .fa-key::before { content: "🔑"; font-family: Arial, sans-serif; }
-        .fa-unlock::before { content: "🔓"; font-family: Arial, sans-serif; }
-        .fa-lock-open::before { content: "🔓"; font-family: Arial, sans-serif; }
-        .fa-fingerprint::before { content: "👆"; font-family: Arial, sans-serif; }
-        .fa-qrcode::before { content: "📱"; font-family: Arial, sans-serif; }
-        .fa-barcode::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-tag::before { content: "🏷️"; font-family: Arial, sans-serif; }
-        .fa-tags::before { content: "🏷️"; font-family: Arial, sans-serif; }
-        .fa-bookmark::before { content: "🔖"; font-family: Arial, sans-serif; }
-        .fa-bookmarks::before { content: "🔖"; font-family: Arial, sans-serif; }
-        .fa-flag::before { content: "🚩"; font-family: Arial, sans-serif; }
-        .fa-flag-checkered::before { content: "🏁"; font-family: Arial, sans-serif; }
-        .fa-trophy::before { content: "🏆"; font-family: Arial, sans-serif; }
-        .fa-medal::before { content: "🏅"; font-family: Arial, sans-serif; }
-        .fa-crown::before { content: "👑"; font-family: Arial, sans-serif; }
-        .fa-gem::before { content: "💎"; font-family: Arial, sans-serif; }
-        .fa-diamond::before { content: "💎"; font-family: Arial, sans-serif; }
-        .fa-coins::before { content: "🪙"; font-family: Arial, sans-serif; }
-        .fa-money-bill::before { content: "💰"; font-family: Arial, sans-serif; }
-        .fa-credit-card::before { content: "💳"; font-family: Arial, sans-serif; }
-        .fa-wallet::before { content: "👛"; font-family: Arial, sans-serif; }
-        .fa-piggy-bank::before { content: "🐷"; font-family: Arial, sans-serif; }
-        .fa-chart-line::before { content: "📈"; font-family: Arial, sans-serif; }
-        .fa-chart-bar::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-pie::before { content: "🥧"; font-family: Arial, sans-serif; }
-        .fa-chart-area::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-gantt::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-scatter::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-network::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-tree::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-sankey::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-waterfall::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-candlestick::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-radar::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-polar::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-bubble::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-doughnut::before { content: "🥧"; font-family: Arial, sans-serif; }
-        .fa-chart-sunburst::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-treemap::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-funnel::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-gauge::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-heatmap::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-histogram::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-boxplot::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-violin::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-ridge::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-parallel::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-sankey-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-alluvial::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-sunburst-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-treemap-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-funnel-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-gauge-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-heatmap-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-histogram-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-boxplot-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-violin-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-ridge-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
-        .fa-chart-parallel-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-dashboard::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-shopping-cart::before {
+            content: "🛒";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-users::before {
+            content: "👥";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-bar::before {
+            content: "📈";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-cog::before {
+            content: "⚙️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-plus::before {
+            content: "➕";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-edit::before {
+            content: "✏️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-trash::before {
+            content: "🗑️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-eye::before {
+            content: "👁️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-link::before {
+            content: "🔗";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-refresh::before {
+            content: "🔄";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-bars::before {
+            content: "☰";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-user::before {
+            content: "👤";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-lock::before {
+            content: "🔒";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-shield-alt::before {
+            content: "🛡️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-download::before {
+            content: "⬇️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-file-pdf::before {
+            content: "📄";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-file-code::before {
+            content: "💻";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-check-circle::before {
+            content: "✅";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-times::before {
+            content: "❌";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-save::before {
+            content: "💾";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-list::before {
+            content: "📋";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-pie::before {
+            content: "🥧";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-line::before {
+            content: "📈";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-area::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-tshirt::before {
+            content: "👕";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-dollar-sign::before {
+            content: "💰";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-percentage::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-ruler::before {
+            content: "📏";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-file-alt::before {
+            content: "📄";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-eye-slash::before {
+            content: "🙈";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-tachometer-alt::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-sync-alt::before {
+            content: "🔄";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-bell::before {
+            content: "🔔";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-search::before {
+            content: "🔍";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-filter::before {
+            content: "🔽";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-sort::before {
+            content: "↕️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-arrow-up::before {
+            content: "⬆️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-arrow-down::before {
+            content: "⬇️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-arrow-left::before {
+            content: "⬅️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-arrow-right::before {
+            content: "➡️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-home::before {
+            content: "🏠";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-sign-out-alt::before {
+            content: "🚪";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-cog::before {
+            content: "⚙️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-wrench::before {
+            content: "🔧";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-tools::before {
+            content: "🛠️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-info-circle::before {
+            content: "ℹ️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-exclamation-triangle::before {
+            content: "⚠️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-question-circle::before {
+            content: "❓";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-heart::before {
+            content: "❤️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-star::before {
+            content: "⭐";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-thumbs-up::before {
+            content: "👍";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-thumbs-down::before {
+            content: "👎";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-comment::before {
+            content: "💬";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-envelope::before {
+            content: "✉️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-phone::before {
+            content: "📞";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-calendar::before {
+            content: "📅";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-clock::before {
+            content: "🕐";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-map-marker-alt::before {
+            content: "📍";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-globe::before {
+            content: "🌐";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-wifi::before {
+            content: "📶";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-battery-full::before {
+            content: "🔋";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-volume-up::before {
+            content: "🔊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-volume-down::before {
+            content: "🔉";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-volume-mute::before {
+            content: "🔇";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-play::before {
+            content: "▶️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-pause::before {
+            content: "⏸️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-stop::before {
+            content: "⏹️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-forward::before {
+            content: "⏩";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-backward::before {
+            content: "⏪";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-expand::before {
+            content: "⛶";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-compress::before {
+            content: "⛷️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-fullscreen::before {
+            content: "⛶";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-exit-fullscreen::before {
+            content: "⛷️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-zoom-in::before {
+            content: "🔍+";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-zoom-out::before {
+            content: "🔍-";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-rotate::before {
+            content: "🔄";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-flip::before {
+            content: "🔄";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-mirror::before {
+            content: "🪞";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-copy::before {
+            content: "📋";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-paste::before {
+            content: "📋";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-cut::before {
+            content: "✂️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-undo::before {
+            content: "↶";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-redo::before {
+            content: "↷";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-print::before {
+            content: "🖨️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-share::before {
+            content: "📤";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-external-link-alt::before {
+            content: "🔗";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-window-maximize::before {
+            content: "⛶";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-window-minimize::before {
+            content: "⛷️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-window-restore::before {
+            content: "⛷️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-window-close::before {
+            content: "❌";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-toggle-on::before {
+            content: "🔛";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-toggle-off::before {
+            content: "🔲";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-check::before {
+            content: "✅";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-times-circle::before {
+            content: "❌";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-exclamation-circle::before {
+            content: "⚠️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-question::before {
+            content: "❓";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-info::before {
+            content: "ℹ️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-ban::before {
+            content: "🚫";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-shield::before {
+            content: "🛡️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-key::before {
+            content: "🔑";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-unlock::before {
+            content: "🔓";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-lock-open::before {
+            content: "🔓";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-fingerprint::before {
+            content: "👆";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-qrcode::before {
+            content: "📱";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-barcode::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-tag::before {
+            content: "🏷️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-tags::before {
+            content: "🏷️";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-bookmark::before {
+            content: "🔖";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-bookmarks::before {
+            content: "🔖";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-flag::before {
+            content: "🚩";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-flag-checkered::before {
+            content: "🏁";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-trophy::before {
+            content: "🏆";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-medal::before {
+            content: "🏅";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-crown::before {
+            content: "👑";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-gem::before {
+            content: "💎";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-diamond::before {
+            content: "💎";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-coins::before {
+            content: "🪙";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-money-bill::before {
+            content: "💰";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-credit-card::before {
+            content: "💳";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-wallet::before {
+            content: "👛";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-piggy-bank::before {
+            content: "🐷";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-line::before {
+            content: "📈";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-bar::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-pie::before {
+            content: "🥧";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-area::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-gantt::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-scatter::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-network::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-tree::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-sankey::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-waterfall::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-candlestick::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-radar::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-polar::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-bubble::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-doughnut::before {
+            content: "🥧";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-sunburst::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-treemap::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-funnel::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-gauge::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-heatmap::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-histogram::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-boxplot::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-violin::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-ridge::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-parallel::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-sankey-diagram::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-alluvial::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-sunburst-diagram::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-treemap-diagram::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-funnel-diagram::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-gauge-diagram::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-heatmap-diagram::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-histogram-diagram::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-boxplot-diagram::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-violin-diagram::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-ridge-diagram::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
+
+        .fa-chart-parallel-diagram::before {
+            content: "📊";
+            font-family: Arial, sans-serif;
+        }
 
         /* Authentic ROG Animations from rog.asus.com */
         @keyframes rog-glow {
-            0%, 100% { 
+
+            0%,
+            100% {
                 box-shadow: 0 0 10px var(--rog-glow), 0 0 20px var(--rog-glow);
                 transform: scale(1);
             }
-            50% { 
+
+            50% {
                 box-shadow: 0 0 20px var(--rog-glow), 0 0 40px var(--rog-glow), 0 0 60px var(--rog-glow);
                 transform: scale(1.02);
             }
         }
 
         @keyframes rog-pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
         }
 
         @keyframes rog-slide {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         @keyframes rog-float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .rog-glow {
@@ -563,11 +1274,11 @@
             .rog-container {
                 padding: 0 0.5rem;
             }
-            
+
             .rog-card {
                 padding: 1rem;
             }
-            
+
             .rog-button {
                 padding: 0.5rem 1rem;
                 font-size: 0.8rem;
@@ -2003,38 +2714,38 @@
         async function testFirebaseConnection() {
             try {
                 console.log('🔍 Testing Firebase connection...');
-                
+
                 if (!window.firebase) {
                     console.error('❌ Firebase not available in window object');
                     return false;
                 }
-                
+
                 // Test Auth
                 if (!window.firebase.auth) {
                     console.error('❌ Firebase Auth not available');
                     return false;
                 }
                 console.log('✅ Firebase Auth available');
-                
+
                 // Test Firestore
                 if (!window.firebase.db) {
                     console.error('❌ Firebase Firestore not available');
                     return false;
                 }
                 console.log('✅ Firebase Firestore available');
-                
+
                 // Test Realtime Database
                 if (!window.firebase.rtdb) {
                     console.warn('⚠️ Firebase Realtime Database not available (optional)');
                 } else {
                     console.log('✅ Firebase Realtime Database available');
                 }
-                
+
                 // Test Firestore operations
                 try {
                     const testRef = window.firebase.collection(window.firebase.db, 'test');
                     console.log('✅ Firestore collection reference created');
-                    
+
                     // Try to read from a test collection (this might fail due to security rules, which is OK)
                     try {
                         const testSnapshot = await window.firebase.getDocs(testRef);
@@ -2047,7 +2758,7 @@
                     console.error('❌ Firestore operation failed:', firestoreError);
                     return false;
                 }
-                
+
                 console.log('🎉 Firebase connection test completed successfully');
                 return true;
             } catch (error) {
@@ -2059,7 +2770,7 @@
         // Enhanced Firebase diagnostics with deployment troubleshooting
         function runFirebaseDiagnostics() {
             console.log('🔧 Running Firebase Diagnostics...');
-            
+
             // Check Firebase configuration
             if (typeof firebaseConfig !== 'undefined') {
                 console.log('✅ Firebase config found:', {
@@ -2071,12 +2782,12 @@
             } else {
                 console.error('❌ Firebase config not found');
             }
-            
+
             // Check Firebase initialization
             if (window.firebase) {
                 console.log('✅ Firebase object available');
                 console.log('Available Firebase services:', Object.keys(window.firebase));
-                
+
                 // Check Firebase readiness
                 if (window.firebase.firebaseReady) {
                     console.log('Firebase ready status:', window.firebase.firebaseReady());
@@ -2084,7 +2795,7 @@
             } else {
                 console.error('❌ Firebase object not available');
             }
-            
+
             // Check authentication state
             if (window.firebase && window.firebase.auth) {
                 const user = window.firebase.auth.currentUser;
@@ -2094,35 +2805,35 @@
                     console.log('ℹ️ No user authenticated');
                 }
             }
-            
+
             // Check network connectivity
             if (navigator.onLine) {
                 console.log('✅ Network connection available');
             } else {
                 console.warn('⚠️ Network connection offline');
             }
-            
+
             // Check localStorage for fallback data
             const localOrders = localStorage.getItem('orders');
             const localUsers = localStorage.getItem('users');
             const adminUser = localStorage.getItem('adminUser');
-            
+
             console.log('📦 LocalStorage data:', {
                 orders: localOrders ? JSON.parse(localOrders).length + ' orders' : 'None',
                 users: localUsers ? JSON.parse(localUsers).length + ' users' : 'None',
                 adminUser: adminUser ? 'Present' : 'None'
             });
-            
+
             // Check for common deployment issues
             checkDeploymentIssues();
-            
+
             console.log('🔧 Firebase Diagnostics completed');
         }
 
         // Check for common deployment issues
         function checkDeploymentIssues() {
             console.log('🔍 Checking for deployment issues...');
-            
+
             // Check if running on HTTPS
             if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
                 console.warn('⚠️ Not running on HTTPS - Firebase may have issues');
@@ -2130,28 +2841,28 @@
             } else {
                 console.log('✅ Running on HTTPS or localhost');
             }
-            
+
             // Check for CORS issues
             if (location.hostname.includes('github.io') || location.hostname.includes('netlify.app') || location.hostname.includes('vercel.app')) {
                 console.log('✅ Detected hosting platform:', location.hostname);
                 console.log('💡 Platform-specific solutions available');
             }
-            
+
             // Check Firebase SDK loading
             const firebaseScripts = document.querySelectorAll('script[src*="firebase"]');
             console.log('Firebase SDK scripts loaded:', firebaseScripts.length);
-            
+
             // Check for CDN loading issues
             const cdnResources = document.querySelectorAll('link[href*="cdn"], script[src*="cdn"]');
             console.log('CDN resources loaded:', cdnResources.length);
-            
+
             // Check for network connectivity
             if (!navigator.onLine) {
                 console.warn('⚠️ Network is offline - some features may not work');
             } else {
                 console.log('✅ Network connection available');
             }
-            
+
             // Check for Firebase errors in console
             const originalError = console.error;
             console.error = function(...args) {
@@ -2161,15 +2872,15 @@
                 }
                 originalError.apply(console, args);
             };
-            
+
             // Check for font loading issues
             const fontLinks = document.querySelectorAll('link[href*="fonts"]');
             console.log('Font resources loaded:', fontLinks.length);
-            
+
             // Check for icon loading issues
             const iconLinks = document.querySelectorAll('link[href*="font-awesome"]');
             console.log('Icon resources loaded:', iconLinks.length);
-            
+
             // Provide deployment solutions
             console.log('🔧 Deployment Solutions:');
             console.log('1. Add your domain to Firebase Console → Authentication → Settings → Authorized domains');
@@ -2181,7 +2892,7 @@
         // ROG Styles Application and Icon Loading
         function applyROGStyles() {
             console.log('🎨 Applying ROG styles...');
-            
+
             // Ensure all cards have ROG styling
             const cards = document.querySelectorAll('.rog-card');
             cards.forEach(card => {
@@ -2189,7 +2900,7 @@
                     card.classList.add('rog-card');
                 }
             });
-            
+
             // Ensure all buttons have ROG styling
             const buttons = document.querySelectorAll('button');
             buttons.forEach(button => {
@@ -2199,7 +2910,7 @@
                     button.classList.add('rog-button-secondary');
                 }
             });
-            
+
             // Ensure all tables have ROG styling
             const tables = document.querySelectorAll('table');
             tables.forEach(table => {
@@ -2207,7 +2918,7 @@
                     table.classList.add('rog-table');
                 }
             });
-            
+
             // Apply ROG grid system
             const grids = document.querySelectorAll('.grid');
             grids.forEach(grid => {
@@ -2219,7 +2930,7 @@
                     grid.classList.add('rog-grid', 'rog-grid-2');
                 }
             });
-            
+
             // Apply status badges
             const statusElements = document.querySelectorAll('[class*="status"]');
             statusElements.forEach(element => {
@@ -2234,14 +2945,14 @@
                     element.classList.add('rog-badge', 'rog-badge-cancelled');
                 }
             });
-            
+
             // Apply ROG typography to headings
             const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
             headings.forEach((heading, index) => {
                 const level = heading.tagName.toLowerCase();
                 heading.classList.add(`rog-${level}`);
             });
-            
+
             // Apply ROG typography to text elements
             const textElements = document.querySelectorAll('p, span, div, a');
             textElements.forEach(element => {
@@ -2249,19 +2960,19 @@
                     element.classList.add('rog-text-normal');
                 }
             });
-            
+
             console.log('✅ ROG styles applied successfully');
         }
 
         // Font Loading Detection and Fallback
         function checkFontLoading() {
             console.log('🔍 Checking font loading...');
-            
+
             // Check if Inter font is loaded
             if (!document.fonts.check('1em Inter')) {
                 console.warn('⚠️ Inter font not loaded, using fallback');
                 document.body.style.fontFamily = 'Arial, sans-serif';
-                
+
                 // Apply fallback to all elements
                 const allElements = document.querySelectorAll('*');
                 allElements.forEach(element => {
@@ -2272,11 +2983,11 @@
             } else {
                 console.log('✅ Inter font loaded successfully');
             }
-            
+
             // Check for Google Fonts loading
             const googleFontsLoaded = document.querySelector('link[href*="fonts.googleapis.com"]') !== null;
             console.log('Google Fonts CDN loaded:', googleFontsLoaded);
-            
+
             // Apply fallback font stack
             if (!googleFontsLoaded) {
                 console.warn('⚠️ Google Fonts not loaded, applying fallback fonts');
@@ -2287,22 +2998,22 @@
         // Enhanced Icon Loading Check
         function checkIconLoading() {
             console.log('🔍 Checking icon loading...');
-            
+
             // Check if FontAwesome is loaded
             const fontAwesomeLoaded = document.querySelector('link[href*="font-awesome"]') !== null;
             console.log('FontAwesome CDN loaded:', fontAwesomeLoaded);
-            
+
             // Check for fallback icons
             const fallbackIcons = document.querySelectorAll('.fa-dashboard, .fa-shopping-cart, .fa-users, .fa-chart-bar, .fa-cog');
             console.log('Fallback icons available:', fallbackIcons.length);
-            
+
             // Force icon display with enhanced fallbacks
             const allIcons = document.querySelectorAll('i[class*="fa-"]');
             allIcons.forEach(icon => {
                 icon.style.display = 'inline-block';
                 icon.style.fontSize = '1rem';
                 icon.style.fontFamily = 'Arial, sans-serif';
-                
+
                 // Add fallback text if icon fails
                 if (!icon.textContent && !icon.innerHTML.includes('::before')) {
                     const iconClass = icon.className.match(/fa-([a-zA-Z0-9-]+)/);
@@ -2311,7 +3022,7 @@
                     }
                 }
             });
-            
+
             console.log('✅ Icon loading check completed');
         }
 
@@ -2394,10 +3105,10 @@
             // Test Firebase connection
             const firebaseConnected = await testFirebaseConnection();
             console.log('Firebase connection status:', firebaseConnected);
-            
+
             // Run comprehensive diagnostics
             runFirebaseDiagnostics();
-            
+
             // Apply ROG styles and check icons
             applyROGStyles();
             checkIconLoading();
@@ -2738,7 +3449,7 @@
         async function loadOrdersFromFirebase() {
             const maxRetries = 3;
             let retryCount = 0;
-            
+
             while (retryCount < maxRetries) {
                 try {
                     if (!firebaseReady || !window.firebase || !window.firebase.db) {
@@ -2764,13 +3475,13 @@
                 } catch (error) {
                     console.error(`❌ Error loading orders from Firebase (attempt ${retryCount + 1}):`, error);
                     retryCount++;
-                    
+
                     if (retryCount < maxRetries) {
                         console.log(`🔄 Retrying in ${retryCount * 2} seconds...`);
                         await new Promise(resolve => setTimeout(resolve, retryCount * 2000));
                     } else {
                         console.error('❌ All Firebase retry attempts failed');
-                        
+
                         // Try alternative data sources
                         try {
                             console.log('Trying localStorage fallback...');
@@ -2782,7 +3493,7 @@
                         } catch (localError) {
                             console.error('localStorage fallback failed:', localError);
                         }
-                        
+
                         // Return sample data for demonstration
                         return getFallbackOrders();
                     }
@@ -2792,8 +3503,7 @@
 
         // Get fallback orders for demonstration
         function getFallbackOrders() {
-            const sampleOrders = [
-                {
+            const sampleOrders = [{
                     id: 'ORD-001',
                     orderId: 'ORD-001',
                     customerName: 'John Doe',
@@ -2830,7 +3540,7 @@
                     updatedAt: new Date().toISOString()
                 }
             ];
-            
+
             console.log(`Using ${sampleOrders.length} fallback orders`);
             return sampleOrders;
         }
@@ -2927,7 +3637,7 @@
                         </td>
                     </tr>
                 `).join('');
-                
+
                 // Reapply ROG styles after content update
                 setTimeout(() => {
                     applyROGStyles();
@@ -3056,7 +3766,7 @@
                 return users;
             } catch (error) {
                 console.error('Error loading users from Firebase:', error);
-                
+
                 // Try localStorage fallback
                 try {
                     console.log('Trying localStorage fallback for users...');
@@ -3068,7 +3778,7 @@
                 } catch (localError) {
                     console.error('localStorage fallback failed:', localError);
                 }
-                
+
                 // Return sample data for demonstration
                 return getFallbackUsers();
             }
@@ -3076,8 +3786,7 @@
 
         // Get fallback users for demonstration
         function getFallbackUsers() {
-            const sampleUsers = [
-                {
+            const sampleUsers = [{
                     id: 'user-001',
                     email: 'admin@otomono.com',
                     name: 'Administrator',
@@ -3102,7 +3811,7 @@
                     lastLogin: new Date(Date.now() - 7200000).toISOString()
                 }
             ];
-            
+
             console.log(`Using ${sampleUsers.length} fallback users`);
             return sampleUsers;
         }
