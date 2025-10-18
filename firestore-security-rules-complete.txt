@@ -1,0 +1,435 @@
+// Otomono Jerseys - Complete Firestore Security Rules
+// Copy and paste these rules into your Firebase Console > Firestore > Rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===========================================
+    // ORDERS COLLECTION - Full Access
+    // ===========================================
+    match /orders/{orderId} {
+      // Allow read/write access to all orders
+      // This enables the admin panel to create, read, update, and delete orders
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // USERS COLLECTION - Full Access
+    // ===========================================
+    match /users/{userId} {
+      // Allow read/write access to user profiles
+      // This enables user management in the admin panel
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // JERSEY DETAILS COLLECTION - Full Access
+    // ===========================================
+    match /jerseyDetails/{detailId} {
+      // Allow read/write access to jersey details
+      // This enables client jersey detail submissions
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // CLIENT ORDERS COLLECTION - Full Access
+    // ===========================================
+    match /clientOrders/{orderId} {
+      // Allow read/write access to client orders
+      // This enables client order tracking and management
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // SYSTEM SETTINGS - Full Access
+    // ===========================================
+    match /systemSettings/{settingId} {
+      // Allow read/write access to system configuration
+      // This enables admin panel settings management
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // CUSTOMER ORDERS - Public Access
+    // ===========================================
+    match /customerOrders/{orderId} {
+      // Allow public read access for customer order tracking
+      // Allow write access for new order submissions
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // PRODUCTS COLLECTION - Full Access
+    // ===========================================
+    match /products/{productId} {
+      // Allow read/write access to product catalog
+      // This enables product management in admin panel
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // ANALYTICS COLLECTION - Full Access
+    // ===========================================
+    match /analytics/{analyticsId} {
+      // Allow read/write access to analytics data
+      // This enables dashboard metrics and reporting
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // REPORTS COLLECTION - Full Access
+    // ===========================================
+    match /reports/{reportId} {
+      // Allow read/write access to report data
+      // This enables report generation and storage
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // NOTIFICATIONS COLLECTION - Full Access
+    // ===========================================
+    match /notifications/{notificationId} {
+      // Allow read/write access to notification system
+      // This enables admin notifications and alerts
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // BACKUP COLLECTION - Full Access
+    // ===========================================
+    match /backups/{backupId} {
+      // Allow read/write access to backup data
+      // This enables data backup and recovery features
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // LOGS COLLECTION - Full Access
+    // ===========================================
+    match /logs/{logId} {
+      // Allow read/write access to system logs
+      // This enables admin panel logging and debugging
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // TEST COLLECTION - Full Access
+    // ===========================================
+    match /test/{testId} {
+      // Allow read/write access to test data
+      // This enables testing and development features
+      allow read, write: if true;
+    }
+    
+    // ===========================================
+    // CATCH-ALL RULE FOR FUTURE COLLECTIONS
+    // ===========================================
+    match /{document=**} {
+      // Allow access to any other collections that might be added
+      // This ensures the application remains flexible for future features
+      allow read, write: if true;
+    }
+  }
+}
+
+// ===========================================
+// FIREBASE REALTIME DATABASE RULES
+// ===========================================
+// Copy and paste these rules into your Firebase Console > Realtime Database > Rules
+
+{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "orders": {
+      ".read": true,
+      ".write": true,
+      "$orderId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "users": {
+      ".read": true,
+      ".write": true,
+      "$userId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "jerseyDetails": {
+      ".read": true,
+      ".write": true,
+      "$detailId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "clientOrders": {
+      ".read": true,
+      ".write": true,
+      "$orderId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "systemSettings": {
+      ".read": true,
+      ".write": true,
+      "$settingId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "customerOrders": {
+      ".read": true,
+      ".write": true,
+      "$orderId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "products": {
+      ".read": true,
+      ".write": true,
+      "$productId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "analytics": {
+      ".read": true,
+      ".write": true,
+      "$analyticsId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "reports": {
+      ".read": true,
+      ".write": true,
+      "$reportId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "notifications": {
+      ".read": true,
+      ".write": true,
+      "$notificationId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "backups": {
+      ".read": true,
+      ".write": true,
+      "$backupId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "logs": {
+      ".read": true,
+      ".write": true,
+      "$logId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "test": {
+      ".read": true,
+      ".write": true,
+      "$testId": {
+        ".read": true,
+        ".write": true
+      }
+    }
+  }
+}
+
+// ===========================================
+// FIREBASE AUTHENTICATION CONFIGURATION
+// ===========================================
+// Go to Firebase Console > Authentication > Settings
+
+// 1. AUTHORIZED DOMAINS
+// Add your deployment domains to the authorized domains list:
+// - your-domain.com
+// - your-domain.netlify.app
+// - your-domain.vercel.app
+// - your-domain.github.io
+// - localhost (for development)
+
+// 2. SIGN-IN METHODS
+// Enable the following sign-in methods:
+// - Email/Password
+// - Anonymous (optional)
+
+// 3. APP CHECK (Optional but recommended)
+// Go to Firebase Console > App Check
+// Register your app and configure enforcement
+
+// ===========================================
+// DEPLOYMENT PLATFORM CONFIGURATION
+// ===========================================
+
+// NETLIFY CONFIGURATION (netlify.toml)
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+
+// VERCEL CONFIGURATION (vercel.json)
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ]
+}
+
+// GITHUB PAGES CONFIGURATION (.htaccess)
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization"
+
+// ===========================================
+// TROUBLESHOOTING GUIDE
+// ===========================================
+
+// COMMON DEPLOYMENT ISSUES AND SOLUTIONS:
+
+// 1. FIREBASE AUTHENTICATION ERRORS
+// - Error: "auth/network-request-failed"
+//   Solution: Check domain authorization in Firebase Console
+//   Go to Authentication > Settings > Authorized domains
+
+// 2. FIRESTORE PERMISSION ERRORS
+// - Error: "Missing or insufficient permissions"
+//   Solution: Apply the security rules above
+//   Go to Firestore > Rules and paste the rules
+
+// 3. CORS ERRORS
+// - Error: "CORS policy" or "Cross-Origin Request Blocked"
+//   Solution: Configure CORS for your hosting platform
+//   Use the platform-specific configurations above
+
+// 4. HTTPS REQUIREMENTS
+// - Error: Firebase requires HTTPS in production
+//   Solution: Ensure your deployment uses HTTPS
+//   Most hosting platforms provide HTTPS by default
+
+// 5. FONT/ICON LOADING ISSUES
+// - Icons or fonts not displaying
+//   Solution: The admin panel now has comprehensive fallbacks
+//   Check browser console for CDN loading errors
+
+// ===========================================
+// TESTING YOUR DEPLOYMENT
+// ===========================================
+
+// 1. OPEN BROWSER CONSOLE
+// Check for any error messages related to:
+// - Firebase initialization
+// - Font loading
+// - Icon loading
+// - Network requests
+
+// 2. TEST FIREBASE CONNECTION
+// The admin panel includes diagnostic functions:
+// - runFirebaseDiagnostics()
+// - checkDeploymentIssues()
+// - checkFontLoading()
+// - checkIconLoading()
+
+// 3. VERIFY SECURITY RULES
+// Test read/write operations:
+// - Create a test order
+// - Update user information
+// - Generate reports
+// - Check analytics data
+
+// ===========================================
+// PRODUCTION SECURITY CONSIDERATIONS
+// ===========================================
+
+// FOR PRODUCTION DEPLOYMENT, CONSIDER:
+
+// 1. RESTRICTIVE SECURITY RULES
+// Replace "allow read, write: if true;" with:
+// allow read, write: if request.auth != null;
+
+// 2. USER AUTHENTICATION
+// Implement proper user authentication:
+// - Admin users only
+// - Role-based access control
+// - Session management
+
+// 3. DATA VALIDATION
+// Add data validation rules:
+// - Required fields
+// - Data type validation
+// - Business logic validation
+
+// 4. RATE LIMITING
+// Implement rate limiting:
+// - API request limits
+// - User action limits
+// - Abuse prevention
+
+// 5. MONITORING
+// Set up monitoring:
+// - Error tracking
+// - Performance monitoring
+// - Security alerts
+
+// ===========================================
+// SUPPORT AND MAINTENANCE
+// ===========================================
+
+// REGULAR MAINTENANCE TASKS:
+
+// 1. MONITOR FIREBASE USAGE
+// - Check Firebase Console for usage statistics
+// - Monitor quota and billing
+// - Review security rules regularly
+
+// 2. UPDATE DEPENDENCIES
+// - Keep Firebase SDK updated
+// - Update CDN resources
+// - Test compatibility
+
+// 3. BACKUP DATA
+// - Regular Firestore exports
+// - Database backups
+// - Configuration backups
+
+// 4. SECURITY REVIEWS
+// - Regular security rule reviews
+// - Access control audits
+// - Vulnerability assessments
+
+// ===========================================
+// END OF FIREBASE CONFIGURATION
+// ===========================================
