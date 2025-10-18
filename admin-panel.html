@@ -5,1331 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Otomono Admin Panel</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- ROG Styling and Icon Fallbacks -->
-    <style>
-        /* Authentic ROG Color Palette from rog.asus.com */
-        :root {
-            --rog-red: #ff0040;
-            --rog-red-dark: #cc0033;
-            --rog-red-light: #ff4080;
-            --rog-red-glow: #ff0040;
-            --rog-dark: #0a0a0a;
-            --rog-gray: #1a1a1a;
-            --rog-light: #2a2a2a;
-            --rog-accent: #ff4080;
-            --rog-glow: rgba(255, 0, 64, 0.4);
-            --rog-shadow: rgba(0, 0, 0, 0.8);
-            --rog-text: #ffffff;
-            --rog-text-secondary: #cccccc;
-            --rog-border: rgba(255, 0, 64, 0.3);
-            --rog-gradient: linear-gradient(135deg, #ff0040 0%, #ff4080 50%, #ff0040 100%);
-            --rog-gradient-dark: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
-
-            /* ROG Typography from rog.asus.com */
-            --rog-font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --rog-font-weight-light: 300;
-            --rog-font-weight-normal: 400;
-            --rog-font-weight-medium: 500;
-            --rog-font-weight-semibold: 600;
-            --rog-font-weight-bold: 700;
-            --rog-font-weight-extrabold: 800;
-            --rog-font-weight-black: 900;
-        }
-
-        /* Global ROG Styling */
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--rog-font-primary);
-            font-weight: var(--rog-font-weight-normal);
-            background: var(--rog-gradient-dark);
-            background-attachment: fixed;
-            color: var(--rog-text);
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-            line-height: 1.6;
-        }
-
-        /* ROG Background Effects */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background:
-                radial-gradient(circle at 20% 80%, rgba(255, 0, 64, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 0, 64, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(255, 0, 64, 0.05) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        /* ROG Grid System */
-        .rog-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .rog-grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .rog-grid-1 {
-            grid-template-columns: 1fr;
-        }
-
-        .rog-grid-2 {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .rog-grid-3 {
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        .rog-grid-4 {
-            grid-template-columns: repeat(4, 1fr);
-        }
-
-        @media (max-width: 768px) {
-
-            .rog-grid-2,
-            .rog-grid-3,
-            .rog-grid-4 {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Authentic ROG Cards from rog.asus.com */
-        .rog-card {
-            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(42, 42, 42, 0.95) 100%);
-            border: 2px solid var(--rog-border);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.6),
-                0 0 0 1px rgba(255, 0, 64, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* ROG Typography Classes */
-        .rog-text-light {
-            font-weight: var(--rog-font-weight-light);
-        }
-
-        .rog-text-normal {
-            font-weight: var(--rog-font-weight-normal);
-        }
-
-        .rog-text-medium {
-            font-weight: var(--rog-font-weight-medium);
-        }
-
-        .rog-text-semibold {
-            font-weight: var(--rog-font-weight-semibold);
-        }
-
-        .rog-text-bold {
-            font-weight: var(--rog-font-weight-bold);
-        }
-
-        .rog-text-extrabold {
-            font-weight: var(--rog-font-weight-extrabold);
-        }
-
-        .rog-text-black {
-            font-weight: var(--rog-font-weight-black);
-        }
-
-        /* ROG Headings */
-        .rog-h1 {
-            font-size: 2.5rem;
-            font-weight: var(--rog-font-weight-bold);
-            line-height: 1.2;
-        }
-
-        .rog-h2 {
-            font-size: 2rem;
-            font-weight: var(--rog-font-weight-semibold);
-            line-height: 1.3;
-        }
-
-        .rog-h3 {
-            font-size: 1.5rem;
-            font-weight: var(--rog-font-weight-medium);
-            line-height: 1.4;
-        }
-
-        .rog-h4 {
-            font-size: 1.25rem;
-            font-weight: var(--rog-font-weight-medium);
-            line-height: 1.4;
-        }
-
-        .rog-h5 {
-            font-size: 1.125rem;
-            font-weight: var(--rog-font-weight-medium);
-            line-height: 1.5;
-        }
-
-        .rog-h6 {
-            font-size: 1rem;
-            font-weight: var(--rog-font-weight-semibold);
-            line-height: 1.5;
-        }
-
-        .rog-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 64, 0.1), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .rog-card:hover::before {
-            left: 100%;
-        }
-
-        .rog-card:hover {
-            border-color: var(--rog-red);
-            box-shadow:
-                0 12px 48px rgba(0, 0, 0, 0.8),
-                0 0 20px var(--rog-glow),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            transform: translateY(-4px) scale(1.02);
-        }
-
-        /* Authentic ROG Buttons from rog.asus.com */
-        .rog-button {
-            background: var(--rog-gradient);
-            border: 2px solid var(--rog-red);
-            color: var(--rog-text);
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow:
-                0 6px 20px rgba(0, 0, 0, 0.4),
-                0 0 10px var(--rog-glow),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            position: relative;
-            overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .rog-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .rog-button:hover::before {
-            left: 100%;
-        }
-
-        .rog-button:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow:
-                0 12px 32px rgba(0, 0, 0, 0.6),
-                0 0 20px var(--rog-glow),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            background: linear-gradient(45deg, var(--rog-red-dark), var(--rog-red), var(--rog-red-light));
-        }
-
-        .rog-button:active {
-            transform: translateY(-1px) scale(1.02);
-        }
-
-        .rog-button-secondary {
-            background: linear-gradient(135deg, var(--rog-gray) 0%, var(--rog-light) 100%);
-            border: 1px solid rgba(255, 0, 64, 0.3);
-            color: white;
-        }
-
-        .rog-button-secondary:hover {
-            border-color: var(--rog-red);
-            background: linear-gradient(135deg, rgba(255, 0, 64, 0.1) 0%, var(--rog-light) 100%);
-        }
-
-        /* Authentic ROG Tables from rog.asus.com */
-        .rog-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(42, 42, 42, 0.95) 100%);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow:
-                0 12px 48px rgba(0, 0, 0, 0.6),
-                0 0 0 1px var(--rog-border),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 2px solid var(--rog-border);
-        }
-
-        .rog-table th {
-            background: var(--rog-gradient);
-            color: var(--rog-text);
-            font-weight: 800;
-            font-size: 0.9rem;
-            padding: 1.5rem 1rem;
-            text-align: left;
-            border-bottom: 3px solid var(--rog-red);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-        }
-
-        .rog-table th::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--rog-red), transparent);
-        }
-
-        .rog-table td {
-            padding: 1.25rem 1rem;
-            border-bottom: 1px solid rgba(255, 0, 64, 0.1);
-            color: var(--rog-text);
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .rog-table tr {
-            transition: all 0.3s ease;
-        }
-
-        .rog-table tr:hover {
-            background: linear-gradient(90deg, rgba(255, 0, 64, 0.1) 0%, rgba(255, 0, 64, 0.05) 50%, rgba(255, 0, 64, 0.1) 100%);
-            transform: scale(1.01);
-        }
-
-        .rog-table tr:hover td {
-            color: var(--rog-text);
-            text-shadow: 0 0 10px var(--rog-glow);
-        }
-
-        /* Authentic ROG Status Badges from rog.asus.com */
-        .rog-badge {
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 2px solid;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .rog-badge::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .rog-badge:hover::before {
-            left: 100%;
-        }
-
-        .rog-badge-pending {
-            background: linear-gradient(135deg, rgba(255, 193, 7, 0.3) 0%, rgba(255, 193, 7, 0.1) 100%);
-            color: #ffc107;
-            border-color: #ffc107;
-            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
-        }
-
-        .rog-badge-processing {
-            background: linear-gradient(135deg, rgba(0, 123, 255, 0.3) 0%, rgba(0, 123, 255, 0.1) 100%);
-            color: #007bff;
-            border-color: #007bff;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-        }
-
-        .rog-badge-completed {
-            background: linear-gradient(135deg, rgba(40, 167, 69, 0.3) 0%, rgba(40, 167, 69, 0.1) 100%);
-            color: #28a745;
-            border-color: #28a745;
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-        }
-
-        .rog-badge-cancelled {
-            background: linear-gradient(135deg, rgba(220, 53, 69, 0.3) 0%, rgba(220, 53, 69, 0.1) 100%);
-            color: #dc3545;
-            border-color: #dc3545;
-            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
-        }
-
-        /* ROG Icons with Fallbacks */
-        .rog-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 1.5rem;
-            height: 1.5rem;
-            font-size: 1rem;
-        }
-
-        /* Enhanced FontAwesome Fallback Icons with Font Family */
-        .fa-dashboard::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-shopping-cart::before {
-            content: "🛒";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-users::before {
-            content: "👥";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-bar::before {
-            content: "📈";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-cog::before {
-            content: "⚙️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-plus::before {
-            content: "➕";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-edit::before {
-            content: "✏️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-trash::before {
-            content: "🗑️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-eye::before {
-            content: "👁️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-link::before {
-            content: "🔗";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-refresh::before {
-            content: "🔄";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-bars::before {
-            content: "☰";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-user::before {
-            content: "👤";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-lock::before {
-            content: "🔒";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-shield-alt::before {
-            content: "🛡️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-download::before {
-            content: "⬇️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-file-pdf::before {
-            content: "📄";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-file-code::before {
-            content: "💻";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-check-circle::before {
-            content: "✅";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-times::before {
-            content: "❌";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-save::before {
-            content: "💾";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-list::before {
-            content: "📋";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-pie::before {
-            content: "🥧";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-line::before {
-            content: "📈";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-area::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-tshirt::before {
-            content: "👕";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-dollar-sign::before {
-            content: "💰";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-percentage::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-ruler::before {
-            content: "📏";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-file-alt::before {
-            content: "📄";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-eye-slash::before {
-            content: "🙈";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-tachometer-alt::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-sync-alt::before {
-            content: "🔄";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-bell::before {
-            content: "🔔";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-search::before {
-            content: "🔍";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-filter::before {
-            content: "🔽";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-sort::before {
-            content: "↕️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-arrow-up::before {
-            content: "⬆️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-arrow-down::before {
-            content: "⬇️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-arrow-left::before {
-            content: "⬅️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-arrow-right::before {
-            content: "➡️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-home::before {
-            content: "🏠";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-sign-out-alt::before {
-            content: "🚪";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-cog::before {
-            content: "⚙️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-wrench::before {
-            content: "🔧";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-tools::before {
-            content: "🛠️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-info-circle::before {
-            content: "ℹ️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-exclamation-triangle::before {
-            content: "⚠️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-question-circle::before {
-            content: "❓";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-heart::before {
-            content: "❤️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-star::before {
-            content: "⭐";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-thumbs-up::before {
-            content: "👍";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-thumbs-down::before {
-            content: "👎";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-comment::before {
-            content: "💬";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-envelope::before {
-            content: "✉️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-phone::before {
-            content: "📞";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-calendar::before {
-            content: "📅";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-clock::before {
-            content: "🕐";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-map-marker-alt::before {
-            content: "📍";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-globe::before {
-            content: "🌐";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-wifi::before {
-            content: "📶";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-battery-full::before {
-            content: "🔋";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-volume-up::before {
-            content: "🔊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-volume-down::before {
-            content: "🔉";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-volume-mute::before {
-            content: "🔇";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-play::before {
-            content: "▶️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-pause::before {
-            content: "⏸️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-stop::before {
-            content: "⏹️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-forward::before {
-            content: "⏩";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-backward::before {
-            content: "⏪";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-expand::before {
-            content: "⛶";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-compress::before {
-            content: "⛷️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-fullscreen::before {
-            content: "⛶";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-exit-fullscreen::before {
-            content: "⛷️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-zoom-in::before {
-            content: "🔍+";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-zoom-out::before {
-            content: "🔍-";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-rotate::before {
-            content: "🔄";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-flip::before {
-            content: "🔄";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-mirror::before {
-            content: "🪞";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-copy::before {
-            content: "📋";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-paste::before {
-            content: "📋";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-cut::before {
-            content: "✂️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-undo::before {
-            content: "↶";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-redo::before {
-            content: "↷";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-print::before {
-            content: "🖨️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-share::before {
-            content: "📤";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-external-link-alt::before {
-            content: "🔗";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-window-maximize::before {
-            content: "⛶";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-window-minimize::before {
-            content: "⛷️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-window-restore::before {
-            content: "⛷️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-window-close::before {
-            content: "❌";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-toggle-on::before {
-            content: "🔛";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-toggle-off::before {
-            content: "🔲";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-check::before {
-            content: "✅";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-times-circle::before {
-            content: "❌";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-exclamation-circle::before {
-            content: "⚠️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-question::before {
-            content: "❓";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-info::before {
-            content: "ℹ️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-ban::before {
-            content: "🚫";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-shield::before {
-            content: "🛡️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-key::before {
-            content: "🔑";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-unlock::before {
-            content: "🔓";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-lock-open::before {
-            content: "🔓";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-fingerprint::before {
-            content: "👆";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-qrcode::before {
-            content: "📱";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-barcode::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-tag::before {
-            content: "🏷️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-tags::before {
-            content: "🏷️";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-bookmark::before {
-            content: "🔖";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-bookmarks::before {
-            content: "🔖";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-flag::before {
-            content: "🚩";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-flag-checkered::before {
-            content: "🏁";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-trophy::before {
-            content: "🏆";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-medal::before {
-            content: "🏅";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-crown::before {
-            content: "👑";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-gem::before {
-            content: "💎";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-diamond::before {
-            content: "💎";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-coins::before {
-            content: "🪙";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-money-bill::before {
-            content: "💰";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-credit-card::before {
-            content: "💳";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-wallet::before {
-            content: "👛";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-piggy-bank::before {
-            content: "🐷";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-line::before {
-            content: "📈";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-bar::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-pie::before {
-            content: "🥧";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-area::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-gantt::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-scatter::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-network::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-tree::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-sankey::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-waterfall::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-candlestick::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-radar::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-polar::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-bubble::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-doughnut::before {
-            content: "🥧";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-sunburst::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-treemap::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-funnel::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-gauge::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-heatmap::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-histogram::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-boxplot::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-violin::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-ridge::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-parallel::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-sankey-diagram::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-alluvial::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-sunburst-diagram::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-treemap-diagram::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-funnel-diagram::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-gauge-diagram::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-heatmap-diagram::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-histogram-diagram::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-boxplot-diagram::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-violin-diagram::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-ridge-diagram::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        .fa-chart-parallel-diagram::before {
-            content: "📊";
-            font-family: Arial, sans-serif;
-        }
-
-        /* Authentic ROG Animations from rog.asus.com */
-        @keyframes rog-glow {
-
-            0%,
-            100% {
-                box-shadow: 0 0 10px var(--rog-glow), 0 0 20px var(--rog-glow);
-                transform: scale(1);
-            }
-
-            50% {
-                box-shadow: 0 0 20px var(--rog-glow), 0 0 40px var(--rog-glow), 0 0 60px var(--rog-glow);
-                transform: scale(1.02);
-            }
-        }
-
-        @keyframes rog-pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.7;
-            }
-        }
-
-        @keyframes rog-slide {
-            0% {
-                transform: translateX(-100%);
-            }
-
-            100% {
-                transform: translateX(100%);
-            }
-        }
-
-        @keyframes rog-float {
-
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .rog-glow {
-            animation: rog-glow 3s ease-in-out infinite;
-        }
-
-        .rog-pulse {
-            animation: rog-pulse 2s ease-in-out infinite;
-        }
-
-        .rog-float {
-            animation: rog-float 4s ease-in-out infinite;
-        }
-
-        /* ROG Responsive Design */
-        @media (max-width: 768px) {
-            .rog-container {
-                padding: 0 0.5rem;
-            }
-
-            .rog-card {
-                padding: 1rem;
-            }
-
-            .rog-button {
-                padding: 0.5rem 1rem;
-                font-size: 0.8rem;
-            }
-        }
-
-        /* Authentic ROG Scrollbar from rog.asus.com */
-        ::-webkit-scrollbar {
-            width: 12px;
-            height: 12px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--rog-gradient-dark);
-            border-radius: 6px;
-            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--rog-gradient);
-            border-radius: 6px;
-            border: 2px solid var(--rog-dark);
-            box-shadow: 0 0 10px var(--rog-glow);
-            transition: all 0.3s ease;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(45deg, var(--rog-red-dark), var(--rog-red), var(--rog-red-light));
-            box-shadow: 0 0 15px var(--rog-glow);
-            transform: scale(1.1);
-        }
-
-        ::-webkit-scrollbar-corner {
-            background: var(--rog-dark);
-        }
-
-        /* Firefox scrollbar */
-        html {
-            scrollbar-width: thin;
-            scrollbar-color: var(--rog-red) var(--rog-dark);
-        }
-    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, orderBy, where, onSnapshot, setDoc, enablePersistence } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, orderBy, where, onSnapshot, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { getDatabase, ref, set, get, push, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
-        // Firebase configuration with deployment optimization
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBNWEchdrKX9A2WdMa3VTnpbKgo0_eWqHE",
             authDomain: "otomono-c9938.firebaseapp.com",
@@ -1337,138 +26,20 @@
             storageBucket: "otomono-c9938.firebasestorage.app",
             messagingSenderId: "348906539551",
             appId: "1:348906539551:web:e249c40d0ae9e2964a632a",
-            measurementId: "G-YVL497L1V3",
-            databaseURL: "https://otomono-c9938-default-rtdb.firebaseio.com/"
+            measurementId: "G-YVL497L1V3"
         };
 
-        // Firebase deployment configuration
-        const firebaseDeploymentConfig = {
-            enableOfflinePersistence: true,
-            cacheSizeBytes: 40 * 1024 * 1024, // 40MB
-            enableNetworkRetry: true,
-            timeout: 30000, // 30 seconds
-            debug: false // Set to false for production
-        };
-
-        // Initialize Firebase with comprehensive deployment handling
-        let app, auth, db, rtdb;
-        let firebaseReady = false;
-        let firebaseRetryCount = 0;
-        const maxRetries = 3;
-        
-        // Enhanced Firebase initialization with retry logic
-        async function initializeFirebaseWithRetry() {
-            try {
-                console.log('🔥 Initializing Firebase...');
-                
-                // Check if Firebase is already initialized
-                if (window.firebase && window.firebase.app) {
-                    console.log('Firebase already initialized, reusing existing instance');
-                    return true;
-                }
-                
-                // Initialize Firebase app
-                app = initializeApp(firebaseConfig);
-                
-                // Initialize services with deployment settings
-                auth = getAuth(app);
-                db = getFirestore(app);
-                rtdb = getDatabase(app);
-                
-                // Configure auth for deployment
-                if (auth) {
-                    auth.settings.appVerificationDisabledForTesting = false;
-                }
-                
-                // Configure Firestore for deployment
-                if (db) {
-                    // Enable offline persistence
-                    try {
-                        await enablePersistence(db, {
-                            synchronizeTabs: true
-                        });
-                        console.log('✅ Firestore offline persistence enabled');
-                    } catch (persistenceError) {
-                        console.warn('⚠️ Firestore persistence not available:', persistenceError.message);
-                    }
-                }
-                
-                // Test Firebase connection
-                await testFirebaseServices();
-                
-                firebaseReady = true;
-                console.log('✅ Firebase initialized successfully');
-                return true;
-                
-            } catch (error) {
-                console.error('❌ Firebase initialization error:', error);
-                
-                // Handle specific Firebase errors
-                if (error.code === 'auth/network-request-failed') {
-                    console.error('🚨 Network error - check domain authorization in Firebase Console');
-                } else if (error.code === 'auth/unauthorized-domain') {
-                    console.error('🚨 Domain not authorized - add to Firebase Console → Authentication → Settings → Authorized domains');
-                } else if (error.code === 'app/duplicate-app') {
-                    console.warn('⚠️ Firebase app already exists, reusing existing instance');
-                    firebaseReady = true;
-                    return true;
-                }
-                
-                firebaseRetryCount++;
-                
-                if (firebaseRetryCount < maxRetries) {
-                    console.log(`🔄 Retrying Firebase initialization (${firebaseRetryCount}/${maxRetries})...`);
-                    await new Promise(resolve => setTimeout(resolve, 2000 * firebaseRetryCount));
-                    return await initializeFirebaseWithRetry();
-                } else {
-                    console.error('❌ Firebase initialization failed after all retries');
-                    firebaseReady = false;
-                    return false;
-                }
-            }
-        }
-        
-        // Test Firebase services
-        async function testFirebaseServices() {
-            try {
-                // Test Auth
-                if (auth) {
-                    console.log('✅ Firebase Auth service ready');
-                }
-                
-                // Test Firestore
-                if (db) {
-                    console.log('✅ Firebase Firestore service ready');
-                }
-                
-                // Test Realtime Database
-                if (rtdb) {
-                    console.log('✅ Firebase Realtime Database service ready');
-                }
-                
-                return true;
-            } catch (error) {
-                console.error('❌ Firebase services test failed:', error);
-                throw error;
-            }
-        }
-        
         // Initialize Firebase
-        initializeFirebaseWithRetry().then(success => {
-            if (success) {
-                console.log('🎉 Firebase initialization completed successfully');
-            } else {
-                console.log('⚠️ Firebase initialization failed, using fallback mode');
-            }
-        });
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const rtdb = getDatabase(app);
 
-        // Make Firebase available globally with deployment support
+        // Make Firebase available globally
         window.firebase = {
-            app,
             auth,
             db,
             rtdb,
-            firebaseReady: () => firebaseReady,
             signInWithEmailAndPassword,
             createUserWithEmailAndPassword,
             signOut,
@@ -1492,12 +63,7 @@
             set,
             get,
             push,
-            remove,
-            // Deployment helpers
-            initializeFirebaseWithRetry,
-            testFirebaseServices,
-            firebaseConfig,
-            firebaseDeploymentConfig
+            remove
         };
 
         console.log('Firebase initialized successfully');
@@ -2119,14 +685,14 @@
         <main class="content-area flex-1 p-6">
             <div class="main-container">
                 <!-- Dashboard Section -->
-                <div id="dashboard" class="section fade-in rog-container">
+                <div id="dashboard" class="section fade-in">
                     <div class="mb-8">
                         <h2 class="text-3xl font-bold text-white mb-2">Dashboard</h2>
                         <p class="text-gray-400">Welcome to your admin dashboard</p>
                     </div>
 
                     <!-- Stats Cards -->
-                    <div class="rog-grid rog-grid-4 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div class="rog-card p-6">
                             <div class="flex items-center justify-between">
                                 <div>
@@ -2204,14 +770,14 @@
                 </div>
 
                 <!-- Orders Section -->
-                <div id="orders" class="section hidden rog-container">
+                <div id="orders" class="section hidden">
                     <div class="mb-8">
                         <h2 class="text-3xl font-bold text-white mb-2">Orders</h2>
                         <p class="text-gray-400">Manage all orders</p>
                     </div>
 
                     <!-- Orders Table -->
-                    <div class="rog-card">
+                    <div class="rog-card p-6">
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
                             <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                                 <input type="text" placeholder="Search orders..." class="px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-rog-red focus:outline-none">
@@ -2446,129 +1012,70 @@
                 <div id="settings" class="section hidden">
                     <div class="mb-8">
                         <h2 class="text-3xl font-bold text-white mb-2">Settings</h2>
-                        <p class="text-gray-400">Manage your account settings and preferences</p>
+                        <p class="text-gray-400">Configure system settings</p>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Account Information -->
-                        <div class="rog-card p-6">
-                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
-                                <i class="fas fa-user mr-2 text-rog-red"></i>
-                                Account Information
-                            </h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
-                                    <input type="email" id="userEmail" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" readonly>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Role</label>
-                                    <input type="text" id="userRole" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" readonly>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Last Login</label>
-                                    <input type="text" id="lastLogin" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" readonly>
+                    <!-- Password Change Section -->
+                    <div class="rog-card p-6 mb-6">
+                        <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                            <i class="fas fa-lock mr-2 text-rog-red"></i>
+                            Change Password
+                        </h3>
+                        <form id="changePasswordForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Current Password</label>
+                                <input type="password" id="currentPassword" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" placeholder="Enter your current password" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">New Password</label>
+                                <input type="password" id="newPassword" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" placeholder="Enter your new password" required>
+                                <div class="mt-2 text-xs text-gray-400">
+                                    Password must be at least 6 characters long
                                 </div>
                             </div>
-                        </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Confirm New Password</label>
+                                <input type="password" id="confirmPassword" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" placeholder="Confirm your new password" required>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <button type="submit" class="rog-button px-6 py-2 rounded-lg">
+                                    <i class="fas fa-key mr-2"></i>Change Password
+                                </button>
+                                <button type="button" onclick="clearPasswordForm()" class="rog-button-secondary px-6 py-2 rounded-lg">
+                                    <i class="fas fa-times mr-2"></i>Clear
+                                </button>
+                            </div>
+                        </form>
+                    </div>
 
-                        <!-- Change Password -->
-                        <div class="rog-card p-6">
-                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
-                                <i class="fas fa-lock mr-2 text-rog-red"></i>
-                                Change Password
-                            </h3>
-                            <form id="changePasswordForm" class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Current Password</label>
-                                    <div class="relative">
-                                        <input type="password" id="currentPassword" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" required>
-                                        <button type="button" onclick="togglePasswordVisibility('currentPassword')" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
-                                            <i class="fas fa-eye" id="currentPasswordIcon"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">New Password</label>
-                                    <div class="relative">
-                                        <input type="password" id="newPassword" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" required minlength="6">
-                                        <button type="button" onclick="togglePasswordVisibility('newPassword')" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
-                                            <i class="fas fa-eye" id="newPasswordIcon"></i>
-                                        </button>
-                                    </div>
-                                    <p class="text-xs text-gray-400 mt-1">Password must be at least 6 characters long</p>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Confirm New Password</label>
-                                    <div class="relative">
-                                        <input type="password" id="confirmPassword" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" required>
-                                        <button type="button" onclick="togglePasswordVisibility('confirmPassword')" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
-                                            <i class="fas fa-eye" id="confirmPasswordIcon"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-3">
-                                    <button type="submit" class="rog-button px-6 py-2 rounded-lg">
-                                        <i class="fas fa-save mr-2"></i>
-                                        Change Password
-                                    </button>
-                                    <button type="button" onclick="clearPasswordForm()" class="rog-button-secondary px-6 py-2 rounded-lg">
-                                        <i class="fas fa-times mr-2"></i>
-                                        Clear
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- System Settings -->
-                        <div class="rog-card p-6">
-                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
-                                <i class="fas fa-cog mr-2 text-rog-red"></i>
-                                System Settings
-                            </h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Site Name</label>
-                                    <input type="text" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" value="Otomono Jerseys">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Email Notifications</label>
-                                    <div class="flex items-center space-x-4">
-                                        <label class="flex items-center">
-                                            <input type="checkbox" class="mr-2" checked>
-                                            <span class="text-sm text-gray-300">Enable email notifications</span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Theme</label>
-                                    <select class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
-                                        <option value="dark">Dark Theme</option>
-                                        <option value="light">Light Theme</option>
-                                    </select>
+                    <div class="rog-card p-6">
+                        <h3 class="text-xl font-bold text-white mb-6">General Settings</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Site Name</label>
+                                <input type="text" class="w-full px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none" value="Otomono Jerseys">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Email Notifications</label>
+                                <div class="flex items-center space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2" checked>
+                                        <span class="text-sm text-gray-300">Enable email notifications</span>
+                                    </label>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Security Information -->
-                        <div class="rog-card p-6">
-                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
-                                <i class="fas fa-shield-alt mr-2 text-rog-red"></i>
-                                Security Information
-                            </h3>
-                            <div class="space-y-4">
-                                <div class="bg-green-900 border border-green-700 rounded-lg p-4">
-                                    <div class="flex items-center">
-                                        <i class="fas fa-check-circle text-green-400 mr-2"></i>
-                                        <span class="text-green-300">Account is secure</span>
-                                    </div>
-                                </div>
-                                <div class="text-sm text-gray-400">
-                                    <p>• Your password is encrypted and secure</p>
-                                    <p>• Two-factor authentication is available</p>
-                                    <p>• Session expires after 24 hours of inactivity</p>
-                                </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Theme</label>
+                                <select class="px-4 py-2 bg-rog-light border border-gray-600 rounded-lg text-white focus:border-rog-red focus:outline-none">
+                                    <option value="dark">Dark Theme</option>
+                                    <option value="light">Light Theme</option>
+                                </select>
                             </div>
+                        </div>
+                        <div class="mt-6">
+                            <button class="rog-button px-6 py-2 rounded-lg">
+                                <i class="fas fa-save mr-2"></i>Save Settings
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -2679,389 +1186,20 @@
         let firebaseReady = false;
         let currentUser = null;
 
-        // Wait for Firebase to be ready with timeout
+        // Wait for Firebase to be ready
         function waitForFirebase() {
             return new Promise((resolve) => {
-                let attempts = 0;
-                const maxAttempts = 100; // 10 seconds timeout for deployment
-
                 const checkFirebase = () => {
-                    attempts++;
-
-                    // Check if Firebase is ready using the new system
-                    if (window.firebase && window.firebase.firebaseReady && window.firebase.firebaseReady()) {
+                    if (window.firebase) {
                         firebaseReady = true;
-                        console.log('✅ Firebase is ready and operational');
-                        resolve();
-                    } else if (window.firebase && window.firebase.auth && window.firebase.db) {
-                        firebaseReady = true;
-                        console.log('✅ Firebase is ready (legacy check)');
-                        resolve();
-                    } else if (attempts >= maxAttempts) {
-                        console.warn('⚠️ Firebase initialization timeout, using fallback mode');
-                        firebaseReady = false;
+                        console.log('Firebase is ready');
                         resolve();
                     } else {
-                        console.log(`🔄 Waiting for Firebase... (${attempts}/${maxAttempts})`);
                         setTimeout(checkFirebase, 100);
                     }
                 };
                 checkFirebase();
             });
-        }
-
-        // Test Firebase connection
-        async function testFirebaseConnection() {
-            try {
-                console.log('🔍 Testing Firebase connection...');
-
-                if (!window.firebase) {
-                    console.error('❌ Firebase not available in window object');
-                    return false;
-                }
-
-                // Test Auth
-                if (!window.firebase.auth) {
-                    console.error('❌ Firebase Auth not available');
-                    return false;
-                }
-                console.log('✅ Firebase Auth available');
-
-                // Test Firestore
-                if (!window.firebase.db) {
-                    console.error('❌ Firebase Firestore not available');
-                    return false;
-                }
-                console.log('✅ Firebase Firestore available');
-
-                // Test Realtime Database
-                if (!window.firebase.rtdb) {
-                    console.warn('⚠️ Firebase Realtime Database not available (optional)');
-                } else {
-                    console.log('✅ Firebase Realtime Database available');
-                }
-
-                // Test Firestore operations
-                try {
-                    const testRef = window.firebase.collection(window.firebase.db, 'test');
-                    console.log('✅ Firestore collection reference created');
-
-                    // Try to read from a test collection (this might fail due to security rules, which is OK)
-                    try {
-                        const testSnapshot = await window.firebase.getDocs(testRef);
-                        console.log('✅ Firestore read operation successful');
-                    } catch (readError) {
-                        console.warn('⚠️ Firestore read failed (likely due to security rules):', readError.message);
-                        console.log('✅ Firestore connection is working (read failed due to rules)');
-                    }
-                } catch (firestoreError) {
-                    console.error('❌ Firestore operation failed:', firestoreError);
-                    return false;
-                }
-
-                console.log('🎉 Firebase connection test completed successfully');
-                return true;
-            } catch (error) {
-                console.error('❌ Firebase connection test failed:', error);
-                return false;
-            }
-        }
-
-        // Enhanced Firebase diagnostics with deployment troubleshooting
-        function runFirebaseDiagnostics() {
-            console.log('🔧 Running Firebase Diagnostics...');
-
-            // Check Firebase configuration
-            if (typeof firebaseConfig !== 'undefined') {
-                console.log('✅ Firebase config found:', {
-                    projectId: firebaseConfig.projectId,
-                    authDomain: firebaseConfig.authDomain,
-                    apiKey: firebaseConfig.apiKey ? '***' + firebaseConfig.apiKey.slice(-4) : 'Not found',
-                    databaseURL: firebaseConfig.databaseURL ? 'Present' : 'Missing'
-                });
-            } else {
-                console.error('❌ Firebase config not found');
-            }
-
-            // Check Firebase initialization
-            if (window.firebase) {
-                console.log('✅ Firebase object available');
-                console.log('Available Firebase services:', Object.keys(window.firebase));
-
-                // Check Firebase readiness
-                if (window.firebase.firebaseReady) {
-                    console.log('Firebase ready status:', window.firebase.firebaseReady());
-                }
-            } else {
-                console.error('❌ Firebase object not available');
-            }
-
-            // Check authentication state
-            if (window.firebase && window.firebase.auth) {
-                const user = window.firebase.auth.currentUser;
-                if (user) {
-                    console.log('✅ User authenticated:', user.email);
-                } else {
-                    console.log('ℹ️ No user authenticated');
-                }
-            }
-
-            // Check network connectivity
-            if (navigator.onLine) {
-                console.log('✅ Network connection available');
-            } else {
-                console.warn('⚠️ Network connection offline');
-            }
-
-            // Check localStorage for fallback data
-            const localOrders = localStorage.getItem('orders');
-            const localUsers = localStorage.getItem('users');
-            const adminUser = localStorage.getItem('adminUser');
-
-            console.log('📦 LocalStorage data:', {
-                orders: localOrders ? JSON.parse(localOrders).length + ' orders' : 'None',
-                users: localUsers ? JSON.parse(localUsers).length + ' users' : 'None',
-                adminUser: adminUser ? 'Present' : 'None'
-            });
-
-            // Check for common deployment issues
-            checkDeploymentIssues();
-
-            console.log('🔧 Firebase Diagnostics completed');
-        }
-
-        // Check for common deployment issues
-        function checkDeploymentIssues() {
-            console.log('🔍 Checking for deployment issues...');
-
-            // Check if running on HTTPS
-            if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
-                console.warn('⚠️ Not running on HTTPS - Firebase may have issues');
-                console.log('💡 Solution: Ensure your deployment uses HTTPS');
-            } else {
-                console.log('✅ Running on HTTPS or localhost');
-            }
-
-            // Check for CORS issues
-            if (location.hostname.includes('github.io') || location.hostname.includes('netlify.app') || location.hostname.includes('vercel.app')) {
-                console.log('✅ Detected hosting platform:', location.hostname);
-                console.log('💡 Platform-specific solutions available');
-            }
-
-            // Check Firebase SDK loading
-            const firebaseScripts = document.querySelectorAll('script[src*="firebase"]');
-            console.log('Firebase SDK scripts loaded:', firebaseScripts.length);
-
-            // Check for CDN loading issues
-            const cdnResources = document.querySelectorAll('link[href*="cdn"], script[src*="cdn"]');
-            console.log('CDN resources loaded:', cdnResources.length);
-
-            // Check for network connectivity
-            if (!navigator.onLine) {
-                console.warn('⚠️ Network is offline - some features may not work');
-            } else {
-                console.log('✅ Network connection available');
-            }
-
-            // Check for Firebase errors in console
-            const originalError = console.error;
-            console.error = function(...args) {
-                if (args[0] && args[0].toString().includes('Firebase')) {
-                    console.warn('🚨 Firebase error detected:', args);
-                    console.log('💡 Check Firebase Console for domain authorization');
-                }
-                originalError.apply(console, args);
-            };
-
-            // Check for font loading issues
-            const fontLinks = document.querySelectorAll('link[href*="fonts"]');
-            console.log('Font resources loaded:', fontLinks.length);
-
-            // Check for icon loading issues
-            const iconLinks = document.querySelectorAll('link[href*="font-awesome"]');
-            console.log('Icon resources loaded:', iconLinks.length);
-
-            // Provide deployment solutions
-            console.log('🔧 Deployment Solutions:');
-            console.log('1. Add your domain to Firebase Console → Authentication → Settings → Authorized domains');
-            console.log('2. Ensure HTTPS is enabled on your hosting platform');
-            console.log('3. Check CORS configuration for your hosting platform');
-            console.log('4. Verify Firebase security rules allow read/write access');
-        }
-
-        // ROG Styles Application and Icon Loading
-        function applyROGStyles() {
-            console.log('🎨 Applying ROG styles...');
-
-            // Ensure all cards have ROG styling
-            const cards = document.querySelectorAll('.rog-card');
-            cards.forEach(card => {
-                if (!card.classList.contains('rog-card')) {
-                    card.classList.add('rog-card');
-                }
-            });
-
-            // Ensure all buttons have ROG styling
-            const buttons = document.querySelectorAll('button');
-            buttons.forEach(button => {
-                if (button.textContent.includes('New Order') || button.textContent.includes('Create Order')) {
-                    button.classList.add('rog-button');
-                } else if (button.textContent.includes('Cancel') || button.textContent.includes('Close')) {
-                    button.classList.add('rog-button-secondary');
-                }
-            });
-
-            // Ensure all tables have ROG styling
-            const tables = document.querySelectorAll('table');
-            tables.forEach(table => {
-                if (!table.classList.contains('rog-table')) {
-                    table.classList.add('rog-table');
-                }
-            });
-
-            // Apply ROG grid system
-            const grids = document.querySelectorAll('.grid');
-            grids.forEach(grid => {
-                if (grid.classList.contains('grid-cols-4')) {
-                    grid.classList.add('rog-grid', 'rog-grid-4');
-                } else if (grid.classList.contains('grid-cols-3')) {
-                    grid.classList.add('rog-grid', 'rog-grid-3');
-                } else if (grid.classList.contains('grid-cols-2')) {
-                    grid.classList.add('rog-grid', 'rog-grid-2');
-                }
-            });
-
-            // Apply status badges
-            const statusElements = document.querySelectorAll('[class*="status"]');
-            statusElements.forEach(element => {
-                const status = element.textContent.toLowerCase();
-                if (status.includes('pending')) {
-                    element.classList.add('rog-badge', 'rog-badge-pending');
-                } else if (status.includes('processing')) {
-                    element.classList.add('rog-badge', 'rog-badge-processing');
-                } else if (status.includes('completed')) {
-                    element.classList.add('rog-badge', 'rog-badge-completed');
-                } else if (status.includes('cancelled')) {
-                    element.classList.add('rog-badge', 'rog-badge-cancelled');
-                }
-            });
-
-            // Apply ROG typography to headings
-            const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-            headings.forEach((heading, index) => {
-                const level = heading.tagName.toLowerCase();
-                heading.classList.add(`rog-${level}`);
-            });
-
-            // Apply ROG typography to text elements
-            const textElements = document.querySelectorAll('p, span, div, a');
-            textElements.forEach(element => {
-                if (!element.classList.contains('rog-text-normal')) {
-                    element.classList.add('rog-text-normal');
-                }
-            });
-
-            console.log('✅ ROG styles applied successfully');
-        }
-
-        // Font Loading Detection and Fallback
-        function checkFontLoading() {
-            console.log('🔍 Checking font loading...');
-
-            // Check if Inter font is loaded
-            if (!document.fonts.check('1em Inter')) {
-                console.warn('⚠️ Inter font not loaded, using fallback');
-                document.body.style.fontFamily = 'Arial, sans-serif';
-
-                // Apply fallback to all elements
-                const allElements = document.querySelectorAll('*');
-                allElements.forEach(element => {
-                    if (element.style.fontFamily.includes('Inter')) {
-                        element.style.fontFamily = 'Arial, sans-serif';
-                    }
-                });
-            } else {
-                console.log('✅ Inter font loaded successfully');
-            }
-
-            // Check for Google Fonts loading
-            const googleFontsLoaded = document.querySelector('link[href*="fonts.googleapis.com"]') !== null;
-            console.log('Google Fonts CDN loaded:', googleFontsLoaded);
-
-            // Apply fallback font stack
-            if (!googleFontsLoaded) {
-                console.warn('⚠️ Google Fonts not loaded, applying fallback fonts');
-                document.body.style.fontFamily = 'Arial, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-            }
-        }
-
-        // Enhanced Icon Loading Check
-        function checkIconLoading() {
-            console.log('🔍 Checking icon loading...');
-
-            // Check if FontAwesome is loaded
-            const fontAwesomeLoaded = document.querySelector('link[href*="font-awesome"]') !== null;
-            console.log('FontAwesome CDN loaded:', fontAwesomeLoaded);
-
-            // Check for fallback icons
-            const fallbackIcons = document.querySelectorAll('.fa-dashboard, .fa-shopping-cart, .fa-users, .fa-chart-bar, .fa-cog');
-            console.log('Fallback icons available:', fallbackIcons.length);
-
-            // Force icon display with enhanced fallbacks
-            const allIcons = document.querySelectorAll('i[class*="fa-"]');
-            allIcons.forEach(icon => {
-                icon.style.display = 'inline-block';
-                icon.style.fontSize = '1rem';
-                icon.style.fontFamily = 'Arial, sans-serif';
-
-                // Add fallback text if icon fails
-                if (!icon.textContent && !icon.innerHTML.includes('::before')) {
-                    const iconClass = icon.className.match(/fa-([a-zA-Z0-9-]+)/);
-                    if (iconClass) {
-                        icon.textContent = getIconFallback(iconClass[1]);
-                    }
-                }
-            });
-
-            console.log('✅ Icon loading check completed');
-        }
-
-        // Get icon fallback text
-        function getIconFallback(iconName) {
-            const iconMap = {
-                'dashboard': '📊',
-                'shopping-cart': '🛒',
-                'users': '👥',
-                'chart-bar': '📈',
-                'cog': '⚙️',
-                'plus': '➕',
-                'edit': '✏️',
-                'trash': '🗑️',
-                'eye': '👁️',
-                'link': '🔗',
-                'refresh': '🔄',
-                'bars': '☰',
-                'user': '👤',
-                'lock': '🔒',
-                'shield-alt': '🛡️',
-                'download': '⬇️',
-                'file-pdf': '📄',
-                'file-code': '💻',
-                'check-circle': '✅',
-                'times': '❌',
-                'save': '💾',
-                'list': '📋',
-                'chart-pie': '🥧',
-                'chart-line': '📈',
-                'chart-area': '📊',
-                'tshirt': '👕',
-                'dollar-sign': '💰',
-                'percentage': '📊',
-                'ruler': '📏',
-                'file-alt': '📄',
-                'eye-slash': '🙈'
-            };
-            return iconMap[iconName] || '?';
         }
 
         // Test function to verify admin panel functionality
@@ -3102,18 +1240,6 @@
             // Wait for Firebase to be ready
             await waitForFirebase();
 
-            // Test Firebase connection
-            const firebaseConnected = await testFirebaseConnection();
-            console.log('Firebase connection status:', firebaseConnected);
-
-            // Run comprehensive diagnostics
-            runFirebaseDiagnostics();
-
-            // Apply ROG styles and check icons
-            applyROGStyles();
-            checkIconLoading();
-            checkFontLoading();
-
             // Setup Firebase auth state listener
             setupFirebaseAuth();
 
@@ -3147,30 +1273,20 @@
 
         // Firebase Authentication Setup
         function setupFirebaseAuth() {
-            if (!firebaseReady || !window.firebase.auth) {
-                console.log('Firebase auth not available, using localStorage fallback');
-                checkLocalStorageAuth();
-                return;
-            }
+            if (!firebaseReady) return;
 
-            try {
-                window.firebase.onAuthStateChanged(window.firebase.auth, (user) => {
-                    if (user) {
-                        currentUser = user;
-                        console.log('User authenticated:', user.email);
-                        updateUserDisplay(user);
-                    } else {
-                        currentUser = null;
-                        console.log('User not authenticated');
-                        // Check localStorage as fallback
-                        checkLocalStorageAuth();
-                    }
-                });
-            } catch (error) {
-                console.error('Firebase auth setup error:', error);
-                // Fallback to localStorage
-                checkLocalStorageAuth();
-            }
+            window.firebase.onAuthStateChanged(window.firebase.auth, (user) => {
+                if (user) {
+                    currentUser = user;
+                    console.log('User authenticated:', user.email);
+                    updateUserDisplay(user);
+                } else {
+                    currentUser = null;
+                    console.log('User not authenticated');
+                    // Check localStorage as fallback
+                    checkLocalStorageAuth();
+                }
+            });
         }
 
         // Check localStorage authentication as fallback
@@ -3188,50 +1304,6 @@
                 }
             }
             return false;
-        }
-
-        // Fallback authentication for deployment issues
-        function authenticateWithFallback(email, password) {
-            console.log('Using fallback authentication');
-
-            // Check against hardcoded admin credentials (for deployment)
-            const adminCredentials = {
-                'admin@otomono.com': 'admin123',
-                'test@otomono.com': 'test123'
-            };
-
-            if (adminCredentials[email] && adminCredentials[email] === password) {
-                const userData = {
-                    email: email,
-                    name: 'Administrator',
-                    role: 'admin',
-                    lastLogin: new Date().toISOString()
-                };
-
-                localStorage.setItem('adminUser', JSON.stringify(userData));
-                updateUserDisplay(userData);
-                return Promise.resolve({
-                    user: userData
-                });
-            }
-
-            throw new Error('Invalid credentials');
-        }
-
-        // Enhanced login with fallback
-        async function loginWithFallback(email, password) {
-            try {
-                // Try Firebase authentication first
-                if (firebaseReady && window.firebase.auth) {
-                    const result = await window.firebase.signInWithEmailAndPassword(window.firebase.auth, email, password);
-                    return result;
-                }
-            } catch (error) {
-                console.warn('Firebase auth failed, trying fallback:', error.message);
-            }
-
-            // Use fallback authentication
-            return authenticateWithFallback(email, password);
         }
 
         // Update user display
@@ -3261,6 +1333,7 @@
                 // Form submissions
                 const createOrderForm = document.getElementById('createOrderForm');
                 const addUserForm = document.getElementById('addUserForm');
+                const changePasswordForm = document.getElementById('changePasswordForm');
 
                 if (createOrderForm) {
                     createOrderForm.addEventListener('submit', handleCreateOrder);
@@ -3274,6 +1347,13 @@
                     console.log('Add user form listener added');
                 } else {
                     console.warn('Add user form not found');
+                }
+
+                if (changePasswordForm) {
+                    changePasswordForm.addEventListener('submit', handlePasswordChange);
+                    console.log('Change password form listener added');
+                } else {
+                    console.warn('Change password form not found');
                 }
 
                 // Close modals on outside click
@@ -3447,102 +1527,24 @@
         }
 
         async function loadOrdersFromFirebase() {
-            const maxRetries = 3;
-            let retryCount = 0;
+            try {
+                const ordersRef = window.firebase.collection(window.firebase.db, 'orders');
+                const q = window.firebase.query(ordersRef, window.firebase.orderBy('createdAt', 'desc'));
+                const querySnapshot = await window.firebase.getDocs(q);
 
-            while (retryCount < maxRetries) {
-                try {
-                    if (!firebaseReady || !window.firebase || !window.firebase.db) {
-                        console.log('Firebase not ready, using fallback data');
-                        return getFallbackOrders();
-                    }
-
-                    console.log(`Attempting to load orders from Firebase... (attempt ${retryCount + 1}/${maxRetries})`);
-                    const ordersRef = window.firebase.collection(window.firebase.db, 'orders');
-                    const q = window.firebase.query(ordersRef, window.firebase.orderBy('createdAt', 'desc'));
-                    const querySnapshot = await window.firebase.getDocs(q);
-
-                    const orders = [];
-                    querySnapshot.forEach((doc) => {
-                        orders.push({
-                            id: doc.id,
-                            ...doc.data()
-                        });
+                const orders = [];
+                querySnapshot.forEach((doc) => {
+                    orders.push({
+                        id: doc.id,
+                        ...doc.data()
                     });
+                });
 
-                    console.log(`✅ Loaded ${orders.length} orders from Firebase`);
-                    return orders;
-                } catch (error) {
-                    console.error(`❌ Error loading orders from Firebase (attempt ${retryCount + 1}):`, error);
-                    retryCount++;
-
-                    if (retryCount < maxRetries) {
-                        console.log(`🔄 Retrying in ${retryCount * 2} seconds...`);
-                        await new Promise(resolve => setTimeout(resolve, retryCount * 2000));
-                    } else {
-                        console.error('❌ All Firebase retry attempts failed');
-
-                        // Try alternative data sources
-                        try {
-                            console.log('Trying localStorage fallback...');
-                            const localOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-                            if (localOrders.length > 0) {
-                                console.log(`✅ Loaded ${localOrders.length} orders from localStorage`);
-                                return localOrders;
-                            }
-                        } catch (localError) {
-                            console.error('localStorage fallback failed:', localError);
-                        }
-
-                        // Return sample data for demonstration
-                        return getFallbackOrders();
-                    }
-                }
+                return orders;
+            } catch (error) {
+                console.error('Error loading orders from Firebase:', error);
+                return [];
             }
-        }
-
-        // Get fallback orders for demonstration
-        function getFallbackOrders() {
-            const sampleOrders = [{
-                    id: 'ORD-001',
-                    orderId: 'ORD-001',
-                    customerName: 'John Doe',
-                    customerEmail: 'john@example.com',
-                    mobileNumber: '+1234567890',
-                    quantity: 2,
-                    materialPreference: 'Waffle',
-                    status: 'pending',
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'ORD-002',
-                    orderId: 'ORD-002',
-                    customerName: 'Jane Smith',
-                    customerEmail: 'jane@example.com',
-                    mobileNumber: '+1234567891',
-                    quantity: 1,
-                    materialPreference: 'Mesh',
-                    status: 'processing',
-                    createdAt: new Date(Date.now() - 86400000).toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'ORD-003',
-                    orderId: 'ORD-003',
-                    customerName: 'Mike Johnson',
-                    customerEmail: 'mike@example.com',
-                    mobileNumber: '+1234567892',
-                    quantity: 3,
-                    materialPreference: 'Combweb',
-                    status: 'completed',
-                    createdAt: new Date(Date.now() - 172800000).toISOString(),
-                    updatedAt: new Date().toISOString()
-                }
-            ];
-
-            console.log(`Using ${sampleOrders.length} fallback orders`);
-            return sampleOrders;
         }
 
         async function getActiveUsersCount() {
@@ -3577,7 +1579,7 @@
                     <td class="py-3 px-4">${order.orderId || order.id}</td>
                     <td class="py-3 px-4">${order.customerName}</td>
                     <td class="py-3 px-4">
-                        <span class="rog-badge rog-badge-${order.status}">
+                        <span class="status-${order.status} px-2 py-1 rounded-full text-xs font-semibold">
                             ${order.status || 'pending'}
                         </span>
                     </td>
@@ -3614,9 +1616,9 @@
                         <td class="py-3 px-4">${order.quantity}</td>
                         <td class="py-3 px-4">${order.materialPreference}</td>
                         <td class="py-3 px-4">
-                        <span class="rog-badge rog-badge-${order.status}">
-                            ${order.status || 'pending'}
-                        </span>
+                            <span class="status-${order.status} px-2 py-1 rounded-full text-xs font-semibold">
+                                ${order.status || 'pending'}
+                            </span>
                         </td>
                         <td class="py-3 px-4">${new Date(order.createdAt).toLocaleDateString()}</td>
                         <td class="py-3 px-4">
@@ -3637,12 +1639,6 @@
                         </td>
                     </tr>
                 `).join('');
-
-                // Reapply ROG styles after content update
-                setTimeout(() => {
-                    applyROGStyles();
-                    checkIconLoading();
-                }, 100);
 
             } catch (error) {
                 console.error('Error loading orders data:', error);
@@ -3745,12 +1741,6 @@
 
         async function loadUsersFromFirebase() {
             try {
-                if (!firebaseReady || !window.firebase || !window.firebase.db) {
-                    console.log('Firebase not ready, using fallback users data');
-                    return getFallbackUsers();
-                }
-
-                console.log('Attempting to load users from Firebase...');
                 const usersRef = window.firebase.collection(window.firebase.db, 'users');
                 const querySnapshot = await window.firebase.getDocs(usersRef);
 
@@ -3762,58 +1752,11 @@
                     });
                 });
 
-                console.log(`Loaded ${users.length} users from Firebase`);
                 return users;
             } catch (error) {
                 console.error('Error loading users from Firebase:', error);
-
-                // Try localStorage fallback
-                try {
-                    console.log('Trying localStorage fallback for users...');
-                    const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
-                    if (localUsers.length > 0) {
-                        console.log(`Loaded ${localUsers.length} users from localStorage`);
-                        return localUsers;
-                    }
-                } catch (localError) {
-                    console.error('localStorage fallback failed:', localError);
-                }
-
-                // Return sample data for demonstration
-                return getFallbackUsers();
+                return [];
             }
-        }
-
-        // Get fallback users for demonstration
-        function getFallbackUsers() {
-            const sampleUsers = [{
-                    id: 'user-001',
-                    email: 'admin@otomono.com',
-                    name: 'Administrator',
-                    role: 'admin',
-                    createdAt: new Date().toISOString(),
-                    lastLogin: new Date().toISOString()
-                },
-                {
-                    id: 'user-002',
-                    email: 'manager@otomono.com',
-                    name: 'Manager User',
-                    role: 'manager',
-                    createdAt: new Date(Date.now() - 86400000).toISOString(),
-                    lastLogin: new Date(Date.now() - 3600000).toISOString()
-                },
-                {
-                    id: 'user-003',
-                    email: 'staff@otomono.com',
-                    name: 'Staff Member',
-                    role: 'staff',
-                    createdAt: new Date(Date.now() - 172800000).toISOString(),
-                    lastLogin: new Date(Date.now() - 7200000).toISOString()
-                }
-            ];
-
-            console.log(`Using ${sampleUsers.length} fallback users`);
-            return sampleUsers;
         }
 
         function calculateAnalytics(orders, users) {
@@ -4038,191 +1981,6 @@
 
         function loadSettingsData() {
             console.log('Loading settings data...');
-
-            // Load user information
-            loadUserInformation();
-
-            // Setup password change form
-            setupPasswordChangeForm();
-        }
-
-        // Load user information for settings
-        function loadUserInformation() {
-            try {
-                // Get current user
-                const user = currentUser || JSON.parse(localStorage.getItem('adminUser') || '{}');
-
-                if (user.email) {
-                    document.getElementById('userEmail').value = user.email;
-                    document.getElementById('userRole').value = user.role || 'Administrator';
-                    document.getElementById('lastLogin').value = user.lastLogin || new Date().toLocaleString();
-                } else {
-                    // Fallback values
-                    document.getElementById('userEmail').value = 'admin@otomono.com';
-                    document.getElementById('userRole').value = 'Administrator';
-                    document.getElementById('lastLogin').value = new Date().toLocaleString();
-                }
-            } catch (error) {
-                console.error('Error loading user information:', error);
-                // Set fallback values
-                document.getElementById('userEmail').value = 'admin@otomono.com';
-                document.getElementById('userRole').value = 'Administrator';
-                document.getElementById('lastLogin').value = new Date().toLocaleString();
-            }
-        }
-
-        // Setup password change form
-        function setupPasswordChangeForm() {
-            const form = document.getElementById('changePasswordForm');
-            if (form) {
-                form.addEventListener('submit', handlePasswordChange);
-            }
-        }
-
-        // Handle password change form submission
-        async function handlePasswordChange(e) {
-            e.preventDefault();
-
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-
-            // Validation
-            if (!currentPassword) {
-                showOtomonoAlert('Please enter your current password', 'Validation Error');
-                return;
-            }
-
-            if (!newPassword) {
-                showOtomonoAlert('Please enter a new password', 'Validation Error');
-                return;
-            }
-
-            if (newPassword.length < 6) {
-                showOtomonoAlert('New password must be at least 6 characters long', 'Validation Error');
-                return;
-            }
-
-            if (newPassword !== confirmPassword) {
-                showOtomonoAlert('New passwords do not match', 'Validation Error');
-                return;
-            }
-
-            if (currentPassword === newPassword) {
-                showOtomonoAlert('New password must be different from current password', 'Validation Error');
-                return;
-            }
-
-            try {
-                showOtomonoAlert('Changing password...', 'Password Change');
-
-                // Change password using Firebase
-                await changeUserPassword(currentPassword, newPassword);
-
-                showOtomonoSuccess('Password changed successfully!');
-                clearPasswordForm();
-
-            } catch (error) {
-                console.error('Error changing password:', error);
-                handlePasswordChangeError(error);
-            }
-        }
-
-        // Change user password with Firebase
-        async function changeUserPassword(currentPassword, newPassword) {
-            try {
-                if (!firebaseReady) {
-                    throw new Error('Firebase not available. Please try again later.');
-                }
-
-                const user = window.firebase.auth.currentUser;
-                if (!user) {
-                    throw new Error('No authenticated user found. Please log in again.');
-                }
-
-                // Re-authenticate user with current password
-                const credential = window.firebase.EmailAuthProvider.credential(user.email, currentPassword);
-                await window.firebase.reauthenticateWithCredential(user, credential);
-
-                // Update password
-                await window.firebase.updatePassword(user, newPassword);
-
-                console.log('Password changed successfully');
-
-            } catch (error) {
-                console.error('Password change error:', error);
-                throw error;
-            }
-        }
-
-        // Handle password change errors
-        function handlePasswordChangeError(error) {
-            let errorMessage = 'An error occurred while changing password.';
-
-            switch (error.code) {
-                case 'auth/wrong-password':
-                    errorMessage = 'Current password is incorrect.';
-                    break;
-                case 'auth/weak-password':
-                    errorMessage = 'New password is too weak. Please choose a stronger password.';
-                    break;
-                case 'auth/requires-recent-login':
-                    errorMessage = 'Please log out and log in again before changing your password.';
-                    break;
-                case 'auth/too-many-requests':
-                    errorMessage = 'Too many attempts. Please try again later.';
-                    break;
-                case 'auth/user-mismatch':
-                    errorMessage = 'User authentication failed. Please log in again.';
-                    break;
-                case 'auth/user-not-found':
-                    errorMessage = 'User not found. Please log in again.';
-                    break;
-                case 'auth/invalid-credential':
-                    errorMessage = 'Invalid credentials. Please check your current password.';
-                    break;
-                case 'auth/network-request-failed':
-                    errorMessage = 'Network error. Please check your connection and try again.';
-                    break;
-                default:
-                    if (error.message) {
-                        errorMessage = error.message;
-                    }
-            }
-
-            showOtomonoAlert(errorMessage, 'Password Change Error');
-        }
-
-        // Toggle password visibility
-        function togglePasswordVisibility(inputId) {
-            const input = document.getElementById(inputId);
-            const icon = document.getElementById(inputId + 'Icon');
-
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                input.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        }
-
-        // Clear password form
-        function clearPasswordForm() {
-            document.getElementById('currentPassword').value = '';
-            document.getElementById('newPassword').value = '';
-            document.getElementById('confirmPassword').value = '';
-
-            // Reset password visibility
-            ['currentPassword', 'newPassword', 'confirmPassword'].forEach(id => {
-                const input = document.getElementById(id);
-                const icon = document.getElementById(id + 'Icon');
-                input.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            });
         }
 
         // Report Generation Functions
@@ -4893,6 +2651,86 @@
                 console.error('Error creating user:', error);
                 showOtomonoAlert('Error creating user: ' + error.message);
             }
+        }
+
+        // Password Change Handler
+        async function handlePasswordChange(e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            try {
+                // Validate inputs
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    showOtomonoAlert('Please fill in all password fields.');
+                    return;
+                }
+
+                if (newPassword.length < 6) {
+                    showOtomonoAlert('New password must be at least 6 characters long.');
+                    return;
+                }
+
+                if (newPassword !== confirmPassword) {
+                    showOtomonoAlert('New passwords do not match.');
+                    return;
+                }
+
+                if (currentPassword === newPassword) {
+                    showOtomonoAlert('New password must be different from current password.');
+                    return;
+                }
+
+                if (!firebaseReady) {
+                    showOtomonoAlert('Firebase not available. Please try again later.');
+                    return;
+                }
+
+                // Get current user
+                const user = window.firebase.auth.currentUser;
+                if (!user) {
+                    showOtomonoAlert('No user is currently logged in.');
+                    return;
+                }
+
+                // Re-authenticate user with current password
+                const credential = window.firebase.EmailAuthProvider.credential(user.email, currentPassword);
+                await window.firebase.reauthenticateWithCredential(user, credential);
+
+                // Update password
+                await window.firebase.updatePassword(user, newPassword);
+
+                console.log('Password updated successfully');
+                showOtomonoSuccess('Password changed successfully!');
+                clearPasswordForm();
+
+            } catch (error) {
+                console.error('Error changing password:', error);
+                let errorMessage = 'Error changing password';
+
+                if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'Current password is incorrect.';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'New password is too weak.';
+                } else if (error.code === 'auth/requires-recent-login') {
+                    errorMessage = 'Please log out and log back in before changing your password.';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage = 'Too many failed attempts. Please try again later.';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+
+                showOtomonoAlert(errorMessage);
+            }
+        }
+
+        // Clear Password Form
+        function clearPasswordForm() {
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
         }
 
         // Order Management Functions
@@ -5859,9 +3697,9 @@
                                     <div><strong class="text-gray-300">Quantity:</strong> <span class="text-white">${order.quantity}</span></div>
                                     <div><strong class="text-gray-300">Material:</strong> <span class="text-white">${order.materialPreference}</span></div>
                                     <div><strong class="text-gray-300">Status:</strong> 
-                        <span class="rog-badge rog-badge-${order.status}">
-                            ${order.status || 'pending'}
-                        </span>
+                                        <span class="status-${order.status} px-2 py-1 rounded-full text-xs font-semibold">
+                                            ${order.status || 'pending'}
+                                        </span>
                                     </div>
                                     <div><strong class="text-gray-300">Created:</strong> <span class="text-white">${new Date(order.createdAt).toLocaleDateString()}</span></div>
                                 </div>
