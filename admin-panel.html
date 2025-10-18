@@ -16,10 +16,8 @@
     <!-- Google Fonts with Local Fallbacks -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" onerror="this.onerror=null;this.href='data:text/css;base64,';">
     
-    <!-- FontAwesome with Multiple Fallback CDNs -->
+    <!-- FontAwesome with Fallback CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" onerror="this.onerror=null;this.href='https://use.fontawesome.com/releases/v6.0.0/css/all.css';">
-    <link href="https://use.fontawesome.com/releases/v6.0.0/css/all.css" rel="stylesheet" onerror="this.onerror=null;this.href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" onerror="this.onerror=null;this.href='data:text/css;base64,';">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
@@ -42,6 +40,16 @@
             --rog-border: rgba(255, 0, 64, 0.3);
             --rog-gradient: linear-gradient(135deg, #ff0040 0%, #ff4080 50%, #ff0040 100%);
             --rog-gradient-dark: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+            
+            /* ROG Typography from rog.asus.com */
+            --rog-font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --rog-font-weight-light: 300;
+            --rog-font-weight-normal: 400;
+            --rog-font-weight-medium: 500;
+            --rog-font-weight-semibold: 600;
+            --rog-font-weight-bold: 700;
+            --rog-font-weight-extrabold: 800;
+            --rog-font-weight-black: 900;
         }
 
         /* Global ROG Styling */
@@ -50,7 +58,8 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: var(--rog-font-primary);
+            font-weight: var(--rog-font-weight-normal);
             background: var(--rog-gradient-dark);
             background-attachment: fixed;
             color: var(--rog-text);
@@ -59,6 +68,7 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            line-height: 1.6;
         }
 
         /* ROG Background Effects */
@@ -115,6 +125,23 @@
             position: relative;
             overflow: hidden;
         }
+
+        /* ROG Typography Classes */
+        .rog-text-light { font-weight: var(--rog-font-weight-light); }
+        .rog-text-normal { font-weight: var(--rog-font-weight-normal); }
+        .rog-text-medium { font-weight: var(--rog-font-weight-medium); }
+        .rog-text-semibold { font-weight: var(--rog-font-weight-semibold); }
+        .rog-text-bold { font-weight: var(--rog-font-weight-bold); }
+        .rog-text-extrabold { font-weight: var(--rog-font-weight-extrabold); }
+        .rog-text-black { font-weight: var(--rog-font-weight-black); }
+
+        /* ROG Headings */
+        .rog-h1 { font-size: 2.5rem; font-weight: var(--rog-font-weight-bold); line-height: 1.2; }
+        .rog-h2 { font-size: 2rem; font-weight: var(--rog-font-weight-semibold); line-height: 1.3; }
+        .rog-h3 { font-size: 1.5rem; font-weight: var(--rog-font-weight-medium); line-height: 1.4; }
+        .rog-h4 { font-size: 1.25rem; font-weight: var(--rog-font-weight-medium); line-height: 1.4; }
+        .rog-h5 { font-size: 1.125rem; font-weight: var(--rog-font-weight-medium); line-height: 1.5; }
+        .rog-h6 { font-size: 1rem; font-weight: var(--rog-font-weight-semibold); line-height: 1.5; }
 
         .rog-card::before {
             content: '';
@@ -605,16 +632,11 @@
 
         // Firebase deployment configuration
         const firebaseDeploymentConfig = {
-            // Enable offline persistence
             enableOfflinePersistence: true,
-            // Set cache size
             cacheSizeBytes: 40 * 1024 * 1024, // 40MB
-            // Enable network retry
             enableNetworkRetry: true,
-            // Set timeout
             timeout: 30000, // 30 seconds
-            // Enable debug mode for deployment
-            debug: true
+            debug: false // Set to false for production
         };
 
         // Initialize Firebase with comprehensive deployment handling
@@ -643,8 +665,9 @@
                 rtdb = getDatabase(app);
                 
                 // Configure auth for deployment
-                auth.settings.appVerificationDisabledForTesting = false;
-                auth.settings.appVerificationDisabledForTesting = false;
+                if (auth) {
+                    auth.settings.appVerificationDisabledForTesting = false;
+                }
                 
                 // Configure Firestore for deployment
                 if (db) {
@@ -668,6 +691,18 @@
                 
             } catch (error) {
                 console.error('❌ Firebase initialization error:', error);
+                
+                // Handle specific Firebase errors
+                if (error.code === 'auth/network-request-failed') {
+                    console.error('🚨 Network error - check domain authorization in Firebase Console');
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    console.error('🚨 Domain not authorized - add to Firebase Console → Authentication → Settings → Authorized domains');
+                } else if (error.code === 'app/duplicate-app') {
+                    console.warn('⚠️ Firebase app already exists, reusing existing instance');
+                    firebaseReady = true;
+                    return true;
+                }
+                
                 firebaseRetryCount++;
                 
                 if (firebaseRetryCount < maxRetries) {
@@ -2197,6 +2232,21 @@
                     element.classList.add('rog-badge', 'rog-badge-completed');
                 } else if (status.includes('cancelled')) {
                     element.classList.add('rog-badge', 'rog-badge-cancelled');
+                }
+            });
+            
+            // Apply ROG typography to headings
+            const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            headings.forEach((heading, index) => {
+                const level = heading.tagName.toLowerCase();
+                heading.classList.add(`rog-${level}`);
+            });
+            
+            // Apply ROG typography to text elements
+            const textElements = document.querySelectorAll('p, span, div, a');
+            textElements.forEach(element => {
+                if (!element.classList.contains('rog-text-normal')) {
+                    element.classList.add('rog-text-normal');
                 }
             });
             
