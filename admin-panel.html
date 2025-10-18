@@ -6,10 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Otomono Admin Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome with fallback CDNs -->
+    
+    <!-- Font Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://use.fontawesome.com">
+    
+    <!-- Google Fonts with Local Fallbacks -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" onerror="this.onerror=null;this.href='data:text/css;base64,';">
+    
+    <!-- FontAwesome with Multiple Fallback CDNs -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" onerror="this.onerror=null;this.href='https://use.fontawesome.com/releases/v6.0.0/css/all.css';">
     <link href="https://use.fontawesome.com/releases/v6.0.0/css/all.css" rel="stylesheet" onerror="this.onerror=null;this.href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" onerror="this.onerror=null;this.href='data:text/css;base64,';">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
@@ -321,38 +331,166 @@
             font-size: 1rem;
         }
 
-        /* FontAwesome Fallback Icons */
-        .fa-dashboard::before { content: "📊"; }
-        .fa-shopping-cart::before { content: "🛒"; }
-        .fa-users::before { content: "👥"; }
-        .fa-chart-bar::before { content: "📈"; }
-        .fa-cog::before { content: "⚙️"; }
-        .fa-plus::before { content: "➕"; }
-        .fa-edit::before { content: "✏️"; }
-        .fa-trash::before { content: "🗑️"; }
-        .fa-eye::before { content: "👁️"; }
-        .fa-link::before { content: "🔗"; }
-        .fa-refresh::before { content: "🔄"; }
-        .fa-bars::before { content: "☰"; }
-        .fa-user::before { content: "👤"; }
-        .fa-lock::before { content: "🔒"; }
-        .fa-shield-alt::before { content: "🛡️"; }
-        .fa-download::before { content: "⬇️"; }
-        .fa-file-pdf::before { content: "📄"; }
-        .fa-file-code::before { content: "💻"; }
-        .fa-check-circle::before { content: "✅"; }
-        .fa-times::before { content: "❌"; }
-        .fa-save::before { content: "💾"; }
-        .fa-list::before { content: "📋"; }
-        .fa-chart-pie::before { content: "🥧"; }
-        .fa-chart-line::before { content: "📈"; }
-        .fa-chart-area::before { content: "📊"; }
-        .fa-tshirt::before { content: "👕"; }
-        .fa-dollar-sign::before { content: "💰"; }
-        .fa-percentage::before { content: "📊"; }
-        .fa-ruler::before { content: "📏"; }
-        .fa-file-alt::before { content: "📄"; }
-        .fa-eye-slash::before { content: "🙈"; }
+        /* Enhanced FontAwesome Fallback Icons with Font Family */
+        .fa-dashboard::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-shopping-cart::before { content: "🛒"; font-family: Arial, sans-serif; }
+        .fa-users::before { content: "👥"; font-family: Arial, sans-serif; }
+        .fa-chart-bar::before { content: "📈"; font-family: Arial, sans-serif; }
+        .fa-cog::before { content: "⚙️"; font-family: Arial, sans-serif; }
+        .fa-plus::before { content: "➕"; font-family: Arial, sans-serif; }
+        .fa-edit::before { content: "✏️"; font-family: Arial, sans-serif; }
+        .fa-trash::before { content: "🗑️"; font-family: Arial, sans-serif; }
+        .fa-eye::before { content: "👁️"; font-family: Arial, sans-serif; }
+        .fa-link::before { content: "🔗"; font-family: Arial, sans-serif; }
+        .fa-refresh::before { content: "🔄"; font-family: Arial, sans-serif; }
+        .fa-bars::before { content: "☰"; font-family: Arial, sans-serif; }
+        .fa-user::before { content: "👤"; font-family: Arial, sans-serif; }
+        .fa-lock::before { content: "🔒"; font-family: Arial, sans-serif; }
+        .fa-shield-alt::before { content: "🛡️"; font-family: Arial, sans-serif; }
+        .fa-download::before { content: "⬇️"; font-family: Arial, sans-serif; }
+        .fa-file-pdf::before { content: "📄"; font-family: Arial, sans-serif; }
+        .fa-file-code::before { content: "💻"; font-family: Arial, sans-serif; }
+        .fa-check-circle::before { content: "✅"; font-family: Arial, sans-serif; }
+        .fa-times::before { content: "❌"; font-family: Arial, sans-serif; }
+        .fa-save::before { content: "💾"; font-family: Arial, sans-serif; }
+        .fa-list::before { content: "📋"; font-family: Arial, sans-serif; }
+        .fa-chart-pie::before { content: "🥧"; font-family: Arial, sans-serif; }
+        .fa-chart-line::before { content: "📈"; font-family: Arial, sans-serif; }
+        .fa-chart-area::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-tshirt::before { content: "👕"; font-family: Arial, sans-serif; }
+        .fa-dollar-sign::before { content: "💰"; font-family: Arial, sans-serif; }
+        .fa-percentage::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-ruler::before { content: "📏"; font-family: Arial, sans-serif; }
+        .fa-file-alt::before { content: "📄"; font-family: Arial, sans-serif; }
+        .fa-eye-slash::before { content: "🙈"; font-family: Arial, sans-serif; }
+        .fa-tachometer-alt::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-sync-alt::before { content: "🔄"; font-family: Arial, sans-serif; }
+        .fa-bell::before { content: "🔔"; font-family: Arial, sans-serif; }
+        .fa-search::before { content: "🔍"; font-family: Arial, sans-serif; }
+        .fa-filter::before { content: "🔽"; font-family: Arial, sans-serif; }
+        .fa-sort::before { content: "↕️"; font-family: Arial, sans-serif; }
+        .fa-arrow-up::before { content: "⬆️"; font-family: Arial, sans-serif; }
+        .fa-arrow-down::before { content: "⬇️"; font-family: Arial, sans-serif; }
+        .fa-arrow-left::before { content: "⬅️"; font-family: Arial, sans-serif; }
+        .fa-arrow-right::before { content: "➡️"; font-family: Arial, sans-serif; }
+        .fa-home::before { content: "🏠"; font-family: Arial, sans-serif; }
+        .fa-sign-out-alt::before { content: "🚪"; font-family: Arial, sans-serif; }
+        .fa-cog::before { content: "⚙️"; font-family: Arial, sans-serif; }
+        .fa-wrench::before { content: "🔧"; font-family: Arial, sans-serif; }
+        .fa-tools::before { content: "🛠️"; font-family: Arial, sans-serif; }
+        .fa-info-circle::before { content: "ℹ️"; font-family: Arial, sans-serif; }
+        .fa-exclamation-triangle::before { content: "⚠️"; font-family: Arial, sans-serif; }
+        .fa-question-circle::before { content: "❓"; font-family: Arial, sans-serif; }
+        .fa-heart::before { content: "❤️"; font-family: Arial, sans-serif; }
+        .fa-star::before { content: "⭐"; font-family: Arial, sans-serif; }
+        .fa-thumbs-up::before { content: "👍"; font-family: Arial, sans-serif; }
+        .fa-thumbs-down::before { content: "👎"; font-family: Arial, sans-serif; }
+        .fa-comment::before { content: "💬"; font-family: Arial, sans-serif; }
+        .fa-envelope::before { content: "✉️"; font-family: Arial, sans-serif; }
+        .fa-phone::before { content: "📞"; font-family: Arial, sans-serif; }
+        .fa-calendar::before { content: "📅"; font-family: Arial, sans-serif; }
+        .fa-clock::before { content: "🕐"; font-family: Arial, sans-serif; }
+        .fa-map-marker-alt::before { content: "📍"; font-family: Arial, sans-serif; }
+        .fa-globe::before { content: "🌐"; font-family: Arial, sans-serif; }
+        .fa-wifi::before { content: "📶"; font-family: Arial, sans-serif; }
+        .fa-battery-full::before { content: "🔋"; font-family: Arial, sans-serif; }
+        .fa-volume-up::before { content: "🔊"; font-family: Arial, sans-serif; }
+        .fa-volume-down::before { content: "🔉"; font-family: Arial, sans-serif; }
+        .fa-volume-mute::before { content: "🔇"; font-family: Arial, sans-serif; }
+        .fa-play::before { content: "▶️"; font-family: Arial, sans-serif; }
+        .fa-pause::before { content: "⏸️"; font-family: Arial, sans-serif; }
+        .fa-stop::before { content: "⏹️"; font-family: Arial, sans-serif; }
+        .fa-forward::before { content: "⏩"; font-family: Arial, sans-serif; }
+        .fa-backward::before { content: "⏪"; font-family: Arial, sans-serif; }
+        .fa-expand::before { content: "⛶"; font-family: Arial, sans-serif; }
+        .fa-compress::before { content: "⛷️"; font-family: Arial, sans-serif; }
+        .fa-fullscreen::before { content: "⛶"; font-family: Arial, sans-serif; }
+        .fa-exit-fullscreen::before { content: "⛷️"; font-family: Arial, sans-serif; }
+        .fa-zoom-in::before { content: "🔍+"; font-family: Arial, sans-serif; }
+        .fa-zoom-out::before { content: "🔍-"; font-family: Arial, sans-serif; }
+        .fa-rotate::before { content: "🔄"; font-family: Arial, sans-serif; }
+        .fa-flip::before { content: "🔄"; font-family: Arial, sans-serif; }
+        .fa-mirror::before { content: "🪞"; font-family: Arial, sans-serif; }
+        .fa-copy::before { content: "📋"; font-family: Arial, sans-serif; }
+        .fa-paste::before { content: "📋"; font-family: Arial, sans-serif; }
+        .fa-cut::before { content: "✂️"; font-family: Arial, sans-serif; }
+        .fa-undo::before { content: "↶"; font-family: Arial, sans-serif; }
+        .fa-redo::before { content: "↷"; font-family: Arial, sans-serif; }
+        .fa-print::before { content: "🖨️"; font-family: Arial, sans-serif; }
+        .fa-share::before { content: "📤"; font-family: Arial, sans-serif; }
+        .fa-external-link-alt::before { content: "🔗"; font-family: Arial, sans-serif; }
+        .fa-window-maximize::before { content: "⛶"; font-family: Arial, sans-serif; }
+        .fa-window-minimize::before { content: "⛷️"; font-family: Arial, sans-serif; }
+        .fa-window-restore::before { content: "⛷️"; font-family: Arial, sans-serif; }
+        .fa-window-close::before { content: "❌"; font-family: Arial, sans-serif; }
+        .fa-toggle-on::before { content: "🔛"; font-family: Arial, sans-serif; }
+        .fa-toggle-off::before { content: "🔲"; font-family: Arial, sans-serif; }
+        .fa-check::before { content: "✅"; font-family: Arial, sans-serif; }
+        .fa-times-circle::before { content: "❌"; font-family: Arial, sans-serif; }
+        .fa-exclamation-circle::before { content: "⚠️"; font-family: Arial, sans-serif; }
+        .fa-question::before { content: "❓"; font-family: Arial, sans-serif; }
+        .fa-info::before { content: "ℹ️"; font-family: Arial, sans-serif; }
+        .fa-ban::before { content: "🚫"; font-family: Arial, sans-serif; }
+        .fa-shield::before { content: "🛡️"; font-family: Arial, sans-serif; }
+        .fa-key::before { content: "🔑"; font-family: Arial, sans-serif; }
+        .fa-unlock::before { content: "🔓"; font-family: Arial, sans-serif; }
+        .fa-lock-open::before { content: "🔓"; font-family: Arial, sans-serif; }
+        .fa-fingerprint::before { content: "👆"; font-family: Arial, sans-serif; }
+        .fa-qrcode::before { content: "📱"; font-family: Arial, sans-serif; }
+        .fa-barcode::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-tag::before { content: "🏷️"; font-family: Arial, sans-serif; }
+        .fa-tags::before { content: "🏷️"; font-family: Arial, sans-serif; }
+        .fa-bookmark::before { content: "🔖"; font-family: Arial, sans-serif; }
+        .fa-bookmarks::before { content: "🔖"; font-family: Arial, sans-serif; }
+        .fa-flag::before { content: "🚩"; font-family: Arial, sans-serif; }
+        .fa-flag-checkered::before { content: "🏁"; font-family: Arial, sans-serif; }
+        .fa-trophy::before { content: "🏆"; font-family: Arial, sans-serif; }
+        .fa-medal::before { content: "🏅"; font-family: Arial, sans-serif; }
+        .fa-crown::before { content: "👑"; font-family: Arial, sans-serif; }
+        .fa-gem::before { content: "💎"; font-family: Arial, sans-serif; }
+        .fa-diamond::before { content: "💎"; font-family: Arial, sans-serif; }
+        .fa-coins::before { content: "🪙"; font-family: Arial, sans-serif; }
+        .fa-money-bill::before { content: "💰"; font-family: Arial, sans-serif; }
+        .fa-credit-card::before { content: "💳"; font-family: Arial, sans-serif; }
+        .fa-wallet::before { content: "👛"; font-family: Arial, sans-serif; }
+        .fa-piggy-bank::before { content: "🐷"; font-family: Arial, sans-serif; }
+        .fa-chart-line::before { content: "📈"; font-family: Arial, sans-serif; }
+        .fa-chart-bar::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-pie::before { content: "🥧"; font-family: Arial, sans-serif; }
+        .fa-chart-area::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-gantt::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-scatter::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-network::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-tree::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-sankey::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-waterfall::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-candlestick::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-radar::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-polar::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-bubble::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-doughnut::before { content: "🥧"; font-family: Arial, sans-serif; }
+        .fa-chart-sunburst::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-treemap::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-funnel::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-gauge::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-heatmap::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-histogram::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-boxplot::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-violin::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-ridge::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-parallel::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-sankey-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-alluvial::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-sunburst-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-treemap-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-funnel-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-gauge-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-heatmap-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-histogram-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-boxplot-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-violin-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-ridge-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
+        .fa-chart-parallel-diagram::before { content: "📊"; font-family: Arial, sans-serif; }
 
         /* Authentic ROG Animations from rog.asus.com */
         @keyframes rog-glow {
@@ -1953,6 +2091,7 @@
             // Check if running on HTTPS
             if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
                 console.warn('⚠️ Not running on HTTPS - Firebase may have issues');
+                console.log('💡 Solution: Ensure your deployment uses HTTPS');
             } else {
                 console.log('✅ Running on HTTPS or localhost');
             }
@@ -1960,20 +2099,48 @@
             // Check for CORS issues
             if (location.hostname.includes('github.io') || location.hostname.includes('netlify.app') || location.hostname.includes('vercel.app')) {
                 console.log('✅ Detected hosting platform:', location.hostname);
+                console.log('💡 Platform-specific solutions available');
             }
             
             // Check Firebase SDK loading
             const firebaseScripts = document.querySelectorAll('script[src*="firebase"]');
             console.log('Firebase SDK scripts loaded:', firebaseScripts.length);
             
+            // Check for CDN loading issues
+            const cdnResources = document.querySelectorAll('link[href*="cdn"], script[src*="cdn"]');
+            console.log('CDN resources loaded:', cdnResources.length);
+            
+            // Check for network connectivity
+            if (!navigator.onLine) {
+                console.warn('⚠️ Network is offline - some features may not work');
+            } else {
+                console.log('✅ Network connection available');
+            }
+            
             // Check for Firebase errors in console
             const originalError = console.error;
             console.error = function(...args) {
                 if (args[0] && args[0].toString().includes('Firebase')) {
                     console.warn('🚨 Firebase error detected:', args);
+                    console.log('💡 Check Firebase Console for domain authorization');
                 }
                 originalError.apply(console, args);
             };
+            
+            // Check for font loading issues
+            const fontLinks = document.querySelectorAll('link[href*="fonts"]');
+            console.log('Font resources loaded:', fontLinks.length);
+            
+            // Check for icon loading issues
+            const iconLinks = document.querySelectorAll('link[href*="font-awesome"]');
+            console.log('Icon resources loaded:', iconLinks.length);
+            
+            // Provide deployment solutions
+            console.log('🔧 Deployment Solutions:');
+            console.log('1. Add your domain to Firebase Console → Authentication → Settings → Authorized domains');
+            console.log('2. Ensure HTTPS is enabled on your hosting platform');
+            console.log('3. Check CORS configuration for your hosting platform');
+            console.log('4. Verify Firebase security rules allow read/write access');
         }
 
         // ROG Styles Application and Icon Loading
@@ -2036,7 +2203,38 @@
             console.log('✅ ROG styles applied successfully');
         }
 
-        // Icon Loading Check
+        // Font Loading Detection and Fallback
+        function checkFontLoading() {
+            console.log('🔍 Checking font loading...');
+            
+            // Check if Inter font is loaded
+            if (!document.fonts.check('1em Inter')) {
+                console.warn('⚠️ Inter font not loaded, using fallback');
+                document.body.style.fontFamily = 'Arial, sans-serif';
+                
+                // Apply fallback to all elements
+                const allElements = document.querySelectorAll('*');
+                allElements.forEach(element => {
+                    if (element.style.fontFamily.includes('Inter')) {
+                        element.style.fontFamily = 'Arial, sans-serif';
+                    }
+                });
+            } else {
+                console.log('✅ Inter font loaded successfully');
+            }
+            
+            // Check for Google Fonts loading
+            const googleFontsLoaded = document.querySelector('link[href*="fonts.googleapis.com"]') !== null;
+            console.log('Google Fonts CDN loaded:', googleFontsLoaded);
+            
+            // Apply fallback font stack
+            if (!googleFontsLoaded) {
+                console.warn('⚠️ Google Fonts not loaded, applying fallback fonts');
+                document.body.style.fontFamily = 'Arial, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            }
+        }
+
+        // Enhanced Icon Loading Check
         function checkIconLoading() {
             console.log('🔍 Checking icon loading...');
             
@@ -2048,14 +2246,61 @@
             const fallbackIcons = document.querySelectorAll('.fa-dashboard, .fa-shopping-cart, .fa-users, .fa-chart-bar, .fa-cog');
             console.log('Fallback icons available:', fallbackIcons.length);
             
-            // Force icon display
+            // Force icon display with enhanced fallbacks
             const allIcons = document.querySelectorAll('i[class*="fa-"]');
             allIcons.forEach(icon => {
                 icon.style.display = 'inline-block';
                 icon.style.fontSize = '1rem';
+                icon.style.fontFamily = 'Arial, sans-serif';
+                
+                // Add fallback text if icon fails
+                if (!icon.textContent && !icon.innerHTML.includes('::before')) {
+                    const iconClass = icon.className.match(/fa-([a-zA-Z0-9-]+)/);
+                    if (iconClass) {
+                        icon.textContent = getIconFallback(iconClass[1]);
+                    }
+                }
             });
             
             console.log('✅ Icon loading check completed');
+        }
+
+        // Get icon fallback text
+        function getIconFallback(iconName) {
+            const iconMap = {
+                'dashboard': '📊',
+                'shopping-cart': '🛒',
+                'users': '👥',
+                'chart-bar': '📈',
+                'cog': '⚙️',
+                'plus': '➕',
+                'edit': '✏️',
+                'trash': '🗑️',
+                'eye': '👁️',
+                'link': '🔗',
+                'refresh': '🔄',
+                'bars': '☰',
+                'user': '👤',
+                'lock': '🔒',
+                'shield-alt': '🛡️',
+                'download': '⬇️',
+                'file-pdf': '📄',
+                'file-code': '💻',
+                'check-circle': '✅',
+                'times': '❌',
+                'save': '💾',
+                'list': '📋',
+                'chart-pie': '🥧',
+                'chart-line': '📈',
+                'chart-area': '📊',
+                'tshirt': '👕',
+                'dollar-sign': '💰',
+                'percentage': '📊',
+                'ruler': '📏',
+                'file-alt': '📄',
+                'eye-slash': '🙈'
+            };
+            return iconMap[iconName] || '?';
         }
 
         // Test function to verify admin panel functionality
@@ -2106,6 +2351,7 @@
             // Apply ROG styles and check icons
             applyROGStyles();
             checkIconLoading();
+            checkFontLoading();
 
             // Setup Firebase auth state listener
             setupFirebaseAuth();
