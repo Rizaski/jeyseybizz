@@ -1535,7 +1535,7 @@
 
         // Firebase Authentication Setup
         function setupFirebaseAuth() {
-            if (!firebaseReady) return;
+            if (!window.firebaseReady || !window.firebase) return;
 
             window.firebase.onAuthStateChanged(window.firebase.auth, (user) => {
                 if (user) {
@@ -1794,7 +1794,7 @@
                     console.log('Firebase not ready, returning empty orders');
                     return [];
                 }
-                
+
                 const ordersRef = window.firebase.collection(window.firebase.db, 'orders');
                 const q = window.firebase.query(ordersRef, window.firebase.orderBy('createdAt', 'desc'));
                 const querySnapshot = await window.firebase.getDocs(q);
@@ -1979,7 +1979,7 @@
             try {
                 console.log('Loading analytics data...');
 
-                if (!firebaseReady) {
+                if (!window.firebaseReady || !window.firebase) {
                     console.log('Firebase not ready, using fallback data');
                     loadFallbackAnalyticsData();
                     return;
@@ -2843,7 +2843,7 @@
             const orderData = Object.fromEntries(formData);
 
             try {
-                if (!firebaseReady) {
+                if (!window.firebaseReady || !window.firebase) {
                     showOtomonoAlert('Firebase not available. Please try again later.');
                     return;
                 }
@@ -2883,7 +2883,7 @@
             const userData = Object.fromEntries(formData);
 
             try {
-                if (!firebaseReady) {
+                if (!window.firebaseReady || !window.firebase) {
                     showOtomonoAlert('Firebase not available. Please try again later.');
                     return;
                 }
@@ -2950,7 +2950,7 @@
                     return;
                 }
 
-                if (!firebaseReady) {
+                if (!window.firebaseReady || !window.firebase) {
                     showOtomonoAlert('Firebase not available. Please try again later.');
                     return;
                 }
@@ -3913,7 +3913,7 @@
         // Enhanced View Order Functionality
         async function viewOrder(orderId) {
             try {
-                if (!firebaseReady) {
+                if (!window.firebaseReady || !window.firebase) {
                     showOtomonoAlert('Firebase not available. Please try again later.');
                     return;
                 }
