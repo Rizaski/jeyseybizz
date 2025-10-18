@@ -1920,10 +1920,37 @@
                 timestamp: new Date().toISOString(),
                 read: false
             };
-
+            
             notifications.unshift(notification);
             notificationCount++;
+            saveNotificationsToStorage();
             updateNotificationUI();
+        }
+
+        function saveNotificationsToStorage() {
+            try {
+                localStorage.setItem('adminNotifications', JSON.stringify(notifications));
+                localStorage.setItem('adminNotificationCount', notificationCount.toString());
+            } catch (error) {
+                console.error('Error saving notifications to storage:', error);
+            }
+        }
+
+        function loadNotificationsFromStorage() {
+            try {
+                const savedNotifications = localStorage.getItem('adminNotifications');
+                const savedCount = localStorage.getItem('adminNotificationCount');
+                
+                if (savedNotifications) {
+                    notifications = JSON.parse(savedNotifications);
+                    notificationCount = savedCount ? parseInt(savedCount) : notifications.length;
+                    updateNotificationUI();
+                }
+            } catch (error) {
+                console.error('Error loading notifications from storage:', error);
+                notifications = [];
+                notificationCount = 0;
+            }
         }
 
         function updateNotificationUI() {
@@ -1980,6 +2007,8 @@
         function clearAllNotifications() {
             notifications = [];
             notificationCount = 0;
+            localStorage.removeItem('adminNotifications');
+            localStorage.removeItem('adminNotificationCount');
             updateNotificationUI();
             console.log('All notifications cleared');
         }
@@ -2071,22 +2100,8 @@
                 });
             }
 
-            // Simulate client submissions for demo
-            setTimeout(() => {
-                addNotification(
-                    'New Jersey Details Submitted',
-                    'Client John Doe has submitted jersey details for Order #ORD-1234',
-                    'success'
-                );
-            }, 5000);
-
-            setTimeout(() => {
-                addNotification(
-                    'Order Status Updated',
-                    'Order #ORD-5678 status changed to "In Production"',
-                    'info'
-                );
-            }, 10000);
+            // Load notifications from localStorage
+            loadNotificationsFromStorage();
         });
 
         // Function to simulate client jersey details submission
