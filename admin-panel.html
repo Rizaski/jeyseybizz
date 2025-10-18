@@ -1758,14 +1758,18 @@
         // Firebase Data Management
         async function loadDashboardData() {
             try {
+                console.log('Loading dashboard data...');
+                
                 if (!window.firebaseReady || !window.firebase) {
                     console.log('Firebase not ready, using fallback data');
                     loadFallbackDashboardData();
                     return;
                 }
 
+                console.log('Firebase is ready, loading orders from Firestore...');
                 // Load orders from Firestore
                 const orders = await loadOrdersFromFirebase();
+                console.log('Loaded orders:', orders.length);
 
                 // Calculate statistics
                 const totalOrders = orders.length;
@@ -1774,13 +1778,16 @@
                 const activeUsers = await getActiveUsersCount();
 
                 // Update dashboard
+                console.log('Updating dashboard with:', { totalOrders, activeUsers, pendingOrders, completedOrders });
                 document.getElementById('totalOrders').textContent = totalOrders;
                 document.getElementById('activeUsers').textContent = activeUsers;
                 document.getElementById('pendingOrders').textContent = pendingOrders;
                 document.getElementById('completedOrders').textContent = completedOrders;
 
                 // Load recent orders
+                console.log('Loading recent orders...');
                 loadRecentOrders(orders.slice(0, 5));
+                console.log('Dashboard data loaded successfully');
 
             } catch (error) {
                 console.error('Error loading dashboard data:', error);
@@ -4075,19 +4082,112 @@
         }
 
         // Utility functions
-        function refreshData() {
+        async function refreshData() {
             console.log('Refreshing data...');
-            loadDashboardData();
+            
+            // Add visual feedback
+            const refreshButton = document.querySelector('button[onclick="refreshData()"]');
+            if (refreshButton) {
+                const icon = refreshButton.querySelector('i');
+                if (icon) {
+                    icon.classList.add('fa-spin');
+                }
+            }
+            
+            try {
+                await loadDashboardData();
+                console.log('Data refreshed successfully');
+                
+                // Show success message
+                if (typeof showOtomonoSuccess === 'function') {
+                    showOtomonoSuccess('Data refreshed successfully!');
+                }
+            } catch (error) {
+                console.error('Error refreshing data:', error);
+                if (typeof showOtomonoAlert === 'function') {
+                    showOtomonoAlert('Error refreshing data: ' + error.message);
+                }
+            } finally {
+                // Remove visual feedback
+                if (refreshButton) {
+                    const icon = refreshButton.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('fa-spin');
+                    }
+                }
+            }
         }
 
-        function refreshOrders() {
+        async function refreshOrders() {
             console.log('Refreshing orders...');
-            loadOrdersData();
+            
+            // Add visual feedback
+            const refreshButton = document.querySelector('button[onclick="refreshOrders()"]');
+            if (refreshButton) {
+                const icon = refreshButton.querySelector('i');
+                if (icon) {
+                    icon.classList.add('fa-spin');
+                }
+            }
+            
+            try {
+                await loadOrdersData();
+                console.log('Orders refreshed successfully');
+                
+                // Show success message
+                if (typeof showOtomonoSuccess === 'function') {
+                    showOtomonoSuccess('Orders refreshed successfully!');
+                }
+            } catch (error) {
+                console.error('Error refreshing orders:', error);
+                if (typeof showOtomonoAlert === 'function') {
+                    showOtomonoAlert('Error refreshing orders: ' + error.message);
+                }
+            } finally {
+                // Remove visual feedback
+                if (refreshButton) {
+                    const icon = refreshButton.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('fa-spin');
+                    }
+                }
+            }
         }
 
-        function refreshUsers() {
+        async function refreshUsers() {
             console.log('Refreshing users...');
-            loadUsersData();
+            
+            // Add visual feedback
+            const refreshButton = document.querySelector('button[onclick="refreshUsers()"]');
+            if (refreshButton) {
+                const icon = refreshButton.querySelector('i');
+                if (icon) {
+                    icon.classList.add('fa-spin');
+                }
+            }
+            
+            try {
+                await loadUsersData();
+                console.log('Users refreshed successfully');
+                
+                // Show success message
+                if (typeof showOtomonoSuccess === 'function') {
+                    showOtomonoSuccess('Users refreshed successfully!');
+                }
+            } catch (error) {
+                console.error('Error refreshing users:', error);
+                if (typeof showOtomonoAlert === 'function') {
+                    showOtomonoAlert('Error refreshing users: ' + error.message);
+                }
+            } finally {
+                // Remove visual feedback
+                if (refreshButton) {
+                    const icon = refreshButton.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('fa-spin');
+                    }
+                }
+            }
         }
 
         async function logout() {
