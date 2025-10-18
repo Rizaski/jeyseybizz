@@ -1,130 +1,64 @@
-# Otomono Jerseys
+# Otomono Jerseys - Production Application
 
-Premium Jersey Design, Printing, and Selling Business Website
+## 🚀 Production-Ready Application
 
-## Features
+This is a clean, production-ready application for Otomono Jerseys with essential Firebase integration.
 
-- Modern reel-style slider showcasing jersey designs
-- Responsive design for web, tablet, and mobile
-- Interactive modals for chat, login, and staff access
-- Pure HTML+CSS+JavaScript implementation
-- Tailwind CSS via CDN for styling
+## 📁 Essential Files
 
-## Tech Stack
+### **Core Application Files:**
+- `index.html` - Main website
+- `admin-panel.html` - Admin dashboard
+- `login.html` - Authentication page
+- `contact.html` - Contact page
+- `client-order-form.html` - Customer order form
 
-- **Frontend**: Pure HTML5 + CSS3 + JavaScript (ES6+)
-- **Styling**: Tailwind CSS (CDN)
-- **Server**: Python HTTP Server (built-in)
+### **Firebase Configuration:**
+- `firebase-config.js` - Essential Firebase configuration
+- `firestore-rules.txt` - Firebase security rules
+- `firebase-env-config.js` - Environment variables configuration
 
-## Getting Started
+### **Deployment:**
+- `vercel.json` - Vercel deployment configuration
+- `firebase-test.html` - Firebase connection test
 
-### Option 1: Python Server (Recommended)
-1. Start the server:
-   ```bash
-   python serve.py
-   ```
-   Or on Windows:
-   ```bash
-   start-server.bat
-   ```
-   Or on Unix/Linux/Mac:
-   ```bash
-   ./start-server.sh
-   ```
+## 🔧 Firebase Setup
 
-2. Open your browser and navigate to `http://localhost:3000`
+### **1. Firebase Security Rules:**
+Copy content from `firestore-rules.txt` to Firebase Console → Firestore Database → Rules
 
-### Option 2: Any Static File Server
-You can use any static file server:
-- Python: `python -m http.server 3000`
-- Node.js: `npx serve .`
-- PHP: `php -S localhost:3000`
-- Or simply open `index.html` directly in your browser
-
-## Project Structure
-
+### **2. Environment Variables (Optional):**
+Set in Vercel Dashboard → Settings → Environment Variables:
 ```
-├── index.html              # Main homepage with jersey slider
-├── services.html           # Services page
-├── serve.py               # Python HTTP server
-├── start-server.bat       # Windows startup script
-├── start-server.sh        # Unix/Linux/Mac startup script
-├── public/
-│   ├── logo.png
-│   ├── logo-white.png
-│   └── favicon.png
-├── jersey-designs/
-│   └── [10 jersey design images]
-├── design-system.md       # Design system documentation
-├── typography-guidelines.md
-└── README.md
+NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyBNWEchdrKX9A2WdMa3VTnpbKgo0_eWqHE
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=otomono-c9938.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=otomono-c9938
 ```
 
-## Features
+## 🎯 Production Features
 
-### Homepage (`index.html`)
-- **Reel-style Slider**: Auto-playing slider with 10 jersey designs
-- **Interactive Controls**: Previous, Next, Play/Pause buttons
-- **Navigation**: Sticky header with smooth scrolling
-- **Modals**: Live chat, Gmail login, Staff login
-- **Testimonials**: Customer reviews with star ratings
-- **Responsive Design**: Mobile-first approach
+- ✅ **Firebase Database** integration
+- ✅ **Gmail Authentication** 
+- ✅ **Admin Panel** with full functionality
+- ✅ **Order Management** system
+- ✅ **User Management** system
+- ✅ **Analytics** and reporting
+- ✅ **Mobile Responsive** design
+- ✅ **ROG Gaming** theme
 
-### Services Page (`services.html`)
-- **Service Overview**: Jersey printing, design, bulk orders
-- **Process Workflow**: 4-step process visualization
-- **Pricing Tiers**: Flexible pricing options
-- **Quality Assurance**: Material testing and inspection
-- **Footer**: Navigation and company information
+## 🚀 Deployment
 
-## Configuration
+1. **Push to GitHub** - Code is automatically deployed to Vercel
+2. **Set Firebase Rules** - Copy from `firestore-rules.txt`
+3. **Test Application** - Use `/firebase-test.html` to verify connection
 
-### Colors
-- Primary: `#dc2626` (Red)
-- Secondary: `#6b7280` (Gray)
-- Accent: `#ff5630` (Orange)
+## 📞 Support
 
-### Fonts
-- Primary: Inter (Google Fonts)
-- Fallback: System fonts
+For production issues, check:
+- Browser console for errors
+- Vercel deployment logs
+- Firebase console for data issues
 
-## Browser Compatibility
+---
 
-- Chrome 60+
-- Firefox 55+
-- Safari 12+
-- Edge 79+
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-## No Dependencies Required
-
-This application uses only:
-- HTML5
-- CSS3
-- JavaScript (ES6+)
-- Tailwind CSS (CDN)
-- Python (for server, optional)
-
-No npm packages, no build process, no compilation required!
-
-## Quick Start
-
-1. **Clone or download** this repository
-2. **Open terminal** in the project directory
-3. **Run**: `python serve.py`
-4. **Open browser** to `http://localhost:3000`
-
-That's it! No installation, no dependencies, no configuration needed.
-
-## Deployment
-
-Deploy to any static hosting service:
-- **GitHub Pages**: Push to GitHub and enable Pages
-- **Netlify**: Drag and drop the folder
-- **Vercel**: Connect GitHub repository
-- **Firebase Hosting**: `firebase deploy`
-- **Any web server**: Upload files to public_html
-
-## License
-
-ISC License
+**🎯 Clean, production-ready application with essential Firebase integration!** ✨

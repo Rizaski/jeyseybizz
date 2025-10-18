@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="firebase-env-config.js"></script>
+    <script src="firebase-config.js"></script>
 
     <!-- Deployment-specific CSS fixes -->
     <style>
@@ -85,34 +85,68 @@
 
     <!-- Firebase SDK -->
     <script type="module">
-        // Initialize Firebase with environment variables
+        // Initialize Firebase with production configuration
         let firebaseReady = false;
         
         try {
-            // Debug environment variables
-            if (typeof window.debugEnvironmentVariables === 'function') {
-                window.debugEnvironmentVariables();
+            // Dynamic imports for better compatibility
+            const { initializeApp, getApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+            const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+            const { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, orderBy, where, onSnapshot, setDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { getDatabase, ref, set, get, push, remove } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
+
+            // Initialize Firebase
+            let app;
+            try {
+                app = getApp();
+                console.log('Using existing Firebase app');
+            } catch (error) {
+                app = initializeApp(firebaseConfig);
+                console.log('Initialized new Firebase app');
             }
             
-            // Check if Firebase is already initialized
-            if (window.firebase && window.firebase.app) {
-                console.log('Firebase already initialized, reusing existing instance');
-                firebaseReady = true;
-            } else {
-                // Use environment variables configuration
-                if (typeof window.initializeFirebaseWithEnv === 'function') {
-                    firebaseReady = await window.initializeFirebaseWithEnv();
-                } else {
-                    console.error('Firebase environment configuration not loaded');
-                    firebaseReady = false;
-                }
-            }
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+            const rtdb = getDatabase(app);
 
-            if (firebaseReady) {
-                console.log('Firebase initialized successfully with environment variables');
-            } else {
-                console.error('Firebase initialization failed');
-            }
+            // Make Firebase available globally
+            window.firebase = {
+                app,
+                auth,
+                db,
+                rtdb,
+                signInWithEmailAndPassword,
+                createUserWithEmailAndPassword,
+                signOut,
+                onAuthStateChanged,
+                updatePassword,
+                reauthenticateWithCredential,
+                EmailAuthProvider,
+                GoogleAuthProvider,
+                signInWithPopup,
+                signInWithRedirect,
+                getRedirectResult,
+                collection,
+                addDoc,
+                getDocs,
+                getDoc,
+                doc,
+                updateDoc,
+                deleteDoc,
+                query,
+                orderBy,
+                where,
+                onSnapshot,
+                setDoc,
+                ref,
+                set,
+                get,
+                push,
+                remove
+            };
+
+            firebaseReady = true;
+            console.log('Firebase initialized successfully');
         } catch (error) {
             console.error('Firebase initialization failed:', error);
             firebaseReady = false;
