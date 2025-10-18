@@ -837,9 +837,58 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <button class="rog-button px-6 py-2 rounded-lg" onclick="showCreateOrderForm()">
-                        <i class="fas fa-plus mr-2"></i>New Order
-                    </button>
+                    <!-- Notification Center -->
+                    <div class="relative">
+                        <button class="rog-button-secondary px-4 py-2 rounded-lg" onclick="toggleNotificationCenter()">
+                            <i class="fas fa-bell"></i>
+                            <span id="notification-count" class="absolute -top-2 -right-2 bg-rog-red text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                        </button>
+                        <div id="notificationCenter" class="absolute right-0 mt-2 w-80 bg-rog-gray rounded-lg shadow-lg border border-rog-red hidden z-50">
+                            <div class="p-4 border-b border-gray-700">
+                                <h3 class="text-lg font-semibold text-white">Notifications</h3>
+                                <p class="text-sm text-gray-400">Client submissions and updates</p>
+                            </div>
+                            <div id="notification-list" class="max-h-64 overflow-y-auto">
+                                <div class="p-4 text-center text-gray-400">
+                                    <i class="fas fa-bell-slash text-2xl mb-2"></i>
+                                    <p>No notifications yet</p>
+                                </div>
+                            </div>
+                            <div class="p-3 border-t border-gray-700">
+                                <button class="w-full text-sm text-rog-red hover:text-red-400" onclick="clearAllNotifications()">
+                                    Clear All
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Live Chat -->
+                    <div class="relative">
+                        <button class="rog-button px-4 py-2 rounded-lg" onclick="toggleLiveChat()">
+                            <i class="fas fa-comments"></i>
+                        </button>
+                        <div id="liveChat" class="absolute right-0 mt-2 w-80 bg-rog-gray rounded-lg shadow-lg border border-rog-red hidden z-50">
+                            <div class="p-4 border-b border-gray-700">
+                                <h3 class="text-lg font-semibold text-white">Live Chat</h3>
+                                <p class="text-sm text-gray-400">Chat with clients and admins</p>
+                            </div>
+                            <div id="chat-messages" class="h-64 overflow-y-auto p-4 space-y-2">
+                                <div class="text-center text-gray-400">
+                                    <i class="fas fa-comments text-2xl mb-2"></i>
+                                    <p>Start a conversation</p>
+                                </div>
+                            </div>
+                            <div class="p-4 border-t border-gray-700">
+                                <div class="flex space-x-2">
+                                    <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 bg-gray-800 text-white px-3 py-2 rounded-lg border border-gray-600 focus:border-rog-red focus:outline-none">
+                                    <button onclick="sendChatMessage()" class="rog-button px-4 py-2 rounded-lg">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <button class="rog-button-secondary px-4 py-2 rounded-lg" onclick="refreshData()">
                         <i class="fas fa-sync-alt"></i>
                     </button>
@@ -850,7 +899,8 @@
                         <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-rog-gray rounded-lg shadow-lg border border-rog-red hidden">
                             <div class="p-4 border-b border-gray-700">
                                 <p class="text-sm text-gray-400">Signed in as</p>
-                                <p class="font-semibold" id="adminName">Admin User</p>
+                                <p class="font-semibold text-white" id="adminName">Admin User</p>
+                                <p class="text-xs text-gray-400 truncate" id="adminEmail" style="max-width: 180px;">admin@example.com</p>
                             </div>
                             <div class="p-2">
                                 <a href="#" class="block px-3 py-2 text-sm hover:bg-rog-light rounded">Profile</a>
@@ -880,9 +930,25 @@
                         <p class="text-xs text-gray-400">Dashboard</p>
                     </div>
                 </div>
-                <button class="w-8 h-8 bg-gradient-to-br from-rog-red to-pink-500 rounded-full flex items-center justify-center" onclick="toggleUserDropdown()">
-                    <i class="fas fa-user text-white text-sm"></i>
-                </button>
+                <div class="flex items-center space-x-2">
+                    <!-- Mobile Notification -->
+                    <div class="relative">
+                        <button class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center" onclick="toggleNotificationCenter()">
+                            <i class="fas fa-bell text-white text-sm"></i>
+                            <span id="mobile-notification-count" class="absolute -top-1 -right-1 bg-rog-red text-white text-xs rounded-full h-4 w-4 flex items-center justify-center hidden">0</span>
+                        </button>
+                    </div>
+                    <!-- Mobile Chat -->
+                    <div class="relative">
+                        <button class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center" onclick="toggleLiveChat()">
+                            <i class="fas fa-comments text-white text-sm"></i>
+                        </button>
+                    </div>
+                    <!-- Mobile Profile -->
+                    <button class="w-8 h-8 bg-gradient-to-br from-rog-red to-pink-500 rounded-full flex items-center justify-center" onclick="toggleUserDropdown()">
+                        <i class="fas fa-user text-white text-sm"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -1735,6 +1801,202 @@
         function toggleUserDropdown() {
             const dropdown = document.getElementById('userDropdown');
             dropdown.classList.toggle('hidden');
+        }
+
+        // Notification Center Functions
+        let notifications = [];
+        let notificationCount = 0;
+
+        function toggleNotificationCenter() {
+            const center = document.getElementById('notificationCenter');
+            center.classList.toggle('hidden');
+        }
+
+        function addNotification(title, message, type = 'info') {
+            const notification = {
+                id: Date.now(),
+                title,
+                message,
+                type,
+                timestamp: new Date().toISOString(),
+                read: false
+            };
+            
+            notifications.unshift(notification);
+            notificationCount++;
+            updateNotificationUI();
+        }
+
+        function updateNotificationUI() {
+            const list = document.getElementById('notification-list');
+            const count = document.getElementById('notification-count');
+            const mobileCount = document.getElementById('mobile-notification-count');
+            
+            if (notifications.length === 0) {
+                list.innerHTML = `
+                    <div class="p-4 text-center text-gray-400">
+                        <i class="fas fa-bell-slash text-2xl mb-2"></i>
+                        <p>No notifications yet</p>
+                    </div>
+                `;
+                count.classList.add('hidden');
+                if (mobileCount) mobileCount.classList.add('hidden');
+            } else {
+                list.innerHTML = notifications.map(notif => `
+                    <div class="p-3 border-b border-gray-700 hover:bg-gray-800 cursor-pointer" onclick="markAsRead(${notif.id})">
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-${notif.type === 'success' ? 'check-circle text-green-400' : notif.type === 'warning' ? 'exclamation-triangle text-yellow-400' : 'info-circle text-blue-400'}"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-white">${notif.title}</p>
+                                <p class="text-xs text-gray-400 mt-1">${notif.message}</p>
+                                <p class="text-xs text-gray-500 mt-1">${new Date(notif.timestamp).toLocaleString()}</p>
+                            </div>
+                            ${!notif.read ? '<div class="w-2 h-2 bg-rog-red rounded-full"></div>' : ''}
+                        </div>
+                    </div>
+                `).join('');
+                
+                count.textContent = notificationCount;
+                count.classList.remove('hidden');
+                
+                if (mobileCount) {
+                    mobileCount.textContent = notificationCount;
+                    mobileCount.classList.remove('hidden');
+                }
+            }
+        }
+
+        function markAsRead(notificationId) {
+            const notification = notifications.find(n => n.id === notificationId);
+            if (notification && !notification.read) {
+                notification.read = true;
+                notificationCount--;
+                updateNotificationUI();
+            }
+        }
+
+        function clearAllNotifications() {
+            notifications = [];
+            notificationCount = 0;
+            updateNotificationUI();
+        }
+
+        // Live Chat Functions
+        let chatMessages = [];
+        let chatOpen = false;
+
+        function toggleLiveChat() {
+            const chat = document.getElementById('liveChat');
+            chat.classList.toggle('hidden');
+            chatOpen = !chatOpen;
+            
+            if (chatOpen) {
+                loadChatMessages();
+            }
+        }
+
+        function loadChatMessages() {
+            const messagesContainer = document.getElementById('chat-messages');
+            
+            if (chatMessages.length === 0) {
+                messagesContainer.innerHTML = `
+                    <div class="text-center text-gray-400">
+                        <i class="fas fa-comments text-2xl mb-2"></i>
+                        <p>Start a conversation</p>
+                    </div>
+                `;
+            } else {
+                messagesContainer.innerHTML = chatMessages.map(msg => `
+                    <div class="flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}">
+                        <div class="max-w-xs ${msg.sender === 'admin' ? 'bg-rog-red' : 'bg-gray-700'} text-white px-3 py-2 rounded-lg">
+                            <p class="text-sm">${msg.message}</p>
+                            <p class="text-xs text-gray-300 mt-1">${new Date(msg.timestamp).toLocaleTimeString()}</p>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatMessage = {
+                    id: Date.now(),
+                    message,
+                    sender: 'admin',
+                    timestamp: new Date().toISOString()
+                };
+                
+                chatMessages.push(chatMessage);
+                input.value = '';
+                loadChatMessages();
+                
+                // Simulate client response (in real app, this would come from Firebase)
+                setTimeout(() => {
+                    const clientResponse = {
+                        id: Date.now() + 1,
+                        message: "Thank you for your message. We'll get back to you soon!",
+                        sender: 'client',
+                        timestamp: new Date().toISOString()
+                    };
+                    chatMessages.push(clientResponse);
+                    loadChatMessages();
+                }, 2000);
+            }
+        }
+
+        // Listen for Enter key in chat input
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatInput = document.getElementById('chat-input');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendChatMessage();
+                    }
+                });
+            }
+            
+            // Simulate client submissions for demo
+            setTimeout(() => {
+                addNotification(
+                    'New Jersey Details Submitted',
+                    'Client John Doe has submitted jersey details for Order #ORD-1234',
+                    'success'
+                );
+            }, 5000);
+            
+            setTimeout(() => {
+                addNotification(
+                    'Order Status Updated',
+                    'Order #ORD-5678 status changed to "In Production"',
+                    'info'
+                );
+            }, 10000);
+        });
+
+        // Function to simulate client jersey details submission
+        function simulateClientSubmission(orderId, clientName) {
+            addNotification(
+                'New Jersey Details Submitted',
+                `Client ${clientName} has submitted jersey details for Order #${orderId}`,
+                'success'
+            );
+        }
+
+        // Function to add order status notifications
+        function addOrderStatusNotification(orderId, status) {
+            addNotification(
+                'Order Status Updated',
+                `Order #${orderId} status changed to "${status}"`,
+                'info'
+            );
         }
 
         // Close all modals
@@ -4103,7 +4365,7 @@
             if (existingLoader) {
                 existingLoader.remove();
             }
-            
+
             const loader = document.createElement('div');
             loader.id = 'rog-loader';
             loader.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
@@ -4114,9 +4376,9 @@
                     <p class="text-gray-400 text-sm">Please wait while we fetch your data...</p>
                 </div>
             `;
-            
+
             document.body.appendChild(loader);
-            
+
             // Add CSS for ROG loader animation
             if (!document.getElementById('rog-loader-styles')) {
                 const style = document.createElement('style');
@@ -4140,7 +4402,7 @@
                 document.head.appendChild(style);
             }
         }
-        
+
         function hideROGLoader() {
             const loader = document.getElementById('rog-loader');
             if (loader) {
@@ -4151,10 +4413,10 @@
         // Utility functions
         async function refreshData() {
             console.log('Refreshing data...');
-            
+
             // Show ROG loader
             showROGLoader('Refreshing Dashboard...');
-            
+
             // Add visual feedback
             const refreshButton = document.querySelector('button[onclick="refreshData()"]');
             if (refreshButton) {
@@ -4163,11 +4425,11 @@
                     icon.classList.add('fa-spin');
                 }
             }
-            
+
             try {
                 await loadDashboardData();
                 console.log('Data refreshed successfully');
-                
+
                 // Show success message
                 if (typeof showOtomonoSuccess === 'function') {
                     showOtomonoSuccess('Data refreshed successfully!');
@@ -4191,10 +4453,10 @@
 
         async function refreshOrders() {
             console.log('Refreshing orders...');
-            
+
             // Show ROG loader
             showROGLoader('Refreshing Orders...');
-            
+
             // Add visual feedback
             const refreshButton = document.querySelector('button[onclick="refreshOrders()"]');
             if (refreshButton) {
@@ -4203,11 +4465,11 @@
                     icon.classList.add('fa-spin');
                 }
             }
-            
+
             try {
                 await loadOrdersData();
                 console.log('Orders refreshed successfully');
-                
+
                 // Show success message
                 if (typeof showOtomonoSuccess === 'function') {
                     showOtomonoSuccess('Orders refreshed successfully!');
@@ -4231,10 +4493,10 @@
 
         async function refreshUsers() {
             console.log('Refreshing users...');
-            
+
             // Show ROG loader
             showROGLoader('Refreshing Users...');
-            
+
             // Add visual feedback
             const refreshButton = document.querySelector('button[onclick="refreshUsers()"]');
             if (refreshButton) {
@@ -4243,11 +4505,11 @@
                     icon.classList.add('fa-spin');
                 }
             }
-            
+
             try {
                 await loadUsersData();
                 console.log('Users refreshed successfully');
-                
+
                 // Show success message
                 if (typeof showOtomonoSuccess === 'function') {
                     showOtomonoSuccess('Users refreshed successfully!');
@@ -4272,18 +4534,18 @@
         async function logout() {
             try {
                 console.log('Logging out...');
-                
+
                 // Clear Firebase auth
                 if (window.firebaseReady && window.firebase && window.firebase.auth) {
                     await window.firebase.signOut(window.firebase.auth);
                     console.log('Firebase signout successful');
                 }
-                
+
                 // Clear local storage
                 localStorage.removeItem('adminUser');
                 localStorage.removeItem('userData');
                 localStorage.clear();
-                
+
                 console.log('Redirecting to login page...');
                 window.location.href = 'login.html';
             } catch (error) {

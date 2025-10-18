@@ -473,7 +473,7 @@
             loading.classList.remove('show');
             successMessage.style.display = 'block';
         }
-        
+
         // ROG-Branded Loader
         function showROGLoader(message = 'Loading...') {
             // Remove existing loader
@@ -481,7 +481,7 @@
             if (existingLoader) {
                 existingLoader.remove();
             }
-            
+
             const loader = document.createElement('div');
             loader.id = 'rog-loader';
             loader.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
@@ -492,9 +492,9 @@
                     <p class="text-gray-400 text-sm">Please wait while we authenticate...</p>
                 </div>
             `;
-            
+
             document.body.appendChild(loader);
-            
+
             // Add CSS for ROG loader animation
             if (!document.getElementById('rog-loader-styles')) {
                 const style = document.createElement('style');
@@ -518,7 +518,7 @@
                 document.head.appendChild(style);
             }
         }
-        
+
         function hideROGLoader() {
             const loader = document.getElementById('rog-loader');
             if (loader) {
@@ -549,7 +549,7 @@
         // Real Firebase Gmail Authentication
         async function handleGoogleSignIn() {
             showLoading();
-            
+
             // Show ROG loader
             showROGLoader('Authenticating with Gmail...');
 
@@ -596,7 +596,7 @@
                 provider.setCustomParameters({
                     prompt: 'select_account'
                 });
-                
+
                 // Add scopes
                 provider.addScope('email');
                 provider.addScope('profile');
