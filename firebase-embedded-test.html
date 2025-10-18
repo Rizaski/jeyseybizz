@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Embedded Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
+    <div class="max-w-2xl mx-auto p-8">
+        <h1 class="text-3xl font-bold mb-8 text-center">Firebase Embedded Test</h1>
+        
+        <!-- Firebase Configuration - Embedded -->
+        <script>
+            // Direct Firebase configuration embedded in HTML
+            const FIREBASE_CONFIG = {
+                apiKey: "AIzaSyBNWEchdrKX9A2WdMa3VTnpbKgo0_eWqHE",
+                authDomain: "otomono-c9938.firebaseapp.com",
+                projectId: "otomono-c9938",
+                storageBucket: "otomono-c9938.firebasestorage.app",
+                messagingSenderId: "348906539551",
+                appId: "1:348906539551:web:e249c40d0ae9e2964a632a",
+                measurementId: "G-YVL497L1V3"
+            };
+
+            // Simple Firebase initialization
+            async function initializeFirebaseDirect() {
+                try {
+                    console.log('Initializing Firebase with embedded configuration...');
+                    console.log('Config:', FIREBASE_CONFIG);
+                    
+                    // Import Firebase modules
+                    const { initializeApp, getApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+                    const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+                    const { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, orderBy, where, onSnapshot, setDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                    const { getDatabase, ref, set, get, push, remove } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
+
+                    // Initialize Firebase app
+                    let app;
+                    try {
+                        app = getApp('embedded-firebase-app');
+                        console.log('Using existing Firebase app');
+                    } catch (error) {
+                        app = initializeApp(FIREBASE_CONFIG, 'embedded-firebase-app');
+                        console.log('Initialized new Firebase app');
+                    }
+                    
+                    // Get Firebase services
+                    const auth = getAuth(app);
+                    const db = getFirestore(app);
+                    const rtdb = getDatabase(app);
+
+                    // Configure Google Auth Provider
+                    const googleProvider = new GoogleAuthProvider();
+                    googleProvider.setCustomParameters({
+                        prompt: 'select_account'
+                    });
+                    googleProvider.addScope('email');
+                    googleProvider.addScope('profile');
+
+                    // Make Firebase available globally
+                    window.firebase = {
+                        app,
+                        auth,
+                        db,
+                        rtdb,
+                        signInWithEmailAndPassword,
+                        createUserWithEmailAndPassword,
+                        signOut,
+                        onAuthStateChanged,
+                        updatePassword,
+                        reauthenticateWithCredential,
+                        EmailAuthProvider,
+                        GoogleAuthProvider,
+                        signInWithPopup,
+                        signInWithRedirect,
+                        getRedirectResult,
+                        googleProvider,
+                        collection,
+                        addDoc,
+                        getDocs,
+                        getDoc,
+                        doc,
+                        updateDoc,
+                        deleteDoc,
+                        query,
+                        orderBy,
+                        where,
+                        onSnapshot,
+                        setDoc,
+                        ref,
+                        set,
+                        get,
+                        push,
+                        remove,
+                        config: FIREBASE_CONFIG,
+                        isReady: true
+                    };
+
+                    console.log('Firebase initialized successfully with embedded configuration');
+                    return true;
+                    
+                } catch (error) {
+                    console.error('Firebase initialization failed:', error);
+                    return false;
+                }
+            }
+
+            // Export for global use
+            window.initializeFirebaseDirect = initializeFirebaseDirect;
+            window.firebaseConfig = FIREBASE_CONFIG;
+        </script>
+        
+        <div id="status" class="bg-gray-800 p-6 rounded-lg mb-6">
+            <h2 class="text-xl font-semibold mb-4">Connection Status</h2>
+            <div id="status-content" class="text-lg">Testing Firebase connection...</div>
+        </div>
+        
+        <div class="bg-gray-800 p-6 rounded-lg mb-6">
+            <h2 class="text-xl font-semibold mb-4">Configuration</h2>
+            <div id="config-content" class="text-sm">Loading configuration...</div>
+        </div>
+        
+        <div class="text-center">
+            <button onclick="testConnection()" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg transition-colors">
+                Test Connection
+            </button>
+        </div>
+    </div>
+
+    <script>
+        async function testConnection() {
+            const statusDiv = document.getElementById('status-content');
+            const configDiv = document.getElementById('config-content');
+            
+            try {
+                console.log('Testing Firebase connection...');
+                
+                // Test Firebase initialization
+                if (typeof window.initializeFirebaseDirect === 'function') {
+                    const result = await window.initializeFirebaseDirect();
+                    
+                    if (result && window.firebase && window.firebase.isReady) {
+                        statusDiv.innerHTML = '<span class="text-green-400">✅ Firebase Connected Successfully!</span>';
+                        console.log('Firebase connection successful');
+                        
+                        // Display configuration
+                        configDiv.innerHTML = `
+                            <div class="space-y-2">
+                                <div><strong>Project ID:</strong> ${window.firebase.config.projectId}</div>
+                                <div><strong>Auth Domain:</strong> ${window.firebase.config.authDomain}</div>
+                                <div><strong>API Key:</strong> ${window.firebase.config.apiKey.substring(0, 20)}...</div>
+                                <div><strong>App ID:</strong> ${window.firebase.config.appId}</div>
+                            </div>
+                        `;
+                    } else {
+                        statusDiv.innerHTML = '<span class="text-red-400">❌ Firebase Connection Failed</span>';
+                        console.error('Firebase connection failed');
+                    }
+                } else {
+                    statusDiv.innerHTML = '<span class="text-red-400">❌ Firebase Config Not Loaded</span>';
+                    console.error('Firebase embedded configuration not available');
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<span class="text-red-400">❌ Error: ${error.message}</span>`;
+                console.error('Firebase test error:', error);
+            }
+        }
+        
+        // Auto-test on page load
+        document.addEventListener('DOMContentLoaded', testConnection);
+    </script>
+</body>
+</html>
