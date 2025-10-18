@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="firebase-robust-config.js"></script>
+    <script src="firebase-simple-config.js"></script>
 
     <!-- Deployment-specific CSS fixes -->
     <style>
@@ -85,46 +85,35 @@
 
     <!-- Firebase SDK -->
     <script type="module">
-        // Initialize Firebase with robust configuration
+        // Initialize Firebase with simple configuration
         let firebaseReady = false;
         
         try {
-            // Debug Firebase status
-            if (typeof window.debugFirebaseStatus === 'function') {
-                window.debugFirebaseStatus();
-            }
+            console.log('Starting Firebase initialization...');
             
-            // Check if Firebase is already initialized and ready
+            // Check if Firebase is already initialized
             if (window.firebase && window.firebase.isReady) {
                 console.log('Firebase already initialized and ready');
                 firebaseReady = true;
             } else {
-                // Use robust Firebase initialization
-                if (typeof window.initializeFirebaseRobust === 'function') {
-                    firebaseReady = await window.initializeFirebaseRobust();
+                // Use simple Firebase initialization
+                if (typeof window.initializeFirebaseSimple === 'function') {
+                    firebaseReady = await window.initializeFirebaseSimple();
                 } else {
-                    console.error('Firebase robust configuration not loaded');
+                    console.error('Firebase simple configuration not loaded');
                     firebaseReady = false;
                 }
             }
 
             if (firebaseReady) {
-                console.log('Firebase initialized successfully with robust configuration');
+                console.log('Firebase initialized successfully with simple configuration');
             } else {
-                console.error('Firebase initialization failed - using fallback mode');
-                // Show user-friendly error message
-                if (typeof showOtomonoAlert === 'function') {
-                    showOtomonoAlert('Firebase connection failed. Some features may not work properly. Please refresh the page to try again.');
-                }
+                console.error('Firebase initialization failed');
+                // Don't show error message immediately, let the app continue
             }
         } catch (error) {
             console.error('Firebase initialization failed:', error);
             firebaseReady = false;
-            
-            // Show user-friendly error message
-            if (typeof showOtomonoAlert === 'function') {
-                showOtomonoAlert('Firebase not available. Please try again later.');
-            }
         }
     </script>
 
