@@ -58,7 +58,7 @@
             },
             {
                 "key": "Access-Control-Allow-Origin",
-                "value": "*"
+                "value": "https://jeyseybizzz.vercel.app, https://otomono.vercel.app"
             },
             {
                 "key": "Access-Control-Allow-Methods",
@@ -66,7 +66,15 @@
             },
             {
                 "key": "Access-Control-Allow-Headers",
-                "value": "Content-Type, Authorization, X-Requested-With"
+                "value": "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Requested-With"
+            },
+            {
+                "key": "Access-Control-Allow-Credentials",
+                "value": "true"
+            },
+            {
+                "key": "Access-Control-Max-Age",
+                "value": "86400"
             },
             {
                 "key": "Referrer-Policy",
