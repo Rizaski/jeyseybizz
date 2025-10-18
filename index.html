@@ -324,7 +324,7 @@
     </header>
 
     <!-- Floating Chat Button -->
-    <button id="floating-chat-btn" class="fixed bottom-6 right-6 w-14 h-14 bg-rog-red rounded-full shadow-lg hover:bg-rog-red/90 transition-all duration-200 z-40 flex items-center justify-center group">
+    <button id="floating-chat-btn" class="fixed bottom-6 right-6 w-14 h-14 bg-rog-red rounded-full shadow-lg hover:bg-rog-red/90 transition-all duration-200 z-40 flex items-center justify-center group md:hidden">
         <i class="fas fa-comments text-white text-xl group-hover:scale-110 transition-transform"></i>
     </button>
 
@@ -377,7 +377,7 @@
     </div>
 
     <!-- Floating Chat Button -->
-    <button id="floating-chat-btn" class="fixed bottom-6 right-6 w-14 h-14 bg-rog-red rounded-full shadow-lg hover:bg-rog-red/90 transition-all duration-200 z-40 flex items-center justify-center group">
+    <button id="floating-chat-btn" class="fixed bottom-6 right-6 w-14 h-14 bg-rog-red rounded-full shadow-lg hover:bg-rog-red/90 transition-all duration-200 z-40 flex items-center justify-center group md:hidden">
         <i class="fas fa-comments text-white text-xl group-hover:scale-110 transition-transform"></i>
     </button>
 
@@ -872,34 +872,43 @@
                         console.error('Error tracking page visit:', error);
                     }
                 }
-                // Mobile menu functionality
-                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-                const mobileMenu = document.getElementById('mobile-menu');
-                const mobileMenuClose = document.getElementById('mobile-menu-close');
-                const mobileMenuOverlay = document.getElementById('mobile-menu');
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+            const mobileMenuOverlay = document.getElementById('mobile-menu');
 
-                // Open mobile menu
-                if (mobileMenuBtn) {
-                    mobileMenuBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Mobile menu button clicked');
+            console.log('Mobile menu elements:', {
+                button: mobileMenuBtn,
+                menu: mobileMenu,
+                close: mobileMenuClose,
+                overlay: mobileMenuOverlay
+            });
 
-                        if (mobileMenu) {
-                            mobileMenu.classList.remove('hidden');
-                            setTimeout(() => {
-                                const transformElement = mobileMenu.querySelector('.transform');
-                                if (transformElement) {
-                                    transformElement.classList.remove('translate-x-full');
-                                }
-                            }, 10);
-                            document.body.style.overflow = 'hidden';
-                            console.log('Mobile menu opened');
-                        } else {
-                            console.error('Mobile menu element not found');
-                        }
-                    });
-                }
+            // Open mobile menu
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Mobile menu button clicked');
+                    
+                    if (mobileMenu) {
+                        mobileMenu.classList.remove('hidden');
+                        setTimeout(() => {
+                            const transformElement = mobileMenu.querySelector('.transform');
+                            if (transformElement) {
+                                transformElement.classList.remove('translate-x-full');
+                            }
+                        }, 10);
+                        document.body.style.overflow = 'hidden';
+                        console.log('Mobile menu opened');
+                    } else {
+                        console.error('Mobile menu element not found');
+                    }
+                });
+            } else {
+                console.error('Mobile menu button not found');
+            }
 
                 // Close mobile menu
                 function closeMobileMenu() {
@@ -1707,11 +1716,13 @@
 
             // Update profile images - use actual photoURL if available
             let profileImage = user.photoURL;
-            if (!profileImage) {
+            if (!profileImage || profileImage === '') {
                 // Create a fallback image with user's initial
                 const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
                 profileImage = `https://via.placeholder.com/32/ff0040/ffffff?text=${initial}`;
             }
+            
+            console.log('Profile image URL:', profileImage);
 
             console.log('Final profile image URL:', profileImage);
 
@@ -1732,6 +1743,8 @@
                     console.log('Desktop profile image loaded successfully');
                 };
                 console.log('Updated desktop profile image:', profileImage);
+            } else {
+                console.log('userProfileImage element not found');
             }
 
             if (dropdownProfileImage) {
