@@ -28,12 +28,49 @@
             try {
                 console.log('Initializing Firebase with direct configuration...');
                 console.log('Config:', FIREBASE_CONFIG);
-                
+
                 // Import Firebase modules
-                const { initializeApp, getApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-                const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
-                const { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, orderBy, where, onSnapshot, setDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-                const { getDatabase, ref, set, get, push, remove } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
+                const {
+                    initializeApp,
+                    getApp
+                } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+                const {
+                    getAuth,
+                    signInWithEmailAndPassword,
+                    createUserWithEmailAndPassword,
+                    signOut,
+                    onAuthStateChanged,
+                    updatePassword,
+                    reauthenticateWithCredential,
+                    EmailAuthProvider,
+                    GoogleAuthProvider,
+                    signInWithPopup,
+                    signInWithRedirect,
+                    getRedirectResult
+                } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+                const {
+                    getFirestore,
+                    collection,
+                    addDoc,
+                    getDocs,
+                    getDoc,
+                    doc,
+                    updateDoc,
+                    deleteDoc,
+                    query,
+                    orderBy,
+                    where,
+                    onSnapshot,
+                    setDoc
+                } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                const {
+                    getDatabase,
+                    ref,
+                    set,
+                    get,
+                    push,
+                    remove
+                } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
 
                 // Initialize Firebase app
                 let app;
@@ -44,7 +81,7 @@
                     app = initializeApp(FIREBASE_CONFIG, 'direct-firebase-app');
                     console.log('Initialized new Firebase app');
                 }
-                
+
                 // Get Firebase services
                 const auth = getAuth(app);
                 const db = getFirestore(app);
@@ -99,10 +136,10 @@
 
                 console.log('Firebase initialized successfully with direct configuration');
                 return true;
-                
+
             } catch (error) {
                 console.error('Firebase initialization failed:', error);
-                
+
                 // Create fallback Firebase object
                 window.firebase = {
                     isReady: false,
@@ -113,25 +150,41 @@
                     createUserWithEmailAndPassword: () => Promise.reject(new Error('Firebase not available')),
                     signOut: () => Promise.reject(new Error('Firebase not available')),
                     onAuthStateChanged: () => {},
-                    collection: () => { throw new Error('Firebase not available'); },
+                    collection: () => {
+                        throw new Error('Firebase not available');
+                    },
                     addDoc: () => Promise.reject(new Error('Firebase not available')),
                     getDocs: () => Promise.reject(new Error('Firebase not available')),
                     getDoc: () => Promise.reject(new Error('Firebase not available')),
-                    doc: () => { throw new Error('Firebase not available'); },
+                    doc: () => {
+                        throw new Error('Firebase not available');
+                    },
                     updateDoc: () => Promise.reject(new Error('Firebase not available')),
                     deleteDoc: () => Promise.reject(new Error('Firebase not available')),
-                    query: () => { throw new Error('Firebase not available'); },
-                    orderBy: () => { throw new Error('Firebase not available'); },
-                    where: () => { throw new Error('Firebase not available'); },
-                    onSnapshot: () => { throw new Error('Firebase not available'); },
+                    query: () => {
+                        throw new Error('Firebase not available');
+                    },
+                    orderBy: () => {
+                        throw new Error('Firebase not available');
+                    },
+                    where: () => {
+                        throw new Error('Firebase not available');
+                    },
+                    onSnapshot: () => {
+                        throw new Error('Firebase not available');
+                    },
                     setDoc: () => Promise.reject(new Error('Firebase not available')),
-                    ref: () => { throw new Error('Firebase not available'); },
+                    ref: () => {
+                        throw new Error('Firebase not available');
+                    },
                     set: () => Promise.reject(new Error('Firebase not available')),
                     get: () => Promise.reject(new Error('Firebase not available')),
-                    push: () => { throw new Error('Firebase not available'); },
+                    push: () => {
+                        throw new Error('Firebase not available');
+                    },
                     remove: () => Promise.reject(new Error('Firebase not available'))
                 };
-                
+
                 return false;
             }
         }
@@ -236,13 +289,18 @@
 
             if (firebaseReady) {
                 console.log('Firebase initialized successfully with simple configuration');
+                // Make firebaseReady globally accessible
+                window.firebaseReady = true;
             } else {
                 console.error('Firebase initialization failed');
-                // Don't show error message immediately, let the app continue
+                // Make firebaseReady globally accessible
+                window.firebaseReady = false;
             }
         } catch (error) {
             console.error('Firebase initialization failed:', error);
             firebaseReady = false;
+            // Make firebaseReady globally accessible
+            window.firebaseReady = false;
         }
     </script>
 
@@ -1700,7 +1758,7 @@
         // Firebase Data Management
         async function loadDashboardData() {
             try {
-                if (!firebaseReady) {
+                if (!window.firebaseReady || !window.firebase) {
                     console.log('Firebase not ready, using fallback data');
                     loadFallbackDashboardData();
                     return;
@@ -1732,6 +1790,11 @@
 
         async function loadOrdersFromFirebase() {
             try {
+                if (!window.firebaseReady || !window.firebase) {
+                    console.log('Firebase not ready, returning empty orders');
+                    return [];
+                }
+                
                 const ordersRef = window.firebase.collection(window.firebase.db, 'orders');
                 const q = window.firebase.query(ordersRef, window.firebase.orderBy('createdAt', 'desc'));
                 const querySnapshot = await window.firebase.getDocs(q);
@@ -1853,7 +1916,7 @@
 
         async function loadUsersData() {
             try {
-                if (!firebaseReady) {
+                if (!window.firebaseReady || !window.firebase) {
                     const tableBody = document.getElementById('usersTable');
                     tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-400">Firebase not available</td></tr>';
                     return;
