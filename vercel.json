@@ -4,21 +4,18 @@
         "src": "*.html",
         "use": "@vercel/static"
     }],
-    "routes": [{
-            "src": "/",
-            "dest": "/index.html"
+    "rewrites": [
+        {
+            "source": "/admin-panel",
+            "destination": "/admin-panel.html"
         },
         {
-            "src": "/admin-panel",
-            "dest": "/admin-panel.html"
+            "source": "/login",
+            "destination": "/login.html"
         },
         {
-            "src": "/login",
-            "dest": "/login.html"
-        },
-        {
-            "src": "/contact",
-            "dest": "/contact.html"
+            "source": "/contact",
+            "destination": "/contact.html"
         }
     ],
     "headers": [{
