@@ -1470,6 +1470,9 @@
             console.log('Admin Panel - Initializing...');
             console.log('Environment:', window.location.hostname);
 
+            // Show ROG loader during initialization
+            showROGLoader('Initializing Admin Panel...');
+
             // Force correct header visibility on load
             forceHeaderVisibility();
 
@@ -1492,19 +1495,22 @@
 
                 if (isAuthenticated) {
                     console.log('Admin Panel - Ready!');
-                    loadDashboardData();
+                    await loadDashboardData();
                     setupEventListeners();
+                    hideROGLoader();
                 } else {
                     console.log('Not authenticated, checking localStorage...');
                     // Try to load anyway for debugging
-                    loadDashboardData();
+                    await loadDashboardData();
                     setupEventListeners();
+                    hideROGLoader();
                 }
             } catch (error) {
                 console.error('Error during initialization:', error);
                 // Load anyway for debugging
-                loadDashboardData();
+                await loadDashboardData();
                 setupEventListeners();
+                hideROGLoader();
             }
 
             // Run diagnostic test
@@ -1759,7 +1765,7 @@
         async function loadDashboardData() {
             try {
                 console.log('Loading dashboard data...');
-                
+
                 if (!window.firebaseReady || !window.firebase) {
                     console.log('Firebase not ready, using fallback data');
                     loadFallbackDashboardData();
@@ -1778,7 +1784,12 @@
                 const activeUsers = await getActiveUsersCount();
 
                 // Update dashboard
-                console.log('Updating dashboard with:', { totalOrders, activeUsers, pendingOrders, completedOrders });
+                console.log('Updating dashboard with:', {
+                    totalOrders,
+                    activeUsers,
+                    pendingOrders,
+                    completedOrders
+                });
                 document.getElementById('totalOrders').textContent = totalOrders;
                 document.getElementById('activeUsers').textContent = activeUsers;
                 document.getElementById('pendingOrders').textContent = pendingOrders;
@@ -1808,12 +1819,16 @@
 
                 const orders = [];
                 querySnapshot.forEach((doc) => {
+                    const data = doc.data();
                     orders.push({
                         id: doc.id,
-                        ...doc.data()
+                        ...data,
+                        // Ensure createdAt exists for sorting
+                        createdAt: data.createdAt || new Date().toISOString()
                     });
                 });
 
+                console.log(`Loaded ${orders.length} orders from Firebase`);
                 return orders;
             } catch (error) {
                 console.error('Error loading orders from Firebase:', error);
@@ -4081,9 +4096,64 @@
             document.body.appendChild(modal);
         }
 
+        // ROG-Branded Loader
+        function showROGLoader(message = 'Loading...') {
+            // Remove existing loader
+            const existingLoader = document.getElementById('rog-loader');
+            if (existingLoader) {
+                existingLoader.remove();
+            }
+            
+            const loader = document.createElement('div');
+            loader.id = 'rog-loader';
+            loader.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+            loader.innerHTML = `
+                <div class="bg-gray-900 p-8 rounded-lg text-center max-w-sm mx-4">
+                    <div class="rog-loader-spinner mb-4"></div>
+                    <h3 class="text-xl font-bold text-white mb-2">${message}</h3>
+                    <p class="text-gray-400 text-sm">Please wait while we fetch your data...</p>
+                </div>
+            `;
+            
+            document.body.appendChild(loader);
+            
+            // Add CSS for ROG loader animation
+            if (!document.getElementById('rog-loader-styles')) {
+                const style = document.createElement('style');
+                style.id = 'rog-loader-styles';
+                style.textContent = `
+                    .rog-loader-spinner {
+                        width: 50px;
+                        height: 50px;
+                        border: 3px solid #374151;
+                        border-top: 3px solid #dc2626;
+                        border-radius: 50%;
+                        animation: rog-spin 1s linear infinite;
+                        margin: 0 auto;
+                    }
+                    
+                    @keyframes rog-spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+        
+        function hideROGLoader() {
+            const loader = document.getElementById('rog-loader');
+            if (loader) {
+                loader.remove();
+            }
+        }
+
         // Utility functions
         async function refreshData() {
             console.log('Refreshing data...');
+            
+            // Show ROG loader
+            showROGLoader('Refreshing Dashboard...');
             
             // Add visual feedback
             const refreshButton = document.querySelector('button[onclick="refreshData()"]');
@@ -4108,7 +4178,8 @@
                     showOtomonoAlert('Error refreshing data: ' + error.message);
                 }
             } finally {
-                // Remove visual feedback
+                // Hide loader and remove visual feedback
+                hideROGLoader();
                 if (refreshButton) {
                     const icon = refreshButton.querySelector('i');
                     if (icon) {
@@ -4120,6 +4191,9 @@
 
         async function refreshOrders() {
             console.log('Refreshing orders...');
+            
+            // Show ROG loader
+            showROGLoader('Refreshing Orders...');
             
             // Add visual feedback
             const refreshButton = document.querySelector('button[onclick="refreshOrders()"]');
@@ -4144,7 +4218,8 @@
                     showOtomonoAlert('Error refreshing orders: ' + error.message);
                 }
             } finally {
-                // Remove visual feedback
+                // Hide loader and remove visual feedback
+                hideROGLoader();
                 if (refreshButton) {
                     const icon = refreshButton.querySelector('i');
                     if (icon) {
@@ -4156,6 +4231,9 @@
 
         async function refreshUsers() {
             console.log('Refreshing users...');
+            
+            // Show ROG loader
+            showROGLoader('Refreshing Users...');
             
             // Add visual feedback
             const refreshButton = document.querySelector('button[onclick="refreshUsers()"]');
@@ -4180,7 +4258,8 @@
                     showOtomonoAlert('Error refreshing users: ' + error.message);
                 }
             } finally {
-                // Remove visual feedback
+                // Hide loader and remove visual feedback
+                hideROGLoader();
                 if (refreshButton) {
                     const icon = refreshButton.querySelector('i');
                     if (icon) {
@@ -4192,14 +4271,27 @@
 
         async function logout() {
             try {
-                if (firebaseReady && currentUser) {
+                console.log('Logging out...');
+                
+                // Clear Firebase auth
+                if (window.firebaseReady && window.firebase && window.firebase.auth) {
                     await window.firebase.signOut(window.firebase.auth);
+                    console.log('Firebase signout successful');
                 }
+                
+                // Clear local storage
                 localStorage.removeItem('adminUser');
+                localStorage.removeItem('userData');
+                localStorage.clear();
+                
+                console.log('Redirecting to login page...');
                 window.location.href = 'login.html';
             } catch (error) {
                 console.error('Error during logout:', error);
+                // Clear storage even if Firebase logout fails
                 localStorage.removeItem('adminUser');
+                localStorage.removeItem('userData');
+                localStorage.clear();
                 window.location.href = 'login.html';
             }
         }

@@ -473,6 +473,58 @@
             loading.classList.remove('show');
             successMessage.style.display = 'block';
         }
+        
+        // ROG-Branded Loader
+        function showROGLoader(message = 'Loading...') {
+            // Remove existing loader
+            const existingLoader = document.getElementById('rog-loader');
+            if (existingLoader) {
+                existingLoader.remove();
+            }
+            
+            const loader = document.createElement('div');
+            loader.id = 'rog-loader';
+            loader.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+            loader.innerHTML = `
+                <div class="bg-gray-900 p-8 rounded-lg text-center max-w-sm mx-4">
+                    <div class="rog-loader-spinner mb-4"></div>
+                    <h3 class="text-xl font-bold text-white mb-2">${message}</h3>
+                    <p class="text-gray-400 text-sm">Please wait while we authenticate...</p>
+                </div>
+            `;
+            
+            document.body.appendChild(loader);
+            
+            // Add CSS for ROG loader animation
+            if (!document.getElementById('rog-loader-styles')) {
+                const style = document.createElement('style');
+                style.id = 'rog-loader-styles';
+                style.textContent = `
+                    .rog-loader-spinner {
+                        width: 50px;
+                        height: 50px;
+                        border: 3px solid #374151;
+                        border-top: 3px solid #dc2626;
+                        border-radius: 50%;
+                        animation: rog-spin 1s linear infinite;
+                        margin: 0 auto;
+                    }
+                    
+                    @keyframes rog-spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+        
+        function hideROGLoader() {
+            const loader = document.getElementById('rog-loader');
+            if (loader) {
+                loader.remove();
+            }
+        }
 
         // Redirect to dashboard
         function redirectToDashboard(userData, userType = 'customer') {
@@ -497,6 +549,9 @@
         // Real Firebase Gmail Authentication
         async function handleGoogleSignIn() {
             showLoading();
+            
+            // Show ROG loader
+            showROGLoader('Authenticating with Gmail...');
 
             console.log('Starting real Gmail authentication...');
 
@@ -539,11 +594,10 @@
 
                 // Configure Google provider for production
                 provider.setCustomParameters({
-                    prompt: 'select_account',
-                    hd: 'gmail.com' // Restrict to Gmail accounts
+                    prompt: 'select_account'
                 });
-
-                // Add authorized domains for production
+                
+                // Add scopes
                 provider.addScope('email');
                 provider.addScope('profile');
 
@@ -554,6 +608,7 @@
                     const result = await signInWithPopup(auth, provider);
                     console.log('Gmail authentication successful via popup:', result.user.email);
                     showSuccess();
+                    hideROGLoader();
 
                     const userData = {
                         id: result.user.uid,
@@ -569,6 +624,21 @@
                 } catch (popupError) {
                     console.log('Popup failed, trying redirect:', popupError.message);
 
+                    // Check for specific error types
+                    if (popupError.code === 'auth/popup-closed-by-user') {
+                        showError('Login cancelled. Please try again.');
+                        return;
+                    } else if (popupError.code === 'auth/popup-blocked') {
+                        showError('Popup blocked by browser. Please allow popups and try again.');
+                        return;
+                    } else if (popupError.code === 'auth/unauthorized-domain') {
+                        showError('This domain is not authorized for Gmail login. Please contact administrator.');
+                        return;
+                    } else if (popupError.code === 'auth/operation-not-allowed') {
+                        showError('Gmail login is not enabled. Please contact administrator.');
+                        return;
+                    }
+
                     // If popup fails, use redirect
                     try {
                         await signInWithRedirect(auth, provider);
@@ -582,6 +652,7 @@
 
             } catch (error) {
                 console.error('Firebase initialization error:', error);
+                hideROGLoader();
                 showError(`Authentication setup failed: ${error.message}. Please try again.`);
             }
         }
@@ -617,6 +688,7 @@
                 if (result) {
                     console.log('Gmail authentication successful via redirect:', result.user.email);
                     showSuccess();
+                    hideROGLoader();
 
                     const userData = {
                         id: result.user.uid,
