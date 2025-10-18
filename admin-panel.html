@@ -1920,7 +1920,7 @@
                 timestamp: new Date().toISOString(),
                 read: false
             };
-            
+
             notifications.unshift(notification);
             notificationCount++;
             saveNotificationsToStorage();
@@ -1940,7 +1940,7 @@
             try {
                 const savedNotifications = localStorage.getItem('adminNotifications');
                 const savedCount = localStorage.getItem('adminNotificationCount');
-                
+
                 if (savedNotifications) {
                     notifications = JSON.parse(savedNotifications);
                     notificationCount = savedCount ? parseInt(savedCount) : notifications.length;

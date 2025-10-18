@@ -83,6 +83,59 @@
 </head>
 
 <body class="min-h-screen bg-gray-900 text-white">
+    <!-- Floating Chat Button -->
+    <button id="floating-chat-btn" class="fixed bottom-6 right-6 w-14 h-14 bg-red-600 rounded-full shadow-lg hover:bg-red-700 transition-all duration-200 z-40 flex items-center justify-center group">
+        <i class="fas fa-comments text-white text-xl group-hover:scale-110 transition-transform"></i>
+    </button>
+
+    <!-- Customer Chat Modal -->
+    <div id="customer-chat-modal" class="fixed inset-0 z-50 bg-black bg-opacity-75 hidden">
+        <div class="fixed bottom-4 right-4 w-80 bg-gray-800 rounded-lg shadow-2xl border border-red-500/30">
+            <div class="flex flex-col h-96">
+                <!-- Chat Header -->
+                <div class="flex items-center justify-between p-4 border-b border-red-500/30 bg-gray-800 rounded-t-lg">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                        <h3 class="text-lg font-semibold text-white">Customer Support</h3>
+                    </div>
+                    <button id="close-chat-modal" class="p-1 rounded hover:bg-red-500/20 transition-colors">
+                        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Customer Info Form -->
+                <div id="customer-info-form" class="p-4 space-y-4">
+                    <h4 class="text-white font-semibold mb-3">Please provide your details to start chatting:</h4>
+                    <input type="text" id="customer-name" placeholder="Full Name" class="w-full px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-red-500 focus:outline-none">
+                    <input type="email" id="customer-email" placeholder="Email Address" class="w-full px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-red-500 focus:outline-none">
+                    <input type="tel" id="customer-phone" placeholder="Mobile Number" class="w-full px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-red-500 focus:outline-none">
+                    <button id="start-chat-btn" class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors">
+                        Start Chat
+                    </button>
+                </div>
+
+                <!-- Chat Interface -->
+                <div id="chat-interface" class="hidden flex-1 flex flex-col">
+                    <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-2">
+                        <div class="text-center text-gray-400 text-sm">
+                            <p>Connected to support team</p>
+                        </div>
+                    </div>
+                    <div class="p-4 border-t border-red-500/30">
+                        <div class="flex space-x-2">
+                            <input type="text" id="chat-message-input" placeholder="Type your message..." class="flex-1 px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-red-500 focus:outline-none">
+                            <button id="send-message-btn" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <!-- Header -->
         <div class="text-center mb-8">
@@ -1131,6 +1184,139 @@
                 </div>
             `;
         }
+    </script>
+
+    <script>
+        // Customer Chat System
+        document.addEventListener('DOMContentLoaded', function() {
+            const floatingChatBtn = document.getElementById('floating-chat-btn');
+            const customerChatModal = document.getElementById('customer-chat-modal');
+            const closeChatModal = document.getElementById('close-chat-modal');
+            const customerInfoForm = document.getElementById('customer-info-form');
+            const chatInterface = document.getElementById('chat-interface');
+            const startChatBtn = document.getElementById('start-chat-btn');
+            const chatMessageInput = document.getElementById('chat-message-input');
+            const sendMessageBtn = document.getElementById('send-message-btn');
+            const chatMessages = document.getElementById('chat-messages');
+
+            let customerInfo = null;
+            let chatMessagesList = [];
+
+            // Open chat modal
+            if (floatingChatBtn) {
+                floatingChatBtn.addEventListener('click', function() {
+                    customerChatModal.classList.remove('hidden');
+                    console.log('Customer chat modal opened');
+                });
+            }
+
+            // Close chat modal
+            if (closeChatModal) {
+                closeChatModal.addEventListener('click', function() {
+                    customerChatModal.classList.add('hidden');
+                    console.log('Customer chat modal closed');
+                });
+            }
+
+            // Start chat
+            if (startChatBtn) {
+                startChatBtn.addEventListener('click', function() {
+                    const name = document.getElementById('customer-name').value.trim();
+                    const email = document.getElementById('customer-email').value.trim();
+                    const phone = document.getElementById('customer-phone').value.trim();
+
+                    if (!name || !email || !phone) {
+                        alert('Please fill in all fields');
+                        return;
+                    }
+
+                    customerInfo = { name, email, phone };
+                    customerInfoForm.classList.add('hidden');
+                    chatInterface.classList.remove('hidden');
+                    
+                    // Add welcome message
+                    addChatMessage('Hello! I\'m ' + name + '. I need help with my order.', 'customer');
+                    
+                    // Notify admin panel
+                    notifyAdminNewCustomer(name, email, phone);
+                    
+                    console.log('Chat started for customer:', customerInfo);
+                });
+            }
+
+            // Send message
+            function sendMessage() {
+                const message = chatMessageInput.value.trim();
+                if (message && customerInfo) {
+                    addChatMessage(message, 'customer');
+                    chatMessageInput.value = '';
+                    
+                    // Notify admin panel
+                    notifyAdminNewMessage(customerInfo.name, message);
+                    
+                    // Simulate admin response
+                    setTimeout(() => {
+                        addChatMessage('Thank you for your message. Our support team will get back to you shortly.', 'admin');
+                    }, 2000);
+                }
+            }
+
+            if (sendMessageBtn) {
+                sendMessageBtn.addEventListener('click', sendMessage);
+            }
+
+            if (chatMessageInput) {
+                chatMessageInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+
+            function addChatMessage(message, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `flex ${sender === 'customer' ? 'justify-end' : 'justify-start'}`;
+                
+                const messageContent = document.createElement('div');
+                messageContent.className = `max-w-xs px-3 py-2 rounded-lg ${
+                    sender === 'customer' 
+                        ? 'bg-red-600 text-white' 
+                        : 'bg-gray-700 text-white'
+                }`;
+                
+                messageContent.innerHTML = `
+                    <p class="text-sm">${message}</p>
+                    <p class="text-xs opacity-70 mt-1">${new Date().toLocaleTimeString()}</p>
+                `;
+                
+                messageDiv.appendChild(messageContent);
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                chatMessagesList.push({ message, sender, timestamp: new Date().toISOString() });
+            }
+
+            function notifyAdminNewCustomer(name, email, phone) {
+                // This would send a notification to the admin panel
+                console.log('New customer chat started:', { name, email, phone });
+                // In a real implementation, this would use Firebase or WebSocket
+            }
+
+            function notifyAdminNewMessage(customerName, message) {
+                // This would send a message notification to the admin panel
+                console.log('New message from customer:', { customerName, message });
+                // In a real implementation, this would use Firebase or WebSocket
+            }
+
+            // Close chat modal when clicking outside
+            if (customerChatModal) {
+                customerChatModal.addEventListener('click', function(e) {
+                    if (e.target === customerChatModal) {
+                        customerChatModal.classList.add('hidden');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 
