@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="firebase-production-config.js"></script>
+    <script src="firebase-robust-config.js"></script>
 
     <!-- Deployment-specific CSS fixes -->
     <style>
@@ -85,37 +85,46 @@
 
     <!-- Firebase SDK -->
     <script type="module">
-        // Initialize Firebase with production configuration
+        // Initialize Firebase with robust configuration
         let firebaseReady = false;
         
         try {
-            // Debug environment variables
-            if (typeof window.debugEnvironmentVariables === 'function') {
-                window.debugEnvironmentVariables();
+            // Debug Firebase status
+            if (typeof window.debugFirebaseStatus === 'function') {
+                window.debugFirebaseStatus();
             }
             
-            // Check if Firebase is already initialized
-            if (window.firebase && window.firebase.app) {
-                console.log('Firebase already initialized, reusing existing instance');
+            // Check if Firebase is already initialized and ready
+            if (window.firebase && window.firebase.isReady) {
+                console.log('Firebase already initialized and ready');
                 firebaseReady = true;
             } else {
-                // Use production configuration
-                if (typeof window.initializeFirebaseForProduction === 'function') {
-                    firebaseReady = await window.initializeFirebaseForProduction();
+                // Use robust Firebase initialization
+                if (typeof window.initializeFirebaseRobust === 'function') {
+                    firebaseReady = await window.initializeFirebaseRobust();
                 } else {
-                    console.error('Firebase production configuration not loaded');
+                    console.error('Firebase robust configuration not loaded');
                     firebaseReady = false;
                 }
             }
 
             if (firebaseReady) {
-                console.log('Firebase initialized successfully for production');
+                console.log('Firebase initialized successfully with robust configuration');
             } else {
-                console.error('Firebase initialization failed');
+                console.error('Firebase initialization failed - using fallback mode');
+                // Show user-friendly error message
+                if (typeof showOtomonoAlert === 'function') {
+                    showOtomonoAlert('Firebase connection failed. Some features may not work properly. Please refresh the page to try again.');
+                }
             }
         } catch (error) {
             console.error('Firebase initialization failed:', error);
             firebaseReady = false;
+            
+            // Show user-friendly error message
+            if (typeof showOtomonoAlert === 'function') {
+                showOtomonoAlert('Firebase not available. Please try again later.');
+            }
         }
     </script>
 
