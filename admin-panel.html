@@ -1335,7 +1335,7 @@
             try {
                 const isAuthenticated = checkAdminAuth();
                 console.log('Authentication check result:', isAuthenticated);
-                
+
                 if (isAuthenticated) {
                     console.log('Admin Panel - Ready!');
                     loadDashboardData();
@@ -1352,7 +1352,7 @@
                 loadDashboardData();
                 setupEventListeners();
             }
-            
+
             // Run diagnostic test
             setTimeout(() => {
                 testAdminPanel();
@@ -1374,7 +1374,7 @@
                         setTimeout(checkFirebase, 100);
                     }
                 };
-                
+
                 checkFirebase();
             });
         }
