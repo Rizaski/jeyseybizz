@@ -250,7 +250,7 @@
 
         /* Header improvements for mobile */
         @media (max-width: 767px) {
-            header .container {
+            header {
                 padding: 12px 16px;
             }
 
@@ -2943,15 +2943,15 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
 
                     const totalRevenue = orders.reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
                     const avgOrderValue = orders.length > 0 ? totalRevenue / orders.length : 0;
-                    
+
                     // Calculate dynamic conversion rate based on completed orders vs total orders
                     const completedOrders = orders.filter(order => order.status === 'delivered' || order.status === 'completed').length;
                     const conversionRate = orders.length > 0 ? Math.round((completedOrders / orders.length) * 100) : 0;
-                    
+
                     // Calculate dynamic customer satisfaction based on order status distribution
-                    const satisfiedOrders = orders.filter(order => 
-                        order.status === 'delivered' || 
-                        order.status === 'completed' || 
+                    const satisfiedOrders = orders.filter(order =>
+                        order.status === 'delivered' ||
+                        order.status === 'completed' ||
                         order.status === 'processing'
                     ).length;
                     const customerSatisfaction = orders.length > 0 ? Math.round((satisfiedOrders / orders.length) * 100) : 0;
