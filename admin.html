@@ -22,9 +22,36 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Firebase Configuration -->
-    <script src="js/firebase-config.js"></script>
-    <script src="js/firebase-database.js"></script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Direct Firebase configuration for admin panel
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, where, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNWEchdrKX9A2WdMa3VTnpbKgo0_eWqHE",
+            authDomain: "otomono-c9938.firebaseapp.com",
+            projectId: "otomono-c9938",
+            storageBucket: "otomono-c9938.firebasestorage.app",
+            messagingSenderId: "348906539551",
+            appId: "1:348906539551:web:e249c40d0ae9e2964a632a",
+            measurementId: "G-YVL497L1V3"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // Make Firebase available globally
+        window.firebaseAuth = auth;
+        window.firebaseApp = app;
+        window.firebaseDb = db;
+        
+        console.log('Firebase initialized for admin panel');
+    </script>
 
     <!-- Custom Tailwind Config -->
     <script>
@@ -589,10 +616,449 @@
                 </div>
             </div>
         </section>
+
+        <!-- Orders Section -->
+        <section id="orders" class="p-6 hidden">
+            <div class="mb-8">
+                <h2 class="text-3xl font-rog-display font-bold text-white mb-4">Orders Management</h2>
+                <p class="text-gray-400 font-rog-body">Manage customer orders and track their status</p>
+            </div>
+
+            <!-- Orders Filters -->
+            <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6 mb-8">
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Search Orders</label>
+                        <input type="text" id="order-search" placeholder="Search by ID, customer, or product..." class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Status Filter</label>
+                        <select id="order-status-filter" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Date Range</label>
+                        <input type="date" id="order-date-from" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red">
+                    </div>
+                    <div class="flex items-end">
+                        <button id="filter-orders" class="w-full rog-button py-3 rounded-lg font-rog-heading font-semibold text-white">
+                            <i class="fas fa-filter mr-2"></i>Filter Orders
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-rog-heading font-semibold text-white">Orders List</h3>
+                    <button id="add-order-btn" class="rog-button px-4 py-2 rounded-lg font-rog-heading font-semibold text-white">
+                        <i class="fas fa-plus mr-2"></i>Add Order
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-rog-gray">
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Order ID</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Customer</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Product</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Status</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Amount</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Date</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body">
+                            <!-- Orders will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Customers Section -->
+        <section id="customers" class="p-6 hidden">
+            <div class="mb-8">
+                <h2 class="text-3xl font-rog-display font-bold text-white mb-4">Customers Management</h2>
+                <p class="text-gray-400 font-rog-body">Manage customer information and track their activity</p>
+            </div>
+
+            <!-- Customer Stats -->
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="total-customers">0</p>
+                            <p class="text-sm text-gray-400 font-rog-body">Total Customers</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-rog-blue to-rog-purple rounded-lg flex items-center justify-center">
+                            <i class="fas fa-users text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="active-customers">0</p>
+                            <p class="text-sm text-gray-400 font-rog-body">Active Customers</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-user-check text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="new-customers">0</p>
+                            <p class="text-sm text-gray-400 font-rog-body">New This Month</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-rog-red to-rog-orange rounded-lg flex items-center justify-center">
+                            <i class="fas fa-user-plus text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customers Table -->
+            <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-rog-heading font-semibold text-white">Customers List</h3>
+                    <button id="add-customer-btn" class="rog-button px-4 py-2 rounded-lg font-rog-heading font-semibold text-white">
+                        <i class="fas fa-plus mr-2"></i>Add Customer
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-rog-gray">
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Name</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Email</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Phone</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Orders</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Status</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Joined</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customers-table-body">
+                            <!-- Customers will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="p-6 hidden">
+            <div class="mb-8">
+                <h2 class="text-3xl font-rog-display font-bold text-white mb-4">Products Management</h2>
+                <p class="text-gray-400 font-rog-body">Manage jersey products and inventory</p>
+            </div>
+
+            <!-- Product Categories -->
+            <div class="grid md:grid-cols-4 gap-6 mb-8">
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="total-products">0</p>
+                            <p class="text-sm text-gray-400 font-rog-body">Total Products</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-rog-red to-rog-orange rounded-lg flex items-center justify-center">
+                            <i class="fas fa-tshirt text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="in-stock">0</p>
+                            <p class="text-sm text-gray-400 font-rog-body">In Stock</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-check-circle text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="low-stock">0</p>
+                            <p class="text-sm text-gray-400 font-rog-body">Low Stock</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="out-of-stock">0</p>
+                            <p class="text-sm text-gray-400 font-rog-body">Out of Stock</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-times-circle text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Table -->
+            <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-rog-heading font-semibold text-white">Products List</h3>
+                    <button id="add-product-btn" class="rog-button px-4 py-2 rounded-lg font-rog-heading font-semibold text-white">
+                        <i class="fas fa-plus mr-2"></i>Add Product
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-rog-gray">
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Product</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Category</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Price</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Stock</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Status</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table-body">
+                            <!-- Products will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics" class="p-6 hidden">
+            <div class="mb-8">
+                <h2 class="text-3xl font-rog-display font-bold text-white mb-4">Analytics Dashboard</h2>
+                <p class="text-gray-400 font-rog-body">Business insights and performance metrics</p>
+            </div>
+
+            <!-- Analytics Cards -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="total-revenue">$0</p>
+                            <p class="text-sm text-gray-400 font-rog-body">Total Revenue</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-dollar-sign text-white"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <i class="fas fa-arrow-up text-green-400 mr-1"></i>
+                        <span class="text-green-400 font-rog-body">+15% from last month</span>
+                    </div>
+                </div>
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="avg-order-value">$0</p>
+                            <p class="text-sm text-gray-400 font-rog-body">Avg Order Value</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-rog-blue to-rog-purple rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-line text-white"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <i class="fas fa-arrow-up text-green-400 mr-1"></i>
+                        <span class="text-green-400 font-rog-body">+8% from last month</span>
+                    </div>
+                </div>
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="conversion-rate">0%</p>
+                            <p class="text-sm text-gray-400 font-rog-body">Conversion Rate</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-rog-red to-rog-orange rounded-lg flex items-center justify-center">
+                            <i class="fas fa-percentage text-white"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <i class="fas fa-arrow-up text-green-400 mr-1"></i>
+                        <span class="text-green-400 font-rog-body">+3% from last month</span>
+                    </div>
+                </div>
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="customer-satisfaction">0%</p>
+                            <p class="text-sm text-gray-400 font-rog-body">Customer Satisfaction</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-star text-white"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <i class="fas fa-arrow-up text-green-400 mr-1"></i>
+                        <span class="text-green-400 font-rog-body">+5% from last month</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6">
+                    <h3 class="text-xl font-rog-heading font-semibold text-white mb-4">Sales Trend</h3>
+                    <div id="sales-chart" class="h-64 flex items-center justify-center text-gray-400">
+                        <p>Sales chart will be displayed here</p>
+                    </div>
+                </div>
+                <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6">
+                    <h3 class="text-xl font-rog-heading font-semibold text-white mb-4">Top Products</h3>
+                    <div id="products-chart" class="h-64 flex items-center justify-center text-gray-400">
+                        <p>Products chart will be displayed here</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="p-6 hidden">
+            <div class="mb-8">
+                <h2 class="text-3xl font-rog-display font-bold text-white mb-4">Reports & Analytics</h2>
+                <p class="text-gray-400 font-rog-body">Generate and download business reports</p>
+            </div>
+
+            <!-- Report Types -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-rog-red to-rog-orange rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-shopping-cart text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-rog-heading font-semibold text-white">Sales Report</h3>
+                            <p class="text-sm text-gray-400 font-rog-body">Order and revenue data</p>
+                        </div>
+                    </div>
+                    <button class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white">
+                        <i class="fas fa-download mr-2"></i>Generate Report
+                    </button>
+                </div>
+
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-rog-blue to-rog-purple rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-users text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-rog-heading font-semibold text-white">Customer Report</h3>
+                            <p class="text-sm text-gray-400 font-rog-body">Customer analytics</p>
+                        </div>
+                    </div>
+                    <button class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white">
+                        <i class="fas fa-download mr-2"></i>Generate Report
+                    </button>
+                </div>
+
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-tshirt text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-rog-heading font-semibold text-white">Inventory Report</h3>
+                            <p class="text-sm text-gray-400 font-rog-body">Stock and product data</p>
+                        </div>
+                    </div>
+                    <button class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white">
+                        <i class="fas fa-download mr-2"></i>Generate Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Reports -->
+            <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6">
+                <h3 class="text-xl font-rog-heading font-semibold text-white mb-6">Recent Reports</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-rog-gray">
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Report Name</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Type</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Generated</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Size</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reports-table-body">
+                            <!-- Reports will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings" class="p-6 hidden">
+            <div class="mb-8">
+                <h2 class="text-3xl font-rog-display font-bold text-white mb-4">Settings</h2>
+                <p class="text-gray-400 font-rog-body">Configure system settings and preferences</p>
+            </div>
+
+            <!-- Settings Tabs -->
+            <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6">
+                <div class="flex space-x-4 mb-6">
+                    <button class="settings-tab active px-4 py-2 bg-rog-red text-white rounded-lg font-rog-heading font-semibold" data-tab="general">General</button>
+                    <button class="settings-tab px-4 py-2 text-gray-400 hover:text-white rounded-lg font-rog-heading font-semibold" data-tab="notifications">Notifications</button>
+                    <button class="settings-tab px-4 py-2 text-gray-400 hover:text-white rounded-lg font-rog-heading font-semibold" data-tab="security">Security</button>
+                    <button class="settings-tab px-4 py-2 text-gray-400 hover:text-white rounded-lg font-rog-heading font-semibold" data-tab="integrations">Integrations</button>
+                </div>
+
+                <!-- General Settings -->
+                <div id="general-settings" class="settings-content">
+                    <h3 class="text-xl font-rog-heading font-semibold text-white mb-6">General Settings</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Company Name</label>
+                            <input type="text" id="company-name" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter company name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Email Address</label>
+                            <input type="email" id="company-email" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter company email">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Phone Number</label>
+                            <input type="tel" id="company-phone" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter phone number">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Address</label>
+                            <textarea id="company-address" rows="3" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter company address"></textarea>
+                        </div>
+                        <button class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">
+                            <i class="fas fa-save mr-2"></i>Save Settings
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Other settings tabs would be implemented similarly -->
+            </div>
+        </section>
     </main>
 
     <!-- JavaScript -->
     <script>
+        // Global variables
+        let currentPage = 'dashboard';
+        let ordersData = [];
+        let customersData = [];
+        let productsData = [];
+
         // Mobile sidebar functionality
         function setupMobileSidebar() {
             const sidebarToggle = document.getElementById('sidebar-toggle');
@@ -634,6 +1100,370 @@
             sidebar.querySelectorAll('nav a').forEach(link => {
                 link.addEventListener('click', closeSidebar);
             });
+        }
+
+        // Navigation functionality
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    showPage(targetId);
+                });
+            });
+        }
+
+        // Show specific page
+        function showPage(pageId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('main > section');
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show target section
+            const targetSection = document.getElementById(pageId);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+                currentPage = pageId;
+                
+                // Load data for the page
+                loadPageData(pageId);
+            }
+        }
+
+        // Load data for specific page
+        async function loadPageData(pageId) {
+            switch (pageId) {
+                case 'dashboard':
+                    await loadDashboardData();
+                    break;
+                case 'orders':
+                    await loadOrdersData();
+                    break;
+                case 'customers':
+                    await loadCustomersData();
+                    break;
+                case 'products':
+                    await loadProductsData();
+                    break;
+                case 'analytics':
+                    await loadAnalyticsData();
+                    break;
+                case 'reports':
+                    await loadReportsData();
+                    break;
+                case 'settings':
+                    await loadSettingsData();
+                    break;
+            }
+        }
+
+        // Firebase data loading functions
+        async function loadDashboardData() {
+            try {
+                console.log('Loading dashboard data...');
+                // Load recent orders, stats, etc.
+                await loadRecentOrders();
+                await loadDashboardStats();
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        async function loadOrdersData() {
+            try {
+                console.log('Loading orders data...');
+                if (window.firebaseDb) {
+                    const ordersRef = collection(window.firebaseDb, 'orders');
+                    const ordersSnapshot = await getDocs(ordersRef);
+                    ordersData = ordersSnapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+                    renderOrdersTable();
+                } else {
+                    // Fallback data
+                    ordersData = [
+                        {
+                            id: 'ORD-001',
+                            customer: 'Ahmed Ali',
+                            product: 'Custom Jersey',
+                            status: 'pending',
+                            amount: 45.00,
+                            date: '2024-01-15'
+                        },
+                        {
+                            id: 'ORD-002',
+                            customer: 'Fatima Hassan',
+                            product: 'Team Jersey Set',
+                            status: 'completed',
+                            amount: 180.00,
+                            date: '2024-01-14'
+                        }
+                    ];
+                    renderOrdersTable();
+                }
+            } catch (error) {
+                console.error('Error loading orders data:', error);
+            }
+        }
+
+        async function loadCustomersData() {
+            try {
+                console.log('Loading customers data...');
+                if (window.firebaseDb) {
+                    const customersRef = collection(window.firebaseDb, 'customers');
+                    const customersSnapshot = await getDocs(customersRef);
+                    customersData = customersSnapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+                    renderCustomersTable();
+                    updateCustomerStats();
+                } else {
+                    // Fallback data
+                    customersData = [
+                        {
+                            id: 'CUST-001',
+                            name: 'Ahmed Ali',
+                            email: 'ahmed@example.com',
+                            phone: '+960 123-4567',
+                            orders: 3,
+                            status: 'active',
+                            joined: '2024-01-01'
+                        }
+                    ];
+                    renderCustomersTable();
+                    updateCustomerStats();
+                }
+            } catch (error) {
+                console.error('Error loading customers data:', error);
+            }
+        }
+
+        async function loadProductsData() {
+            try {
+                console.log('Loading products data...');
+                if (window.firebaseDb) {
+                    const productsRef = collection(window.firebaseDb, 'products');
+                    const productsSnapshot = await getDocs(productsRef);
+                    productsData = productsSnapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+                    renderProductsTable();
+                    updateProductStats();
+                } else {
+                    // Fallback data
+                    productsData = [
+                        {
+                            id: 'PROD-001',
+                            name: 'Custom Jersey',
+                            category: 'Sports',
+                            price: 45.00,
+                            stock: 50,
+                            status: 'active'
+                        }
+                    ];
+                    renderProductsTable();
+                    updateProductStats();
+                }
+            } catch (error) {
+                console.error('Error loading products data:', error);
+            }
+        }
+
+        async function loadAnalyticsData() {
+            try {
+                console.log('Loading analytics data...');
+                await updateAnalyticsStats();
+            } catch (error) {
+                console.error('Error loading analytics data:', error);
+            }
+        }
+
+        async function loadReportsData() {
+            try {
+                console.log('Loading reports data...');
+                // Load recent reports
+            } catch (error) {
+                console.error('Error loading reports data:', error);
+            }
+        }
+
+        async function loadSettingsData() {
+            try {
+                console.log('Loading settings data...');
+                // Load settings
+            } catch (error) {
+                console.error('Error loading settings data:', error);
+            }
+        }
+
+        // Render functions
+        function renderOrdersTable() {
+            const tbody = document.getElementById('orders-table-body');
+            if (!tbody) return;
+
+            tbody.innerHTML = ordersData.map(order => `
+                <tr class="border-b border-rog-gray/50">
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.id}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.customer}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.product}</td>
+                    <td class="py-3 px-4">
+                        <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status}</span>
+                    </td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">$${order.amount}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.date}</td>
+                    <td class="py-3 px-4">
+                        <button class="text-rog-red hover:text-rog-orange mr-2" onclick="editOrder('${order.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="text-red-400 hover:text-red-300" onclick="deleteOrder('${order.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderCustomersTable() {
+            const tbody = document.getElementById('customers-table-body');
+            if (!tbody) return;
+
+            tbody.innerHTML = customersData.map(customer => `
+                <tr class="border-b border-rog-gray/50">
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.name}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.email}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.phone}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.orders}</td>
+                    <td class="py-3 px-4">
+                        <span class="px-2 py-1 ${getStatusColor(customer.status)} rounded-full text-xs font-rog-body">${customer.status}</span>
+                    </td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.joined}</td>
+                    <td class="py-3 px-4">
+                        <button class="text-rog-red hover:text-rog-orange mr-2" onclick="editCustomer('${customer.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="text-red-400 hover:text-red-300" onclick="deleteCustomer('${customer.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderProductsTable() {
+            const tbody = document.getElementById('products-table-body');
+            if (!tbody) return;
+
+            tbody.innerHTML = productsData.map(product => `
+                <tr class="border-b border-rog-gray/50">
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${product.name}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${product.category}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">$${product.price}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${product.stock}</td>
+                    <td class="py-3 px-4">
+                        <span class="px-2 py-1 ${getStatusColor(product.status)} rounded-full text-xs font-rog-body">${product.status}</span>
+                    </td>
+                    <td class="py-3 px-4">
+                        <button class="text-rog-red hover:text-rog-orange mr-2" onclick="editProduct('${product.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="text-red-400 hover:text-red-300" onclick="deleteProduct('${product.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Helper functions
+        function getStatusColor(status) {
+            const colors = {
+                'pending': 'bg-yellow-500/20 text-yellow-400',
+                'processing': 'bg-blue-500/20 text-blue-400',
+                'completed': 'bg-green-500/20 text-green-400',
+                'cancelled': 'bg-red-500/20 text-red-400',
+                'active': 'bg-green-500/20 text-green-400',
+                'inactive': 'bg-gray-500/20 text-gray-400'
+            };
+            return colors[status] || 'bg-gray-500/20 text-gray-400';
+        }
+
+        // Stats update functions
+        async function updateCustomerStats() {
+            const totalCustomers = document.getElementById('total-customers');
+            const activeCustomers = document.getElementById('active-customers');
+            const newCustomers = document.getElementById('new-customers');
+
+            if (totalCustomers) totalCustomers.textContent = customersData.length;
+            if (activeCustomers) activeCustomers.textContent = customersData.filter(c => c.status === 'active').length;
+            if (newCustomers) newCustomers.textContent = customersData.filter(c => {
+                const joinedDate = new Date(c.joined);
+                const now = new Date();
+                const monthDiff = (now - joinedDate) / (1000 * 60 * 60 * 24 * 30);
+                return monthDiff < 1;
+            }).length;
+        }
+
+        async function updateProductStats() {
+            const totalProducts = document.getElementById('total-products');
+            const inStock = document.getElementById('in-stock');
+            const lowStock = document.getElementById('low-stock');
+            const outOfStock = document.getElementById('out-of-stock');
+
+            if (totalProducts) totalProducts.textContent = productsData.length;
+            if (inStock) inStock.textContent = productsData.filter(p => p.stock > 10).length;
+            if (lowStock) lowStock.textContent = productsData.filter(p => p.stock <= 10 && p.stock > 0).length;
+            if (outOfStock) outOfStock.textContent = productsData.filter(p => p.stock === 0).length;
+        }
+
+        async function updateAnalyticsStats() {
+            // Update analytics stats
+            const totalRevenue = document.getElementById('total-revenue');
+            const avgOrderValue = document.getElementById('avg-order-value');
+            const conversionRate = document.getElementById('conversion-rate');
+            const customerSatisfaction = document.getElementById('customer-satisfaction');
+
+            if (totalRevenue) totalRevenue.textContent = '$12,450';
+            if (avgOrderValue) avgOrderValue.textContent = '$85.50';
+            if (conversionRate) conversionRate.textContent = '3.2%';
+            if (customerSatisfaction) customerSatisfaction.textContent = '94%';
+        }
+
+        // Action functions
+        function editOrder(orderId) {
+            console.log('Edit order:', orderId);
+            // Implement edit order functionality
+        }
+
+        function deleteOrder(orderId) {
+            console.log('Delete order:', orderId);
+            // Implement delete order functionality
+        }
+
+        function editCustomer(customerId) {
+            console.log('Edit customer:', customerId);
+            // Implement edit customer functionality
+        }
+
+        function deleteCustomer(customerId) {
+            console.log('Delete customer:', customerId);
+            // Implement delete customer functionality
+        }
+
+        function editProduct(productId) {
+            console.log('Edit product:', productId);
+            // Implement edit product functionality
+        }
+
+        function deleteProduct(productId) {
+            console.log('Delete product:', productId);
+            // Implement delete product functionality
         }
 
         // Notification functionality
@@ -689,7 +1519,7 @@
 
                     if (adminName) adminName.textContent = adminData.name || 'Admin User';
                     if (adminEmail) adminEmail.textContent = adminData.email || 'admin@otomono.mv';
-
+                    
                     if (adminAvatar && adminData.name) {
                         const initial = adminData.name.charAt(0).toUpperCase();
                         adminAvatar.innerHTML = `<span class="text-white text-sm font-rog-heading font-bold">${initial}</span>`;
@@ -711,7 +1541,7 @@
                     const diffMs = now - loginTime;
                     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
                     const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-
+                    
                     const sessionDuration = document.getElementById('session-duration');
                     if (sessionDuration) {
                         sessionDuration.textContent = `${diffHours}h ${diffMinutes}m`;
@@ -734,13 +1564,17 @@
         // Initialize all functionality
         document.addEventListener('DOMContentLoaded', function() {
             setupMobileSidebar();
+            setupNavigation();
             setupNotifications();
             setupUserProfile();
             loadAdminUserInfo();
             updateSessionDuration();
-
+            
             // Update session duration every minute
             setInterval(updateSessionDuration, 60000);
+            
+            // Load initial dashboard data
+            loadDashboardData();
         });
     </script>
 </body>
