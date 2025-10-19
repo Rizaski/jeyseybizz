@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Otomono Jerseys</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        :root {
+            --rog-dark: #0a0a0a;
+            --rog-light: #1a1a1a;
+            --rog-red: #dc2626;
+            --rog-gold: #fbbf24;
+        }
+        
+        .font-rog-display { font-family: 'Orbitron', sans-serif; }
+        .font-rog-heading { font-family: 'Inter', sans-serif; }
+        .font-rog-body { font-family: 'Inter', sans-serif; }
+        
+        .rog-button {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            border: 1px solid #dc2626;
+            transition: all 0.3s ease;
+        }
+        
+        .rog-button:hover {
+            background: linear-gradient(135deg, #b91c1c, #991b1b);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+        }
+        
+        .glow {
+            text-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+        }
+        
+        .bg-rog-dark { background-color: var(--rog-dark); }
+        .bg-rog-light { background-color: var(--rog-light); }
+        .text-rog-red { color: var(--rog-red); }
+        .text-rog-gold { color: var(--rog-gold); }
+        .border-rog-red { border-color: var(--rog-red); }
+    </style>
+</head>
+
+<body class="min-h-screen bg-rog-dark text-white">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-rog-dark/95 backdrop-blur-sm border-b border-rog-red shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo Section -->
+                <div class="flex items-center">
+                    <a href="index.html" class="hover:opacity-80 transition-opacity duration-200">
+                        <img src="public/logo.png" alt="Otomono Logo" class="h-8 w-auto" />
+                    </a>
+                </div>
+                
+                <!-- Back to Site Button -->
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-white hover:text-rog-red font-rog-heading font-medium transition-colors">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Site
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <!-- Login Form Card -->
+            <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-rog-red/30">
+                <div class="text-center mb-8">
+                    <div class="mx-auto h-16 w-16 bg-rog-red/20 rounded-full flex items-center justify-center mb-4">
+                        <svg class="h-8 w-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-rog-display font-bold text-white glow">Admin Login</h2>
+                    <p class="mt-2 text-sm text-gray-400 font-rog-body">Staff and admin access only</p>
+                </div>
+
+                <form id="admin-login-form" class="space-y-6">
+                    <div>
+                        <label for="admin-email" class="block text-sm font-rog-heading font-medium text-rog-red mb-2">
+                            Email Address
+                        </label>
+                        <input 
+                            id="admin-email" 
+                            name="email" 
+                            type="email" 
+                            required 
+                            class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-rog-red focus:border-rog-red text-white placeholder-gray-400 font-rog-body transition-all duration-300"
+                            placeholder="admin@otomono.com"
+                        >
+                    </div>
+
+                    <div>
+                        <label for="admin-password" class="block text-sm font-rog-heading font-medium text-rog-red mb-2">
+                            Password
+                        </label>
+                        <input 
+                            id="admin-password" 
+                            name="password" 
+                            type="password" 
+                            required 
+                            class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-rog-red focus:border-rog-red text-white placeholder-gray-400 font-rog-body transition-all duration-300"
+                            placeholder="Enter your password"
+                        >
+                    </div>
+
+                    <div>
+                        <button 
+                            type="submit" 
+                            class="w-full rog-button py-3 px-6 rounded-lg font-rog-heading font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                        >
+                            <i class="fas fa-sign-in-alt mr-2"></i>
+                            Login to Admin Panel
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Admin Credentials Info -->
+                <div class="mt-8 p-4 bg-rog-dark/50 rounded-lg border border-rog-red/20">
+                    <h3 class="text-sm font-rog-heading font-semibold text-rog-red mb-2">Available Credentials:</h3>
+                    <div class="space-y-1 text-xs text-gray-400 font-rog-body">
+                        <div>• admin@otomono.com / admin123</div>
+                        <div>• staff@otomono.com / staff123</div>
+                        <div>• miicrossoft@gmail.com / admin123</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-rog-dark border-t border-rog-red/20 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-400 text-sm font-rog-body">
+                © 2024 Otomono Jerseys. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Admin login page loaded');
+            
+            const adminLoginForm = document.getElementById('admin-login-form');
+            const emailInput = document.getElementById('admin-email');
+            const passwordInput = document.getElementById('admin-password');
+
+            // Focus on email input
+            emailInput.focus();
+
+            // Admin login form submission
+            if (adminLoginForm) {
+                adminLoginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = emailInput.value.trim();
+                    const password = passwordInput.value;
+
+                    console.log('Admin login attempt:', email);
+
+                    // Simple admin credentials check
+                    const validAdmins = [
+                        { email: 'admin@otomono.com', password: 'admin123', name: 'Admin User' },
+                        { email: 'staff@otomono.com', password: 'staff123', name: 'Staff User' },
+                        { email: 'miicrossoft@gmail.com', password: 'admin123', name: 'Admin User' }
+                    ];
+
+                    const admin = validAdmins.find(a => a.email === email && a.password === password);
+
+                    if (admin) {
+                        console.log('Admin authentication successful:', admin);
+                        
+                        // Store admin session
+                        localStorage.setItem('adminUser', JSON.stringify({
+                            id: 'admin_' + Date.now(),
+                            email: admin.email,
+                            name: admin.name,
+                            userType: 'admin',
+                            loginTime: new Date().toISOString()
+                        }));
+
+                        // Show success message
+                        const submitBtn = adminLoginForm.querySelector('button[type="submit"]');
+                        const originalText = submitBtn.innerHTML;
+                        submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Login Successful!';
+                        submitBtn.classList.add('bg-green-600');
+                        submitBtn.disabled = true;
+                        
+                        setTimeout(() => {
+                            window.location.href = 'admin-panel.html';
+                        }, 1500);
+                    } else {
+                        console.log('Admin authentication failed');
+                        
+                        // Show error message
+                        const submitBtn = adminLoginForm.querySelector('button[type="submit"]');
+                        const originalText = submitBtn.innerHTML;
+                        submitBtn.innerHTML = '<i class="fas fa-times mr-2"></i>Invalid Credentials';
+                        submitBtn.classList.add('bg-red-600');
+                        
+                        setTimeout(() => {
+                            submitBtn.innerHTML = originalText;
+                            submitBtn.classList.remove('bg-red-600');
+                        }, 2000);
+                    }
+                });
+            }
+
+            // Enter key handling
+            passwordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    adminLoginForm.dispatchEvent(new Event('submit'));
+                }
+            });
+        });
+    </script>
+</body>
+</html>
