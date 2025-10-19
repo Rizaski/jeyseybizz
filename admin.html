@@ -1036,13 +1036,95 @@
                             <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Address</label>
                             <textarea id="company-address" rows="3" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter company address"></textarea>
                         </div>
-                        <button class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">
+                        <button id="save-general-settings" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">
                             <i class="fas fa-save mr-2"></i>Save Settings
                         </button>
                     </div>
                 </div>
 
-                <!-- Other settings tabs would be implemented similarly -->
+                <!-- Notifications Settings -->
+                <div id="notifications-settings" class="settings-content hidden">
+                    <h3 class="text-xl font-rog-heading font-semibold text-white mb-6">Notification Settings</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between p-4 bg-rog-light/20 rounded-lg">
+                            <div>
+                                <h4 class="font-rog-heading font-semibold text-white">Email Notifications</h4>
+                                <p class="text-sm text-gray-400 font-rog-body">Receive email notifications for new orders</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="email-notifications" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rog-red"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-rog-light/20 rounded-lg">
+                            <div>
+                                <h4 class="font-rog-heading font-semibold text-white">SMS Notifications</h4>
+                                <p class="text-sm text-gray-400 font-rog-body">Receive SMS notifications for urgent orders</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="sms-notifications" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rog-red"></div>
+                            </label>
+                        </div>
+                        <button id="save-notification-settings" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">
+                            <i class="fas fa-save mr-2"></i>Save Settings
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Security Settings -->
+                <div id="security-settings" class="settings-content hidden">
+                    <h3 class="text-xl font-rog-heading font-semibold text-white mb-6">Security Settings</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Current Password</label>
+                            <input type="password" id="current-password" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter current password">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">New Password</label>
+                            <input type="password" id="new-password" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter new password">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Confirm New Password</label>
+                            <input type="password" id="confirm-password" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Confirm new password">
+                        </div>
+                        <button id="save-security-settings" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">
+                            <i class="fas fa-save mr-2"></i>Update Password
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Integrations Settings -->
+                <div id="integrations-settings" class="settings-content hidden">
+                    <h3 class="text-xl font-rog-heading font-semibold text-white mb-6">Integration Settings</h3>
+                    <div class="space-y-6">
+                        <div class="p-4 bg-rog-light/20 rounded-lg">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h4 class="font-rog-heading font-semibold text-white">Firebase Integration</h4>
+                                    <p class="text-sm text-gray-400 font-rog-body">Database and authentication services</p>
+                                </div>
+                                <span class="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-xs font-rog-body">Connected</span>
+                            </div>
+                            <div class="text-sm text-gray-400 font-rog-body">
+                                <p>Project ID: otomono-c9938</p>
+                                <p>Status: Active</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-rog-light/20 rounded-lg">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h4 class="font-rog-heading font-semibold text-white">Email Service</h4>
+                                    <p class="text-sm text-gray-400 font-rog-body">SMTP configuration for notifications</p>
+                                </div>
+                                <span class="px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-xs font-rog-body">Pending</span>
+                            </div>
+                            <button class="rog-button px-4 py-2 rounded-lg font-rog-heading font-semibold text-white text-sm">
+                                <i class="fas fa-cog mr-2"></i>Configure
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -1145,7 +1227,25 @@
                     e.preventDefault();
                     const targetId = link.getAttribute('href').substring(1);
                     showPage(targetId);
+                    
+                    // Update active navigation state
+                    updateActiveNavigation(targetId);
                 });
+            });
+        }
+
+        // Update active navigation state
+        function updateActiveNavigation(activeId) {
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            navLinks.forEach(link => {
+                const targetId = link.getAttribute('href').substring(1);
+                if (targetId === activeId) {
+                    link.classList.add('bg-rog-red', 'text-white');
+                    link.classList.remove('text-white', 'hover:bg-rog-gray');
+                } else {
+                    link.classList.remove('bg-rog-red', 'text-white');
+                    link.classList.add('text-white', 'hover:bg-rog-gray');
+                }
             });
         }
 
@@ -1378,11 +1478,11 @@
                     const ordersRef = collection(window.firebaseDb, 'orders');
                     const ordersSnapshot = await getDocs(ordersRef);
                     const orders = ordersSnapshot.docs.map(doc => doc.data());
-                    
+
                     const materialsRef = collection(window.firebaseDb, 'materials');
                     const materialsSnapshot = await getDocs(materialsRef);
                     const materials = materialsSnapshot.docs.map(doc => doc.data());
-                    
+
                     // Create charts
                     createSalesChart(orders);
                     createMaterialsChart(orders);
@@ -1404,9 +1504,9 @@
 
             // Process sales data by date
             const salesData = processSalesData(orders);
-            
+
             if (salesChart) salesChart.destroy();
-            
+
             salesChart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -1459,9 +1559,9 @@
 
             // Process materials data
             const materialsData = processMaterialsData(orders);
-            
+
             if (materialsChart) materialsChart.destroy();
-            
+
             materialsChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
@@ -1504,9 +1604,9 @@
 
             // Process status data
             const statusData = processStatusData(orders);
-            
+
             if (statusChart) statusChart.destroy();
-            
+
             statusChart = new Chart(ctx, {
                 type: 'pie',
                 data: {
@@ -1517,7 +1617,7 @@
                             '#f59e0b', // pending
                             '#10b981', // completed
                             '#ef4444', // cancelled
-                            '#3b82f6'  // processing
+                            '#3b82f6' // processing
                         ],
                         borderWidth: 2,
                         borderColor: '#1a1a1a'
@@ -1545,9 +1645,9 @@
 
             // Process revenue data
             const revenueData = processRevenueData(orders);
-            
+
             if (revenueChart) revenueChart.destroy();
-            
+
             revenueChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -1611,19 +1711,19 @@
                 date.setDate(date.getDate() - i);
                 last7Days.push(date.toISOString().split('T')[0]);
             }
-            
+
             const salesByDate = {};
             last7Days.forEach(date => {
                 salesByDate[date] = 0;
             });
-            
+
             orders.forEach(order => {
-                const orderDate = order.date || order.createdAt?.toDate?.()?.toISOString().split('T')[0];
+                const orderDate = order.date || order.createdAt ? .toDate ? .() ? .toISOString().split('T')[0];
                 if (salesByDate.hasOwnProperty(orderDate)) {
                     salesByDate[orderDate] += parseFloat(order.amount) || 0;
                 }
             });
-            
+
             return {
                 labels: last7Days.map(date => new Date(date).toLocaleDateString()),
                 values: last7Days.map(date => salesByDate[date])
@@ -1636,14 +1736,14 @@
                 const material = order.material || 'Unknown';
                 materialCounts[material] = (materialCounts[material] || 0) + 1;
             });
-            
+
             const sortedMaterials = Object.entries(materialCounts)
-                .sort(([,a], [,b]) => b - a)
+                .sort(([, a], [, b]) => b - a)
                 .slice(0, 8);
-            
+
             return {
                 labels: sortedMaterials.map(([material]) => material),
-                values: sortedMaterials.map(([,count]) => count)
+                values: sortedMaterials.map(([, count]) => count)
             };
         }
 
@@ -1653,7 +1753,7 @@
                 const status = order.status || 'Unknown';
                 statusCounts[status] = (statusCounts[status] || 0) + 1;
             });
-            
+
             return {
                 labels: Object.keys(statusCounts),
                 values: Object.values(statusCounts)
@@ -1667,21 +1767,24 @@
                 date.setMonth(date.getMonth() - i);
                 last6Months.push(date.toISOString().substring(0, 7));
             }
-            
+
             const revenueByMonth = {};
             last6Months.forEach(month => {
                 revenueByMonth[month] = 0;
             });
-            
+
             orders.forEach(order => {
-                const orderDate = order.date || order.createdAt?.toDate?.()?.toISOString().substring(0, 7);
+                const orderDate = order.date || order.createdAt ? .toDate ? .() ? .toISOString().substring(0, 7);
                 if (revenueByMonth.hasOwnProperty(orderDate)) {
                     revenueByMonth[orderDate] += parseFloat(order.amount) || 0;
                 }
             });
-            
+
             return {
-                labels: last6Months.map(month => new Date(month + '-01').toLocaleDateString('en-US', { month: 'short', year: 'numeric' })),
+                labels: last6Months.map(month => new Date(month + '-01').toLocaleDateString('en-US', {
+                    month: 'short',
+                    year: 'numeric'
+                })),
                 values: last6Months.map(month => revenueByMonth[month])
             };
         }
@@ -1740,7 +1843,7 @@
             try {
                 const reportType = document.getElementById('reportType').value;
                 const dateRange = document.getElementById('dateRange').value;
-                
+
                 // Show loading state
                 const generateBtn = document.getElementById('generateReportBtn');
                 const originalText = generateBtn.innerHTML;
@@ -1790,8 +1893,11 @@
         async function generateSalesReport(dateRange) {
             const ordersRef = collection(window.firebaseDb, 'orders');
             const ordersSnapshot = await getDocs(ordersRef);
-            const orders = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            
+            const orders = ordersSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
             const filteredOrders = filterOrdersByDateRange(orders, dateRange);
             const totalRevenue = filteredOrders.reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
             const totalOrders = filteredOrders.length;
@@ -1811,16 +1917,22 @@
         async function generateCustomerReport(dateRange) {
             const customersRef = collection(window.firebaseDb, 'customers');
             const customersSnapshot = await getDocs(customersRef);
-            const customers = customersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            
+            const customers = customersSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
             const ordersRef = collection(window.firebaseDb, 'orders');
             const ordersSnapshot = await getDocs(ordersRef);
-            const orders = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            const orders = ordersSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
 
             const filteredOrders = filterOrdersByDateRange(orders, dateRange);
             const activeCustomers = customers.filter(c => c.status === 'active').length;
             const newCustomers = customers.filter(c => {
-                const joinedDate = new Date(c.joined || c.createdAt?.toDate?.());
+                const joinedDate = new Date(c.joined || c.createdAt ? .toDate ? .());
                 return isDateInRange(joinedDate, dateRange);
             }).length;
 
@@ -1839,11 +1951,17 @@
         async function generateMaterialsReport(dateRange) {
             const materialsRef = collection(window.firebaseDb, 'materials');
             const materialsSnapshot = await getDocs(materialsRef);
-            const materials = materialsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            
+            const materials = materialsSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
             const ordersRef = collection(window.firebaseDb, 'orders');
             const ordersSnapshot = await getDocs(ordersRef);
-            const orders = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            const orders = ordersSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
 
             const filteredOrders = filterOrdersByDateRange(orders, dateRange);
             const materialUsage = {};
@@ -1866,7 +1984,10 @@
         async function generateOrdersReport(dateRange) {
             const ordersRef = collection(window.firebaseDb, 'orders');
             const ordersSnapshot = await getDocs(ordersRef);
-            const orders = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            const orders = ordersSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
 
             const filteredOrders = filterOrdersByDateRange(orders, dateRange);
             const statusCounts = {};
@@ -1888,14 +2009,17 @@
         async function generateRevenueReport(dateRange) {
             const ordersRef = collection(window.firebaseDb, 'orders');
             const ordersSnapshot = await getDocs(ordersRef);
-            const orders = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            const orders = ordersSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
 
             const filteredOrders = filterOrdersByDateRange(orders, dateRange);
             const totalRevenue = filteredOrders.reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
             const revenueByMonth = {};
-            
+
             filteredOrders.forEach(order => {
-                const orderDate = order.date || order.createdAt?.toDate?.()?.toISOString().substring(0, 7);
+                const orderDate = order.date || order.createdAt ? .toDate ? .() ? .toISOString().substring(0, 7);
                 if (orderDate) {
                     revenueByMonth[orderDate] = (revenueByMonth[orderDate] || 0) + (parseFloat(order.amount) || 0);
                 }
@@ -1936,7 +2060,7 @@
             }
 
             return orders.filter(order => {
-                const orderDate = new Date(order.date || order.createdAt?.toDate?.());
+                const orderDate = new Date(order.date || order.createdAt ? .toDate ? .());
                 return orderDate >= startDate && orderDate <= now;
             });
         }
@@ -1994,7 +2118,7 @@
                 </div>
             `;
 
-            // Add report-specific content
+            // Add report-specific content with tables
             switch (reportType) {
                 case 'sales':
                     html += `
@@ -2010,6 +2134,33 @@
                             <div class="bg-rog-light/20 p-4 rounded-lg">
                                 <h5 class="text-lg font-rog-heading font-semibold text-white">Avg Order Value</h5>
                                 <p class="text-2xl font-rog-display font-bold text-rog-red">$${reportData.avgOrderValue.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <div class="bg-rog-light/20 rounded-lg p-6">
+                            <h5 class="text-lg font-rog-heading font-semibold text-white mb-4">Sales Details</h5>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="border-b border-rog-gray">
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Order ID</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Customer</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Material</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Amount</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${reportData.orders.slice(0, 10).map(order => `
+                                            <tr class="border-b border-rog-gray/50">
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${order.id || 'N/A'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${order.customer || 'N/A'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${order.material || 'N/A'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">$${order.amount || '0.00'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${order.date || 'N/A'}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     `;
@@ -2030,13 +2181,42 @@
                                 <p class="text-2xl font-rog-display font-bold text-rog-red">${reportData.newCustomers}</p>
                             </div>
                         </div>
+                        <div class="bg-rog-light/20 rounded-lg p-6">
+                            <h5 class="text-lg font-rog-heading font-semibold text-white mb-4">Customer Details</h5>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="border-b border-rog-gray">
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Name</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Email</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Phone</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Status</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Joined</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${reportData.customers.slice(0, 10).map(customer => `
+                                            <tr class="border-b border-rog-gray/50">
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${customer.name || 'N/A'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${customer.email || 'N/A'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${customer.phone || 'N/A'}</td>
+                                                <td class="py-3 px-4">
+                                                    <span class="px-2 py-1 ${getStatusColor(customer.status)} rounded-full text-xs font-rog-body">${customer.status || 'N/A'}</span>
+                                                </td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${customer.joined || 'N/A'}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     `;
                     break;
                 case 'materials':
                     html += `
                         <div class="mb-6">
                             <h5 class="text-lg font-rog-heading font-semibold text-white mb-4">Material Usage</h5>
-                            <div class="grid md:grid-cols-2 gap-4">
+                            <div class="grid md:grid-cols-2 gap-4 mb-6">
                                 ${Object.entries(reportData.materialUsage).map(([material, count]) => `
                                     <div class="bg-rog-light/20 p-4 rounded-lg">
                                         <h6 class="font-rog-heading font-semibold text-white">${material}</h6>
@@ -2045,13 +2225,42 @@
                                 `).join('')}
                             </div>
                         </div>
+                        <div class="bg-rog-light/20 rounded-lg p-6">
+                            <h5 class="text-lg font-rog-heading font-semibold text-white mb-4">Materials Inventory</h5>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="border-b border-rog-gray">
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Material</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Type</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Price</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Stock</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${reportData.materials.slice(0, 10).map(material => `
+                                            <tr class="border-b border-rog-gray/50">
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${material.name || 'N/A'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${material.type || 'N/A'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">$${material.price || '0.00'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${material.stock || 0}</td>
+                                                <td class="py-3 px-4">
+                                                    <span class="px-2 py-1 ${getStatusColor(material.status)} rounded-full text-xs font-rog-body">${material.status || 'N/A'}</span>
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     `;
                     break;
                 case 'orders':
                     html += `
                         <div class="mb-6">
                             <h5 class="text-lg font-rog-heading font-semibold text-white mb-4">Order Status Distribution</h5>
-                            <div class="grid md:grid-cols-2 gap-4">
+                            <div class="grid md:grid-cols-2 gap-4 mb-6">
                                 ${Object.entries(reportData.statusCounts).map(([status, count]) => `
                                     <div class="bg-rog-light/20 p-4 rounded-lg">
                                         <h6 class="font-rog-heading font-semibold text-white">${status}</h6>
@@ -2060,19 +2269,77 @@
                                 `).join('')}
                             </div>
                         </div>
+                        <div class="bg-rog-light/20 rounded-lg p-6">
+                            <h5 class="text-lg font-rog-heading font-semibold text-white mb-4">Orders Details</h5>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="border-b border-rog-gray">
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Order ID</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Customer</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Material</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Status</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Amount</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${reportData.orders.slice(0, 10).map(order => `
+                                            <tr class="border-b border-rog-gray/50">
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${order.id || 'N/A'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${order.customer || 'N/A'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${order.material || 'N/A'}</td>
+                                                <td class="py-3 px-4">
+                                                    <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status || 'N/A'}</span>
+                                                </td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">$${order.amount || '0.00'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${order.date || 'N/A'}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     `;
                     break;
                 case 'revenue':
                     html += `
                         <div class="mb-6">
                             <h5 class="text-lg font-rog-heading font-semibold text-white mb-4">Revenue by Month</h5>
-                            <div class="grid md:grid-cols-2 gap-4">
+                            <div class="grid md:grid-cols-2 gap-4 mb-6">
                                 ${Object.entries(reportData.revenueByMonth).map(([month, revenue]) => `
                                     <div class="bg-rog-light/20 p-4 rounded-lg">
                                         <h6 class="font-rog-heading font-semibold text-white">${month}</h6>
                                         <p class="text-rog-red font-rog-display font-bold">$${revenue.toFixed(2)}</p>
                                     </div>
                                 `).join('')}
+                            </div>
+                        </div>
+                        <div class="bg-rog-light/20 rounded-lg p-6">
+                            <h5 class="text-lg font-rog-heading font-semibold text-white mb-4">Revenue Details</h5>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="border-b border-rog-gray">
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Order ID</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Customer</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Material</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Amount</th>
+                                            <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${reportData.orders.slice(0, 10).map(order => `
+                                            <tr class="border-b border-rog-gray/50">
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${order.id || 'N/A'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${order.customer || 'N/A'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${order.material || 'N/A'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">$${order.amount || '0.00'}</td>
+                                                <td class="py-3 px-4 font-rog-body text-gray-300">${order.date || 'N/A'}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     `;
@@ -2139,8 +2406,10 @@
         function exportToExcel(reportData) {
             // Create CSV content for Excel
             const csvContent = `Report Type,${reportData.type}\nPeriod,${reportData.period}\nGenerated,${new Date(reportData.generatedAt).toLocaleString()}\n\n`;
-            
-            const blob = new Blob([csvContent], { type: 'text/csv' });
+
+            const blob = new Blob([csvContent], {
+                type: 'text/csv'
+            });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -2152,8 +2421,10 @@
         function exportToCSV(reportData) {
             // Create CSV content
             const csvContent = `Report Type,${reportData.type}\nPeriod,${reportData.period}\nGenerated,${new Date(reportData.generatedAt).toLocaleString()}\n\n`;
-            
-            const blob = new Blob([csvContent], { type: 'text/csv' });
+
+            const blob = new Blob([csvContent], {
+                type: 'text/csv'
+            });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -2165,10 +2436,66 @@
         async function loadSettingsData() {
             try {
                 console.log('Loading settings data...');
-                // Load settings
+                setupSettingsTabs();
+                loadSettingsContent();
             } catch (error) {
                 console.error('Error loading settings data:', error);
             }
+        }
+
+        // Settings tabs functionality
+        function setupSettingsTabs() {
+            const settingsTabs = document.querySelectorAll('.settings-tab');
+            const settingsContents = document.querySelectorAll('.settings-content');
+
+            settingsTabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetTab = tab.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs
+                    settingsTabs.forEach(t => {
+                        t.classList.remove('active', 'bg-rog-red', 'text-white');
+                        t.classList.add('text-gray-400', 'hover:text-white');
+                    });
+                    
+                    // Add active class to clicked tab
+                    tab.classList.add('active', 'bg-rog-red', 'text-white');
+                    tab.classList.remove('text-gray-400', 'hover:text-white');
+                    
+                    // Hide all content sections
+                    settingsContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Show target content
+                    const targetContent = document.getElementById(targetTab + '-settings');
+                    if (targetContent) {
+                        targetContent.classList.remove('hidden');
+                    }
+                });
+            });
+        }
+
+        // Load settings content
+        function loadSettingsContent() {
+            // Load general settings
+            loadGeneralSettings();
+            // Load other settings as needed
+        }
+
+        // Load general settings data
+        function loadGeneralSettings() {
+            // Load company settings from localStorage or Firebase
+            const companyName = localStorage.getItem('companyName') || '';
+            const companyEmail = localStorage.getItem('companyEmail') || '';
+            const companyPhone = localStorage.getItem('companyPhone') || '';
+            const companyAddress = localStorage.getItem('companyAddress') || '';
+
+            document.getElementById('company-name').value = companyName;
+            document.getElementById('company-email').value = companyEmail;
+            document.getElementById('company-phone').value = companyPhone;
+            document.getElementById('company-address').value = companyAddress;
         }
 
         // Render functions
@@ -2177,7 +2504,7 @@
             if (!tbody) return;
 
             if (ordersData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="py-8 text-center text-gray-400 font-rog-body">No orders found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" class="py-8 text-center text-gray-400 font-rog-body">No orders found</td></tr>';
                 return;
             }
 
@@ -2192,10 +2519,16 @@
                     <td class="py-3 px-4 font-rog-body text-gray-300">$${order.amount || '0.00'}</td>
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.date || 'N/A'}</td>
                     <td class="py-3 px-4">
-                        <button class="text-rog-red hover:text-rog-orange mr-2" onclick="editOrder('${order.id}')">
+                        <button class="text-rog-red hover:text-rog-orange mr-2" onclick="editOrder('${order.id}')" title="Edit Order">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="text-red-400 hover:text-red-300" onclick="deleteOrder('${order.id}')">
+                        <button class="text-blue-400 hover:text-blue-300 mr-2" onclick="addJerseyDetails('${order.id}')" title="Add Jersey Details">
+                            <i class="fas fa-tshirt"></i>
+                        </button>
+                        <button class="text-green-400 hover:text-green-300 mr-2" onclick="generateShareLink('${order.id}')" title="Generate Share Link">
+                            <i class="fas fa-share"></i>
+                        </button>
+                        <button class="text-red-400 hover:text-red-300" onclick="deleteOrder('${order.id}')" title="Delete Order">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -2438,6 +2771,23 @@
                     await saveMaterial();
                 });
             }
+
+            // Jersey modal
+            const jerseyModal = document.getElementById('jerseyModal');
+            const closeJerseyModal = document.getElementById('closeJerseyModal');
+            const cancelJersey = document.getElementById('cancelJersey');
+
+            if (closeJerseyModal) {
+                closeJerseyModal.addEventListener('click', () => {
+                    jerseyModal.classList.add('hidden');
+                });
+            }
+
+            if (cancelJersey) {
+                cancelJersey.addEventListener('click', () => {
+                    jerseyModal.classList.add('hidden');
+                });
+            }
         }
 
         // Save functions
@@ -2524,6 +2874,74 @@
         function editOrder(orderId) {
             console.log('Edit order:', orderId);
             // Implement edit order functionality
+        }
+
+        // Jersey details functionality
+        function addJerseyDetails(orderId) {
+            const jerseyModal = document.getElementById('jerseyModal');
+            if (jerseyModal) {
+                // Set the order ID for the jersey details
+                document.getElementById('jerseyOrderId').value = orderId;
+                jerseyModal.classList.remove('hidden');
+            }
+        }
+
+        // Generate share link functionality
+        function generateShareLink(orderId) {
+            const order = ordersData.find(o => o.id === orderId);
+            if (!order) {
+                alert('Order not found');
+                return;
+            }
+
+            // Generate a shareable link (in a real app, this would be a proper URL)
+            const shareLink = `${window.location.origin}/order-details.html?orderId=${orderId}`;
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(shareLink).then(() => {
+                alert('Share link copied to clipboard!');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = shareLink;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Share link copied to clipboard!');
+            });
+        }
+
+        // Save jersey details
+        async function saveJerseyDetails() {
+            try {
+                const orderId = document.getElementById('jerseyOrderId').value;
+                const jerseyData = {
+                    type: document.getElementById('jerseyType').value,
+                    name: document.getElementById('jerseyName').value,
+                    number: document.getElementById('jerseyNumber').value,
+                    sizeCategory: document.getElementById('jerseySizeCategory').value,
+                    size: document.getElementById('jerseySize').value,
+                    sleeve: document.getElementById('jerseySleeve').value,
+                    shorts: document.getElementById('jerseyShorts').value,
+                    createdAt: new Date()
+                };
+
+                if (window.firebaseDb && updateDoc && doc) {
+                    const orderRef = doc(window.firebaseDb, 'orders', orderId);
+                    await updateDoc(orderRef, { jerseyDetails: jerseyData });
+                    console.log('Jersey details saved successfully');
+                    
+                    // Close modal
+                    document.getElementById('jerseyModal').classList.add('hidden');
+                    
+                    // Reload orders data
+                    await loadOrdersData();
+                }
+            } catch (error) {
+                console.error('Error saving jersey details:', error);
+                alert('Error saving jersey details. Please try again.');
+            }
         }
 
         async function deleteOrder(orderId) {
@@ -2682,6 +3100,9 @@
         window.deleteCustomer = deleteCustomer;
         window.editMaterial = editMaterial;
         window.deleteMaterial = deleteMaterial;
+        window.addJerseyDetails = addJerseyDetails;
+        window.generateShareLink = generateShareLink;
+        window.saveJerseyDetails = saveJerseyDetails;
 
         // Initialize all functionality
         document.addEventListener('DOMContentLoaded', async function() {
@@ -2881,6 +3302,93 @@
                     <div class="flex justify-end space-x-4">
                         <button type="button" id="cancelMaterial" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">Cancel</button>
                         <button type="submit" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">Save Material</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jersey Details Modal -->
+    <div id="jerseyModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-rog-light rounded-2xl p-6 w-full max-w-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-rog-display font-bold text-white">Add Jersey Details</h3>
+                    <button id="closeJerseyModal" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <form id="jerseyForm" class="space-y-4">
+                    <input type="hidden" id="jerseyOrderId">
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Jersey Type</label>
+                            <select id="jerseyType" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                                <option value="">Select Jersey Type</option>
+                                <option value="Player Jersey">Player Jersey</option>
+                                <option value="Keeper Jersey">Keeper Jersey</option>
+                                <option value="Official Jersey">Official Jersey</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Jersey Name</label>
+                            <input type="text" id="jerseyName" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter jersey name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Jersey Number</label>
+                            <input type="text" id="jerseyNumber" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter jersey number" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Size Category</label>
+                            <select id="jerseySizeCategory" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                                <option value="">Select Size Category</option>
+                                <option value="Adult">Adult</option>
+                                <option value="Kids">Kids</option>
+                                <option value="Muslima">Muslima</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Size</label>
+                            <select id="jerseySize" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                                <option value="">Select Size</option>
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="2XL">2XL</option>
+                                <option value="3XL">3XL</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Sleeve</label>
+                            <select id="jerseySleeve" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                                <option value="">Select Sleeve</option>
+                                <option value="Short Sleeve">Short Sleeve</option>
+                                <option value="Long Sleeve">Long Sleeve</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Shorts</label>
+                        <select id="jerseyShorts" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                            <option value="">Select Shorts</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancelJersey" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">Cancel</button>
+                        <button type="button" onclick="saveJerseyDetails()" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">Save Jersey Details</button>
                     </div>
                 </form>
             </div>
