@@ -708,11 +708,11 @@
                         Manage your jersey business with powerful tools and real-time insights.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 animate-slide-up">
-                        <button class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white transition-all duration-300 hover:shadow-xl">
+                        <button onclick="navigateToOrders()" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white transition-all duration-300 hover:shadow-xl">
                             <i class="fas fa-plus mr-2"></i>
                             New Order
                         </button>
-                        <button class="glass-effect px-6 py-3 rounded-lg font-rog-heading font-semibold text-white hover:bg-white hover:text-rog-dark transition-all duration-300">
+                        <button onclick="navigateToAnalytics()" class="glass-effect px-6 py-3 rounded-lg font-rog-heading font-semibold text-white hover:bg-white hover:text-rog-dark transition-all duration-300">
                             <i class="fas fa-chart-bar mr-2"></i>
                             View Analytics
                         </button>
@@ -830,7 +830,7 @@
                             <p class="text-sm text-gray-400 font-rog-body">Create a new customer order</p>
                         </div>
                     </div>
-                    <button class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white transition-all duration-300">
+                    <button onclick="navigateToOrders()" class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white transition-all duration-300">
                         Create Order
                     </button>
                 </div>
@@ -861,7 +861,7 @@
                             <p class="text-sm text-gray-400 font-rog-body">Business performance insights</p>
                         </div>
                     </div>
-                    <button class="w-full glass-effect py-2 rounded-lg font-rog-heading font-semibold text-white hover:bg-white hover:text-rog-dark transition-all duration-300">
+                    <button onclick="navigateToAnalytics()" class="w-full glass-effect py-2 rounded-lg font-rog-heading font-semibold text-white hover:bg-white hover:text-rog-dark transition-all duration-300">
                         View Analytics
                     </button>
                 </div>
@@ -876,7 +876,7 @@
                             <p class="text-sm text-gray-400 font-rog-body">Export business data</p>
                         </div>
                     </div>
-                    <button class="w-full glass-effect py-2 rounded-lg font-rog-heading font-semibold text-white hover:bg-white hover:text-rog-dark transition-all duration-300">
+                    <button onclick="navigateToReports()" class="w-full glass-effect py-2 rounded-lg font-rog-heading font-semibold text-white hover:bg-white hover:text-rog-dark transition-all duration-300">
                         Generate Report
                     </button>
                 </div>
@@ -3324,7 +3324,7 @@
                     </div>
                 </div>
             `;
-            
+
             document.body.insertAdjacentHTML('beforeend', modalHtml);
         }
 
@@ -3775,9 +3775,25 @@
             if (userDropdown) {
                 userDropdown.classList.add('hidden');
             }
-
+            
             // Navigate to settings section
             showSection('settings');
+        }
+
+        // Dashboard quick action navigation functions
+        function navigateToOrders() {
+            console.log('Navigating to Orders section...');
+            showSection('orders');
+        }
+
+        function navigateToAnalytics() {
+            console.log('Navigating to Analytics section...');
+            showSection('analytics');
+        }
+
+        function navigateToReports() {
+            console.log('Navigating to Reports section...');
+            showSection('reports');
         }
 
         // Help dialog functionality
@@ -4016,6 +4032,9 @@
         window.closeExportOptionsModal = closeExportOptionsModal;
         window.executeExport = executeExport;
         window.navigateToSettings = navigateToSettings;
+        window.navigateToOrders = navigateToOrders;
+        window.navigateToAnalytics = navigateToAnalytics;
+        window.navigateToReports = navigateToReports;
         window.showHelpDialog = showHelpDialog;
         window.closeHelpDialog = closeHelpDialog;
 
