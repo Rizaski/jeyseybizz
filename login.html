@@ -296,25 +296,12 @@
 
                     console.log('Admin login attempt:', email);
 
-                    // Simple admin credentials check
-                    const validAdmins = [{
-                            email: 'admin@otomono.com',
-                            password: 'admin123',
-                            name: 'Admin User'
-                        },
-                        {
-                            email: 'staff@otomono.com',
-                            password: 'staff123',
-                            name: 'Staff User'
-                        },
-                        {
-                            email: 'miicrossoft@gmail.com',
-                            password: 'admin123',
-                            name: 'Admin User'
-                        }
-                    ];
-
-                    const admin = validAdmins.find(a => a.email === email && a.password === password);
+                    // Admin credentials check - credentials should be configured securely
+                    // For security, credentials are not hardcoded in the client-side code
+                    // This should be handled by a secure backend authentication system
+                    
+                    // Placeholder for secure authentication
+                    const admin = null; // Replace with secure authentication logic
 
                     if (admin) {
                         console.log('Admin authentication successful:', admin);

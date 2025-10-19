@@ -22,6 +22,10 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase-database.js"></script>
+
     <!-- Custom Tailwind Config -->
     <script>
         tailwind.config = {
@@ -53,28 +57,58 @@
                     },
                     keyframes: {
                         fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
+                            '0%': {
+                                opacity: '0'
+                            },
+                            '100%': {
+                                opacity: '1'
+                            },
                         },
                         slideUp: {
-                            '0%': { transform: 'translateY(30px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                            '0%': {
+                                transform: 'translateY(30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateY(0)',
+                                opacity: '1'
+                            },
                         },
                         slideInLeft: {
-                            '0%': { transform: 'translateX(-30px)', opacity: '0' },
-                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                            '0%': {
+                                transform: 'translateX(-30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
                         },
                         slideInRight: {
-                            '0%': { transform: 'translateX(30px)', opacity: '0' },
-                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                            '0%': {
+                                transform: 'translateX(30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
                         },
                         float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-20px)' },
+                            '0%, 100%': {
+                                transform: 'translateY(0px)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-20px)'
+                            },
                         },
                         glow: {
-                            '0%': { boxShadow: '0 0 20px rgba(220, 38, 38, 0.5)' },
-                            '100%': { boxShadow: '0 0 30px rgba(220, 38, 38, 0.8)' },
+                            '0%': {
+                                boxShadow: '0 0 20px rgba(220, 38, 38, 0.5)'
+                            },
+                            '100%': {
+                                boxShadow: '0 0 30px rgba(220, 38, 38, 0.8)'
+                            },
                         },
                     },
                 }
@@ -110,7 +144,7 @@
             right: 0;
             bottom: 0;
             background: radial-gradient(circle at 30% 20%, rgba(255, 0, 55, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 70% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
             pointer-events: none;
         }
 
@@ -316,6 +350,10 @@
                 <i class="fas fa-tshirt text-rog-red"></i>
                 <span>Products</span>
             </a>
+            <a href="designer-studio.html" class="flex items-center space-x-3 px-4 py-3 text-white hover:bg-rog-gray rounded-lg transition-colors duration-300 font-rog-body">
+                <i class="fas fa-paint-brush text-rog-red"></i>
+                <span>Design Studio</span>
+            </a>
             <a href="#analytics" class="flex items-center space-x-3 px-4 py-3 text-white hover:bg-rog-gray rounded-lg transition-colors duration-300 font-rog-body">
                 <i class="fas fa-chart-line text-rog-red"></i>
                 <span>Analytics</span>
@@ -488,7 +526,7 @@
             </div>
 
             <!-- Quick Actions -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 bg-gradient-to-br from-rog-red to-rog-orange rounded-lg flex items-center justify-center mr-4">
@@ -502,6 +540,22 @@
                     <button class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white transition-all duration-300">
                         Create Order
                     </button>
+                </div>
+
+                <div class="bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-rog-purple to-rog-blue rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-paint-brush text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-rog-heading font-semibold text-white">Design Studio</h3>
+                            <p class="text-sm text-gray-400 font-rog-body">Create custom jersey designs</p>
+                        </div>
+                    </div>
+                    <a href="designer-studio.html" class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white transition-all duration-300 inline-block text-center">
+                        <i class="fas fa-paint-brush mr-2"></i>
+                        Start Designing
+                    </a>
                 </div>
 
                 <div class="bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
@@ -635,7 +689,7 @@
 
                     if (adminName) adminName.textContent = adminData.name || 'Admin User';
                     if (adminEmail) adminEmail.textContent = adminData.email || 'admin@otomono.mv';
-                    
+
                     if (adminAvatar && adminData.name) {
                         const initial = adminData.name.charAt(0).toUpperCase();
                         adminAvatar.innerHTML = `<span class="text-white text-sm font-rog-heading font-bold">${initial}</span>`;
@@ -657,7 +711,7 @@
                     const diffMs = now - loginTime;
                     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
                     const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-                    
+
                     const sessionDuration = document.getElementById('session-duration');
                     if (sessionDuration) {
                         sessionDuration.textContent = `${diffHours}h ${diffMinutes}m`;
@@ -684,7 +738,7 @@
             setupUserProfile();
             loadAdminUserInfo();
             updateSessionDuration();
-            
+
             // Update session duration every minute
             setInterval(updateSessionDuration, 60000);
         });
