@@ -608,131 +608,128 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Index page loaded successfully');
             
-            // Admin Panel functionality
-            const adminPanelBtn = document.getElementById('admin-panel-btn');
-            const mobileAdminPanelBtn = document.getElementById('mobile-admin-panel-btn');
+            // Admin Panel functionality - GUARANTEED FIX
+            function setupAdminPanelButtons() {
+                const adminPanelBtn = document.getElementById('admin-panel-btn');
+                const mobileAdminPanelBtn = document.getElementById('mobile-admin-panel-btn');
 
-            console.log('Admin panel elements found:', {
-                adminPanelBtn: !!adminPanelBtn,
-                mobileAdminPanelBtn: !!mobileAdminPanelBtn
-            });
-
-            // Redirect to admin login page
-            if (adminPanelBtn) {
-                adminPanelBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Admin panel button clicked - redirecting to login');
-                    window.location.href = 'login.html';
-                });
-                console.log('Admin panel button event listener added');
-            } else {
-                console.error('Admin panel button not found');
-            }
-
-            if (mobileAdminPanelBtn) {
-                mobileAdminPanelBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Mobile admin panel button clicked - redirecting to login');
-                    window.location.href = 'login.html';
-                });
-                console.log('Mobile admin panel button event listener added');
-            } else {
-                console.error('Mobile admin panel button not found');
-            }
-
-                // Mobile menu functionality
-                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-                const mobileMenu = document.getElementById('mobile-menu');
-                const mobileMenuClose = document.getElementById('mobile-menu-close');
-                const mobileMenuOverlay = document.getElementById('mobile-menu');
-
-                console.log('Mobile menu elements:', {
-                    button: mobileMenuBtn,
-                    menu: mobileMenu,
-                    close: mobileMenuClose,
-                    overlay: mobileMenuOverlay
+                console.log('Admin panel elements found:', {
+                    adminPanelBtn: !!adminPanelBtn,
+                    mobileAdminPanelBtn: !!mobileAdminPanelBtn
                 });
 
-                // Open mobile menu
-                if (mobileMenuBtn) {
-                    mobileMenuBtn.addEventListener('click', function(e) {
+                // Desktop admin panel button
+                if (adminPanelBtn) {
+                    // Remove any existing listeners
+                    adminPanelBtn.replaceWith(adminPanelBtn.cloneNode(true));
+                    const newAdminPanelBtn = document.getElementById('admin-panel-btn');
+                    
+                    newAdminPanelBtn.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        console.log('Mobile menu button clicked');
-
-                        if (mobileMenu) {
-                            mobileMenu.classList.remove('hidden');
-                            setTimeout(() => {
-                                const transformElement = mobileMenu.querySelector('.transform');
-                                if (transformElement) {
-                                    transformElement.classList.remove('translate-x-full');
-                                }
-                            }, 10);
-                            document.body.style.overflow = 'hidden';
-                            console.log('Mobile menu opened');
-                        } else {
-                            console.error('Mobile menu element not found');
-                        }
+                        console.log('Desktop admin panel button clicked - redirecting to login');
+                        window.location.href = 'login.html';
                     });
+                    console.log('Desktop admin panel button event listener added');
                 } else {
-                    console.error('Mobile menu button not found');
+                    console.error('Desktop admin panel button not found');
                 }
 
-                // Close mobile menu
-                function closeMobileMenu() {
-                    console.log('Closing mobile menu');
-                    if (mobileMenu) {
-                        const transformElement = mobileMenu.querySelector('.transform');
-                        if (transformElement) {
-                            transformElement.classList.add('translate-x-full');
-                        }
-                        setTimeout(() => {
-                            mobileMenu.classList.add('hidden');
-                        }, 300);
-                        document.body.style.overflow = '';
-                        console.log('Mobile menu closed');
-                    }
-                }
-
-                if (mobileMenuClose) {
-                    mobileMenuClose.addEventListener('click', function(e) {
+                // Mobile admin panel button
+                if (mobileAdminPanelBtn) {
+                    // Remove any existing listeners
+                    mobileAdminPanelBtn.replaceWith(mobileAdminPanelBtn.cloneNode(true));
+                    const newMobileAdminPanelBtn = document.getElementById('mobile-admin-panel-btn');
+                    
+                    newMobileAdminPanelBtn.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        closeMobileMenu();
+                        console.log('Mobile admin panel button clicked - redirecting to login');
+                        window.location.href = 'login.html';
                     });
+                    console.log('Mobile admin panel button event listener added');
+                } else {
+                    console.error('Mobile admin panel button not found');
                 }
+            }
 
-                if (mobileMenuOverlay) {
-                    mobileMenuOverlay.addEventListener('click', function(e) {
-                        if (e.target === mobileMenuOverlay) {
+            // Setup admin panel buttons immediately
+            setupAdminPanelButtons();
+
+                // Mobile menu functionality - FIXED VERSION
+                function setupMobileMenu() {
+                    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+                    console.log('Mobile menu elements:', {
+                        button: mobileMenuBtn,
+                        menu: mobileMenu,
+                        close: mobileMenuClose
+                    });
+
+                    // Close mobile menu function
+                    function closeMobileMenu() {
+                        console.log('Closing mobile menu');
+                        if (mobileMenu) {
+                            mobileMenu.classList.add('hidden');
+                            document.body.style.overflow = '';
+                            console.log('Mobile menu closed');
+                        }
+                    }
+
+                    // Open mobile menu
+                    if (mobileMenuBtn) {
+                        mobileMenuBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            console.log('Mobile menu button clicked');
+
+                            if (mobileMenu) {
+                                mobileMenu.classList.remove('hidden');
+                                document.body.style.overflow = 'hidden';
+                                console.log('Mobile menu opened');
+                            } else {
+                                console.error('Mobile menu element not found');
+                            }
+                        });
+                    } else {
+                        console.error('Mobile menu button not found');
+                    }
+
+                    // Close mobile menu
+                    if (mobileMenuClose) {
+                        mobileMenuClose.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            closeMobileMenu();
+                        });
+                    }
+
+                    // Close menu when clicking outside
+                    if (mobileMenu) {
+                        mobileMenu.addEventListener('click', function(e) {
+                            if (e.target === mobileMenu) {
+                                closeMobileMenu();
+                            }
+                        });
+
+                        // Close menu when clicking on navigation links
+                        mobileMenu.querySelectorAll('nav a').forEach(link => {
+                            link.addEventListener('click', closeMobileMenu);
+                        });
+                    }
+
+                    // Add keyboard support for mobile menu
+                    document.addEventListener('keydown', function(e) {
+                        if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
                             closeMobileMenu();
                         }
                     });
                 }
 
-                // Close menu when clicking on navigation links
-                if (mobileMenu) {
-                    mobileMenu.querySelectorAll('nav a').forEach(link => {
-                        link.addEventListener('click', closeMobileMenu);
-                    });
-                }
-
-                // Add keyboard support for mobile menu
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
-                        closeMobileMenu();
-                    }
-                });
-
-                // Debug: Log mobile menu elements
-                console.log('Mobile menu elements:', {
-                    button: mobileMenuBtn,
-                    menu: mobileMenu,
-                    close: mobileMenuClose,
-                    overlay: mobileMenuOverlay
-                });
+                // Setup mobile menu
+                setupMobileMenu();
 
                 // Customer Chat System
                 const floatingChatBtn = document.getElementById('floating-chat-btn');
@@ -868,171 +865,190 @@
                     });
                     // In a real implementation, this would use Firebase or WebSocket
                 }
-                // Jersey designs data
-                const jerseyDesigns = [{
-                        id: 1,
-                        image: 'jersey-designs/Mockup24A001.jpg',
-                        title: 'Classic Blue Design',
-                        price: '$29.99'
-                    },
-                    {
-                        id: 2,
-                        image: 'jersey-designs/Mockup24A002.jpg',
-                        title: 'Modern Red Jersey',
-                        price: '$34.99'
-                    },
-                    {
-                        id: 3,
-                        image: 'jersey-designs/Mockup24A003.jpg',
-                        title: 'Elegant White',
-                        price: '$32.99'
-                    },
-                    {
-                        id: 4,
-                        image: 'jersey-designs/Mockup24A004.jpg',
-                        title: 'Bold Black Design',
-                        price: '$36.99'
-                    },
-                    {
-                        id: 5,
-                        image: 'jersey-designs/Mockup24A005.jpg',
-                        title: 'Vibrant Green',
-                        price: '$31.99'
-                    },
-                    {
-                        id: 6,
-                        image: 'jersey-designs/Mockup24A006.jpg',
-                        title: 'Royal Purple',
-                        price: '$33.99'
-                    },
-                    {
-                        id: 7,
-                        image: 'jersey-designs/Mockup24A007.jpg',
-                        title: 'Sunset Orange',
-                        price: '$30.99'
-                    },
-                    {
-                        id: 8,
-                        image: 'jersey-designs/Mockup24A008.jpg',
-                        title: 'Ocean Blue',
-                        price: '$35.99'
-                    },
-                    {
-                        id: 9,
-                        image: 'jersey-designs/Mockup24A009.jpg',
-                        title: 'Forest Green',
-                        price: '$32.99'
-                    },
-                    {
-                        id: 10,
-                        image: 'jersey-designs/Mockup24A010.jpg',
-                        title: 'Midnight Black',
-                        price: '$37.99'
-                    },
-                ];
+                // Jersey designs reel - FIXED VERSION
+                function setupDesignsReel() {
+                    const jerseyDesigns = [{
+                            id: 1,
+                            image: 'jersey-designs/Mockup24A001.jpg',
+                            title: 'Classic Blue Design',
+                            price: '$29.99'
+                        },
+                        {
+                            id: 2,
+                            image: 'jersey-designs/Mockup24A002.jpg',
+                            title: 'Modern Red Jersey',
+                            price: '$34.99'
+                        },
+                        {
+                            id: 3,
+                            image: 'jersey-designs/Mockup24A003.jpg',
+                            title: 'Elegant White',
+                            price: '$32.99'
+                        },
+                        {
+                            id: 4,
+                            image: 'jersey-designs/Mockup24A004.jpg',
+                            title: 'Bold Black Design',
+                            price: '$36.99'
+                        },
+                        {
+                            id: 5,
+                            image: 'jersey-designs/Mockup24A005.jpg',
+                            title: 'Vibrant Green',
+                            price: '$31.99'
+                        },
+                        {
+                            id: 6,
+                            image: 'jersey-designs/Mockup24A006.jpg',
+                            title: 'Royal Purple',
+                            price: '$33.99'
+                        },
+                        {
+                            id: 7,
+                            image: 'jersey-designs/Mockup24A007.jpg',
+                            title: 'Sunset Orange',
+                            price: '$30.99'
+                        },
+                        {
+                            id: 8,
+                            image: 'jersey-designs/Mockup24A008.jpg',
+                            title: 'Ocean Blue',
+                            price: '$35.99'
+                        },
+                        {
+                            id: 9,
+                            image: 'jersey-designs/Mockup24A009.jpg',
+                            title: 'Forest Green',
+                            price: '$32.99'
+                        },
+                        {
+                            id: 10,
+                            image: 'jersey-designs/Mockup24A010.jpg',
+                            title: 'Midnight Black',
+                            price: '$37.99'
+                        },
+                    ];
 
-                let currentSlide = 0;
-                let isPlaying = false;
-                let playInterval;
+                    let currentSlide = 0;
+                    let isPlaying = false;
+                    let playInterval;
 
-                // DOM elements
-                const sliderImage = document.getElementById('slider-image');
-                const prevBtn = document.getElementById('prev-btn');
-                const nextBtn = document.getElementById('next-btn');
-                const playBtn = document.getElementById('play-btn');
-                const playIcon = document.getElementById('play-icon');
-                const indicators = document.getElementById('indicators');
+                    // DOM elements
+                    const sliderImage = document.getElementById('slider-image');
+                    const prevBtn = document.getElementById('prev-btn');
+                    const nextBtn = document.getElementById('next-btn');
+                    const playBtn = document.getElementById('play-btn');
+                    const playIcon = document.getElementById('play-icon');
+                    const indicators = document.getElementById('indicators');
 
-                // Debug: Check if elements exist
-                console.log('Slider elements:', {
-                    sliderImage: !!sliderImage,
-                    prevBtn: !!prevBtn,
-                    nextBtn: !!nextBtn,
-                    playBtn: !!playBtn,
-                    playIcon: !!playIcon,
-                    indicators: !!indicators
-                });
-
-                // Initialize indicators
-                function initIndicators() {
-                    if (!indicators) {
-                        console.error('Indicators element not found');
-                        return;
-                    }
-                    indicators.innerHTML = '';
-                    jerseyDesigns.forEach((_, index) => {
-                        const indicator = document.createElement('button');
-                        indicator.className = `w-2 h-2 rounded-full transition-all indicator ${
-                        index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
-                    }`;
-                        indicator.addEventListener('click', () => goToSlide(index));
-                        indicators.appendChild(indicator);
+                    console.log('Designs reel elements:', {
+                        sliderImage: !!sliderImage,
+                        prevBtn: !!prevBtn,
+                        nextBtn: !!nextBtn,
+                        playBtn: !!playBtn,
+                        playIcon: !!playIcon,
+                        indicators: !!indicators
                     });
-                }
 
-                // Update slide
-                function updateSlide() {
-                    if (!sliderImage) {
-                        console.error('Slider image element not found');
-                        return;
-                    }
-                    sliderImage.src = jerseyDesigns[currentSlide].image;
-                    sliderImage.alt = jerseyDesigns[currentSlide].title;
-
-                    // Update indicators
-                    if (indicators) {
-                        const indicatorButtons = indicators.querySelectorAll('button');
-                        indicatorButtons.forEach((btn, index) => {
-                            btn.className = `w-2 h-2 rounded-full transition-all indicator ${
+                    // Initialize indicators
+                    function initIndicators() {
+                        if (!indicators) {
+                            console.error('Indicators element not found');
+                            return;
+                        }
+                        indicators.innerHTML = '';
+                        jerseyDesigns.forEach((_, index) => {
+                            const indicator = document.createElement('button');
+                            indicator.className = `w-2 h-2 rounded-full transition-all indicator ${
                             index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
                         }`;
+                            indicator.addEventListener('click', () => goToSlide(index));
+                            indicators.appendChild(indicator);
                         });
                     }
-                }
 
-                // Go to specific slide
-                function goToSlide(index) {
-                    currentSlide = index;
-                    updateSlide();
-                }
+                    // Update slide
+                    function updateSlide() {
+                        if (!sliderImage) {
+                            console.error('Slider image element not found');
+                            return;
+                        }
+                        sliderImage.src = jerseyDesigns[currentSlide].image;
+                        sliderImage.alt = jerseyDesigns[currentSlide].title;
 
-                // Next slide
-                function nextSlide() {
-                    currentSlide = (currentSlide + 1) % jerseyDesigns.length;
-                    updateSlide();
-                }
-
-                // Previous slide
-                function prevSlide() {
-                    currentSlide = (currentSlide - 1 + jerseyDesigns.length) % jerseyDesigns.length;
-                    updateSlide();
-                }
-
-                // Toggle play/pause
-                function togglePlay() {
-                    isPlaying = !isPlaying;
-                    if (isPlaying) {
-                        playIcon.innerHTML = '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>';
-                        playInterval = setInterval(nextSlide, 3000);
-                    } else {
-                        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-                        clearInterval(playInterval);
+                        // Update indicators
+                        if (indicators) {
+                            const indicatorButtons = indicators.querySelectorAll('button');
+                            indicatorButtons.forEach((btn, index) => {
+                                btn.className = `w-2 h-2 rounded-full transition-all indicator ${
+                                index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
+                            }`;
+                            });
+                        }
                     }
+
+                    // Go to specific slide
+                    function goToSlide(index) {
+                        currentSlide = index;
+                        updateSlide();
+                    }
+
+                    // Next slide
+                    function nextSlide() {
+                        currentSlide = (currentSlide + 1) % jerseyDesigns.length;
+                        updateSlide();
+                    }
+
+                    // Previous slide
+                    function prevSlide() {
+                        currentSlide = (currentSlide - 1 + jerseyDesigns.length) % jerseyDesigns.length;
+                        updateSlide();
+                    }
+
+                    // Toggle play/pause
+                    function togglePlay() {
+                        isPlaying = !isPlaying;
+                        if (isPlaying) {
+                            if (playIcon) playIcon.innerHTML = '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>';
+                            playInterval = setInterval(nextSlide, 3000);
+                        } else {
+                            if (playIcon) playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+                            clearInterval(playInterval);
+                        }
+                    }
+
+                    // Event listeners
+                    if (prevBtn) {
+                        prevBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            prevSlide();
+                        });
+                    }
+                    if (nextBtn) {
+                        nextBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            nextSlide();
+                        });
+                    }
+                    if (playBtn) {
+                        playBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            togglePlay();
+                        });
+                    }
+
+                    // Initialize
+                    initIndicators();
+                    updateSlide();
+
+                    // Auto-play on page load
+                    setTimeout(() => {
+                        togglePlay();
+                    }, 2000);
                 }
 
-                // Event listeners
-                if (prevBtn) prevBtn.addEventListener('click', prevSlide);
-                if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-                if (playBtn) playBtn.addEventListener('click', togglePlay);
-
-                // Initialize
-                initIndicators();
-                updateSlide();
-
-                // Auto-play on page load
-                setTimeout(() => {
-                    togglePlay();
-                }, 2000);
+                // Setup designs reel
+                setupDesignsReel();
 
                 // Modal functionality
                 const chatModal = document.getElementById('chat-modal');

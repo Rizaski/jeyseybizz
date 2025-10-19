@@ -869,50 +869,80 @@
                     console.error('About page: Mobile login button not found!');
                 }
 
-                // Mobile menu functionality
-                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-                const mobileMenu = document.getElementById('mobile-menu');
-                const mobileMenuClose = document.getElementById('mobile-menu-close');
-                const mobileMenuOverlay = document.getElementById('mobile-menu');
+                // Mobile menu functionality - FIXED VERSION
+                function setupMobileMenu() {
+                    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    const mobileMenuClose = document.getElementById('mobile-menu-close');
 
-                // Open mobile menu
-                if (mobileMenuBtn) {
-                    mobileMenuBtn.addEventListener('click', function() {
-                        mobileMenu.classList.remove('hidden');
-                        setTimeout(() => {
-                            mobileMenu.querySelector('.transform').classList.remove('translate-x-full');
-                        }, 10);
-                        document.body.style.overflow = 'hidden';
+                    console.log('Mobile menu elements:', {
+                        button: mobileMenuBtn,
+                        menu: mobileMenu,
+                        close: mobileMenuClose
                     });
-                }
 
-                // Close mobile menu
-                function closeMobileMenu() {
-                    mobileMenu.querySelector('.transform').classList.add('translate-x-full');
-                    setTimeout(() => {
-                        mobileMenu.classList.add('hidden');
-                    }, 300);
-                    document.body.style.overflow = '';
-                }
+                    // Close mobile menu function
+                    function closeMobileMenu() {
+                        console.log('Closing mobile menu');
+                        if (mobileMenu) {
+                            mobileMenu.classList.add('hidden');
+                            document.body.style.overflow = '';
+                            console.log('Mobile menu closed');
+                        }
+                    }
 
-                if (mobileMenuClose) {
-                    mobileMenuClose.addEventListener('click', closeMobileMenu);
-                }
+                    // Open mobile menu
+                    if (mobileMenuBtn) {
+                        mobileMenuBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            console.log('Mobile menu button clicked');
+                            
+                            if (mobileMenu) {
+                                mobileMenu.classList.remove('hidden');
+                                document.body.style.overflow = 'hidden';
+                                console.log('Mobile menu opened');
+                            } else {
+                                console.error('Mobile menu element not found');
+                            }
+                        });
+                    } else {
+                        console.error('Mobile menu button not found');
+                    }
 
-                if (mobileMenuOverlay) {
-                    mobileMenuOverlay.addEventListener('click', function(e) {
-                        if (e.target === mobileMenuOverlay) {
+                    // Close mobile menu
+                    if (mobileMenuClose) {
+                        mobileMenuClose.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            closeMobileMenu();
+                        });
+                    }
+
+                    // Close menu when clicking outside
+                    if (mobileMenu) {
+                        mobileMenu.addEventListener('click', function(e) {
+                            if (e.target === mobileMenu) {
+                                closeMobileMenu();
+                            }
+                        });
+
+                        // Close menu when clicking on navigation links
+                        mobileMenu.querySelectorAll('nav a').forEach(link => {
+                            link.addEventListener('click', closeMobileMenu);
+                        });
+                    }
+
+                    // Add keyboard support for mobile menu
+                    document.addEventListener('keydown', function(e) {
+                        if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
                             closeMobileMenu();
                         }
                     });
                 }
 
-                // Close menu when clicking on navigation links
-                if (mobileMenu) {
-                    mobileMenu.querySelectorAll('nav a').forEach(link => {
-                        link.addEventListener('click', closeMobileMenu);
-                    });
-                }
+                // Setup mobile menu
+                setupMobileMenu();
 
                 // Modal functionality
                 const loginModal = document.getElementById('login-modal');
