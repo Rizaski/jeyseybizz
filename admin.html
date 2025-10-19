@@ -3141,69 +3141,181 @@
             showClientLinkModal(order, clientLink);
         }
 
-        // Show order details modal
+        // Show order details modal with client-submitted details
         function showOrderDetailsModal(order) {
             const modalHtml = `
                 <div id="orderDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50">
                     <div class="flex items-center justify-center min-h-screen p-4">
-                        <div class="bg-rog-light rounded-2xl p-6 w-full max-w-2xl">
+                        <div class="bg-rog-light rounded-2xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
                             <div class="flex items-center justify-between mb-6">
-                                <h3 class="text-2xl font-rog-display font-bold text-white">Order Details</h3>
+                                <h3 class="text-2xl font-rog-display font-bold text-white">Order Details - ${order.id || 'N/A'}</h3>
                                 <button onclick="closeOrderDetailsModal()" class="text-gray-400 hover:text-white">
                                     <i class="fas fa-times text-xl"></i>
                                 </button>
                             </div>
-                            <div class="space-y-4">
-                                <div class="grid md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Order ID</label>
-                                        <p class="text-white font-rog-body">${order.id || 'N/A'}</p>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Status</label>
-                                        <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status || 'N/A'}</span>
-                                    </div>
-                                </div>
-                                <div class="grid md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Customer</label>
-                                        <p class="text-white font-rog-body">${order.customer || 'N/A'}</p>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Email</label>
-                                        <p class="text-white font-rog-body">${order.email || 'N/A'}</p>
-                                    </div>
-                                </div>
-                                <div class="grid md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Product</label>
-                                        <p class="text-white font-rog-body">${order.product || 'N/A'}</p>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Material</label>
-                                        <p class="text-white font-rog-body">${order.material || 'N/A'}</p>
+                            
+                            <div class="space-y-6">
+                                <!-- Order Status and Basic Info -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
+                                        <i class="fas fa-info-circle text-rog-red mr-2"></i>Order Information
+                                    </h4>
+                                    <div class="grid md:grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Order ID</label>
+                                            <p class="text-white font-rog-body">${order.id || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Status</label>
+                                            <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status || 'N/A'}</span>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Date</label>
+                                            <p class="text-white font-rog-body">${order.date || 'N/A'}</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="grid md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Quantity</label>
-                                        <p class="text-white font-rog-body">${order.quantity || 'N/A'}</p>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Amount</label>
-                                        <p class="text-white font-rog-body">$${order.amount || '0.00'}</p>
+
+                                <!-- Customer Information -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
+                                        <i class="fas fa-user text-rog-red mr-2"></i>Customer Information
+                                    </h4>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Customer Name</label>
+                                            <p class="text-white font-rog-body">${order.customer || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Email Address</label>
+                                            <p class="text-white font-rog-body">${order.email || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Phone Number</label>
+                                            <p class="text-white font-rog-body">${order.phone || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Company</label>
+                                            <p class="text-white font-rog-body">${order.company || 'N/A'}</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Notes</label>
-                                    <p class="text-white font-rog-body">${order.notes || 'No notes'}</p>
+
+                                <!-- Product Details -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
+                                        <i class="fas fa-tshirt text-rog-red mr-2"></i>Product Details
+                                    </h4>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Product Type</label>
+                                            <p class="text-white font-rog-body">${order.product || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Material</label>
+                                            <p class="text-white font-rog-body">${order.material || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Quantity</label>
+                                            <p class="text-white font-rog-body">${order.quantity || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Size</label>
+                                            <p class="text-white font-rog-body">${order.size || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Color</label>
+                                            <p class="text-white font-rog-body">${order.color || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Price per Unit</label>
+                                            <p class="text-white font-rog-body">$${order.unitPrice || '0.00'}</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Date</label>
-                                    <p class="text-white font-rog-body">${order.date || 'N/A'}</p>
+
+                                <!-- Client-Submitted Details -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
+                                        <i class="fas fa-clipboard-list text-rog-red mr-2"></i>Client-Submitted Details
+                                    </h4>
+                                    <div class="space-y-4">
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Design Requirements</label>
+                                            <p class="text-white font-rog-body bg-rog-gray/20 p-3 rounded-lg">${order.designRequirements || 'No specific design requirements provided'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Special Instructions</label>
+                                            <p class="text-white font-rog-body bg-rog-gray/20 p-3 rounded-lg">${order.specialInstructions || 'No special instructions provided'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Delivery Address</label>
+                                            <p class="text-white font-rog-body bg-rog-gray/20 p-3 rounded-lg">${order.deliveryAddress || 'No delivery address provided'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Preferred Delivery Date</label>
+                                            <p class="text-white font-rog-body">${order.preferredDeliveryDate || 'No specific date requested'}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Financial Information -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
+                                        <i class="fas fa-dollar-sign text-rog-red mr-2"></i>Financial Information
+                                    </h4>
+                                    <div class="grid md:grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Subtotal</label>
+                                            <p class="text-white font-rog-body">$${order.subtotal || '0.00'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Tax</label>
+                                            <p class="text-white font-rog-body">$${order.tax || '0.00'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Total Amount</label>
+                                            <p class="text-white font-rog-body text-lg font-semibold text-rog-red">$${order.amount || '0.00'}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Additional Notes -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
+                                        <i class="fas fa-sticky-note text-rog-red mr-2"></i>Additional Information
+                                    </h4>
+                                    <div>
+                                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Order Notes</label>
+                                        <p class="text-white font-rog-body bg-rog-gray/20 p-3 rounded-lg">${order.notes || 'No additional notes provided'}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Client Form Link Status -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
+                                        <i class="fas fa-link text-rog-red mr-2"></i>Client Form Status
+                                    </h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-white font-rog-body">Client form link status:</p>
+                                            <span class="px-2 py-1 ${order.clientFormSubmitted ? 'bg-green-500' : 'bg-yellow-500'} rounded-full text-xs font-rog-body text-white">
+                                                ${order.clientFormSubmitted ? 'Details Submitted' : 'Pending Submission'}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <button onclick="generateClientLink('${order.id}')" class="px-4 py-2 bg-rog-red text-white rounded-lg font-rog-heading font-semibold hover:bg-rog-orange transition-colors duration-300">
+                                                <i class="fas fa-link mr-2"></i>Generate Link
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="flex justify-end mt-6">
+                            
+                            <div class="flex justify-end mt-6 space-x-3">
+                                <button onclick="generateClientLink('${order.id}')" class="px-6 py-3 bg-green-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-green-700 transition-colors duration-300">
+                                    <i class="fas fa-link mr-2"></i>Generate Client Link
+                                </button>
                                 <button onclick="closeOrderDetailsModal()" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">
                                     Close
                                 </button>
@@ -3212,7 +3324,7 @@
                     </div>
                 </div>
             `;
-
+            
             document.body.insertAdjacentHTML('beforeend', modalHtml);
         }
 
@@ -3419,12 +3531,12 @@
             // Check if notifications were cleared
             const notificationsCleared = localStorage.getItem('notificationsCleared');
             const clearedTime = localStorage.getItem('notificationsClearedTime');
-            
+
             if (notificationsCleared === 'true' && clearedTime) {
                 // Check if cleared within last 24 hours
                 const timeDiff = Date.now() - parseInt(clearedTime);
                 const hoursDiff = timeDiff / (1000 * 60 * 60);
-                
+
                 if (hoursDiff < 24) {
                     // Keep notifications cleared
                     if (notificationCount) {
@@ -3663,7 +3775,7 @@
             if (userDropdown) {
                 userDropdown.classList.add('hidden');
             }
-            
+
             // Navigate to settings section
             showSection('settings');
         }
@@ -3864,7 +3976,7 @@
                     </div>
                 </div>
             `;
-            
+
             document.body.insertAdjacentHTML('beforeend', helpDialogHtml);
         }
 
