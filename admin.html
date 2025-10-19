@@ -1215,51 +1215,19 @@
             // Navigation links will be handled by setupNavigation function
         }
 
-        // Navigation functionality
+        // Simple navigation functionality
         function setupNavigation() {
-            console.log('Setting up navigation...');
-            const navLinks = document.querySelectorAll('nav a[href^="#"]');
-            console.log('Found navigation links:', navLinks.length);
-
-            navLinks.forEach((link, index) => {
-                console.log(`Setting up link ${index}:`, link.getAttribute('href'));
-                
-                // Remove any existing event listeners
-                const newLink = link.cloneNode(true);
-                link.parentNode.replaceChild(newLink, link);
-                
-                // Add new event listener
-                newLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const targetId = newLink.getAttribute('href').substring(1);
-                    console.log('Navigation clicked:', targetId);
-                    
-                    // Handle navigation
-                    showPage(targetId);
-                    updateActiveNavigation(targetId);
-                    
-                    // Close mobile sidebar if open
-                    const sidebar = document.getElementById('sidebar');
-                    const mobileOverlay = document.getElementById('mobileOverlay');
-                    if (sidebar && sidebar.classList.contains('open')) {
-                        sidebar.classList.remove('open');
-                        if (mobileOverlay) mobileOverlay.classList.remove('active');
-                        document.body.style.overflow = '';
-                    }
-                });
-            });
-
-            // Also add event delegation for dynamically added links
-            document.addEventListener('click', (e) => {
+            // Simple event delegation for all navigation links
+            document.addEventListener('click', function(e) {
                 if (e.target.closest('nav a[href^="#"]')) {
                     e.preventDefault();
                     const link = e.target.closest('nav a[href^="#"]');
                     const targetId = link.getAttribute('href').substring(1);
-                    console.log('Delegated navigation clicked:', targetId);
-                    showPage(targetId);
-                    updateActiveNavigation(targetId);
                     
-                    // Close mobile sidebar if open
+                    // Show the page
+                    showPage(targetId);
+                    
+                    // Close mobile sidebar
                     const sidebar = document.getElementById('sidebar');
                     const mobileOverlay = document.getElementById('mobileOverlay');
                     if (sidebar && sidebar.classList.contains('open')) {
@@ -1288,35 +1256,18 @@
 
         // Show specific page
         function showPage(pageId) {
-            console.log('Showing page:', pageId);
-
             // Hide all sections
             const sections = document.querySelectorAll('main > section');
-            console.log('Found sections:', sections.length);
             sections.forEach(section => {
-                console.log('Hiding section:', section.id);
                 section.classList.add('hidden');
             });
 
             // Show target section
             const targetSection = document.getElementById(pageId);
-            console.log('Target section:', targetSection);
             if (targetSection) {
-                console.log('Removing hidden class from:', pageId);
                 targetSection.classList.remove('hidden');
                 currentPage = pageId;
-                console.log('Current page set to:', currentPage);
-
-                // Load data for the page
                 loadPageData(pageId);
-            } else {
-                console.error('Section not found:', pageId);
-                // List all available sections for debugging
-                const allSections = document.querySelectorAll('main > section');
-                console.log('Available sections:');
-                allSections.forEach(section => {
-                    console.log('- Section ID:', section.id);
-                });
             }
         }
 
@@ -3201,46 +3152,8 @@
 
             // Load initial dashboard data
             await loadDashboardData();
-            
-            // Ensure navigation is working
-            setTimeout(() => {
-                console.log('Re-checking navigation setup...');
-                setupNavigation();
-            }, 1000);
 
-            // Add simple fallback navigation
-            setTimeout(() => {
-                console.log('Adding fallback navigation...');
-                addFallbackNavigation();
-            }, 2000);
         });
-
-        // Fallback navigation method
-        function addFallbackNavigation() {
-            const navLinks = document.querySelectorAll('nav a[href^="#"]');
-            console.log('Adding fallback navigation to', navLinks.length, 'links');
-            
-            navLinks.forEach(link => {
-                // Add a simple onclick handler as fallback
-                link.onclick = function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href').substring(1);
-                    console.log('Fallback navigation clicked:', targetId);
-                    showPage(targetId);
-                    updateActiveNavigation(targetId);
-                    
-                    // Close mobile sidebar
-                    const sidebar = document.getElementById('sidebar');
-                    const mobileOverlay = document.getElementById('mobileOverlay');
-                    if (sidebar && sidebar.classList.contains('open')) {
-                        sidebar.classList.remove('open');
-                        if (mobileOverlay) mobileOverlay.classList.remove('active');
-                        document.body.style.overflow = '';
-                    }
-                    return false;
-                };
-            });
-        }
     </script>
 
     <!-- Order Modal -->
