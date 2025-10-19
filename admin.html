@@ -3081,26 +3081,47 @@
                 const orderData = {
                     customer: document.getElementById('orderCustomer').value,
                     email: document.getElementById('orderEmail').value,
+                    phone: document.getElementById('orderPhone').value,
+                    product: document.getElementById('orderProduct').value,
                     material: document.getElementById('orderMaterial').value,
                     quantity: parseInt(document.getElementById('orderQuantity').value),
                     amount: parseFloat(document.getElementById('orderAmount').value),
                     status: document.getElementById('orderStatus').value,
                     notes: document.getElementById('orderNotes').value,
                     date: new Date().toISOString().split('T')[0],
-                    createdAt: new Date()
+                    updatedAt: new Date()
                 };
 
-                if (window.firebaseDb && addDoc) {
-                    const ordersRef = collection(window.firebaseDb, 'orders');
-                    await addDoc(ordersRef, orderData);
-                    console.log('Order saved successfully');
+                if (currentEditId) {
+                    // Update existing order
+                    if (window.firebaseDb && updateDoc && doc) {
+                        const orderRef = doc(window.firebaseDb, 'orders', currentEditId);
+                        await updateDoc(orderRef, orderData);
+                        console.log('Order updated successfully');
+                        showRogSuccess('Order updated successfully!', 'Order Updated');
+                    }
+                } else {
+                    // Create new order
+                    orderData.createdAt = new Date();
+                    if (window.firebaseDb && addDoc && collection) {
+                        const ordersRef = collection(window.firebaseDb, 'orders');
+                        await addDoc(ordersRef, orderData);
+                        console.log('Order created successfully');
+                        showRogSuccess('Order created successfully!', 'Order Created');
+                    }
                 }
 
+                // Reset form and close modal
+                currentEditId = null;
+                document.getElementById('orderModalTitle').textContent = 'Add New Order';
                 document.getElementById('orderModal').classList.add('hidden');
+                
+                // Refresh data
                 await loadOrdersData();
                 await loadDashboardData();
             } catch (error) {
                 console.error('Error saving order:', error);
+                showRogError('Error saving order. Please try again.', 'Save Failed');
             }
         }
 
@@ -3178,8 +3199,21 @@
                 return;
             }
 
-            // Generate a unique client link
-            const clientLink = `${window.location.origin}/client-order-form.html?orderId=${orderId}&token=${generateToken()}`;
+            // Generate a unique client link with customer details
+            const customerDetails = {
+                orderId: orderId,
+                customerName: order.customer || '',
+                customerEmail: order.email || '',
+                customerPhone: order.phone || '',
+                product: order.product || '',
+                material: order.material || '',
+                quantity: order.quantity || '',
+                amount: order.amount || ''
+            };
+
+            // Encode customer details as URL parameters
+            const params = new URLSearchParams(customerDetails);
+            const clientLink = `${window.location.origin}/client-order-form.html?${params.toString()}&token=${generateToken()}`;
 
             // Show the link in a modal
             showClientLinkModal(order, clientLink);
@@ -3434,31 +3468,9 @@
                                     </div>
                                 </div>
 
-                                <!-- Client Form Link Status -->
-                                <div class="bg-rog-light/20 rounded-lg p-4">
-                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
-                                        <i class="fas fa-link text-rog-red mr-2"></i>Client Form Status
-                                    </h4>
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <p class="text-white font-rog-body">Client form link status:</p>
-                                            <span class="px-2 py-1 ${order.clientFormSubmitted ? 'bg-green-500' : 'bg-yellow-500'} rounded-full text-xs font-rog-body text-white">
-                                                ${order.clientFormSubmitted ? 'Details Submitted' : 'Pending Submission'}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <button onclick="generateClientLink('${order.id}')" class="px-4 py-2 bg-rog-red text-white rounded-lg font-rog-heading font-semibold hover:bg-rog-orange transition-colors duration-300">
-                                                <i class="fas fa-link mr-2"></i>Generate Link
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                             
-                            <div class="flex justify-end mt-6 space-x-3">
-                                <button onclick="generateClientLink('${order.id}')" class="px-6 py-3 bg-green-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-green-700 transition-colors duration-300">
-                                    <i class="fas fa-link mr-2"></i>Generate Client Link
-                                </button>
+                            <div class="flex justify-end mt-6">
                                 <button onclick="closeOrderDetailsModal()" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">
                                     Close
                                 </button>
@@ -3564,7 +3576,32 @@
 
         function editOrder(orderId) {
             console.log('Edit order:', orderId);
-            // Implement edit order functionality
+            // Find the order in ordersData
+            const order = ordersData.find(o => o.id === orderId);
+            if (!order) {
+                showRogError('Order not found', 'Order Not Found');
+                return;
+            }
+
+            // Set current edit ID
+            currentEditId = orderId;
+            
+            // Update modal title
+            document.getElementById('orderModalTitle').textContent = 'Edit Order';
+            
+            // Populate form fields with existing order data
+            document.getElementById('orderCustomer').value = order.customer || '';
+            document.getElementById('orderEmail').value = order.email || '';
+            document.getElementById('orderPhone').value = order.phone || '';
+            document.getElementById('orderProduct').value = order.product || '';
+            document.getElementById('orderMaterial').value = order.material || '';
+            document.getElementById('orderQuantity').value = order.quantity || '';
+            document.getElementById('orderAmount').value = order.amount || '';
+            document.getElementById('orderStatus').value = order.status || '';
+            document.getElementById('orderNotes').value = order.notes || '';
+            
+            // Show the modal
+            document.getElementById('orderModal').classList.remove('hidden');
         }
 
         async function deleteOrder(orderId) {
