@@ -1212,25 +1212,46 @@
                 mobileOverlay.addEventListener('click', closeSidebar);
             }
 
-            // Close sidebar when clicking on navigation links
+            // Close sidebar when clicking on navigation links (but don't prevent navigation)
             sidebar.querySelectorAll('nav a').forEach(link => {
-                link.addEventListener('click', closeSidebar);
+                link.addEventListener('click', (e) => {
+                    // Only close sidebar for internal navigation links
+                    if (link.getAttribute('href').startsWith('#')) {
+                        closeSidebar();
+                    }
+                });
             });
         }
 
         // Navigation functionality
         function setupNavigation() {
+            console.log('Setting up navigation...');
             const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            console.log('Found navigation links:', navLinks.length);
 
-            navLinks.forEach(link => {
+            navLinks.forEach((link, index) => {
+                console.log(`Setting up link ${index}:`, link.getAttribute('href'));
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     const targetId = link.getAttribute('href').substring(1);
+                    console.log('Navigation clicked:', targetId);
                     showPage(targetId);
                     
                     // Update active navigation state
                     updateActiveNavigation(targetId);
                 });
+            });
+
+            // Also add event delegation for dynamically added links
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('nav a[href^="#"]')) {
+                    e.preventDefault();
+                    const link = e.target.closest('nav a[href^="#"]');
+                    const targetId = link.getAttribute('href').substring(1);
+                    console.log('Delegated navigation clicked:', targetId);
+                    showPage(targetId);
+                    updateActiveNavigation(targetId);
+                }
             });
         }
 
@@ -1251,20 +1272,27 @@
 
         // Show specific page
         function showPage(pageId) {
+            console.log('Showing page:', pageId);
+            
             // Hide all sections
             const sections = document.querySelectorAll('main > section');
+            console.log('Found sections:', sections.length);
             sections.forEach(section => {
                 section.classList.add('hidden');
             });
 
             // Show target section
             const targetSection = document.getElementById(pageId);
+            console.log('Target section:', targetSection);
             if (targetSection) {
                 targetSection.classList.remove('hidden');
                 currentPage = pageId;
+                console.log('Current page set to:', currentPage);
 
                 // Load data for the page
                 loadPageData(pageId);
+            } else {
+                console.error('Section not found:', pageId);
             }
         }
 
@@ -2107,7 +2135,7 @@
         function displayReportPreview(reportType, reportData) {
             const reportPreview = document.getElementById('reportPreview');
             const reportContent = document.getElementById('reportContent');
-            
+
             if (!reportPreview || !reportContent) return;
 
             let html = `
@@ -2452,22 +2480,22 @@
                 tab.addEventListener('click', (e) => {
                     e.preventDefault();
                     const targetTab = tab.getAttribute('data-tab');
-                    
+
                     // Remove active class from all tabs
                     settingsTabs.forEach(t => {
                         t.classList.remove('active', 'bg-rog-red', 'text-white');
                         t.classList.add('text-gray-400', 'hover:text-white');
                     });
-                    
+
                     // Add active class to clicked tab
                     tab.classList.add('active', 'bg-rog-red', 'text-white');
                     tab.classList.remove('text-gray-400', 'hover:text-white');
-                    
+
                     // Hide all content sections
                     settingsContents.forEach(content => {
                         content.classList.add('hidden');
                     });
-                    
+
                     // Show target content
                     const targetContent = document.getElementById(targetTab + '-settings');
                     if (targetContent) {
@@ -2896,7 +2924,7 @@
 
             // Generate a shareable link (in a real app, this would be a proper URL)
             const shareLink = `${window.location.origin}/order-details.html?orderId=${orderId}`;
-            
+
             // Copy to clipboard
             navigator.clipboard.writeText(shareLink).then(() => {
                 alert('Share link copied to clipboard!');
@@ -2929,12 +2957,14 @@
 
                 if (window.firebaseDb && updateDoc && doc) {
                     const orderRef = doc(window.firebaseDb, 'orders', orderId);
-                    await updateDoc(orderRef, { jerseyDetails: jerseyData });
+                    await updateDoc(orderRef, {
+                        jerseyDetails: jerseyData
+                    });
                     console.log('Jersey details saved successfully');
-                    
+
                     // Close modal
                     document.getElementById('jerseyModal').classList.add('hidden');
-                    
+
                     // Reload orders data
                     await loadOrdersData();
                 }
@@ -3092,6 +3122,16 @@
             window.location.href = 'login.html';
         }
 
+        // Test navigation function
+        function testNavigation() {
+            console.log('Testing navigation...');
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            console.log('Navigation links found:', navLinks.length);
+            navLinks.forEach((link, index) => {
+                console.log(`Link ${index}:`, link.getAttribute('href'), link.textContent.trim());
+            });
+        }
+
         // Make functions global
         window.logout = logout;
         window.editOrder = editOrder;
@@ -3103,9 +3143,12 @@
         window.addJerseyDetails = addJerseyDetails;
         window.generateShareLink = generateShareLink;
         window.saveJerseyDetails = saveJerseyDetails;
+        window.testNavigation = testNavigation;
+        window.showPage = showPage;
 
         // Initialize all functionality
         document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Admin panel initializing...');
             await initializeFirebase();
             setupMobileSidebar();
             setupNavigation();
@@ -3120,6 +3163,12 @@
 
             // Load initial dashboard data
             await loadDashboardData();
+            
+            // Ensure navigation is working
+            setTimeout(() => {
+                console.log('Re-checking navigation setup...');
+                setupNavigation();
+            }, 1000);
         });
     </script>
 
@@ -3320,7 +3369,7 @@
                 </div>
                 <form id="jerseyForm" class="space-y-4">
                     <input type="hidden" id="jerseyOrderId">
-                    
+
                     <div class="grid md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Jersey Type</label>
@@ -3336,7 +3385,7 @@
                             <input type="text" id="jerseyName" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter jersey name" required>
                         </div>
                     </div>
-                    
+
                     <div class="grid md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Jersey Number</label>
@@ -3352,7 +3401,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="grid md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Size</label>
@@ -3376,7 +3425,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div>
                         <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Shorts</label>
                         <select id="jerseyShorts" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
@@ -3385,7 +3434,7 @@
                             <option value="No">No</option>
                         </select>
                     </div>
-                    
+
                     <div class="flex justify-end space-x-4">
                         <button type="button" id="cancelJersey" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">Cancel</button>
                         <button type="button" onclick="saveJerseyDetails()" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">Save Jersey Details</button>
