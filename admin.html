@@ -3234,28 +3234,127 @@
                                     </div>
                                 </div>
 
-                                <!-- Client-Submitted Details -->
+                                <!-- Initial Order Record -->
                                 <div class="bg-rog-light/20 rounded-lg p-4">
                                     <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
-                                        <i class="fas fa-clipboard-list text-rog-red mr-2"></i>Client-Submitted Details
+                                        <i class="fas fa-file-alt text-rog-red mr-2"></i>Initial Order Record
                                     </h4>
-                                    <div class="space-y-4">
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Design Requirements</label>
-                                            <p class="text-white font-rog-body bg-rog-gray/20 p-3 rounded-lg">${order.designRequirements || 'No specific design requirements provided'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Special Instructions</label>
-                                            <p class="text-white font-rog-body bg-rog-gray/20 p-3 rounded-lg">${order.specialInstructions || 'No special instructions provided'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Delivery Address</label>
-                                            <p class="text-white font-rog-body bg-rog-gray/20 p-3 rounded-lg">${order.deliveryAddress || 'No delivery address provided'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Preferred Delivery Date</label>
-                                            <p class="text-white font-rog-body">${order.preferredDeliveryDate || 'No specific date requested'}</p>
-                                        </div>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full">
+                                            <thead>
+                                                <tr class="border-b border-rog-gray">
+                                                    <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Field</th>
+                                                    <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Order ID</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.id || 'N/A'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Customer Name</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.customer || 'N/A'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Email</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.email || 'N/A'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Phone</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.phone || 'N/A'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Product Type</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.product || 'N/A'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Quantity</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.quantity || 'N/A'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Total Amount</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white font-semibold text-rog-red">$${order.amount || '0.00'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Order Date</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.date || 'N/A'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Status</td>
+                                                    <td class="py-3 px-4">
+                                                        <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status || 'N/A'}</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Jersey Details Submitted by Client -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
+                                        <i class="fas fa-tshirt text-rog-red mr-2"></i>Jersey Details Submitted by Client
+                                    </h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full">
+                                            <thead>
+                                                <tr class="border-b border-rog-gray">
+                                                    <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Specification</th>
+                                                    <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Client Input</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Jersey Type</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.jerseyType || 'Not specified'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Material</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.material || 'Not specified'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Size</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.size || 'Not specified'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Color</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.color || 'Not specified'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Design Requirements</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.designRequirements || 'No specific design requirements provided'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Logo Placement</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.logoPlacement || 'Not specified'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Text/Number</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.textNumber || 'Not specified'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Font Style</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.fontStyle || 'Not specified'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Special Instructions</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.specialInstructions || 'No special instructions provided'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Delivery Address</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.deliveryAddress || 'No delivery address provided'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Preferred Delivery Date</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.preferredDeliveryDate || 'No specific date requested'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Additional Notes</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.notes || 'No additional notes provided'}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
 
@@ -3775,7 +3874,7 @@
             if (userDropdown) {
                 userDropdown.classList.add('hidden');
             }
-            
+
             // Navigate to settings section
             showSection('settings');
         }
