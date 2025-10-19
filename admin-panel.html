@@ -10,6 +10,55 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Admin Authentication Protection -->
+    <script>
+        // Check admin authentication before page loads
+        function checkAdminAuth() {
+            console.log('Checking admin authentication...');
+            
+            // Check if admin user is logged in
+            const adminUser = localStorage.getItem('adminUser');
+            
+            if (!adminUser) {
+                console.log('No admin user found - redirecting to login');
+                window.location.href = 'login.html';
+                return false;
+            }
+            
+            try {
+                const adminData = JSON.parse(adminUser);
+                console.log('Admin user found:', adminData);
+                
+                // Check if admin session is still valid (24 hours)
+                const loginTime = new Date(adminData.loginTime);
+                const now = new Date();
+                const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
+                
+                if (hoursDiff > 24) {
+                    console.log('Admin session expired - redirecting to login');
+                    localStorage.removeItem('adminUser');
+                    window.location.href = 'login.html';
+                    return false;
+                }
+                
+                console.log('Admin authentication successful');
+                return true;
+            } catch (error) {
+                console.error('Error parsing admin user data:', error);
+                localStorage.removeItem('adminUser');
+                window.location.href = 'login.html';
+                return false;
+            }
+        }
+        
+        // Run authentication check immediately
+        if (!checkAdminAuth()) {
+            // Stop page loading if not authenticated
+            document.body.innerHTML = '<div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #0a0a0a; color: #dc2626; font-family: Arial, sans-serif;"><div style="text-align: center;"><h2>Redirecting to login...</h2><p>Please wait...</p></div></div>';
+        }
+    </script>
+    
     <!-- Firebase Configuration - Embedded for reliability -->
     <script>
         // Direct Firebase configuration embedded in HTML
@@ -1673,6 +1722,26 @@
             setTimeout(() => {
                 testAdminPanel();
             }, 1000);
+            
+            // Set up periodic authentication check (every 5 minutes)
+            setInterval(() => {
+                console.log('Performing periodic authentication check...');
+                if (!checkAdminAuth()) {
+                    console.log('Authentication failed - redirecting to login');
+                    window.location.href = 'login.html';
+                }
+            }, 5 * 60 * 1000); // 5 minutes
+            
+            // Check authentication when page becomes visible again
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    console.log('Page became visible - checking authentication...');
+                    if (!checkAdminAuth()) {
+                        console.log('Authentication failed on visibility change - redirecting to login');
+                        window.location.href = 'login.html';
+                    }
+                }
+            });
         });
 
         // Deployment-specific Firebase initialization
