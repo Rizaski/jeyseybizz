@@ -1231,15 +1231,12 @@
 
             navLinks.forEach((link, index) => {
                 console.log(`Setting up link ${index}:`, link.getAttribute('href'));
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const targetId = link.getAttribute('href').substring(1);
-                    console.log('Navigation clicked:', targetId);
-                    showPage(targetId);
-                    
-                    // Update active navigation state
-                    updateActiveNavigation(targetId);
-                });
+                
+                // Remove any existing event listeners
+                link.removeEventListener('click', handleNavClick);
+                
+                // Add new event listener
+                link.addEventListener('click', handleNavClick);
             });
 
             // Also add event delegation for dynamically added links
@@ -1253,6 +1250,15 @@
                     updateActiveNavigation(targetId);
                 }
             });
+        }
+
+        // Separate click handler function
+        function handleNavClick(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            console.log('Navigation clicked:', targetId);
+            showPage(targetId);
+            updateActiveNavigation(targetId);
         }
 
         // Update active navigation state
@@ -1278,6 +1284,7 @@
             const sections = document.querySelectorAll('main > section');
             console.log('Found sections:', sections.length);
             sections.forEach(section => {
+                console.log('Hiding section:', section.id);
                 section.classList.add('hidden');
             });
 
@@ -1285,6 +1292,7 @@
             const targetSection = document.getElementById(pageId);
             console.log('Target section:', targetSection);
             if (targetSection) {
+                console.log('Removing hidden class from:', pageId);
                 targetSection.classList.remove('hidden');
                 currentPage = pageId;
                 console.log('Current page set to:', currentPage);
@@ -1293,6 +1301,12 @@
                 loadPageData(pageId);
             } else {
                 console.error('Section not found:', pageId);
+                // List all available sections for debugging
+                const allSections = document.querySelectorAll('main > section');
+                console.log('Available sections:');
+                allSections.forEach(section => {
+                    console.log('- Section ID:', section.id);
+                });
             }
         }
 
@@ -3130,6 +3144,19 @@
             navLinks.forEach((link, index) => {
                 console.log(`Link ${index}:`, link.getAttribute('href'), link.textContent.trim());
             });
+            
+            // Test if sections exist
+            const sections = document.querySelectorAll('main > section');
+            console.log('Available sections:');
+            sections.forEach(section => {
+                console.log(`- ${section.id}: ${section.classList.contains('hidden') ? 'hidden' : 'visible'}`);
+            });
+        }
+
+        // Manual navigation test
+        function testPageNavigation(pageId) {
+            console.log(`Testing navigation to: ${pageId}`);
+            showPage(pageId);
         }
 
         // Make functions global
@@ -3144,6 +3171,7 @@
         window.generateShareLink = generateShareLink;
         window.saveJerseyDetails = saveJerseyDetails;
         window.testNavigation = testNavigation;
+        window.testPageNavigation = testPageNavigation;
         window.showPage = showPage;
 
         // Initialize all functionality
@@ -3163,7 +3191,7 @@
 
             // Load initial dashboard data
             await loadDashboardData();
-            
+
             // Ensure navigation is working
             setTimeout(() => {
                 console.log('Re-checking navigation setup...');
