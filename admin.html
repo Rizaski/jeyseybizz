@@ -1212,15 +1212,7 @@
                 mobileOverlay.addEventListener('click', closeSidebar);
             }
 
-            // Close sidebar when clicking on navigation links (but don't prevent navigation)
-            sidebar.querySelectorAll('nav a').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    // Only close sidebar for internal navigation links
-                    if (link.getAttribute('href').startsWith('#')) {
-                        closeSidebar();
-                    }
-                });
-            });
+            // Navigation links will be handled by setupNavigation function
         }
 
         // Navigation functionality
@@ -1233,10 +1225,28 @@
                 console.log(`Setting up link ${index}:`, link.getAttribute('href'));
                 
                 // Remove any existing event listeners
-                link.removeEventListener('click', handleNavClick);
+                const newLink = link.cloneNode(true);
+                link.parentNode.replaceChild(newLink, link);
                 
                 // Add new event listener
-                link.addEventListener('click', handleNavClick);
+                newLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = newLink.getAttribute('href').substring(1);
+                    console.log('Navigation clicked:', targetId);
+                    
+                    // Handle navigation
+                    showPage(targetId);
+                    updateActiveNavigation(targetId);
+                    
+                    // Close mobile sidebar if open
+                    const sidebar = document.getElementById('sidebar');
+                    const mobileOverlay = document.getElementById('mobileOverlay');
+                    if (sidebar && sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                        if (mobileOverlay) mobileOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
             });
 
             // Also add event delegation for dynamically added links
@@ -1248,17 +1258,17 @@
                     console.log('Delegated navigation clicked:', targetId);
                     showPage(targetId);
                     updateActiveNavigation(targetId);
+                    
+                    // Close mobile sidebar if open
+                    const sidebar = document.getElementById('sidebar');
+                    const mobileOverlay = document.getElementById('mobileOverlay');
+                    if (sidebar && sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                        if (mobileOverlay) mobileOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
                 }
             });
-        }
-
-        // Separate click handler function
-        function handleNavClick(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            console.log('Navigation clicked:', targetId);
-            showPage(targetId);
-            updateActiveNavigation(targetId);
         }
 
         // Update active navigation state
@@ -1279,7 +1289,7 @@
         // Show specific page
         function showPage(pageId) {
             console.log('Showing page:', pageId);
-            
+
             // Hide all sections
             const sections = document.querySelectorAll('main > section');
             console.log('Found sections:', sections.length);
@@ -3144,7 +3154,7 @@
             navLinks.forEach((link, index) => {
                 console.log(`Link ${index}:`, link.getAttribute('href'), link.textContent.trim());
             });
-            
+
             // Test if sections exist
             const sections = document.querySelectorAll('main > section');
             console.log('Available sections:');
@@ -3191,13 +3201,46 @@
 
             // Load initial dashboard data
             await loadDashboardData();
-
+            
             // Ensure navigation is working
             setTimeout(() => {
                 console.log('Re-checking navigation setup...');
                 setupNavigation();
             }, 1000);
+
+            // Add simple fallback navigation
+            setTimeout(() => {
+                console.log('Adding fallback navigation...');
+                addFallbackNavigation();
+            }, 2000);
         });
+
+        // Fallback navigation method
+        function addFallbackNavigation() {
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            console.log('Adding fallback navigation to', navLinks.length, 'links');
+            
+            navLinks.forEach(link => {
+                // Add a simple onclick handler as fallback
+                link.onclick = function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    console.log('Fallback navigation clicked:', targetId);
+                    showPage(targetId);
+                    updateActiveNavigation(targetId);
+                    
+                    // Close mobile sidebar
+                    const sidebar = document.getElementById('sidebar');
+                    const mobileOverlay = document.getElementById('mobileOverlay');
+                    if (sidebar && sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                        if (mobileOverlay) mobileOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                    return false;
+                };
+            });
+        }
     </script>
 
     <!-- Order Modal -->
