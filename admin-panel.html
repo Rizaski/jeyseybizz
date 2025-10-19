@@ -1025,9 +1025,20 @@
                         </button>
                         <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-rog-gray rounded-lg shadow-lg border border-rog-red hidden">
                             <div class="p-4 border-b border-gray-700">
-                                <p class="text-sm text-gray-400">Signed in as</p>
-                                <p class="font-semibold text-white" id="adminName">Admin User</p>
-                                <p class="text-xs text-gray-400 truncate" id="adminEmail" style="max-width: 180px;">admin@example.com</p>
+                                <div class="flex items-center space-x-3 mb-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-rog-red to-pink-500 rounded-full flex items-center justify-center" id="adminAvatar">
+                                        <i class="fas fa-user text-white text-sm"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-sm text-gray-400">Signed in as</p>
+                                        <p class="font-semibold text-white" id="adminName">Admin User</p>
+                                        <p class="text-xs text-gray-400 truncate" id="adminEmail" style="max-width: 180px;">admin@example.com</p>
+                                    </div>
+                                </div>
+                                <div class="text-xs text-gray-500" id="adminLoginTime">
+                                    <i class="fas fa-clock mr-1"></i>
+                                    <span id="loginTimeText">Session started</span>
+                                </div>
                             </div>
                             <div class="p-2">
                                 <a href="#" class="block px-3 py-2 text-sm hover:bg-rog-light rounded">Profile</a>
@@ -1700,12 +1711,15 @@
 
                 if (isAuthenticated) {
                     console.log('Admin Panel - Ready!');
+                    // Load admin user information for dynamic display
+                    loadAdminUserInfo();
                     await loadDashboardData();
                     setupEventListeners();
                     hideROGLoader();
                 } else {
                     console.log('Not authenticated, checking localStorage...');
                     // Try to load anyway for debugging
+                    loadAdminUserInfo();
                     await loadDashboardData();
                     setupEventListeners();
                     hideROGLoader();
@@ -1742,6 +1756,19 @@
                     }
                 }
             });
+            
+            // Update login time every minute for dynamic display
+            setInterval(() => {
+                const adminUser = localStorage.getItem('adminUser');
+                if (adminUser) {
+                    try {
+                        const adminData = JSON.parse(adminUser);
+                        updateUserDisplay(adminData);
+                    } catch (error) {
+                        console.error('Error updating admin display:', error);
+                    }
+                }
+            }, 60000); // Update every minute
         });
 
         // Deployment-specific Firebase initialization
@@ -1799,12 +1826,74 @@
             return false;
         }
 
+        // Load admin user information from localStorage
+        function loadAdminUserInfo() {
+            console.log('Loading admin user information...');
+            
+            try {
+                const adminUser = localStorage.getItem('adminUser');
+                if (adminUser) {
+                    const adminData = JSON.parse(adminUser);
+                    console.log('Admin user data found:', adminData);
+                    updateUserDisplay(adminData);
+                } else {
+                    console.log('No admin user data found in localStorage');
+                    // Set default admin info
+                    updateUserDisplay({
+                        name: 'Admin User',
+                        email: 'admin@otomono.com'
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading admin user info:', error);
+                // Set default admin info on error
+                updateUserDisplay({
+                    name: 'Admin User',
+                    email: 'admin@otomono.com'
+                });
+            }
+        }
+
         // Update user display
         function updateUserDisplay(user) {
             const adminNameElement = document.getElementById('adminName');
+            const adminEmailElement = document.getElementById('adminEmail');
+            const loginTimeElement = document.getElementById('loginTimeText');
+            const adminAvatarElement = document.getElementById('adminAvatar');
+            
             if (adminNameElement) {
                 adminNameElement.textContent = user.displayName || user.name || user.email || 'Admin';
             }
+            
+            if (adminEmailElement) {
+                adminEmailElement.textContent = user.email || 'admin@otomono.com';
+            }
+            
+            if (loginTimeElement && user.loginTime) {
+                const loginTime = new Date(user.loginTime);
+                const now = new Date();
+                const hoursDiff = Math.floor((now - loginTime) / (1000 * 60 * 60));
+                const minutesDiff = Math.floor((now - loginTime) / (1000 * 60));
+                
+                if (hoursDiff > 0) {
+                    loginTimeElement.textContent = `Active for ${hoursDiff}h ${minutesDiff % 60}m`;
+                } else {
+                    loginTimeElement.textContent = `Active for ${minutesDiff}m`;
+                }
+            }
+            
+            // Update avatar with user initials
+            if (adminAvatarElement) {
+                const name = user.displayName || user.name || user.email || 'Admin';
+                const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                adminAvatarElement.innerHTML = `<span class="text-white text-sm font-bold">${initials}</span>`;
+            }
+            
+            console.log('Updated admin display:', {
+                name: user.displayName || user.name || user.email || 'Admin',
+                email: user.email || 'admin@otomono.com',
+                loginTime: user.loginTime
+            });
         }
 
         // Authentication check
