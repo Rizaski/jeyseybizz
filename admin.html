@@ -876,7 +876,7 @@
                             <p class="text-sm text-gray-400 font-rog-body">Export business data</p>
                         </div>
                     </div>
-                    <button onclick="navigateToReports()" class="w-full glass-effect py-2 rounded-lg font-rog-heading font-semibold text-white hover:bg-white hover:text-rog-dark transition-all duration-300">
+                    <button onclick="generateReport('sales')" class="w-full glass-effect py-2 rounded-lg font-rog-heading font-semibold text-white hover:bg-white hover:text-rog-dark transition-all duration-300">
                         Generate Report
                     </button>
                 </div>
@@ -2296,8 +2296,15 @@
                     status: 'Ready'
                 };
 
+                // Add the new report to the existing reports array
+                if (window.dynamicReports) {
+                    window.dynamicReports.unshift(newReport); // Add to beginning of array
+                } else {
+                    window.dynamicReports = [newReport];
+                }
+
                 // Update the table
-                await loadRecentReports();
+                renderReportsTable(window.dynamicReports);
 
                 showRogSuccess('Report generated successfully!', 'Report Generated');
             } catch (error) {
@@ -4190,12 +4197,6 @@
             }
         }
 
-        // Generate report function
-        function generateReport() {
-            console.log('Generating report...');
-            showRogSuccess('Report generation initiated! Check the Reports section for details.', 'Report Generation');
-            showSection('reports');
-        }
 
         // Make functions global
         window.logout = logout;
