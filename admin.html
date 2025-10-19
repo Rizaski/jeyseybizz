@@ -3881,8 +3881,17 @@
 
         // Dashboard quick action navigation functions
         function navigateToOrders() {
-            console.log('Navigating to Orders section...');
+            console.log('Opening Add New Order form...');
+            // Navigate to orders section first
             showSection('orders');
+            
+            // Then trigger the Add New Order form
+            setTimeout(() => {
+                const addOrderBtn = document.getElementById('add-order-btn');
+                if (addOrderBtn) {
+                    addOrderBtn.click();
+                }
+            }, 100);
         }
 
         function navigateToAnalytics() {
@@ -3893,6 +3902,11 @@
         function navigateToReports() {
             console.log('Navigating to Reports section...');
             showSection('reports');
+        }
+
+        // Alias for showPage function
+        function showSection(sectionId) {
+            showPage(sectionId);
         }
 
         // Help dialog functionality
