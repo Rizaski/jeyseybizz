@@ -4,38 +4,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - Otomono Jerseys</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="public/favicon.png">
+    <link rel="apple-touch-icon" href="public/favicon.png">
+    <link rel="shortcut icon" href="public/favicon.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- ROG Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rog-red': '#ff0037',
+                        'rog-orange': '#ff6b35',
+                        'rog-dark': '#000000',
+                        'rog-light': '#1a1a1a',
+                        'rog-gray': '#333333',
+                        'rog-blue': '#00d4ff',
+                        'rog-purple': '#8b5cf6',
+                    },
+                    fontFamily: {
+                        'rog-display': ['Orbitron', 'monospace'],
+                        'rog-heading': ['Exo 2', 'sans-serif'],
+                        'rog-body': ['Roboto', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #ff0037, 0 0 10px #ff0037, 0 0 15px #ff0037' },
+                            '100%': { boxShadow: '0 0 10px #ff0037, 0 0 20px #ff0037, 0 0 30px #ff0037' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-        
         :root {
-            --rog-dark: #0a0a0a;
+            --rog-dark: #000000;
             --rog-light: #1a1a1a;
-            --rog-red: #dc2626;
-            --rog-gold: #fbbf24;
+            --rog-red: #ff0037;
+            --rog-orange: #ff6b35;
+            --rog-blue: #00d4ff;
+            --rog-purple: #8b5cf6;
+            --rog-gray: #333333;
         }
         
-        .font-rog-display { font-family: 'Orbitron', sans-serif; }
-        .font-rog-heading { font-family: 'Inter', sans-serif; }
-        .font-rog-body { font-family: 'Inter', sans-serif; }
+        .font-rog-display { font-family: 'Orbitron', monospace; }
+        .font-rog-heading { font-family: 'Exo 2', sans-serif; }
+        .font-rog-body { font-family: 'Roboto', sans-serif; }
 
         .rog-button {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
-            color: white;
-            border: 1px solid #dc2626;
+            background: linear-gradient(135deg, #ff0037 0%, #ff6b35 50%, #00d4ff 100%);
             transition: all 0.3s ease;
+            border: 1px solid #ff0037;
+            box-shadow: 0 0 20px rgba(255, 0, 55, 0.3);
         }
 
         .rog-button:hover {
-            background: linear-gradient(135deg, #b91c1c, #991b1b);
+            background: linear-gradient(135deg, #ff6b35 0%, #ff0037 50%, #8b5cf6 100%);
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+            box-shadow: 0 15px 35px rgba(255, 0, 55, 0.6);
+            border-color: #00d4ff;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 30%, #333333 70%, #000000 100%);
+            position: relative;
+        }
+        
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 0, 55, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 0, 55, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
         
         .glow {
-            text-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+            text-shadow: 0 0 10px rgba(255, 0, 55, 0.5);
         }
         
         .bg-rog-dark { background-color: var(--rog-dark); }
@@ -46,9 +116,9 @@
     </style>
 </head>
 
-<body class="min-h-screen bg-rog-dark text-white">
+<body class="min-h-screen bg-rog-dark text-white hero-gradient">
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-rog-dark/95 backdrop-blur-sm border-b border-rog-red shadow-lg">
+    <header class="sticky top-0 z-50 glass-effect border-b border-rog-red shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo Section -->
