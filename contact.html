@@ -59,71 +59,71 @@
 
     <!-- Improved Authentication Handler -->
     <script src="js/improved-auth-handler.js"></script>
-    
+
     <!-- Profile Photo Handler -->
     <script src="js/profile-photo-handler.js"></script>
-    
+
     <!-- Universal Authentication Fix -->
     <script src="js/universal-auth-fix.js"></script>
-    
+
     <!-- Deployed Authentication Fix -->
     <script src="js/deployed-auth-fix.js"></script>
-    
+
     <!-- Gmail Profile Photo Fix -->
     <script src="js/gmail-profile-photo-fix.js"></script>
-    
+
     <!-- Aggressive Gmail Fix -->
     <script src="js/aggressive-gmail-fix.js"></script>
-    
+
     <!-- BULLETPROOF Gmail Fix -->
     <script src="js/bulletproof-gmail-fix.js"></script>
-    
+
     <!-- ULTIMATE Gmail Fix -->
     <script src="js/ultimate-gmail-fix.js"></script>
-    
+
     <!-- FINAL Gmail Fix -->
     <script src="js/final-gmail-fix.js"></script>
-    
+
     <!-- Smooth Auth Handler -->
     <script src="js/smooth-auth-handler.js"></script>
-    
+
     <!-- User Icon Fix -->
     <script src="js/user-icon-fix.js"></script>
-    
+
     <!-- Smooth Profile Fix -->
     <script src="js/smooth-profile-fix.js"></script>
-    
+
     <!-- Stop Loading CSS Fix -->
     <script src="js/stop-loading-css.js"></script>
-    
+
     <!-- Simple User Icon -->
     <script src="js/simple-user-icon.js"></script>
-    
+
     <!-- Simple User Icon CSS -->
     <script src="js/simple-user-icon-css.js"></script>
-    
+
     <!-- Clean Gmail Profile -->
     <script src="js/clean-gmail-profile.js"></script>
-    
+
     <!-- Clean Profile CSS -->
     <script src="js/clean-profile-css.js"></script>
-    
+
     <!-- ABSOLUTE FINAL FIX -->
     <script src="js/ABSOLUTE-FINAL-FIX.js"></script>
-    
+
     <!-- ABSOLUTE FINAL CSS -->
     <script src="js/ABSOLUTE-FINAL-CSS.js"></script>
-    
+
     <!-- SIGNOUT DROPDOWN FIX -->
     <script src="js/SIGNOUT-DROPDOWN-FIX.js"></script>
-    
+
     <!-- GMAIL USER INFO FIX -->
     <script src="js/GMAIL-USER-INFO-FIX.js"></script>
-    
-    
+
+
     <!-- STOP CONSTANT LOADING -->
     <script src="js/STOP-CONSTANT-LOADING.js"></script>
-    
+
     <!-- STATIC PROFILE CSS -->
     <script src="js/STATIC-PROFILE-CSS.js"></script>
 
@@ -146,15 +146,70 @@
                         'rog-body': ['Roboto', 'sans-serif'],
                     },
                     animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'slide-in-left': 'slideInLeft 0.8s ease-out',
+                        'slide-in-right': 'slideInRight 0.8s ease-out',
                         'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'float': 'float 6s ease-in-out infinite',
                         'glow': 'glow 2s ease-in-out infinite alternate',
                     },
                     keyframes: {
+                        fadeIn: {
+                            '0%': {
+                                opacity: '0'
+                            },
+                            '100%': {
+                                opacity: '1'
+                            },
+                        },
+                        slideUp: {
+                            '0%': {
+                                transform: 'translateY(30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateY(0)',
+                                opacity: '1'
+                            },
+                        },
+                        slideInLeft: {
+                            '0%': {
+                                transform: 'translateX(-30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
+                        },
+                        slideInRight: {
+                            '0%': {
+                                transform: 'translateX(30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
+                        },
+                        float: {
+                            '0%, 100%': {
+                                transform: 'translateY(0px)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-20px)'
+                            },
+                        },
                         glow: {
-                            '0%': { boxShadow: '0 0 5px #ff0037, 0 0 10px #ff0037, 0 0 15px #ff0037' },
-                            '100%': { boxShadow: '0 0 10px #ff0037, 0 0 20px #ff0037, 0 0 30px #ff0037' }
-                        }
+                            '0%': {
+                                boxShadow: '0 0 5px #ff0037, 0 0 10px #ff0037, 0 0 15px #ff0037'
+                            },
+                            '100%': {
+                                boxShadow: '0 0 10px #ff0037, 0 0 20px #ff0037, 0 0 30px #ff0037'
+                            },
+                        },
                     }
                 }
             }
@@ -335,7 +390,7 @@
             background: linear-gradient(135deg, #000000 0%, #1a1a1a 30%, #333333 70%, #000000 100%);
             position: relative;
         }
-        
+
         .hero-gradient::before {
             content: '';
             position: absolute;
@@ -344,7 +399,7 @@
             right: 0;
             bottom: 0;
             background: radial-gradient(circle at 30% 20%, rgba(255, 0, 55, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 70% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
             pointer-events: none;
         }
 
@@ -1410,7 +1465,7 @@
         // Admin Panel functionality
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Contact page loaded with admin functionality');
-            
+
             const adminPanelBtn = document.getElementById('admin-panel-btn');
             const adminLoginModal = document.getElementById('admin-login-modal');
             const closeAdminLogin = document.getElementById('close-admin-login');

@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Otomono Admin Panel</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="public/favicon.png">
     <link rel="apple-touch-icon" href="public/favicon.png">
     <link rel="shortcut icon" href="public/favicon.png">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -31,15 +31,70 @@
                         'rog-body': ['Roboto', 'sans-serif'],
                     },
                     animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'slide-in-left': 'slideInLeft 0.8s ease-out',
+                        'slide-in-right': 'slideInRight 0.8s ease-out',
                         'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'float': 'float 6s ease-in-out infinite',
                         'glow': 'glow 2s ease-in-out infinite alternate',
                     },
                     keyframes: {
+                        fadeIn: {
+                            '0%': {
+                                opacity: '0'
+                            },
+                            '100%': {
+                                opacity: '1'
+                            },
+                        },
+                        slideUp: {
+                            '0%': {
+                                transform: 'translateY(30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateY(0)',
+                                opacity: '1'
+                            },
+                        },
+                        slideInLeft: {
+                            '0%': {
+                                transform: 'translateX(-30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
+                        },
+                        slideInRight: {
+                            '0%': {
+                                transform: 'translateX(30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
+                        },
+                        float: {
+                            '0%, 100%': {
+                                transform: 'translateY(0px)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-20px)'
+                            },
+                        },
                         glow: {
-                            '0%': { boxShadow: '0 0 5px #ff0037, 0 0 10px #ff0037, 0 0 15px #ff0037' },
-                            '100%': { boxShadow: '0 0 10px #ff0037, 0 0 20px #ff0037, 0 0 30px #ff0037' }
-                        }
+                            '0%': {
+                                boxShadow: '0 0 5px #ff0037, 0 0 10px #ff0037, 0 0 15px #ff0037'
+                            },
+                            '100%': {
+                                boxShadow: '0 0 10px #ff0037, 0 0 20px #ff0037, 0 0 30px #ff0037'
+                            },
+                        },
                     }
                 }
             }
@@ -52,38 +107,38 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
+
     <!-- Admin Authentication Protection -->
     <script>
         // Check admin authentication before page loads
         function checkAdminAuth() {
             console.log('Checking admin authentication...');
-            
+
             // Check if admin user is logged in
             const adminUser = localStorage.getItem('adminUser');
-            
+
             if (!adminUser) {
                 console.log('No admin user found - redirecting to login');
                 window.location.href = 'login.html';
                 return false;
             }
-            
+
             try {
                 const adminData = JSON.parse(adminUser);
                 console.log('Admin user found:', adminData);
-                
+
                 // Check if admin session is still valid (24 hours)
                 const loginTime = new Date(adminData.loginTime);
                 const now = new Date();
                 const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
-                
+
                 if (hoursDiff > 24) {
                     console.log('Admin session expired - redirecting to login');
                     localStorage.removeItem('adminUser');
                     window.location.href = 'login.html';
                     return false;
                 }
-                
+
                 console.log('Admin authentication successful');
                 return true;
             } catch (error) {
@@ -93,14 +148,14 @@
                 return false;
             }
         }
-        
+
         // Run authentication check immediately
         if (!checkAdminAuth()) {
             // Stop page loading if not authenticated
             document.body.innerHTML = '<div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #0a0a0a; color: #dc2626; font-family: Arial, sans-serif;"><div style="text-align: center;"><h2>Redirecting to login...</h2><p>Please wait...</p></div></div>';
         }
     </script>
-    
+
     <!-- Firebase Configuration - Embedded for reliability -->
     <script>
         // Direct Firebase configuration embedded in HTML
@@ -1750,7 +1805,7 @@
             setTimeout(() => {
                 testAdminPanel();
             }, 1000);
-            
+
             // Set up periodic authentication check (every 5 minutes)
             setInterval(() => {
                 console.log('Performing periodic authentication check...');
@@ -1759,7 +1814,7 @@
                     window.location.href = 'login.html';
                 }
             }, 5 * 60 * 1000); // 5 minutes
-            
+
             // Check authentication when page becomes visible again
             document.addEventListener('visibilitychange', () => {
                 if (!document.hidden) {
@@ -1770,7 +1825,7 @@
                     }
                 }
             });
-            
+
             // Update login time every minute for dynamic display
             setInterval(() => {
                 const adminUser = localStorage.getItem('adminUser');
@@ -1843,7 +1898,7 @@
         // Load admin user information from localStorage
         function loadAdminUserInfo() {
             console.log('Loading admin user information...');
-            
+
             try {
                 const adminUser = localStorage.getItem('adminUser');
                 if (adminUser) {
@@ -1874,35 +1929,35 @@
             const adminEmailElement = document.getElementById('adminEmail');
             const loginTimeElement = document.getElementById('loginTimeText');
             const adminAvatarElement = document.getElementById('adminAvatar');
-            
+
             if (adminNameElement) {
                 adminNameElement.textContent = user.displayName || user.name || user.email || 'Admin';
             }
-            
+
             if (adminEmailElement) {
                 adminEmailElement.textContent = user.email || 'admin@otomono.com';
             }
-            
+
             if (loginTimeElement && user.loginTime) {
                 const loginTime = new Date(user.loginTime);
                 const now = new Date();
                 const hoursDiff = Math.floor((now - loginTime) / (1000 * 60 * 60));
                 const minutesDiff = Math.floor((now - loginTime) / (1000 * 60));
-                
+
                 if (hoursDiff > 0) {
                     loginTimeElement.textContent = `Active for ${hoursDiff}h ${minutesDiff % 60}m`;
                 } else {
                     loginTimeElement.textContent = `Active for ${minutesDiff}m`;
                 }
             }
-            
+
             // Update avatar with user initials
             if (adminAvatarElement) {
                 const name = user.displayName || user.name || user.email || 'Admin';
                 const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
                 adminAvatarElement.innerHTML = `<span class="text-white text-sm font-bold">${initials}</span>`;
             }
-            
+
             console.log('Updated admin display:', {
                 name: user.displayName || user.name || user.email || 'Admin',
                 email: user.email || 'admin@otomono.com',
@@ -2190,8 +2245,8 @@
 
 
 
-            // Load notifications from localStorage
-            loadNotificationsFromStorage();
+        // Load notifications from localStorage
+        loadNotificationsFromStorage();
         });
 
         // Function to simulate client jersey details submission

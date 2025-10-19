@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - Otomono Jerseys</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="public/favicon.png">
     <link rel="apple-touch-icon" href="public/favicon.png">
     <link rel="shortcut icon" href="public/favicon.png">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
+
     <!-- ROG Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,21 +37,76 @@
                         'rog-body': ['Roboto', 'sans-serif'],
                     },
                     animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'slide-in-left': 'slideInLeft 0.8s ease-out',
+                        'slide-in-right': 'slideInRight 0.8s ease-out',
                         'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'float': 'float 6s ease-in-out infinite',
                         'glow': 'glow 2s ease-in-out infinite alternate',
                     },
                     keyframes: {
+                        fadeIn: {
+                            '0%': {
+                                opacity: '0'
+                            },
+                            '100%': {
+                                opacity: '1'
+                            },
+                        },
+                        slideUp: {
+                            '0%': {
+                                transform: 'translateY(30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateY(0)',
+                                opacity: '1'
+                            },
+                        },
+                        slideInLeft: {
+                            '0%': {
+                                transform: 'translateX(-30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
+                        },
+                        slideInRight: {
+                            '0%': {
+                                transform: 'translateX(30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
+                        },
+                        float: {
+                            '0%, 100%': {
+                                transform: 'translateY(0px)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-20px)'
+                            },
+                        },
                         glow: {
-                            '0%': { boxShadow: '0 0 5px #ff0037, 0 0 10px #ff0037, 0 0 15px #ff0037' },
-                            '100%': { boxShadow: '0 0 10px #ff0037, 0 0 20px #ff0037, 0 0 30px #ff0037' }
-                        }
+                            '0%': {
+                                boxShadow: '0 0 5px #ff0037, 0 0 10px #ff0037, 0 0 15px #ff0037'
+                            },
+                            '100%': {
+                                boxShadow: '0 0 10px #ff0037, 0 0 20px #ff0037, 0 0 30px #ff0037'
+                            },
+                        },
                     }
                 }
             }
         }
     </script>
-    
+
     <style>
         :root {
             --rog-dark: #000000;
@@ -61,10 +117,18 @@
             --rog-purple: #8b5cf6;
             --rog-gray: #333333;
         }
-        
-        .font-rog-display { font-family: 'Orbitron', monospace; }
-        .font-rog-heading { font-family: 'Exo 2', sans-serif; }
-        .font-rog-body { font-family: 'Roboto', sans-serif; }
+
+        .font-rog-display {
+            font-family: 'Orbitron', monospace;
+        }
+
+        .font-rog-heading {
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        .font-rog-body {
+            font-family: 'Roboto', sans-serif;
+        }
 
         .rog-button {
             background: linear-gradient(135deg, #ff0037 0%, #ff6b35 50%, #00d4ff 100%);
@@ -84,7 +148,7 @@
             background: linear-gradient(135deg, #000000 0%, #1a1a1a 30%, #333333 70%, #000000 100%);
             position: relative;
         }
-        
+
         .hero-gradient::before {
             content: '';
             position: absolute;
@@ -93,7 +157,7 @@
             right: 0;
             bottom: 0;
             background: radial-gradient(circle at 30% 20%, rgba(255, 0, 55, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 70% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
             pointer-events: none;
         }
 
@@ -103,16 +167,30 @@
             border: 1px solid rgba(255, 0, 55, 0.3);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        
+
         .glow {
             text-shadow: 0 0 10px rgba(255, 0, 55, 0.5);
         }
-        
-        .bg-rog-dark { background-color: var(--rog-dark); }
-        .bg-rog-light { background-color: var(--rog-light); }
-        .text-rog-red { color: var(--rog-red); }
-        .text-rog-gold { color: var(--rog-gold); }
-        .border-rog-red { border-color: var(--rog-red); }
+
+        .bg-rog-dark {
+            background-color: var(--rog-dark);
+        }
+
+        .bg-rog-light {
+            background-color: var(--rog-light);
+        }
+
+        .text-rog-red {
+            color: var(--rog-red);
+        }
+
+        .text-rog-gold {
+            color: var(--rog-gold);
+        }
+
+        .border-rog-red {
+            border-color: var(--rog-red);
+        }
     </style>
 </head>
 
@@ -126,7 +204,7 @@
                     <a href="index.html" class="hover:opacity-80 transition-opacity duration-200">
                         <img src="public/logo.png" alt="Otomono Logo" class="h-8 w-auto" />
                     </a>
-            </div>
+                </div>
 
                 <!-- Back to Site Button -->
                 <div class="flex items-center space-x-4">
@@ -147,50 +225,33 @@
                     <div class="mx-auto h-16 w-16 bg-rog-red/20 rounded-full flex items-center justify-center mb-4">
                         <svg class="h-8 w-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
+                        </svg>
                     </div>
                     <h2 class="text-3xl font-rog-display font-bold text-white glow">Admin Login</h2>
                     <p class="mt-2 text-sm text-gray-400 font-rog-body">Staff and admin access only</p>
-            </div>
+                </div>
 
                 <form id="admin-login-form" class="space-y-6">
                     <div>
                         <label for="admin-email" class="block text-sm font-rog-heading font-medium text-rog-red mb-2">
                             Email Address
                         </label>
-                        <input 
-                            id="admin-email" 
-                            name="email" 
-                            type="email" 
-                            required 
-                            class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-rog-red focus:border-rog-red text-white placeholder-gray-400 font-rog-body transition-all duration-300"
-                            placeholder="admin@otomono.com"
-                        >
-            </div>
+                        <input id="admin-email" name="email" type="email" required class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-rog-red focus:border-rog-red text-white placeholder-gray-400 font-rog-body transition-all duration-300" placeholder="admin@otomono.com">
+                    </div>
 
                     <div>
                         <label for="admin-password" class="block text-sm font-rog-heading font-medium text-rog-red mb-2">
                             Password
                         </label>
-                        <input 
-                            id="admin-password" 
-                            name="password" 
-                            type="password" 
-                            required 
-                            class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-rog-red focus:border-rog-red text-white placeholder-gray-400 font-rog-body transition-all duration-300"
-                            placeholder="Enter your password"
-                        >
-            </div>
+                        <input id="admin-password" name="password" type="password" required class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-rog-red focus:border-rog-red text-white placeholder-gray-400 font-rog-body transition-all duration-300" placeholder="Enter your password">
+                    </div>
 
                     <div>
-                        <button 
-                            type="submit" 
-                            class="w-full rog-button py-3 px-6 rounded-lg font-rog-heading font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-                        >
+                        <button type="submit" class="w-full rog-button py-3 px-6 rounded-lg font-rog-heading font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl">
                             <i class="fas fa-sign-in-alt mr-2"></i>
                             Login to Admin Panel
                         </button>
-            </div>
+                    </div>
                 </form>
 
                 <!-- Admin Credentials Info -->
@@ -200,10 +261,10 @@
                         <div>• admin@otomono.com / admin123</div>
                         <div>• staff@otomono.com / staff123</div>
                         <div>• miicrossoft@gmail.com / admin123</div>
-            </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
     </main>
 
     <!-- Footer -->
@@ -218,8 +279,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Admin login page loaded');
-            
-        const adminLoginForm = document.getElementById('admin-login-form');
+
+            const adminLoginForm = document.getElementById('admin-login-form');
             const emailInput = document.getElementById('admin-email');
             const passwordInput = document.getElementById('admin-password');
 
@@ -236,17 +297,28 @@
                     console.log('Admin login attempt:', email);
 
                     // Simple admin credentials check
-                    const validAdmins = [
-                        { email: 'admin@otomono.com', password: 'admin123', name: 'Admin User' },
-                        { email: 'staff@otomono.com', password: 'staff123', name: 'Staff User' },
-                        { email: 'miicrossoft@gmail.com', password: 'admin123', name: 'Admin User' }
+                    const validAdmins = [{
+                            email: 'admin@otomono.com',
+                            password: 'admin123',
+                            name: 'Admin User'
+                        },
+                        {
+                            email: 'staff@otomono.com',
+                            password: 'staff123',
+                            name: 'Staff User'
+                        },
+                        {
+                            email: 'miicrossoft@gmail.com',
+                            password: 'admin123',
+                            name: 'Admin User'
+                        }
                     ];
 
                     const admin = validAdmins.find(a => a.email === email && a.password === password);
 
                     if (admin) {
                         console.log('Admin authentication successful:', admin);
-                        
+
                         // Store admin session
                         localStorage.setItem('adminUser', JSON.stringify({
                             id: 'admin_' + Date.now(),
@@ -268,13 +340,13 @@
                         }, 1500);
                     } else {
                         console.log('Admin authentication failed');
-                        
+
                         // Show error message
                         const submitBtn = adminLoginForm.querySelector('button[type="submit"]');
                         const originalText = submitBtn.innerHTML;
                         submitBtn.innerHTML = '<i class="fas fa-times mr-2"></i>Invalid Credentials';
                         submitBtn.classList.add('bg-red-600');
-                        
+
                         setTimeout(() => {
                             submitBtn.innerHTML = originalText;
                             submitBtn.classList.remove('bg-red-600');
@@ -292,4 +364,5 @@
         });
     </script>
 </body>
+
 </html>

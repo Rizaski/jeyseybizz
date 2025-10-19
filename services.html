@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services - Otomono Jerseys</title>
+    <meta name="description" content="Professional jersey design and printing services. Custom team uniforms, sportswear, and premium quality jerseys with fast delivery.">
+
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="public/favicon.png">
     <link rel="apple-touch-icon" href="public/favicon.png">
 
@@ -15,6 +18,8 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -93,10 +98,10 @@
                         },
                         glow: {
                             '0%': {
-                                boxShadow: '0 0 20px rgba(255, 0, 55, 0.5)'
+                                boxShadow: '0 0 5px #ff0037, 0 0 10px #ff0037, 0 0 15px #ff0037'
                             },
                             '100%': {
-                                boxShadow: '0 0 30px rgba(255, 0, 55, 0.8)'
+                                boxShadow: '0 0 10px #ff0037, 0 0 20px #ff0037, 0 0 30px #ff0037'
                             },
                         },
                     },
@@ -697,9 +702,9 @@
         // Mobile menu functionality - FIXED VERSION
         document.addEventListener('DOMContentLoaded', function() {
             function setupMobileMenu() {
-                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-                const mobileMenu = document.getElementById('mobile-menu');
-                const mobileMenuClose = document.getElementById('mobile-menu-close');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
 
                 console.log('Mobile menu elements:', {
                     button: mobileMenuBtn,
@@ -717,53 +722,53 @@
                     }
                 }
 
-                // Open mobile menu
-                if (mobileMenuBtn) {
-                    mobileMenuBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Mobile menu button clicked');
-
-                        if (mobileMenu) {
-                            mobileMenu.classList.remove('hidden');
-                            document.body.style.overflow = 'hidden';
-                            console.log('Mobile menu opened');
-                        } else {
-                            console.error('Mobile menu element not found');
-                        }
-                    });
+            // Open mobile menu
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Mobile menu button clicked');
+                    
+                    if (mobileMenu) {
+                        mobileMenu.classList.remove('hidden');
+                        document.body.style.overflow = 'hidden';
+                        console.log('Mobile menu opened');
+                    } else {
+                        console.error('Mobile menu element not found');
+                    }
+                });
                 } else {
                     console.error('Mobile menu button not found');
-                }
+            }
 
-                // Close mobile menu
-                if (mobileMenuClose) {
-                    mobileMenuClose.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        closeMobileMenu();
-                    });
-                }
+            // Close mobile menu
+            if (mobileMenuClose) {
+                mobileMenuClose.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMobileMenu();
+                });
+            }
 
                 // Close menu when clicking outside
                 if (mobileMenu) {
                     mobileMenu.addEventListener('click', function(e) {
                         if (e.target === mobileMenu) {
-                            closeMobileMenu();
-                        }
-                    });
+                        closeMobileMenu();
+                    }
+                });
 
                     // Close menu when clicking on navigation links
                     mobileMenu.querySelectorAll('nav a').forEach(link => {
                         link.addEventListener('click', closeMobileMenu);
                     });
-                }
+            }
 
-                // Add keyboard support for mobile menu
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
-                        closeMobileMenu();
-                    }
+            // Add keyboard support for mobile menu
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                    closeMobileMenu();
+                }
                 });
             }
 
@@ -774,58 +779,58 @@
         // Authentication functionality
         // Authentication check with persistent session
         document.addEventListener('DOMContentLoaded', async function() {
-            try {
-                // Wait for Firebase to initialize and restore auth state
-                await new Promise(resolve => {
-                    const checkAuth = () => {
-                        if (window.FirebaseAuth && window.FirebaseAuth.getCurrentUser) {
-                            resolve();
-                        } else {
-                            setTimeout(checkAuth, 100);
-                        }
-                    };
-                    checkAuth();
-                });
+                try {
+                    // Wait for Firebase to initialize and restore auth state
+                    await new Promise(resolve => {
+                        const checkAuth = () => {
+                            if (window.FirebaseAuth && window.FirebaseAuth.getCurrentUser) {
+                                resolve();
+                            } else {
+                                setTimeout(checkAuth, 100);
+                            }
+                        };
+                        checkAuth();
+                    });
 
-                // Wait a bit for authentication to be processed
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                    // Wait a bit for authentication to be processed
+                    await new Promise(resolve => setTimeout(resolve, 1000));
 
-                // Check localStorage first
-                const storedUser = localStorage.getItem('user');
-                console.log('Stored user data:', storedUser);
+                    // Check localStorage first
+                    const storedUser = localStorage.getItem('user');
+                    console.log('Stored user data:', storedUser);
 
-                // Restore authentication state (persistent login)
-                const user = await window.FirebaseAuth.restoreAuthState();
-                console.log('Restored user:', user);
+                    // Restore authentication state (persistent login)
+                    const user = await window.FirebaseAuth.restoreAuthState();
+                    console.log('Restored user:', user);
 
-                if (user) {
-                    console.log('User authenticated:', user.email);
-                    console.log('User photoURL:', user.photoURL);
-                    console.log('User displayName:', user.displayName);
+                    if (user) {
+                        console.log('User authenticated:', user.email);
+                        console.log('User photoURL:', user.photoURL);
+                        console.log('User displayName:', user.displayName);
 
-                    // Update user information in header
-                    console.log('Updating user info in services page...');
-                    updateUserInfo(user);
-                } else {
-                    console.log('No authenticated user, showing login button');
-                }
-
-                // Track page visit
-                if (window.FirebaseDB && window.FirebaseAuth) {
-                    try {
-                        const currentUser = window.FirebaseAuth.getCurrentUser();
-                        const userId = currentUser ? currentUser.uid : 'anonymous';
-                        await window.FirebaseDB.trackUserAction(userId, 'page_visit', {
-                            page: 'services',
-                            url: window.location.href,
-                            timestamp: new Date().toISOString()
-                        });
-                    } catch (error) {
-                        console.error('Error tracking page visit:', error);
+                        // Update user information in header
+                        console.log('Updating user info in services page...');
+                        updateUserInfo(user);
+                    } else {
+                        console.log('No authenticated user, showing login button');
                     }
-                }
 
-            } catch (error) {
+                    // Track page visit
+                    if (window.FirebaseDB && window.FirebaseAuth) {
+                        try {
+                            const currentUser = window.FirebaseAuth.getCurrentUser();
+                        const userId = currentUser ? currentUser.uid : 'anonymous';
+                            await window.FirebaseDB.trackUserAction(userId, 'page_visit', {
+                                page: 'services',
+                                url: window.location.href,
+                                timestamp: new Date().toISOString()
+                            });
+                        } catch (error) {
+                            console.error('Error tracking page visit:', error);
+                        }
+                    }
+
+                    } catch (error) {
                 console.error('Error initializing services page:', error);
             }
         });
