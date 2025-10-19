@@ -127,8 +127,6 @@
     <script src="js/firebase-config.js"></script>
     <script src="js/firebase-auth-wrapper.js"></script>
 
-    <!-- Global Login Handler - Force redirect to login page -->
-    <script src="js/global-login.js"></script>
 
     <!-- Universal Authentication Handler -->
     <script src="js/universal-auth.js"></script>
@@ -196,17 +194,6 @@
     <!-- GMAIL USER INFO FIX -->
     <script src="js/GMAIL-USER-INFO-FIX.js"></script>
     
-    <!-- REDESIGNED GMAIL LOGIN -->
-    <script src="js/REDESIGNED-GMAIL-LOGIN.js"></script>
-    
-    <!-- REDESIGNED GMAIL LOGIN CSS -->
-    <script src="js/REDESIGNED-GMAIL-LOGIN-CSS.js"></script>
-    
-    <!-- BULLETPROOF GMAIL LOGIN -->
-    <script src="js/BULLETPROOF-GMAIL-LOGIN.js"></script>
-    
-    <!-- BULLETPROOF GMAIL LOGIN CSS -->
-    <script src="js/BULLETPROOF-GMAIL-LOGIN-CSS.js"></script>
     
     <!-- STOP CONSTANT LOADING -->
     <script src="js/STOP-CONSTANT-LOADING.js"></script>
@@ -245,15 +232,6 @@
 
                 <!-- User Actions -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <!-- Login Button (shown when not logged in) -->
-                    <button id="login-btn" class="relative group p-3 rounded-lg bg-rog-light/20 backdrop-blur-sm border border-rog-red/30 hover:bg-rog-red/20 transition-all duration-300 hover:border-rog-red">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-rog-dark text-rog-red text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red">
-                            Login
-                        </div>
-                    </button>
 
                     <!-- User Profile Icon with Dropdown (shown when logged in) -->
                     <div class="relative group">
@@ -330,12 +308,6 @@
 
                     <!-- Mobile Action Buttons -->
                     <div class="mt-8 pt-8 border-t border-rog-red/30 space-y-4">
-                        <button id="mobile-login-btn" class="w-full flex items-center justify-center px-4 py-3 bg-rog-light/20 backdrop-blur-sm rounded-lg hover:bg-rog-red/20 transition-all duration-300 border border-rog-red/30 hover:border-rog-red">
-                            <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                            <span class="text-white font-rog-heading font-medium">Login</span>
-                        </button>
 
                     </div>
                 </nav>
@@ -795,33 +767,6 @@
                         }
                     }
 
-                    // Unified Login functionality - Redirect to unified login page
-                    const loginBtn = document.getElementById('login-btn');
-                    if (loginBtn) {
-                        console.log('Services page: Login button found, adding event listener');
-                        loginBtn.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            console.log('Services page: Login button clicked, redirecting to login.html');
-                            // Redirect to unified login page
-                            window.location.href = 'login.html';
-                        });
-                    } else {
-                        console.error('Services page: Login button not found!');
-                    }
-
-                    // Mobile Login - Redirect to unified login page
-                    const mobileLoginBtn = document.getElementById('mobile-login-btn');
-                    if (mobileLoginBtn) {
-                        console.log('Services page: Mobile login button found, adding event listener');
-                        mobileLoginBtn.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            console.log('Services page: Mobile login button clicked, redirecting to login.html');
-                            // Redirect to unified login page
-                            window.location.href = 'login.html';
-                        });
-                    } else {
-                        console.error('Services page: Mobile login button not found!');
-                    }
                 } catch (error) {
                     console.error('Error initializing services page:', error);
                 }
