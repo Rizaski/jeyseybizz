@@ -247,8 +247,15 @@
 
                 <!-- User Actions -->
                 <div class="hidden md:flex items-center space-x-4">
-
-
+                    <!-- Admin Panel Button -->
+                    <button id="admin-panel-btn" class="relative group p-3 rounded-lg bg-rog-light/20 backdrop-blur-sm border border-rog-red/30 hover:bg-rog-red/20 transition-all duration-300 hover:border-rog-red">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-rog-dark text-rog-red text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red">
+                            Admin Panel
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>
@@ -283,6 +290,13 @@
 
                     <!-- Mobile Action Buttons -->
                     <div class="mt-8 pt-8 border-t border-rog-red/30 space-y-4">
+                        <!-- Mobile Admin Panel Button -->
+                        <button id="mobile-admin-panel-btn" class="w-full flex items-center justify-center px-4 py-3 bg-rog-light/20 backdrop-blur-sm rounded-lg hover:bg-rog-red/20 transition-all duration-300 border border-rog-red/30 hover:border-rog-red">
+                            <svg class="w-5 h-5 text-rog-red mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                            <span class="text-white font-rog-heading font-medium">Admin Panel</span>
+                        </button>
 
                         <!-- Mobile Chat Button -->
                         <button id="mobile-chat-btn" class="w-full flex items-center justify-center px-4 py-3 bg-rog-light/20 backdrop-blur-sm rounded-lg hover:bg-rog-red/20 transition-all duration-300 border border-rog-red/30 hover:border-rog-red">
@@ -588,60 +602,138 @@
         </div>
     </div>
 
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-rog-dark rounded-2xl shadow-2xl w-full max-w-md p-6 border border-rog-red/30">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-rog-display font-bold text-white glow">Admin Login</h3>
+                    <button id="close-admin-login" class="text-gray-400 hover:text-rog-red transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <form id="admin-login-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Email</label>
+                        <input type="email" id="admin-email" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-rog-red focus:border-rog-red text-white placeholder-gray-400 font-rog-body" placeholder="admin@otomono.com" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Password</label>
+                        <input type="password" id="admin-password" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-rog-red focus:border-rog-red text-white placeholder-gray-400 font-rog-body" placeholder="Enter password" required>
+                    </div>
+                    <button type="submit" class="w-full rog-button py-3 px-6 rounded-lg font-rog-heading font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl">
+                        Login to Admin Panel
+                    </button>
+                </form>
+                <p class="text-sm text-gray-400 font-rog-body mt-4 text-center">
+                    Staff and admin access only
+                </p>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Simple page initialization
         document.addEventListener('DOMContentLoaded', function() {
-            try {
-                // Wait for Firebase to initialize and restore auth state
-                await new Promise(resolve => {
-                    const checkAuth = () => {
-                        if (window.FirebaseAuth && window.FirebaseAuth.getCurrentUser) {
-                            resolve();
-                        } else {
-                            setTimeout(checkAuth, 100);
-                        }
-                    };
-                    checkAuth();
+            console.log('Index page loaded successfully');
+            
+            // Admin Panel functionality
+            const adminPanelBtn = document.getElementById('admin-panel-btn');
+            const mobileAdminPanelBtn = document.getElementById('mobile-admin-panel-btn');
+            const adminLoginModal = document.getElementById('admin-login-modal');
+            const closeAdminLogin = document.getElementById('close-admin-login');
+            const adminLoginForm = document.getElementById('admin-login-form');
+
+            // Open admin login modal
+            if (adminPanelBtn && adminLoginModal) {
+                adminPanelBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Admin panel button clicked');
+                    adminLoginModal.classList.remove('hidden');
                 });
+            }
 
-                // Wait a bit for authentication to be processed
-                await new Promise(resolve => setTimeout(resolve, 1000));
+            if (mobileAdminPanelBtn && adminLoginModal) {
+                mobileAdminPanelBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Mobile admin panel button clicked');
+                    adminLoginModal.classList.remove('hidden');
+                });
+            }
 
-                // Check localStorage first
-                const storedUser = localStorage.getItem('user');
-                console.log('Stored user data:', storedUser);
+            // Close admin login modal
+            if (closeAdminLogin && adminLoginModal) {
+                closeAdminLogin.addEventListener('click', () => {
+                    adminLoginModal.classList.add('hidden');
+                });
+            }
 
-                // Restore authentication state (persistent login)
-                const user = await window.FirebaseAuth.restoreAuthState();
-                console.log('Restored user:', user);
-
-                if (user) {
-                    console.log('User authenticated:', user.email);
-                    console.log('User photoURL:', user.photoURL);
-                    console.log('User displayName:', user.displayName);
-
-                    // Update user information in header
-                    console.log('Updating user info in index page...');
-                    updateUserInfo(user);
-                } else {
-                    console.log('No authenticated user, showing login button');
-                }
-
-                // Track page visit
-                if (window.FirebaseDB && window.FirebaseAuth) {
-                    try {
-                        const currentUser = window.FirebaseAuth.getCurrentUser();
-                        const userId = currentUser ? .uid || 'anonymous';
-                        await window.FirebaseDB.trackUserAction(userId, 'page_visit', {
-                            page: 'index',
-                            url: window.location.href,
-                            timestamp: new Date().toISOString()
-                        });
-                    } catch (error) {
-                        console.error('Error tracking page visit:', error);
+            // Close modal when clicking outside
+            if (adminLoginModal) {
+                adminLoginModal.addEventListener('click', (e) => {
+                    if (e.target === adminLoginModal) {
+                        adminLoginModal.classList.add('hidden');
                     }
-                }
+                });
+            }
+
+            // Admin login form submission
+            if (adminLoginForm) {
+                adminLoginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('admin-email').value;
+                    const password = document.getElementById('admin-password').value;
+
+                    console.log('Admin login attempt:', email);
+
+                    // Simple admin credentials check
+                    const validAdmins = [
+                        { email: 'admin@otomono.com', password: 'admin123', name: 'Admin User' },
+                        { email: 'staff@otomono.com', password: 'staff123', name: 'Staff User' },
+                        { email: 'miicrossoft@gmail.com', password: 'admin123', name: 'Admin User' }
+                    ];
+
+                    const admin = validAdmins.find(a => a.email === email && a.password === password);
+
+                    if (admin) {
+                        console.log('Admin authentication successful:', admin);
+                        
+                        // Store admin session
+                        localStorage.setItem('adminUser', JSON.stringify({
+                            id: 'admin_' + Date.now(),
+                            email: admin.email,
+                            name: admin.name,
+                            userType: 'admin',
+                            loginTime: new Date().toISOString()
+                        }));
+
+                        // Show success message
+                        const submitBtn = adminLoginForm.querySelector('button[type="submit"]');
+                        const originalText = submitBtn.textContent;
+                        submitBtn.textContent = 'Login Successful!';
+                        submitBtn.classList.add('bg-green-600');
+                        
+                        setTimeout(() => {
+                            window.location.href = 'admin-panel.html';
+                        }, 1500);
+                    } else {
+                        console.log('Admin authentication failed');
+                        
+                        // Show error message
+                        const submitBtn = adminLoginForm.querySelector('button[type="submit"]');
+                        const originalText = submitBtn.textContent;
+                        submitBtn.textContent = 'Invalid Credentials';
+                        submitBtn.classList.add('bg-red-600');
+                        
+                        setTimeout(() => {
+                            submitBtn.textContent = originalText;
+                            submitBtn.classList.remove('bg-red-600');
+                        }, 2000);
+                    }
+                });
+            }
                 // Mobile menu functionality
                 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
                 const mobileMenu = document.getElementById('mobile-menu');
