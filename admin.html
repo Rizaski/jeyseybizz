@@ -3171,8 +3171,6 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                 const orderData = {
                     customer: document.getElementById('orderCustomer').value,
                     email: document.getElementById('orderEmail').value,
-                    phone: document.getElementById('orderPhone').value,
-                    product: document.getElementById('orderProduct').value,
                     material: document.getElementById('orderMaterial').value,
                     quantity: parseInt(document.getElementById('orderQuantity').value),
                     amount: parseFloat(document.getElementById('orderAmount').value),
@@ -3675,21 +3673,19 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
 
             // Set current edit ID
             currentEditId = orderId;
-
+            
             // Update modal title
             document.getElementById('orderModalTitle').textContent = 'Edit Order';
-
-            // Populate form fields with existing order data
+            
+            // Populate form fields with existing order data (only fields that exist in the form)
             document.getElementById('orderCustomer').value = order.customer || '';
             document.getElementById('orderEmail').value = order.email || '';
-            document.getElementById('orderPhone').value = order.phone || '';
-            document.getElementById('orderProduct').value = order.product || '';
             document.getElementById('orderMaterial').value = order.material || '';
             document.getElementById('orderQuantity').value = order.quantity || '';
             document.getElementById('orderAmount').value = order.amount || '';
             document.getElementById('orderStatus').value = order.status || '';
             document.getElementById('orderNotes').value = order.notes || '';
-
+            
             // Show the modal
             document.getElementById('orderModal').classList.remove('hidden');
         }
@@ -4589,16 +4585,6 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                         <div>
                             <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Customer Email</label>
                             <input type="email" id="orderEmail" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter customer email" required>
-                        </div>
-                    </div>
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Customer Phone</label>
-                            <input type="tel" id="orderPhone" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter customer phone">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Product</label>
-                            <input type="text" id="orderProduct" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter product name">
                         </div>
                     </div>
                     <div class="grid md:grid-cols-2 gap-4">
