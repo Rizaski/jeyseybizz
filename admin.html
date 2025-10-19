@@ -434,13 +434,13 @@
                             <i class="fas fa-shopping-cart text-white"></i>
                         </div>
                         <div class="text-right">
-                            <p class="text-2xl font-rog-display font-bold text-white">156</p>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="dashboard-total-orders">0</p>
                             <p class="text-sm text-gray-400 font-rog-body">Total Orders</p>
                         </div>
                     </div>
                     <div class="flex items-center text-sm">
                         <i class="fas fa-arrow-up text-green-400 mr-1"></i>
-                        <span class="text-green-400 font-rog-body">+12% from last month</span>
+                        <span class="text-green-400 font-rog-body" id="dashboard-orders-growth">+0% from last month</span>
                     </div>
                 </div>
 
@@ -451,13 +451,13 @@
                             <i class="fas fa-users text-white"></i>
                         </div>
                         <div class="text-right">
-                            <p class="text-2xl font-rog-display font-bold text-white">89</p>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="dashboard-active-customers">0</p>
                             <p class="text-sm text-gray-400 font-rog-body">Active Customers</p>
                         </div>
                     </div>
                     <div class="flex items-center text-sm">
                         <i class="fas fa-arrow-up text-green-400 mr-1"></i>
-                        <span class="text-green-400 font-rog-body">+8% from last month</span>
+                        <span class="text-green-400 font-rog-body" id="dashboard-customers-growth">+0% from last month</span>
                     </div>
                 </div>
 
@@ -468,13 +468,13 @@
                             <i class="fas fa-clock text-white"></i>
                         </div>
                         <div class="text-right">
-                            <p class="text-2xl font-rog-display font-bold text-white">23</p>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="dashboard-pending-orders">0</p>
                             <p class="text-sm text-gray-400 font-rog-body">Pending Orders</p>
                         </div>
                     </div>
                     <div class="flex items-center text-sm">
                         <i class="fas fa-arrow-down text-red-400 mr-1"></i>
-                        <span class="text-red-400 font-rog-body">-3 from yesterday</span>
+                        <span class="text-red-400 font-rog-body" id="dashboard-pending-change">-0 from yesterday</span>
                     </div>
                 </div>
 
@@ -485,13 +485,13 @@
                             <i class="fas fa-check-circle text-white"></i>
                         </div>
                         <div class="text-right">
-                            <p class="text-2xl font-rog-display font-bold text-white">133</p>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="dashboard-completed-orders">0</p>
                             <p class="text-sm text-gray-400 font-rog-body">Completed Orders</p>
                         </div>
                     </div>
                     <div class="flex items-center text-sm">
                         <i class="fas fa-arrow-up text-green-400 mr-1"></i>
-                        <span class="text-green-400 font-rog-body">+15 from yesterday</span>
+                        <span class="text-green-400 font-rog-body" id="dashboard-completed-change">+0 from yesterday</span>
                     </div>
                 </div>
             </div>
@@ -516,37 +516,8 @@
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Date</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr class="border-b border-rog-gray/50">
-                                <td class="py-3 px-4 font-rog-body text-gray-300">#ORD-001</td>
-                                <td class="py-3 px-4 font-rog-body text-gray-300">Ahmed Ali</td>
-                                <td class="py-3 px-4 font-rog-body text-gray-300">Custom Jersey</td>
-                                <td class="py-3 px-4">
-                                    <span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-xs font-rog-body">Pending</span>
-                                </td>
-                                <td class="py-3 px-4 font-rog-body text-gray-300">$45.00</td>
-                                <td class="py-3 px-4 font-rog-body text-gray-300">2024-01-15</td>
-                            </tr>
-                            <tr class="border-b border-rog-gray/50">
-                                <td class="py-3 px-4 font-rog-body text-gray-300">#ORD-002</td>
-                                <td class="py-3 px-4 font-rog-body text-gray-300">Fatima Hassan</td>
-                                <td class="py-3 px-4 font-rog-body text-gray-300">Team Jersey Set</td>
-                                <td class="py-3 px-4">
-                                    <span class="px-2 py-1 bg-green-500/20 text-green-400 rounded-full text-xs font-rog-body">Completed</span>
-                                </td>
-                                <td class="py-3 px-4 font-rog-body text-gray-300">$180.00</td>
-                                <td class="py-3 px-4 font-rog-body text-gray-300">2024-01-14</td>
-                            </tr>
-                            <tr class="border-b border-rog-gray/50">
-                                <td class="py-3 px-4 font-rog-body text-gray-300">#ORD-003</td>
-                                <td class="py-3 px-4 font-rog-body text-gray-300">Mohamed Ibrahim</td>
-                                <td class="py-3 px-4 font-rog-body text-gray-300">Sports Jersey</td>
-                                <td class="py-3 px-4">
-                                    <span class="px-2 py-1 bg-blue-500/20 text-blue-400 rounded-full text-xs font-rog-body">Processing</span>
-                                </td>
-                                <td class="py-3 px-4 font-rog-body text-gray-300">$65.00</td>
-                                <td class="py-3 px-4 font-rog-body text-gray-300">2024-01-13</td>
-                            </tr>
+                        <tbody id="recent-orders-table-body">
+                            <!-- Recent orders will be populated dynamically -->
                         </tbody>
                     </table>
                 </div>
@@ -1058,6 +1029,32 @@
         let ordersData = [];
         let customersData = [];
         let productsData = [];
+        let currentEditId = null;
+
+        // Firebase imports
+        let collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, where, onSnapshot;
+
+        // Initialize Firebase imports
+        async function initializeFirebase() {
+            try {
+                const { getFirestore, collection: col, getDocs: getDocsFn, addDoc: addDocFn, updateDoc: updateDocFn, deleteDoc: deleteDocFn, doc: docFn, query: queryFn, orderBy: orderByFn, where: whereFn, onSnapshot: onSnapshotFn } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                
+                collection = col;
+                getDocs = getDocsFn;
+                addDoc = addDocFn;
+                updateDoc = updateDocFn;
+                deleteDoc = deleteDocFn;
+                doc = docFn;
+                query = queryFn;
+                orderBy = orderByFn;
+                where = whereFn;
+                onSnapshot = onSnapshotFn;
+                
+                console.log('Firebase Firestore imported successfully');
+            } catch (error) {
+                console.error('Error importing Firebase Firestore:', error);
+            }
+        }
 
         // Mobile sidebar functionality
         function setupMobileSidebar() {
@@ -1105,7 +1102,7 @@
         // Navigation functionality
         function setupNavigation() {
             const navLinks = document.querySelectorAll('nav a[href^="#"]');
-            
+
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -1128,7 +1125,7 @@
             if (targetSection) {
                 targetSection.classList.remove('hidden');
                 currentPage = pageId;
-                
+
                 // Load data for the page
                 loadPageData(pageId);
             }
@@ -1165,12 +1162,95 @@
         async function loadDashboardData() {
             try {
                 console.log('Loading dashboard data...');
-                // Load recent orders, stats, etc.
                 await loadRecentOrders();
                 await loadDashboardStats();
             } catch (error) {
                 console.error('Error loading dashboard data:', error);
             }
+        }
+
+        async function loadRecentOrders() {
+            try {
+                if (window.firebaseDb && collection) {
+                    const ordersRef = collection(window.firebaseDb, 'orders');
+                    const q = query(ordersRef, orderBy('createdAt', 'desc'));
+                    const ordersSnapshot = await getDocs(q);
+                    const recentOrders = ordersSnapshot.docs.slice(0, 5).map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+                    renderRecentOrdersTable(recentOrders);
+                } else {
+                    renderRecentOrdersTable([]);
+                }
+            } catch (error) {
+                console.error('Error loading recent orders:', error);
+                renderRecentOrdersTable([]);
+            }
+        }
+
+        async function loadDashboardStats() {
+            try {
+                if (window.firebaseDb && collection) {
+                    // Load orders for stats
+                    const ordersRef = collection(window.firebaseDb, 'orders');
+                    const ordersSnapshot = await getDocs(ordersRef);
+                    const orders = ordersSnapshot.docs.map(doc => doc.data());
+                    
+                    // Load customers for stats
+                    const customersRef = collection(window.firebaseDb, 'customers');
+                    const customersSnapshot = await getDocs(customersRef);
+                    const customers = customersSnapshot.docs.map(doc => doc.data());
+                    
+                    updateDashboardStats(orders, customers);
+                } else {
+                    updateDashboardStats([], []);
+                }
+            } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+                updateDashboardStats([], []);
+            }
+        }
+
+        function updateDashboardStats(orders, customers) {
+            const totalOrders = orders.length;
+            const activeCustomers = customers.filter(c => c.status === 'active').length;
+            const pendingOrders = orders.filter(o => o.status === 'pending').length;
+            const completedOrders = orders.filter(o => o.status === 'completed').length;
+            
+            // Update dashboard stats
+            const totalOrdersEl = document.getElementById('dashboard-total-orders');
+            const activeCustomersEl = document.getElementById('dashboard-active-customers');
+            const pendingOrdersEl = document.getElementById('dashboard-pending-orders');
+            const completedOrdersEl = document.getElementById('dashboard-completed-orders');
+            
+            if (totalOrdersEl) totalOrdersEl.textContent = totalOrders;
+            if (activeCustomersEl) activeCustomersEl.textContent = activeCustomers;
+            if (pendingOrdersEl) pendingOrdersEl.textContent = pendingOrders;
+            if (completedOrdersEl) completedOrdersEl.textContent = completedOrders;
+        }
+
+        function renderRecentOrdersTable(orders) {
+            const tbody = document.getElementById('recent-orders-table-body');
+            if (!tbody) return;
+
+            if (orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-gray-400 font-rog-body">No recent orders</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = orders.map(order => `
+                <tr class="border-b border-rog-gray/50">
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.id || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.customer || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.product || 'N/A'}</td>
+                    <td class="py-3 px-4">
+                        <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status || 'N/A'}</span>
+                    </td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">$${order.amount || '0.00'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.date || 'N/A'}</td>
+                </tr>
+            `).join('');
         }
 
         async function loadOrdersData() {
@@ -1185,25 +1265,7 @@
                     }));
                     renderOrdersTable();
                 } else {
-                    // Fallback data
-                    ordersData = [
-                        {
-                            id: 'ORD-001',
-                            customer: 'Ahmed Ali',
-                            product: 'Custom Jersey',
-                            status: 'pending',
-                            amount: 45.00,
-                            date: '2024-01-15'
-                        },
-                        {
-                            id: 'ORD-002',
-                            customer: 'Fatima Hassan',
-                            product: 'Team Jersey Set',
-                            status: 'completed',
-                            amount: 180.00,
-                            date: '2024-01-14'
-                        }
-                    ];
+                    ordersData = [];
                     renderOrdersTable();
                 }
             } catch (error) {
@@ -1224,18 +1286,7 @@
                     renderCustomersTable();
                     updateCustomerStats();
                 } else {
-                    // Fallback data
-                    customersData = [
-                        {
-                            id: 'CUST-001',
-                            name: 'Ahmed Ali',
-                            email: 'ahmed@example.com',
-                            phone: '+960 123-4567',
-                            orders: 3,
-                            status: 'active',
-                            joined: '2024-01-01'
-                        }
-                    ];
+                    customersData = [];
                     renderCustomersTable();
                     updateCustomerStats();
                 }
@@ -1257,17 +1308,7 @@
                     renderProductsTable();
                     updateProductStats();
                 } else {
-                    // Fallback data
-                    productsData = [
-                        {
-                            id: 'PROD-001',
-                            name: 'Custom Jersey',
-                            category: 'Sports',
-                            price: 45.00,
-                            stock: 50,
-                            status: 'active'
-                        }
-                    ];
+                    productsData = [];
                     renderProductsTable();
                     updateProductStats();
                 }
@@ -1308,16 +1349,21 @@
             const tbody = document.getElementById('orders-table-body');
             if (!tbody) return;
 
+            if (ordersData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="py-8 text-center text-gray-400 font-rog-body">No orders found</td></tr>';
+                return;
+            }
+
             tbody.innerHTML = ordersData.map(order => `
                 <tr class="border-b border-rog-gray/50">
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.id}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.customer}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.product}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.id || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.customer || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.product || 'N/A'}</td>
                     <td class="py-3 px-4">
-                        <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status}</span>
+                        <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status || 'N/A'}</span>
                     </td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">$${order.amount}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.date}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">$${order.amount || '0.00'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.date || 'N/A'}</td>
                     <td class="py-3 px-4">
                         <button class="text-rog-red hover:text-rog-orange mr-2" onclick="editOrder('${order.id}')">
                             <i class="fas fa-edit"></i>
@@ -1334,16 +1380,21 @@
             const tbody = document.getElementById('customers-table-body');
             if (!tbody) return;
 
+            if (customersData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="py-8 text-center text-gray-400 font-rog-body">No customers found</td></tr>';
+                return;
+            }
+
             tbody.innerHTML = customersData.map(customer => `
                 <tr class="border-b border-rog-gray/50">
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.name}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.email}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.phone}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.orders}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.name || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.email || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.phone || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.orders || 0}</td>
                     <td class="py-3 px-4">
-                        <span class="px-2 py-1 ${getStatusColor(customer.status)} rounded-full text-xs font-rog-body">${customer.status}</span>
+                        <span class="px-2 py-1 ${getStatusColor(customer.status)} rounded-full text-xs font-rog-body">${customer.status || 'N/A'}</span>
                     </td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.joined}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${customer.joined || 'N/A'}</td>
                     <td class="py-3 px-4">
                         <button class="text-rog-red hover:text-rog-orange mr-2" onclick="editCustomer('${customer.id}')">
                             <i class="fas fa-edit"></i>
@@ -1360,14 +1411,19 @@
             const tbody = document.getElementById('products-table-body');
             if (!tbody) return;
 
+            if (productsData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-gray-400 font-rog-body">No products found</td></tr>';
+                return;
+            }
+
             tbody.innerHTML = productsData.map(product => `
                 <tr class="border-b border-rog-gray/50">
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${product.name}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${product.category}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">$${product.price}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${product.stock}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${product.name || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${product.category || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">$${product.price || '0.00'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${product.stock || 0}</td>
                     <td class="py-3 px-4">
-                        <span class="px-2 py-1 ${getStatusColor(product.status)} rounded-full text-xs font-rog-body">${product.status}</span>
+                        <span class="px-2 py-1 ${getStatusColor(product.status)} rounded-full text-xs font-rog-body">${product.status || 'N/A'}</span>
                     </td>
                     <td class="py-3 px-4">
                         <button class="text-rog-red hover:text-rog-orange mr-2" onclick="editProduct('${product.id}')">
@@ -1423,16 +1479,218 @@
         }
 
         async function updateAnalyticsStats() {
-            // Update analytics stats
-            const totalRevenue = document.getElementById('total-revenue');
-            const avgOrderValue = document.getElementById('avg-order-value');
-            const conversionRate = document.getElementById('conversion-rate');
-            const customerSatisfaction = document.getElementById('customer-satisfaction');
+            try {
+                if (window.firebaseDb && collection) {
+                    const ordersRef = collection(window.firebaseDb, 'orders');
+                    const ordersSnapshot = await getDocs(ordersRef);
+                    const orders = ordersSnapshot.docs.map(doc => doc.data());
+                    
+                    const totalRevenue = orders.reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
+                    const avgOrderValue = orders.length > 0 ? totalRevenue / orders.length : 0;
+                    const conversionRate = 3.2; // This would be calculated based on actual data
+                    const customerSatisfaction = 94; // This would be calculated based on actual data
+                    
+                    const totalRevenueEl = document.getElementById('total-revenue');
+                    const avgOrderValueEl = document.getElementById('avg-order-value');
+                    const conversionRateEl = document.getElementById('conversion-rate');
+                    const customerSatisfactionEl = document.getElementById('customer-satisfaction');
+                    
+                    if (totalRevenueEl) totalRevenueEl.textContent = `$${totalRevenue.toFixed(2)}`;
+                    if (avgOrderValueEl) avgOrderValueEl.textContent = `$${avgOrderValue.toFixed(2)}`;
+                    if (conversionRateEl) conversionRateEl.textContent = `${conversionRate}%`;
+                    if (customerSatisfactionEl) customerSatisfactionEl.textContent = `${customerSatisfaction}%`;
+                }
+            } catch (error) {
+                console.error('Error updating analytics stats:', error);
+            }
+        }
 
-            if (totalRevenue) totalRevenue.textContent = '$12,450';
-            if (avgOrderValue) avgOrderValue.textContent = '$85.50';
-            if (conversionRate) conversionRate.textContent = '3.2%';
-            if (customerSatisfaction) customerSatisfaction.textContent = '94%';
+        // Modal functionality
+        function setupModals() {
+            // Order modal
+            const orderModal = document.getElementById('orderModal');
+            const addOrderBtn = document.getElementById('add-order-btn');
+            const closeOrderModal = document.getElementById('closeOrderModal');
+            const cancelOrder = document.getElementById('cancelOrder');
+            const orderForm = document.getElementById('orderForm');
+
+            if (addOrderBtn) {
+                addOrderBtn.addEventListener('click', () => {
+                    currentEditId = null;
+                    document.getElementById('orderModalTitle').textContent = 'Add New Order';
+                    orderForm.reset();
+                    orderModal.classList.remove('hidden');
+                });
+            }
+
+            if (closeOrderModal) {
+                closeOrderModal.addEventListener('click', () => {
+                    orderModal.classList.add('hidden');
+                });
+            }
+
+            if (cancelOrder) {
+                cancelOrder.addEventListener('click', () => {
+                    orderModal.classList.add('hidden');
+                });
+            }
+
+            if (orderForm) {
+                orderForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    await saveOrder();
+                });
+            }
+
+            // Customer modal
+            const customerModal = document.getElementById('customerModal');
+            const addCustomerBtn = document.getElementById('add-customer-btn');
+            const closeCustomerModal = document.getElementById('closeCustomerModal');
+            const cancelCustomer = document.getElementById('cancelCustomer');
+            const customerForm = document.getElementById('customerForm');
+
+            if (addCustomerBtn) {
+                addCustomerBtn.addEventListener('click', () => {
+                    currentEditId = null;
+                    document.getElementById('customerModalTitle').textContent = 'Add New Customer';
+                    customerForm.reset();
+                    customerModal.classList.remove('hidden');
+                });
+            }
+
+            if (closeCustomerModal) {
+                closeCustomerModal.addEventListener('click', () => {
+                    customerModal.classList.add('hidden');
+                });
+            }
+
+            if (cancelCustomer) {
+                cancelCustomer.addEventListener('click', () => {
+                    customerModal.classList.add('hidden');
+                });
+            }
+
+            if (customerForm) {
+                customerForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    await saveCustomer();
+                });
+            }
+
+            // Product modal
+            const productModal = document.getElementById('productModal');
+            const addProductBtn = document.getElementById('add-product-btn');
+            const closeProductModal = document.getElementById('closeProductModal');
+            const cancelProduct = document.getElementById('cancelProduct');
+            const productForm = document.getElementById('productForm');
+
+            if (addProductBtn) {
+                addProductBtn.addEventListener('click', () => {
+                    currentEditId = null;
+                    document.getElementById('productModalTitle').textContent = 'Add New Product';
+                    productForm.reset();
+                    productModal.classList.remove('hidden');
+                });
+            }
+
+            if (closeProductModal) {
+                closeProductModal.addEventListener('click', () => {
+                    productModal.classList.add('hidden');
+                });
+            }
+
+            if (cancelProduct) {
+                cancelProduct.addEventListener('click', () => {
+                    productModal.classList.add('hidden');
+                });
+            }
+
+            if (productForm) {
+                productForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    await saveProduct();
+                });
+            }
+        }
+
+        // Save functions
+        async function saveOrder() {
+            try {
+                const orderData = {
+                    customer: document.getElementById('orderCustomer').value,
+                    email: document.getElementById('orderEmail').value,
+                    product: document.getElementById('orderProduct').value,
+                    quantity: parseInt(document.getElementById('orderQuantity').value),
+                    amount: parseFloat(document.getElementById('orderAmount').value),
+                    status: document.getElementById('orderStatus').value,
+                    notes: document.getElementById('orderNotes').value,
+                    date: new Date().toISOString().split('T')[0],
+                    createdAt: new Date()
+                };
+
+                if (window.firebaseDb && addDoc) {
+                    const ordersRef = collection(window.firebaseDb, 'orders');
+                    await addDoc(ordersRef, orderData);
+                    console.log('Order saved successfully');
+                }
+
+                document.getElementById('orderModal').classList.add('hidden');
+                await loadOrdersData();
+                await loadDashboardData();
+            } catch (error) {
+                console.error('Error saving order:', error);
+            }
+        }
+
+        async function saveCustomer() {
+            try {
+                const customerData = {
+                    name: document.getElementById('customerName').value,
+                    email: document.getElementById('customerEmail').value,
+                    phone: document.getElementById('customerPhone').value,
+                    address: document.getElementById('customerAddress').value,
+                    status: document.getElementById('customerStatus').value,
+                    orders: 0,
+                    joined: new Date().toISOString().split('T')[0],
+                    createdAt: new Date()
+                };
+
+                if (window.firebaseDb && addDoc) {
+                    const customersRef = collection(window.firebaseDb, 'customers');
+                    await addDoc(customersRef, customerData);
+                    console.log('Customer saved successfully');
+                }
+
+                document.getElementById('customerModal').classList.add('hidden');
+                await loadCustomersData();
+            } catch (error) {
+                console.error('Error saving customer:', error);
+            }
+        }
+
+        async function saveProduct() {
+            try {
+                const productData = {
+                    name: document.getElementById('productName').value,
+                    category: document.getElementById('productCategory').value,
+                    price: parseFloat(document.getElementById('productPrice').value),
+                    stock: parseInt(document.getElementById('productStock').value),
+                    description: document.getElementById('productDescription').value,
+                    status: 'active',
+                    createdAt: new Date()
+                };
+
+                if (window.firebaseDb && addDoc) {
+                    const productsRef = collection(window.firebaseDb, 'products');
+                    await addDoc(productsRef, productData);
+                    console.log('Product saved successfully');
+                }
+
+                document.getElementById('productModal').classList.add('hidden');
+                await loadProductsData();
+            } catch (error) {
+                console.error('Error saving product:', error);
+            }
         }
 
         // Action functions
@@ -1441,9 +1699,20 @@
             // Implement edit order functionality
         }
 
-        function deleteOrder(orderId) {
-            console.log('Delete order:', orderId);
-            // Implement delete order functionality
+        async function deleteOrder(orderId) {
+            if (confirm('Are you sure you want to delete this order?')) {
+                try {
+                    if (window.firebaseDb && deleteDoc && doc) {
+                        const orderRef = doc(window.firebaseDb, 'orders', orderId);
+                        await deleteDoc(orderRef);
+                        console.log('Order deleted successfully');
+                        await loadOrdersData();
+                        await loadDashboardData();
+                    }
+                } catch (error) {
+                    console.error('Error deleting order:', error);
+                }
+            }
         }
 
         function editCustomer(customerId) {
@@ -1451,9 +1720,19 @@
             // Implement edit customer functionality
         }
 
-        function deleteCustomer(customerId) {
-            console.log('Delete customer:', customerId);
-            // Implement delete customer functionality
+        async function deleteCustomer(customerId) {
+            if (confirm('Are you sure you want to delete this customer?')) {
+                try {
+                    if (window.firebaseDb && deleteDoc && doc) {
+                        const customerRef = doc(window.firebaseDb, 'customers', customerId);
+                        await deleteDoc(customerRef);
+                        console.log('Customer deleted successfully');
+                        await loadCustomersData();
+                    }
+                } catch (error) {
+                    console.error('Error deleting customer:', error);
+                }
+            }
         }
 
         function editProduct(productId) {
@@ -1461,9 +1740,19 @@
             // Implement edit product functionality
         }
 
-        function deleteProduct(productId) {
-            console.log('Delete product:', productId);
-            // Implement delete product functionality
+        async function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                try {
+                    if (window.firebaseDb && deleteDoc && doc) {
+                        const productRef = doc(window.firebaseDb, 'products', productId);
+                        await deleteDoc(productRef);
+                        console.log('Product deleted successfully');
+                        await loadProductsData();
+                    }
+                } catch (error) {
+                    console.error('Error deleting product:', error);
+                }
+            }
         }
 
         // Notification functionality
@@ -1519,7 +1808,7 @@
 
                     if (adminName) adminName.textContent = adminData.name || 'Admin User';
                     if (adminEmail) adminEmail.textContent = adminData.email || 'admin@otomono.mv';
-                    
+
                     if (adminAvatar && adminData.name) {
                         const initial = adminData.name.charAt(0).toUpperCase();
                         adminAvatar.innerHTML = `<span class="text-white text-sm font-rog-heading font-bold">${initial}</span>`;
@@ -1541,7 +1830,7 @@
                     const diffMs = now - loginTime;
                     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
                     const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-                    
+
                     const sessionDuration = document.getElementById('session-duration');
                     if (sessionDuration) {
                         sessionDuration.textContent = `${diffHours}h ${diffMinutes}m`;
@@ -1558,13 +1847,21 @@
             window.location.href = 'login.html';
         }
 
-        // Make logout function global
+        // Make functions global
         window.logout = logout;
+        window.editOrder = editOrder;
+        window.deleteOrder = deleteOrder;
+        window.editCustomer = editCustomer;
+        window.deleteCustomer = deleteCustomer;
+        window.editProduct = editProduct;
+        window.deleteProduct = deleteProduct;
 
         // Initialize all functionality
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initializeFirebase();
             setupMobileSidebar();
             setupNavigation();
+            setupModals();
             setupNotifications();
             setupUserProfile();
             loadAdminUserInfo();
@@ -1574,9 +1871,168 @@
             setInterval(updateSessionDuration, 60000);
             
             // Load initial dashboard data
-            loadDashboardData();
+            await loadDashboardData();
         });
     </script>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-rog-light rounded-2xl p-6 w-full max-w-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-rog-display font-bold text-white" id="orderModalTitle">Add New Order</h3>
+                    <button id="closeOrderModal" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <form id="orderForm" class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Customer Name</label>
+                            <input type="text" id="orderCustomer" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter customer name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Customer Email</label>
+                            <input type="email" id="orderEmail" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter customer email" required>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Product</label>
+                            <select id="orderProduct" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                                <option value="">Select Product</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Quantity</label>
+                            <input type="number" id="orderQuantity" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter quantity" min="1" required>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Amount</label>
+                            <input type="number" id="orderAmount" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter amount" step="0.01" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Status</label>
+                            <select id="orderStatus" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                                <option value="pending">Pending</option>
+                                <option value="processing">Processing</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="delivered">Delivered</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Notes</label>
+                        <textarea id="orderNotes" rows="3" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter order notes"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancelOrder" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">Cancel</button>
+                        <button type="submit" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">Save Order</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Modal -->
+    <div id="customerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-rog-light rounded-2xl p-6 w-full max-w-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-rog-display font-bold text-white" id="customerModalTitle">Add New Customer</h3>
+                    <button id="closeCustomerModal" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <form id="customerForm" class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Full Name</label>
+                            <input type="text" id="customerName" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter full name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Email</label>
+                            <input type="email" id="customerEmail" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter email" required>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Phone</label>
+                            <input type="tel" id="customerPhone" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter phone number" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Status</label>
+                            <select id="customerStatus" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Address</label>
+                        <textarea id="customerAddress" rows="3" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter address"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancelCustomer" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">Cancel</button>
+                        <button type="submit" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">Save Customer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-rog-light rounded-2xl p-6 w-full max-w-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-rog-display font-bold text-white" id="productModalTitle">Add New Product</h3>
+                    <button id="closeProductModal" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <form id="productForm" class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Product Name</label>
+                            <input type="text" id="productName" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter product name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Category</label>
+                            <select id="productCategory" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                                <option value="">Select Category</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Team">Team</option>
+                                <option value="Custom">Custom</option>
+                                <option value="Training">Training</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Price</label>
+                            <input type="number" id="productPrice" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter price" step="0.01" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Stock Quantity</label>
+                            <input type="number" id="productStock" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter stock quantity" min="0" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Description</label>
+                        <textarea id="productDescription" rows="3" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter product description"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancelProduct" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">Cancel</button>
+                        <button type="submit" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">Save Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
