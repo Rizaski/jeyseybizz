@@ -611,25 +611,35 @@
             // Admin Panel functionality
             const adminPanelBtn = document.getElementById('admin-panel-btn');
             const mobileAdminPanelBtn = document.getElementById('mobile-admin-panel-btn');
-            const adminLoginModal = document.getElementById('admin-login-modal');
-            const closeAdminLogin = document.getElementById('close-admin-login');
-            const adminLoginForm = document.getElementById('admin-login-form');
+
+            console.log('Admin panel elements found:', {
+                adminPanelBtn: !!adminPanelBtn,
+                mobileAdminPanelBtn: !!mobileAdminPanelBtn
+            });
 
             // Redirect to admin login page
             if (adminPanelBtn) {
                 adminPanelBtn.addEventListener('click', (e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     console.log('Admin panel button clicked - redirecting to login');
                     window.location.href = 'login.html';
                 });
+                console.log('Admin panel button event listener added');
+            } else {
+                console.error('Admin panel button not found');
             }
 
             if (mobileAdminPanelBtn) {
                 mobileAdminPanelBtn.addEventListener('click', (e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     console.log('Mobile admin panel button clicked - redirecting to login');
                     window.location.href = 'login.html';
                 });
+                console.log('Mobile admin panel button event listener added');
+            } else {
+                console.error('Mobile admin panel button not found');
             }
 
                 // Mobile menu functionality
