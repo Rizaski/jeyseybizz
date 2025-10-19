@@ -14,8 +14,33 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-    <!-- Firebase Configuration -->
-    <script src="js/firebase-config.js"></script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Direct Firebase configuration for login
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNWEchdrKX9A2WdMa3VTnpbKgo0_eWqHE",
+            authDomain: "otomono-c9938.firebaseapp.com",
+            projectId: "otomono-c9938",
+            storageBucket: "otomono-c9938.firebasestorage.app",
+            messagingSenderId: "348906539551",
+            appId: "1:348906539551:web:e249c40d0ae9e2964a632a",
+            measurementId: "G-YVL497L1V3"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+        
+        // Make auth available globally
+        window.firebaseAuth = auth;
+        window.firebaseApp = app;
+        
+        console.log('Firebase initialized successfully');
+    </script>
 
     <!-- ROG Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -207,7 +232,7 @@
                     <a href="index.html" class="hover:opacity-80 transition-opacity duration-200">
                         <img src="public/logo.png" alt="Otomono Logo" class="h-8 w-auto" />
                     </a>
-                </div>
+            </div>
 
                 <!-- Back to Site Button -->
                 <div class="flex items-center space-x-4">
@@ -228,11 +253,11 @@
                     <div class="mx-auto h-16 w-16 bg-rog-red/20 rounded-full flex items-center justify-center mb-4">
                         <svg class="h-8 w-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
+                    </svg>
                     </div>
                     <h2 class="text-3xl font-rog-display font-bold text-white glow">Admin Login</h2>
                     <p class="mt-2 text-sm text-gray-400 font-rog-body">Staff and admin access only</p>
-                </div>
+            </div>
 
                 <form id="admin-login-form" class="space-y-6">
                     <div>
@@ -240,25 +265,25 @@
                             Email Address
                         </label>
                         <input id="admin-email" name="email" type="email" required class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-rog-red focus:border-rog-red text-white placeholder-gray-400 font-rog-body transition-all duration-300" placeholder="Enter your email">
-                    </div>
+            </div>
 
                     <div>
                         <label for="admin-password" class="block text-sm font-rog-heading font-medium text-rog-red mb-2">
                             Password
                         </label>
                         <input id="admin-password" name="password" type="password" required class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-rog-red focus:border-rog-red text-white placeholder-gray-400 font-rog-body transition-all duration-300" placeholder="Enter your password">
-                    </div>
+            </div>
 
                     <div>
                         <button type="submit" class="w-full rog-button py-3 px-6 rounded-lg font-rog-heading font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl">
                             <i class="fas fa-sign-in-alt mr-2"></i>
                             Login to Admin Panel
                         </button>
-                    </div>
+            </div>
                 </form>
 
             </div>
-        </div>
+            </div>
     </main>
 
     <!-- Footer -->
@@ -266,15 +291,15 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p class="text-gray-400 text-sm font-rog-body">
                 © 2024 Otomono Jerseys. All rights reserved.
-            </p>
-        </div>
+                </p>
+            </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Admin login page loaded');
 
-            const adminLoginForm = document.getElementById('admin-login-form');
+        const adminLoginForm = document.getElementById('admin-login-form');
             const emailInput = document.getElementById('admin-email');
             const passwordInput = document.getElementById('admin-password');
 
@@ -289,8 +314,15 @@
                     const password = passwordInput.value;
 
                     console.log('Admin login attempt:', email);
+                    
+                    // Check if Firebase is ready
+                    if (!window.firebaseAuth) {
+                        console.error('Firebase not initialized');
+                        alert('Firebase not ready. Please refresh the page and try again.');
+                        return;
+                    }
 
-                    // Show loading state
+        // Show loading state
                     const submitBtn = adminLoginForm.querySelector('button[type="submit"]');
                     const originalText = submitBtn.innerHTML;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Authenticating...';
@@ -299,43 +331,47 @@
                     // Firebase Authentication
                     try {
                         console.log('Attempting Firebase authentication for:', email);
-                        
-                        // Import Firebase Auth
-                        const { getAuth, signInWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
-                        
-                        // Get Firebase app instance
-                        const { getApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-                        const app = getApp();
-                        const auth = getAuth(app);
-                        
+
+                        // Check if Firebase is initialized
+                        if (!window.firebaseAuth) {
+                            throw new Error('Firebase not initialized. Please refresh the page.');
+                        }
+
+                        // Import signInWithEmailAndPassword
+                        const { signInWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+
                         // Attempt Firebase sign in
-                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                        const userCredential = await signInWithEmailAndPassword(window.firebaseAuth, email, password);
                         const user = userCredential.user;
-                        
+
                         console.log('Firebase authentication successful:', user.email);
 
                         // Store admin session
-                        localStorage.setItem('adminUser', JSON.stringify({
+                localStorage.setItem('adminUser', JSON.stringify({
                             id: user.uid,
                             email: user.email,
                             name: user.displayName || user.email.split('@')[0],
                             userType: 'admin',
-                            loginTime: new Date().toISOString()
-                        }));
+                    loginTime: new Date().toISOString()
+                }));
 
                         // Show success message
                         submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Login Successful!';
                         submitBtn.classList.add('bg-green-600');
 
-                        setTimeout(() => {
+                    setTimeout(() => {
                             window.location.href = 'admin.html';
                         }, 1500);
-                        
+
                     } catch (error) {
                         console.error('Firebase authentication failed:', error);
-                        
+                        console.error('Error details:', {
+                            code: error.code,
+                            message: error.message,
+                            stack: error.stack
+                        });
+
                         // Show error message
-                        
                         let errorMessage = 'Login Failed';
                         if (error.code === 'auth/user-not-found') {
                             errorMessage = 'User not found';
@@ -345,8 +381,14 @@
                             errorMessage = 'Invalid email';
                         } else if (error.code === 'auth/too-many-requests') {
                             errorMessage = 'Too many attempts. Try again later';
+                        } else if (error.code === 'auth/network-request-failed') {
+                            errorMessage = 'Network error. Please check your connection';
+                        } else if (error.message.includes('Firebase not initialized')) {
+                            errorMessage = 'Firebase not ready. Please refresh the page';
+                        } else {
+                            errorMessage = `Login failed: ${error.message}`;
                         }
-                        
+
                         submitBtn.innerHTML = `<i class="fas fa-times mr-2"></i>${errorMessage}`;
                         submitBtn.classList.add('bg-red-600');
 
