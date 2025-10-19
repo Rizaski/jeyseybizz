@@ -677,7 +677,7 @@
                         <div><strong class="text-gray-300">Quantity:</strong> <span class="text-white">${urlParams.get('quantity') || order.quantity || 1}</span></div>
                         <div><strong class="text-gray-300">Material:</strong> <span class="text-white">${urlParams.get('materialPreference') || order.materialPreference || 'N/A'}</span></div>
                         <div><strong class="text-gray-300">Status:</strong> ${getStatusBadge(urlParams.get('status') || order.status || 'processing')}</div>
-                        <div><strong class="text-gray-300">Created:</strong> <span class="text-white">${urlParams.get('createdAt') ? new Date(urlParams.get('createdAt')).toLocaleDateString() : (order.createdAt ? new Date(order.createdAt).toLocaleDateString() : new Date().toLocaleDateString())}</span></div>
+                        <div><strong class="text-gray-300">Created:</strong> <span class="text-white">${formatDate(urlParams.get('createdAt') || order.createdAt || new Date().toISOString())}</span></div>
                     </div>
                 </div>
             `;
@@ -685,6 +685,22 @@
             // Generate dynamic jersey forms based on quantity from URL params or order data
             const quantity = parseInt(urlParams.get('quantity') || order.quantity || 1);
             generateJerseyForms(quantity);
+        }
+
+        // Format date safely to avoid Invalid Date
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            
+            try {
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) {
+                    return 'N/A';
+                }
+                return date.toLocaleDateString();
+            } catch (error) {
+                console.warn('Date formatting error:', error);
+                return 'N/A';
+            }
         }
 
         // Get status badge with color coding
@@ -911,7 +927,7 @@
                                 <div><strong class="text-gray-300">Quantity:</strong> <span class="text-white">${order.quantity || 1}</span></div>
                                 <div><strong class="text-gray-300">Material:</strong> <span class="text-white">${order.materialPreference || 'N/A'}</span></div>
                                 <div><strong class="text-gray-300">Status:</strong> ${getStatusBadge(order.status || 'processing')}</div>
-                                <div><strong class="text-gray-300">Created:</strong> <span class="text-white">${order.createdAt ? new Date(order.createdAt).toLocaleDateString() : new Date().toLocaleDateString()}</span></div>
+                                <div><strong class="text-gray-300">Created:</strong> <span class="text-white">${formatDate(order.createdAt || new Date().toISOString())}</span></div>
                             </div>
                         </div>
 
@@ -1029,7 +1045,7 @@
                         <div><strong class="text-gray-300">Size:</strong> <span class="text-white">${jersey.size}</span></div>
                         <div><strong class="text-gray-300">Sleeve:</strong> <span class="text-white">${jersey.sleeve}</span></div>
                         <div><strong class="text-gray-300">Shorts:</strong> <span class="text-white">${jersey.shorts}</span></div>
-                        <div><strong class="text-gray-300">Submitted:</strong> <span class="text-white">${new Date(jersey.completedAt).toLocaleDateString()}</span></div>
+                        <div><strong class="text-gray-300">Submitted:</strong> <span class="text-white">${formatDate(jersey.completedAt)}</span></div>
                         </div>
                     `;
             } else {
@@ -1050,7 +1066,7 @@
                                     <div><strong class="text-gray-300">Size:</strong> <span class="text-white">${jersey.size}</span></div>
                                     <div><strong class="text-gray-300">Sleeve:</strong> <span class="text-white">${jersey.sleeve}</span></div>
                                     <div><strong class="text-gray-300">Shorts:</strong> <span class="text-white">${jersey.shorts}</span></div>
-                                    <div><strong class="text-gray-300">Submitted:</strong> <span class="text-white">${new Date(jersey.completedAt).toLocaleDateString()}</span></div>
+                                    <div><strong class="text-gray-300">Submitted:</strong> <span class="text-white">${formatDate(jersey.completedAt)}</span></div>
                                 </div>
                         </div>
                         `).join('')}

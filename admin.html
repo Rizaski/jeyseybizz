@@ -2943,8 +2943,18 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
 
                     const totalRevenue = orders.reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
                     const avgOrderValue = orders.length > 0 ? totalRevenue / orders.length : 0;
-                    const conversionRate = 3.2; // This would be calculated based on actual data
-                    const customerSatisfaction = 94; // This would be calculated based on actual data
+                    
+                    // Calculate dynamic conversion rate based on completed orders vs total orders
+                    const completedOrders = orders.filter(order => order.status === 'delivered' || order.status === 'completed').length;
+                    const conversionRate = orders.length > 0 ? Math.round((completedOrders / orders.length) * 100) : 0;
+                    
+                    // Calculate dynamic customer satisfaction based on order status distribution
+                    const satisfiedOrders = orders.filter(order => 
+                        order.status === 'delivered' || 
+                        order.status === 'completed' || 
+                        order.status === 'processing'
+                    ).length;
+                    const customerSatisfaction = orders.length > 0 ? Math.round((satisfiedOrders / orders.length) * 100) : 0;
 
                     const totalRevenueEl = document.getElementById('total-revenue');
                     const avgOrderValueEl = document.getElementById('avg-order-value');
@@ -3269,85 +3279,6 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                             </div>
                             
                             <div class="space-y-6">
-                                <!-- Order Status and Basic Info -->
-                                <div class="bg-rog-light/20 rounded-lg p-4">
-                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
-                                        <i class="fas fa-info-circle text-rog-red mr-2"></i>Order Information
-                                    </h4>
-                                    <div class="grid md:grid-cols-3 gap-4">
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Order ID</label>
-                                            <p class="text-white font-rog-body">${order.id || 'N/A'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Status</label>
-                                            <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status || 'N/A'}</span>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Date</label>
-                                            <p class="text-white font-rog-body">${order.date || 'N/A'}</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Customer Information -->
-                                <div class="bg-rog-light/20 rounded-lg p-4">
-                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
-                                        <i class="fas fa-user text-rog-red mr-2"></i>Customer Information
-                                    </h4>
-                                    <div class="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Customer Name</label>
-                                            <p class="text-white font-rog-body">${order.customer || 'N/A'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Email Address</label>
-                                            <p class="text-white font-rog-body">${order.email || 'N/A'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Phone Number</label>
-                                            <p class="text-white font-rog-body">${order.phone || 'N/A'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Company</label>
-                                            <p class="text-white font-rog-body">${order.company || 'N/A'}</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Product Details -->
-                                <div class="bg-rog-light/20 rounded-lg p-4">
-                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
-                                        <i class="fas fa-tshirt text-rog-red mr-2"></i>Product Details
-                                    </h4>
-                                    <div class="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Product Type</label>
-                                            <p class="text-white font-rog-body">${order.product || 'N/A'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Material</label>
-                                            <p class="text-white font-rog-body">${order.material || 'N/A'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Quantity</label>
-                                            <p class="text-white font-rog-body">${order.quantity || 'N/A'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Size</label>
-                                            <p class="text-white font-rog-body">${order.size || 'N/A'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Color</label>
-                                            <p class="text-white font-rog-body">${order.color || 'N/A'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Price per Unit</label>
-                                            <p class="text-white font-rog-body">$${order.unitPrice || '0.00'}</p>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <!-- Initial Order Record -->
                                 <div class="bg-rog-light/20 rounded-lg p-4">
                                     <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
@@ -3379,8 +3310,8 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                                                     <td class="py-3 px-4 font-rog-body text-white">${order.phone || 'N/A'}</td>
                                                 </tr>
                                                 <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Product Type</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.product || 'N/A'}</td>
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Material</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.material || 'N/A'}</td>
                                                 </tr>
                                                 <tr class="border-b border-rog-gray/50">
                                                     <td class="py-3 px-4 font-rog-body text-rog-red">Quantity</td>
@@ -3449,38 +3380,6 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    </div>
-                                </div>
-
-                                <!-- Financial Information -->
-                                <div class="bg-rog-light/20 rounded-lg p-4">
-                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
-                                        <i class="fas fa-dollar-sign text-rog-red mr-2"></i>Financial Information
-                                    </h4>
-                                    <div class="grid md:grid-cols-3 gap-4">
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Subtotal</label>
-                                            <p class="text-white font-rog-body">$${order.subtotal || '0.00'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Tax</label>
-                                            <p class="text-white font-rog-body">$${order.tax || '0.00'}</p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Total Amount</label>
-                                            <p class="text-white font-rog-body text-lg font-semibold text-rog-red">$${order.amount || '0.00'}</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Additional Notes -->
-                                <div class="bg-rog-light/20 rounded-lg p-4">
-                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
-                                        <i class="fas fa-sticky-note text-rog-red mr-2"></i>Additional Information
-                                    </h4>
-                                    <div>
-                                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Order Notes</label>
-                                        <p class="text-white font-rog-body bg-rog-gray/20 p-3 rounded-lg">${order.notes || 'No additional notes provided'}</p>
                                     </div>
                                 </div>
 
