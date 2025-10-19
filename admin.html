@@ -935,6 +935,7 @@
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Order ID</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Customer</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Product</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Material</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Status</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Amount</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Date</th>
@@ -2760,7 +2761,7 @@
             if (!tbody) return;
 
             if (ordersData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="py-8 text-center text-gray-400 font-rog-body">No orders found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" class="py-8 text-center text-gray-400 font-rog-body">No orders found</td></tr>';
                 return;
             }
 
@@ -2769,6 +2770,7 @@
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.id || 'N/A'}</td>
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.customer || 'N/A'}</td>
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.product || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.material || 'N/A'}</td>
                     <td class="py-3 px-4">
                         <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status || 'N/A'}</span>
                     </td>
@@ -3027,6 +3029,41 @@
                 productForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     await saveProduct();
+                });
+            }
+
+            // Material modal
+            const materialModal = document.getElementById('materialModal');
+            const addMaterialBtn = document.getElementById('add-material-btn');
+            const closeMaterialModal = document.getElementById('closeMaterialModal');
+            const cancelMaterial = document.getElementById('cancelMaterial');
+            const materialForm = document.getElementById('materialForm');
+
+            if (addMaterialBtn) {
+                addMaterialBtn.addEventListener('click', () => {
+                    currentEditId = null;
+                    document.getElementById('materialModalTitle').textContent = 'Add New Material';
+                    materialForm.reset();
+                    materialModal.classList.remove('hidden');
+                });
+            }
+
+            if (closeMaterialModal) {
+                closeMaterialModal.addEventListener('click', () => {
+                    materialModal.classList.add('hidden');
+                });
+            }
+
+            if (cancelMaterial) {
+                cancelMaterial.addEventListener('click', () => {
+                    materialModal.classList.add('hidden');
+                });
+            }
+
+            if (materialForm) {
+                materialForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    await saveMaterial();
                 });
             }
         }
@@ -3571,9 +3608,45 @@
             );
         }
 
+        async function saveMaterial() {
+            try {
+                const materialData = {
+                    name: document.getElementById('materialName').value,
+                    type: document.getElementById('materialType').value,
+                    price: parseFloat(document.getElementById('materialPrice').value),
+                    stock: parseInt(document.getElementById('materialStock').value),
+                    status: document.getElementById('materialStatus').value,
+                    description: document.getElementById('materialDescription').value
+                };
+
+                if (window.firebaseDb && addDoc && collection) {
+                    const materialsRef = collection(window.firebaseDb, 'materials');
+                    await addDoc(materialsRef, materialData);
+                    console.log('Material saved successfully');
+                    showRogSuccess('Material saved successfully!', 'Material Saved');
+                    document.getElementById('materialModal').classList.add('hidden');
+                    await loadMaterialsData();
+                }
+            } catch (error) {
+                console.error('Error saving material:', error);
+                showRogError('Error saving material. Please try again.', 'Save Failed');
+            }
+        }
+
         function editMaterial(materialId) {
             console.log('Edit material:', materialId);
-            // Implement edit material functionality
+            const material = materialsData.find(m => m.id === materialId);
+            if (material) {
+                currentEditId = materialId;
+                document.getElementById('materialModalTitle').textContent = 'Edit Material';
+                document.getElementById('materialName').value = material.name || '';
+                document.getElementById('materialType').value = material.type || '';
+                document.getElementById('materialPrice').value = material.price || '';
+                document.getElementById('materialStock').value = material.stock || '';
+                document.getElementById('materialStatus').value = material.status || '';
+                document.getElementById('materialDescription').value = material.description || '';
+                document.getElementById('materialModal').classList.remove('hidden');
+            }
         }
 
         async function deleteMaterial(materialId) {
@@ -3884,7 +3957,7 @@
             console.log('Opening Add New Order form...');
             // Navigate to orders section first
             showSection('orders');
-            
+
             // Then trigger the Add New Order form
             setTimeout(() => {
                 const addOrderBtn = document.getElementById('add-order-btn');
@@ -4117,6 +4190,13 @@
             }
         }
 
+        // Generate report function
+        function generateReport() {
+            console.log('Generating report...');
+            showRogSuccess('Report generation initiated! Check the Reports section for details.', 'Report Generation');
+            showSection('reports');
+        }
+
         // Make functions global
         window.logout = logout;
         window.editOrder = editOrder;
@@ -4125,6 +4205,9 @@
         window.deleteCustomer = deleteCustomer;
         window.editProduct = editProduct;
         window.deleteProduct = deleteProduct;
+        window.editMaterial = editMaterial;
+        window.deleteMaterial = deleteMaterial;
+        window.saveMaterial = saveMaterial;
         window.generateReport = generateReport;
         window.downloadReport = downloadReport;
         window.deleteReport = deleteReport;
@@ -4161,10 +4244,37 @@
                     icon.classList.add('animate-spin');
 
                     try {
-                        await loadPageData(currentPage);
-                        console.log('Data refreshed successfully');
+                        // Force refresh from Firebase for current page
+                        switch (currentPage) {
+                            case 'dashboard':
+                                await loadDashboardData();
+                                break;
+                            case 'orders':
+                                await loadOrdersData();
+                                break;
+                            case 'customers':
+                                await loadCustomersData();
+                                break;
+                            case 'materials':
+                                await loadMaterialsData();
+                                break;
+                            case 'analytics':
+                                await loadAnalyticsData();
+                                break;
+                            case 'reports':
+                                await loadReportsData();
+                                break;
+                            case 'settings':
+                                await loadSettingsData();
+                                break;
+                            default:
+                                await loadPageData(currentPage);
+                        }
+                        console.log('Data refreshed successfully from Firebase');
+                        showRogSuccess('Data refreshed successfully!', 'Refresh Complete');
                     } catch (error) {
                         console.error('Error refreshing data:', error);
+                        showRogError('Error refreshing data. Please try again.', 'Refresh Failed');
                     } finally {
                         setTimeout(() => {
                             icon.classList.remove('animate-spin');
@@ -4465,6 +4575,7 @@
                 </div>
                 <form id="productForm" class="space-y-4">
                     <div class="grid md:grid-cols-2 gap-4">
+
                         <div>
                             <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Product Name</label>
                             <input type="text" id="productName" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter product name" required>
@@ -4497,6 +4608,70 @@
                     <div class="flex justify-end space-x-4">
                         <button type="button" id="cancelProduct" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">Cancel</button>
                         <button type="submit" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">Save Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Material Modal -->
+    <div id="materialModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-rog-light rounded-2xl p-6 w-full max-w-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-rog-display font-bold text-white" id="materialModalTitle">Add New Material</h3>
+                    <button id="closeMaterialModal" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <form id="materialForm" class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Material Name</label>
+                            <input type="text" id="materialName" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter material name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Material Type</label>
+                            <select id="materialType" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                                <option value="">Select Type</option>
+                                <option value="Fabric">Fabric</option>
+                                <option value="Mesh">Mesh</option>
+                                <option value="Jacquard">Jacquard</option>
+                                <option value="Technical">Technical</option>
+                                <option value="Performance">Performance</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Price per Unit ($)</label>
+                            <input type="number" id="materialPrice" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="0.00" step="0.01" min="0" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Stock Quantity</label>
+                            <input type="number" id="materialStock" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="0" min="0" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Status</label>
+                        <select id="materialStatus" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                            <option value="Available">Available</option>
+                            <option value="Low Stock">Low Stock</option>
+                            <option value="Out of Stock">Out of Stock</option>
+                            <option value="Discontinued">Discontinued</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Description</label>
+                        <textarea id="materialDescription" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" rows="3" placeholder="Enter material description"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancelMaterial" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">
+                            Cancel
+                        </button>
+                        <button type="submit" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">
+                            Save Material
+                        </button>
                     </div>
                 </form>
             </div>
