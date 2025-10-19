@@ -2378,7 +2378,9 @@ Report Data:
 ${JSON.stringify(report.data || {}, null, 2)}`;
 
             // Create and download the file
-            const blob = new Blob([reportContent], { type: 'text/plain' });
+            const blob = new Blob([reportContent], {
+                type: 'text/plain'
+            });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -2574,7 +2576,9 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
             }
 
             // Create and download the file
-            const blob = new Blob([reportContent], { type: mimeType });
+            const blob = new Blob([reportContent], {
+                type: mimeType
+            });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -4585,6 +4589,16 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                         <div>
                             <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Customer Email</label>
                             <input type="email" id="orderEmail" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter customer email" required>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Customer Phone</label>
+                            <input type="tel" id="orderPhone" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter customer phone">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Product</label>
+                            <input type="text" id="orderProduct" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter product name">
                         </div>
                     </div>
                     <div class="grid md:grid-cols-2 gap-4">
