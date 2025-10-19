@@ -251,24 +251,24 @@
         /* Header improvements for mobile */
         @media (max-width: 767px) {
             header {
-                padding: 12px 16px;
+                padding: 8px 12px;
             }
 
             header h1 {
-                font-size: 18px;
+                font-size: 16px;
             }
 
             header p {
-                font-size: 12px;
+                font-size: 10px;
             }
 
             /* Mobile header actions */
             .header-actions {
-                gap: 8px;
+                gap: 6px;
             }
 
             .header-actions button {
-                padding: 8px;
+                padding: 6px;
             }
 
             /* Mobile notification center */
@@ -288,16 +288,19 @@
         @media (max-width: 767px) {
             main {
                 margin-left: 0;
-                padding-top: 80px;
+                padding-top: 60px;
+                min-height: calc(100vh - 60px);
             }
 
             main section {
-                padding: 16px;
+                padding: 12px;
+                margin-bottom: 20px;
             }
 
             /* Mobile cards */
             .admin-card {
-                padding: 16px;
+                padding: 12px;
+                margin-bottom: 16px;
             }
 
             /* Mobile tables */
@@ -309,6 +312,12 @@
             .modal-content {
                 margin: 16px;
                 max-width: calc(100vw - 32px);
+            }
+
+            /* Ensure content doesn't go below sidebar */
+            .sidebar.open + main {
+                margin-left: 0;
+                padding-top: 60px;
             }
         }
 
@@ -553,7 +562,7 @@
     <div id="mobileOverlay" class="mobile-overlay" onclick="toggleSidebar()"></div>
 
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 glass-effect">
+    <header class="sticky top-0 left-0 right-0 z-50 glass-effect">
         <div class="container mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
                 <!-- Logo Section -->
@@ -692,7 +701,7 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="md:ml-80 pt-20">
+    <main class="md:ml-80 pt-16">
         <!-- Dashboard Section -->
         <section id="dashboard" class="p-6">
             <!-- Hero Section -->
