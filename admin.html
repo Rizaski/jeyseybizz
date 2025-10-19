@@ -2360,8 +2360,35 @@
         // Download report
         function downloadReport(reportId) {
             console.log(`Downloading report ${reportId}...`);
-            // In a real application, this would download the actual file
-            showRogSuccess('Report download started!', 'Download Initiated');
+            // Find the report
+            const report = window.dynamicReports?.find(r => r.id == reportId);
+            if (!report) {
+                showRogError('Report not found', 'Report Not Found');
+                return;
+            }
+
+            // Create a simple text report content
+            const reportContent = `Report: ${report.name}
+Type: ${report.type}
+Generated: ${report.generated}
+Size: ${report.size}
+Status: ${report.status}
+
+Report Data:
+${JSON.stringify(report.data || {}, null, 2)}`;
+
+            // Create and download the file
+            const blob = new Blob([reportContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${report.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+
+            showRogSuccess('Report downloaded successfully!', 'Download Complete');
         }
 
         // Show report details modal
@@ -2495,7 +2522,68 @@
 
             console.log(`Exporting report ${reportId} as ${format} with logo: ${includeLogo}`);
 
-            // Simulate export process
+            // Find the report
+            const report = window.dynamicReports?.find(r => r.id == reportId);
+            if (!report) {
+                showRogError('Report not found', 'Report Not Found');
+                closeExportOptionsModal();
+                return;
+            }
+
+            // Create report content based on format
+            let reportContent = '';
+            let mimeType = '';
+            let fileExtension = '';
+
+            switch (format) {
+                case 'pdf':
+                    // For PDF, we'll create a simple text file that can be converted to PDF
+                    reportContent = `Report: ${report.name}
+Type: ${report.type}
+Generated: ${report.generated}
+Size: ${report.size}
+Status: ${report.status}
+
+Report Data:
+${JSON.stringify(report.data || {}, null, 2)}`;
+                    mimeType = 'text/plain';
+                    fileExtension = 'txt';
+                    break;
+                case 'excel':
+                    // Create CSV format for Excel compatibility
+                    reportContent = `Report Name,Type,Generated,Size,Status
+"${report.name}","${report.type}","${report.generated}","${report.size}","${report.status}"`;
+                    mimeType = 'text/csv';
+                    fileExtension = 'csv';
+                    break;
+                case 'csv':
+                    reportContent = `Report Name,Type,Generated,Size,Status
+"${report.name}","${report.type}","${report.generated}","${report.size}","${report.status}"`;
+                    mimeType = 'text/csv';
+                    fileExtension = 'csv';
+                    break;
+                case 'json':
+                    reportContent = JSON.stringify(report, null, 2);
+                    mimeType = 'application/json';
+                    fileExtension = 'json';
+                    break;
+                default:
+                    reportContent = JSON.stringify(report, null, 2);
+                    mimeType = 'text/plain';
+                    fileExtension = 'txt';
+            }
+
+            // Create and download the file
+            const blob = new Blob([reportContent], { type: mimeType });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${report.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.${fileExtension}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+
             showRogSuccess(`Report exported successfully as ${format.toUpperCase()}!`, 'Export Complete');
             closeExportOptionsModal();
         }
