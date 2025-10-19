@@ -3476,48 +3476,28 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                                                     <td class="py-3 px-4 font-rog-body text-white">${order.jerseyType || 'Not specified'}</td>
                                                 </tr>
                                                 <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Material</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.material || 'Not specified'}</td>
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Jersey Name</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.jerseyName || 'Not specified'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Jersey Number</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.jerseyNumber || 'Not specified'}</td>
+                                                </tr>
+                                                <tr class="border-b border-rog-gray/50">
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Size Category</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.sizeCategory || 'Not specified'}</td>
                                                 </tr>
                                                 <tr class="border-b border-rog-gray/50">
                                                     <td class="py-3 px-4 font-rog-body text-rog-red">Size</td>
                                                     <td class="py-3 px-4 font-rog-body text-white">${order.size || 'Not specified'}</td>
                                                 </tr>
                                                 <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Color</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.color || 'Not specified'}</td>
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Sleeve</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.sleeve || 'Not specified'}</td>
                                                 </tr>
                                                 <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Design Requirements</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.designRequirements || 'No specific design requirements provided'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Logo Placement</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.logoPlacement || 'Not specified'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Text/Number</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.textNumber || 'Not specified'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Font Style</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.fontStyle || 'Not specified'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Special Instructions</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.specialInstructions || 'No special instructions provided'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Delivery Address</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.deliveryAddress || 'No delivery address provided'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Preferred Delivery Date</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.preferredDeliveryDate || 'No specific date requested'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Additional Notes</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.notes || 'No additional notes provided'}</td>
+                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Shorts</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.shorts || 'Not specified'}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -3673,10 +3653,10 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
 
             // Set current edit ID
             currentEditId = orderId;
-            
+
             // Update modal title
             document.getElementById('orderModalTitle').textContent = 'Edit Order';
-            
+
             // Populate form fields with existing order data (only fields that exist in the form)
             document.getElementById('orderCustomer').value = order.customer || '';
             document.getElementById('orderEmail').value = order.email || '';
@@ -3685,7 +3665,7 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
             document.getElementById('orderAmount').value = order.amount || '';
             document.getElementById('orderStatus').value = order.status || '';
             document.getElementById('orderNotes').value = order.notes || '';
-            
+
             // Show the modal
             document.getElementById('orderModal').classList.remove('hidden');
         }
