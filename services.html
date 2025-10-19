@@ -228,6 +228,12 @@
     
     <!-- STATIC PROFILE CSS -->
     <script src="js/STATIC-PROFILE-CSS.js"></script>
+    
+    <!-- CUSTOMER ADMIN CHAT -->
+    <script src="js/CUSTOMER-ADMIN-CHAT.js"></script>
+    
+    <!-- ADMIN CHAT INTERFACE -->
+    <script src="js/ADMIN-CHAT-INTERFACE.js"></script>
 </head>
 
 <body class="min-h-screen bg-rog-dark text-white">
@@ -330,10 +336,6 @@
         </div>
     </header>
 
-    <!-- Floating Chat Button -->
-    <button id="floating-chat-btn" class="fixed bottom-6 right-6 w-14 h-14 bg-rog-red rounded-full shadow-lg hover:bg-rog-red/90 transition-all duration-200 z-40 flex items-center justify-center group">
-        <i class="fas fa-comments text-white text-xl group-hover:scale-110 transition-transform"></i>
-    </button>
 
     <!-- Customer Chat Modal -->
     <div id="customer-chat-modal" class="fixed inset-0 z-50 bg-black bg-opacity-75 hidden">
@@ -429,18 +431,6 @@
         </div>
     </div>
 
-    <!-- Floating Live Chat Button (Mobile Only) -->
-    <button id="floating-chat-btn" class="fixed bottom-6 right-6 z-40 md:hidden bg-rog-red hover:bg-rog-red/90 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110 group">
-        <svg class="w-6 h-6 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg>
-        <!-- Notification Badge -->
-        <span class="absolute -top-1 -right-1 bg-white text-rog-red text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">●</span>
-        <!-- Tooltip -->
-        <div class="absolute bottom-full right-0 mb-2 px-3 py-1 bg-rog-dark text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red/30">
-            Live Chat Support
-        </div>
-    </button>
 
     <!-- Services Page -->
     <section class="py-20 bg-rog-dark">
@@ -881,140 +871,8 @@
                 overlay: mobileMenuOverlay
             });
 
-            // Customer Chat System
-            const floatingChatBtn = document.getElementById('floating-chat-btn');
-            const customerChatModal = document.getElementById('customer-chat-modal');
-            const closeChatModal = document.getElementById('close-chat-modal');
-            const customerInfoForm = document.getElementById('customer-info-form');
-            const chatInterface = document.getElementById('chat-interface');
-            const startChatBtn = document.getElementById('start-chat-btn');
-            const chatMessageInput = document.getElementById('chat-message-input');
-            const sendMessageBtn = document.getElementById('send-message-btn');
-            const chatMessages = document.getElementById('chat-messages');
-
-            let customerInfo = null;
-            let chatMessagesList = [];
-
-            // Open chat modal
-            if (floatingChatBtn) {
-                floatingChatBtn.addEventListener('click', function() {
-                    customerChatModal.classList.remove('hidden');
-                    console.log('Customer chat modal opened');
-                });
-            }
-
-            // Close chat modal
-            if (closeChatModal) {
-                closeChatModal.addEventListener('click', function() {
-                    customerChatModal.classList.add('hidden');
-                    console.log('Customer chat modal closed');
-                });
-            }
-
-            // Start chat
-            if (startChatBtn) {
-                startChatBtn.addEventListener('click', function() {
-                    const name = document.getElementById('customer-name').value.trim();
-                    const email = document.getElementById('customer-email').value.trim();
-                    const phone = document.getElementById('customer-phone').value.trim();
-
-                    if (!name || !email || !phone) {
-                        alert('Please fill in all fields');
-                        return;
-                    }
-
-                    customerInfo = {
-                        name,
-                        email,
-                        phone
-                    };
-                    customerInfoForm.classList.add('hidden');
-                    chatInterface.classList.remove('hidden');
-
-                    // Add welcome message
-                    addChatMessage('Hello! I\'m ' + name + '. I need help with my order.', 'customer');
-
-                    // Notify admin panel
-                    notifyAdminNewCustomer(name, email, phone);
-
-                    console.log('Chat started for customer:', customerInfo);
-                });
-            }
-
-            // Send message
-            function sendMessage() {
-                const message = chatMessageInput.value.trim();
-                if (message && customerInfo) {
-                    addChatMessage(message, 'customer');
-                    chatMessageInput.value = '';
-
-                    // Notify admin panel
-                    notifyAdminNewMessage(customerInfo.name, message);
-
-                    // Simulate admin response
-                    setTimeout(() => {
-                        addChatMessage('Thank you for your message. Our support team will get back to you shortly.', 'admin');
-                    }, 2000);
-                }
-            }
-
-            if (sendMessageBtn) {
-                sendMessageBtn.addEventListener('click', sendMessage);
-            }
-
-            if (chatMessageInput) {
-                chatMessageInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        sendMessage();
-                    }
-                });
-            }
-
-            function addChatMessage(message, sender) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `flex ${sender === 'customer' ? 'justify-end' : 'justify-start'}`;
-
-                const messageContent = document.createElement('div');
-                messageContent.className = `max-w-xs px-3 py-2 rounded-lg ${
-                    sender === 'customer' 
-                        ? 'bg-rog-red text-white' 
-                        : 'bg-gray-700 text-white'
-                }`;
-
-                messageContent.innerHTML = `
-                    <p class="text-sm">${message}</p>
-                    <p class="text-xs opacity-70 mt-1">${new Date().toLocaleTimeString()}</p>
-                `;
-
-                messageDiv.appendChild(messageContent);
-                chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-
-                chatMessagesList.push({
-                    message,
-                    sender,
-                    timestamp: new Date().toISOString()
-                });
-            }
-
-            function notifyAdminNewCustomer(name, email, phone) {
-                // This would send a notification to the admin panel
-                console.log('New customer chat started:', {
-                    name,
-                    email,
-                    phone
-                });
-                // In a real implementation, this would use Firebase or WebSocket
-            }
-
-            function notifyAdminNewMessage(customerName, message) {
-                // This would send a message notification to the admin panel
-                console.log('New message from customer:', {
-                    customerName,
-                    message
-                });
-                // In a real implementation, this would use Firebase or WebSocket
-            }
+            // Customer Chat System - Now handled by CUSTOMER-ADMIN-CHAT.js
+            console.log('Customer chat system is now handled by CUSTOMER-ADMIN-CHAT.js');
 
             // Close menu when clicking on navigation links
             if (mobileMenu) {
@@ -1067,7 +925,7 @@
                     if (window.FirebaseDB && window.FirebaseAuth) {
                         try {
                             const currentUser = window.FirebaseAuth.getCurrentUser();
-                            const userId = currentUser ? .uid || 'anonymous';
+                            const userId = currentUser ? currentUser.uid : 'anonymous';
                             await window.FirebaseDB.trackUserAction(userId, 'page_visit', {
                                 page: 'services',
                                 url: window.location.href,
@@ -1105,187 +963,10 @@
                     } else {
                         console.error('Services page: Mobile login button not found!');
                     }
-                });
-
-            // Modal functionality
-            const chatModal = document.getElementById('chat-modal');
-            const chatBtn = document.getElementById('chat-btn');
-
-            // Chat functionality
-            chatBtn.addEventListener('click', () => {
-                chatModal.classList.remove('hidden');
-            });
-
-            // Floating chat button functionality (Mobile only)
-            const floatingChatBtn = document.getElementById('floating-chat-btn');
-            if (floatingChatBtn) {
-                floatingChatBtn.addEventListener('click', () => {
-                    chatModal.classList.remove('hidden');
-                });
-            }
-
-            document.getElementById('close-chat').addEventListener('click', () => {
-                chatModal.classList.add('hidden');
-            });
-
-            // Close modal when clicking outside
-            chatModal.addEventListener('click', (e) => {
-                if (e.target === chatModal) {
-                    chatModal.classList.add('hidden');
+                } catch (error) {
+                    console.error('Error initializing services page:', error);
                 }
             });
-
-            // Chat bot responses
-            const chatResponses = [
-                "Thank you for your interest! Our team will get back to you shortly.",
-                "We offer custom jersey designs with premium quality materials.",
-                "Our standard delivery time is 3-5 business days.",
-                "Yes, we can create jerseys for teams of any size!",
-                "We use high-quality polyester and cotton blends for durability.",
-                "You can choose from our catalog or request a custom design.",
-                "We provide digital proofs before printing for your approval.",
-                "Our jerseys come with a 30-day satisfaction guarantee."
-            ];
-
-            // Send message functionality
-            document.getElementById('send-message').addEventListener('click', () => {
-                const input = document.getElementById('chat-input');
-                const message = input.value.trim();
-
-                if (message) {
-                    addMessage(message, 'user');
-                    input.value = '';
-
-                    // Simulate bot response
-                    setTimeout(() => {
-                        const randomResponse = chatResponses[Math.floor(Math.random() * chatResponses.length)];
-                        addMessage(randomResponse, 'bot');
-                    }, 1000);
-                }
-            });
-
-            // Send message on Enter key
-            document.getElementById('chat-input').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    document.getElementById('send-message').click();
-                }
-            });
-
-            function addMessage(text, sender) {
-                const messagesContainer = document.getElementById('chat-messages');
-                const messageDiv = document.createElement('div');
-
-                if (sender === 'user') {
-                    messageDiv.className = 'flex items-start space-x-2 justify-end';
-                    messageDiv.innerHTML = `
-                    <div class="bg-black text-white rounded-lg p-3 max-w-xs">
-                        <p class="text-sm">${text}</p>
-                        <p class="text-xs text-gray-300 mt-1">Just now</p>
-                    </div>
-                    <div class="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center">
-                        <span class="text-white text-xs font-bold">U</span>
-                    </div>
-                `;
-                } else {
-                    messageDiv.className = 'flex items-start space-x-2';
-                    messageDiv.innerHTML = `
-                    <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                        <span class="text-white text-xs font-bold">O</span>
-                    </div>
-                    <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
-                        <p class="text-sm text-gray-800">${text}</p>
-                        <p class="text-xs text-gray-500 mt-1">Just now</p>
-                    </div>
-                `;
-                }
-
-                messagesContainer.appendChild(messageDiv);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }
-
-            // Mobile menu functionality is already handled above
-            // This section is removed to prevent duplicate event listeners
-
-            // Mobile sign out
-            if (mobileSignOut) {
-                console.log('Adding mobile sign-out event listener');
-                mobileSignOut.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Mobile sign out button clicked');
-                    try {
-                        await window.FirebaseAuth.signOut();
-                        console.log('Mobile sign out successful, redirecting...');
-                        window.location.href = 'index.html';
-                    } catch (error) {
-                        console.error('Mobile sign out error:', error);
-                    }
-                });
-            } else {
-                console.error('Mobile sign out button not found');
-            }
-
-            // Profile dropdown functionality
-            const userProfileBtn = document.getElementById('user-profile-btn');
-            const userProfileDropdown = document.getElementById('user-profile-dropdown');
-
-            if (userProfileBtn && userProfileDropdown) {
-                console.log('Adding profile dropdown event listener');
-                userProfileBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Profile button clicked, toggling dropdown');
-
-                    // Toggle dropdown visibility
-                    if (userProfileDropdown.classList.contains('hidden')) {
-                        userProfileDropdown.classList.remove('hidden');
-                        console.log('Dropdown opened');
-                    } else {
-                        userProfileDropdown.classList.add('hidden');
-                        console.log('Dropdown closed');
-                    }
-                });
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', (e) => {
-                    if (!userProfileBtn.contains(e.target) && !userProfileDropdown.contains(e.target)) {
-                        if (!userProfileDropdown.classList.contains('hidden')) {
-                            userProfileDropdown.classList.add('hidden');
-                            console.log('Dropdown closed by outside click');
-                        }
-                    }
-                });
-            } else {
-                console.error('Profile dropdown elements not found');
-                console.log('userProfileBtn:', userProfileBtn);
-                console.log('userProfileDropdown:', userProfileDropdown);
-            }
-
-            // Sign out functionality
-            const signOutBtn = document.getElementById('sign-out-btn');
-            if (signOutBtn) {
-                console.log('Adding sign-out event listener');
-                signOutBtn.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Sign out button clicked');
-                    try {
-                        await window.FirebaseAuth.signOut();
-                        console.log('Sign out successful, redirecting...');
-                        window.location.href = 'index.html';
-                    } catch (error) {
-                        console.error('Sign out error:', error);
-                    }
-                });
-            } else {
-                console.error('Sign out button not found');
-            }
-
-        }
-        catch (error) {
-            console.error('Error initializing services page:', error);
-        }
-        });
 
         async function updateUserInfo(user) {
             console.log('updateUserInfo called with user:', user);

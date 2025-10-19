@@ -32,7 +32,6 @@ const getFirebaseConfig = () => {
         };
     }
 };
-
 // Enhanced Firebase initialization with environment variables
 async function initializeFirebaseWithEnv() {
     try {
