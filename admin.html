@@ -934,7 +934,6 @@
                             <tr class="border-b border-rog-gray">
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Order ID</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Customer</th>
-                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Product</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Material</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Status</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Amount</th>
@@ -2768,7 +2767,7 @@
             if (!tbody) return;
 
             if (ordersData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" class="py-8 text-center text-gray-400 font-rog-body">No orders found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" class="py-8 text-center text-gray-400 font-rog-body">No orders found</td></tr>';
                 return;
             }
 
@@ -2776,7 +2775,6 @@
                 <tr class="border-b border-rog-gray/50">
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.id || 'N/A'}</td>
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.customer || 'N/A'}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.product || 'N/A'}</td>
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.material || 'N/A'}</td>
                     <td class="py-3 px-4">
                         <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status || 'N/A'}</span>
@@ -3115,7 +3113,7 @@
                 currentEditId = null;
                 document.getElementById('orderModalTitle').textContent = 'Add New Order';
                 document.getElementById('orderModal').classList.add('hidden');
-                
+
                 // Refresh data
                 await loadOrdersData();
                 await loadDashboardData();
@@ -3585,10 +3583,10 @@
 
             // Set current edit ID
             currentEditId = orderId;
-            
+
             // Update modal title
             document.getElementById('orderModalTitle').textContent = 'Edit Order';
-            
+
             // Populate form fields with existing order data
             document.getElementById('orderCustomer').value = order.customer || '';
             document.getElementById('orderEmail').value = order.email || '';
@@ -3599,7 +3597,7 @@
             document.getElementById('orderAmount').value = order.amount || '';
             document.getElementById('orderStatus').value = order.status || '';
             document.getElementById('orderNotes').value = order.notes || '';
-            
+
             // Show the modal
             document.getElementById('orderModal').classList.remove('hidden');
         }
