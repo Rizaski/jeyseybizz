@@ -312,7 +312,7 @@
                             <!-- Jersey Image -->
                             <div class="flex-1 relative group">
                                 <div class="relative overflow-hidden rounded-2xl shadow-2xl">
-                                    <img id="current-jersey-image" src="" alt="" class="w-full h-auto transition-transform duration-700 group-hover:scale-105">
+                                    <img id="current-jersey-image" src="" alt="" class="w-full h-auto transition-transform duration-700 group-hover:scale-105" loading="lazy">
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                                 </div>
                                 <!-- Design Badge -->
@@ -630,7 +630,7 @@
             const playBtn = document.getElementById('reel-play');
             const playIcon = document.getElementById('reel-play-icon');
 
-            // Initialize thumbnails
+            // Initialize thumbnails with lazy loading
             function initThumbnails() {
                 thumbnailsContainer.innerHTML = '';
                 jerseyDesigns.forEach((design, index) => {
@@ -638,7 +638,7 @@
                     thumbnail.className = `relative group cursor-pointer transition-all duration-300 hover:scale-105 ${index === 0 ? 'ring-2 ring-rog-red' : ''}`;
                     thumbnail.innerHTML = `
                         <div class="relative overflow-hidden rounded-xl shadow-lg">
-                            <img src="${design.image}" alt="${design.title}" class="w-full h-32 object-cover">
+                            <img src="${design.image}" alt="${design.title}" class="w-full h-32 object-cover" loading="lazy">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                             <div class="absolute bottom-2 left-2 right-2">
                                 <h4 class="text-white font-rog-heading font-semibold text-sm">${design.title}</h4>
@@ -737,10 +737,8 @@
             initThumbnails();
             updateCurrentDesign();
 
-            // Auto-play on page load
-            setTimeout(() => {
-                togglePlay();
-            }, 3000);
+            // Initialize without auto-play for better performance
+            // Auto-play can be started manually by user
         }
 
         // Admin panel functionality
