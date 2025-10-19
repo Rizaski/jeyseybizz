@@ -871,6 +871,7 @@
                             <tr class="border-b border-rog-gray">
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Order ID</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Customer</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Mobile</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Material</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Status</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Amount</th>
@@ -2796,7 +2797,7 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
             if (!tbody) return;
 
             if (ordersData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="py-8 text-center text-gray-400 font-rog-body">No orders found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" class="py-8 text-center text-gray-400 font-rog-body">No orders found</td></tr>';
                 return;
             }
 
@@ -2804,6 +2805,7 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                 <tr class="border-b border-rog-gray/50">
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.id || 'N/A'}</td>
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.customer || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.phone || 'N/A'}</td>
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.material || 'N/A'}</td>
                     <td class="py-3 px-4">
                         <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status || 'N/A'}</span>
@@ -3108,6 +3110,7 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                 const orderData = {
                     customer: document.getElementById('orderCustomer').value,
                     email: document.getElementById('orderEmail').value,
+                    phone: document.getElementById('orderPhone').value,
                     material: document.getElementById('orderMaterial').value,
                     quantity: parseInt(document.getElementById('orderQuantity').value),
                     amount: parseFloat(document.getElementById('orderAmount').value),
@@ -3605,6 +3608,7 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
             // Populate form fields with existing order data (only fields that exist in the form)
             document.getElementById('orderCustomer').value = order.customer || '';
             document.getElementById('orderEmail').value = order.email || '';
+            document.getElementById('orderPhone').value = order.phone || '';
             document.getElementById('orderMaterial').value = order.material || '';
             document.getElementById('orderQuantity').value = order.quantity || '';
             document.getElementById('orderAmount').value = order.amount || '';
@@ -4514,33 +4518,32 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                     </div>
                     <div class="grid md:grid-cols-2 gap-4">
                         <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Mobile Number</label>
+                            <input type="tel" id="orderPhone" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter mobile number" required>
+                        </div>
+                        <div>
                             <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Material</label>
                             <select id="orderMaterial" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
                                 <option value="">Select Material</option>
-                                <option value="Waffle">Waffle</option>
-                                <option value="Combweb">Combweb</option>
-                                <option value="Vortex Jacquard">Vortex Jacquard</option>
+                                <option value="Cotton">Cotton</option>
+                                <option value="Polyester">Polyester</option>
                                 <option value="Mesh">Mesh</option>
-                                <option value="Iceburg">Iceburg</option>
-                                <option value="Nano Check">Nano Check</option>
-                                <option value="Closehole">Closehole</option>
-                                <option value="Drytec">Drytec</option>
-                                <option value="Wetlook">Wetlook</option>
-                                <option value="Baby Pk">Baby Pk</option>
-                                <option value="Cool Tech">Cool Tech</option>
-                                <option value="Net">Net</option>
+                                <option value="Dri-FIT">Dri-FIT</option>
+                                <option value="Other">Other</option>
                             </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Quantity</label>
-                            <input type="number" id="orderQuantity" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter quantity" min="1" required>
                         </div>
                     </div>
                     <div class="grid md:grid-cols-2 gap-4">
                         <div>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Quantity</label>
+                            <input type="number" id="orderQuantity" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter quantity" min="1" required>
+                        </div>
+                        <div>
                             <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Amount</label>
                             <input type="number" id="orderAmount" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter amount" step="0.01" required>
                         </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Status</label>
                             <select id="orderStatus" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
@@ -4550,6 +4553,9 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                                 <option value="delivered">Delivered</option>
                                 <option value="cancelled">Cancelled</option>
                             </select>
+                        </div>
+                        <div>
+                            <!-- Empty div for layout balance -->
                         </div>
                     </div>
                     <div>
