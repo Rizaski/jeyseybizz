@@ -4,17 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Otomono Jerseys - Republic of Gamers Style Jersey Design</title>
-    <meta name="description" content="Create stunning gaming jerseys with ROG-inspired design. Premium quality, fast delivery, and endless customization options for gamers.">
+    <title>Otomono Jerseys - Premium Custom Jersey Design</title>
+    <meta name="description" content="Create stunning custom jerseys with our advanced 3D designer. Premium quality, fast delivery, and endless customization options.">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="public/favicon.png">
     <link rel="apple-touch-icon" href="public/favicon.png">
 
-    <!-- Fonts -->
+    <!-- ROG Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -28,15 +28,18 @@
             theme: {
                 extend: {
                     colors: {
-                        'rog-red': '#dc2626',
-                        'rog-dark': '#0a0a0a',
+                        'rog-red': '#ff0037',
+                        'rog-orange': '#ff6b35',
+                        'rog-dark': '#000000',
                         'rog-light': '#1a1a1a',
-                        'rog-gray': '#2a2a2a',
+                        'rog-gray': '#333333',
+                        'rog-blue': '#00d4ff',
+                        'rog-purple': '#8b5cf6',
                     },
                     fontFamily: {
-                        'rog-display': ['Playfair Display', 'serif'],
-                        'rog-heading': ['Inter', 'sans-serif'],
-                        'rog-body': ['Inter', 'sans-serif'],
+                        'rog-display': ['Orbitron', 'monospace'],
+                        'rog-heading': ['Exo 2', 'sans-serif'],
+                        'rog-body': ['Roboto', 'sans-serif'],
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.6s ease-out',
@@ -111,24 +114,41 @@
 
     <style>
         .rog-button {
-            background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
+            background: linear-gradient(135deg, #ff0037 0%, #ff6b35 50%, #00d4ff 100%);
             transition: all 0.3s ease;
+            border: 1px solid #ff0037;
+            box-shadow: 0 0 20px rgba(255, 0, 55, 0.3);
         }
 
         .rog-button:hover {
-            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 50%, #ef4444 100%);
+            background: linear-gradient(135deg, #ff6b35 0%, #ff0037 50%, #8b5cf6 100%);
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4);
+            box-shadow: 0 15px 35px rgba(255, 0, 55, 0.6);
+            border-color: #00d4ff;
         }
 
         .hero-gradient {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 30%, #333333 70%, #000000 100%);
+            position: relative;
+        }
+        
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 0, 55, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
 
         .glass-effect {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 0, 55, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .jersey-card {
@@ -137,7 +157,7 @@
 
         .jersey-card:hover {
             transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 25px 50px rgba(255, 0, 55, 0.3), 0 0 30px rgba(0, 212, 255, 0.2);
         }
 
         .reel-container {
@@ -152,16 +172,19 @@
         .reel-item.active {
             transform: rotateY(0deg) scale(1.1);
             z-index: 10;
+            box-shadow: 0 0 40px rgba(255, 0, 55, 0.4);
         }
 
         .reel-item.prev {
             transform: rotateY(45deg) translateZ(-100px) scale(0.9);
             opacity: 0.7;
+            filter: hue-rotate(180deg);
         }
 
         .reel-item.next {
             transform: rotateY(-45deg) translateZ(-100px) scale(0.9);
             opacity: 0.7;
+            filter: hue-rotate(-180deg);
         }
 
         .mobile-menu {
@@ -251,23 +274,23 @@
         <div class="container mx-auto px-4 text-center relative z-10">
             <div class="max-w-4xl mx-auto">
                 <h1 class="text-5xl md:text-7xl font-rog-display font-bold mb-6 animate-fade-in">
-                    Republic of
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-rog-red to-pink-500 animate-glow">
-                        Gamers Jerseys
+                    Create Your
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-rog-red via-rog-orange to-rog-blue animate-glow">
+                        Perfect Jersey
                     </span>
                 </h1>
                 <p class="text-xl md:text-2xl text-gray-300 mb-8 animate-slide-up font-rog-body">
-                    Design epic gaming jerseys with ROG-inspired aesthetics.
-                    Premium quality, lightning-fast delivery, and unlimited customization for the ultimate gaming experience.
+                    Design stunning custom jerseys with our advanced 3D designer.
+                    Premium quality, fast delivery, and endless customization options.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up">
                     <a href="3D-Jersey-Designer/designer-studio.html" class="rog-button px-8 py-4 rounded-lg font-rog-heading font-semibold text-lg transition-all duration-300 hover:shadow-xl">
-                        <i class="fas fa-gamepad mr-2"></i>
-                        Enter Gaming Studio
+                        <i class="fas fa-paint-brush mr-2"></i>
+                        Start Designing
                     </a>
                     <a href="#designs" class="glass-effect px-8 py-4 rounded-lg font-rog-heading font-semibold text-lg text-white hover:bg-white hover:text-rog-dark transition-all duration-300">
-                        <i class="fas fa-trophy mr-2"></i>
-                        View Champion Designs
+                        <i class="fas fa-eye mr-2"></i>
+                        View Designs
                     </a>
                 </div>
             </div>
@@ -287,13 +310,13 @@
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
                 <h2 class="text-4xl md:text-5xl font-rog-display font-bold mb-6">
-                    Gaming
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-rog-red to-pink-500">
-                        Champions Collection
+                    Featured
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-rog-red via-rog-orange to-rog-blue">
+                        Designs
                     </span>
                 </h2>
                 <p class="text-xl text-gray-300 max-w-2xl mx-auto">
-                    Explore our collection of ROG-inspired gaming jerseys. Each piece is crafted for champions with cutting-edge design and premium materials.
+                    Explore our collection of premium jersey designs. Each piece is crafted with attention to detail and quality.
                 </p>
             </div>
 
@@ -333,8 +356,8 @@
             <div class="text-center mb-16">
                 <h2 class="text-4xl md:text-5xl font-rog-display font-bold mb-6">
                     Why Choose
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-rog-red to-pink-500">
-                        ROG Gaming Jerseys?
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-rog-red via-rog-orange to-rog-blue">
+                        Otomono?
                     </span>
                 </h2>
             </div>
@@ -342,43 +365,43 @@
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="text-center animate-slide-in-left">
                     <div class="w-20 h-20 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-gamepad text-3xl text-rog-red"></i>
+                        <i class="fas fa-palette text-3xl text-rog-red"></i>
                     </div>
-                    <h3 class="text-2xl font-rog-heading font-bold mb-4">ROG Gaming Studio</h3>
-                    <p class="text-gray-300">Create your champion jersey with our advanced 3D gaming designer. See your ROG-inspired design come to life before you order.</p>
+                    <h3 class="text-2xl font-rog-heading font-bold mb-4">3D Design Studio</h3>
+                    <p class="text-gray-300">Create your perfect jersey with our advanced 3D designer. See your design come to life before you order.</p>
                 </div>
 
                 <div class="text-center animate-slide-up">
                     <div class="w-20 h-20 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-bolt text-3xl text-rog-red"></i>
+                        <i class="fas fa-shipping-fast text-3xl text-rog-red"></i>
                     </div>
-                    <h3 class="text-2xl font-rog-heading font-bold mb-4">Lightning Fast</h3>
-                    <p class="text-gray-300">Get your gaming jerseys delivered at ROG speed with our optimized production and shipping process.</p>
+                    <h3 class="text-2xl font-rog-heading font-bold mb-4">Fast Delivery</h3>
+                    <p class="text-gray-300">Get your custom jerseys delivered quickly with our efficient production and shipping process.</p>
                 </div>
 
                 <div class="text-center animate-slide-in-right">
                     <div class="w-20 h-20 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-trophy text-3xl text-rog-red"></i>
+                        <i class="fas fa-award text-3xl text-rog-red"></i>
                     </div>
-                    <h3 class="text-2xl font-rog-heading font-bold mb-4">Champion Quality</h3>
-                    <p class="text-gray-300">We use only the finest gaming-grade materials and cutting-edge printing technology to ensure your jerseys are tournament-ready.</p>
+                    <h3 class="text-2xl font-rog-heading font-bold mb-4">Premium Quality</h3>
+                    <p class="text-gray-300">We use only the finest materials and latest printing technology to ensure your jerseys are perfect.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="py-20 bg-gradient-to-r from-rog-red to-pink-500">
+    <section class="py-20 bg-gradient-to-r from-rog-red via-rog-orange to-rog-blue">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl md:text-5xl font-rog-display font-bold mb-6 text-white">
-                Ready to Join the Republic?
+                Ready to Create Your Jersey?
             </h2>
             <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                Join thousands of gaming champions who have created their epic ROG-inspired jerseys with us.
+                Join thousands of satisfied customers who have created their perfect jerseys with us.
             </p>
             <a href="3D-Jersey-Designer/designer-studio.html" class="inline-block bg-white text-rog-red px-8 py-4 rounded-lg font-rog-heading font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105">
-                <i class="fas fa-gamepad mr-2"></i>
-                Enter Gaming Studio
+                <i class="fas fa-rocket mr-2"></i>
+                Start Your Design Now
             </a>
         </div>
     </section>
@@ -393,7 +416,7 @@
                         <span class="text-2xl font-rog-display font-bold text-white">Otomono</span>
                     </div>
                     <p class="text-gray-400 mb-4">
-                        Creating premium ROG-inspired gaming jerseys with cutting-edge 3D design technology for champions.
+                        Creating premium custom jerseys with cutting-edge 3D design technology.
                     </p>
                 </div>
 
@@ -408,11 +431,11 @@
                 </div>
 
                 <div>
-                    <h3 class="text-lg font-rog-heading font-semibold mb-4 text-white">Gaming Services</h3>
+                    <h3 class="text-lg font-rog-heading font-semibold mb-4 text-white">Services</h3>
                     <ul class="space-y-2">
-                        <li><a href="services.html" class="text-gray-400 hover:text-rog-red transition-colors duration-300">ROG Gaming Jerseys</a></li>
-                        <li><a href="3D-Jersey-Designer/designer-studio.html" class="text-gray-400 hover:text-rog-red transition-colors duration-300">Gaming Studio</a></li>
-                        <li><a href="client-order-form.html" class="text-gray-400 hover:text-rog-red transition-colors duration-300">Champion Orders</a></li>
+                        <li><a href="services.html" class="text-gray-400 hover:text-rog-red transition-colors duration-300">Custom Jerseys</a></li>
+                        <li><a href="3D-Jersey-Designer/designer-studio.html" class="text-gray-400 hover:text-rog-red transition-colors duration-300">3D Designer</a></li>
+                        <li><a href="client-order-form.html" class="text-gray-400 hover:text-rog-red transition-colors duration-300">Order Form</a></li>
                     </ul>
                 </div>
 
@@ -489,52 +512,52 @@
             const jerseyDesigns = [{
                     id: 1,
                     image: 'jersey-designs/Mockup24A001.jpg',
-                    title: 'ROG Red Champion'
+                    title: 'Classic Red Jersey'
                 },
                 {
                     id: 2,
                     image: 'jersey-designs/Mockup24A002.jpg',
-                    title: 'Republic Thunder'
+                    title: 'Blue Thunder Jersey'
                 },
                 {
                     id: 3,
                     image: 'jersey-designs/Mockup24A003.jpg',
-                    title: 'Gaming Machine'
+                    title: 'Green Machine Jersey'
                 },
                 {
                     id: 4,
                     image: 'jersey-designs/Mockup24A004.jpg',
-                    title: 'Golden ROG Eagle'
+                    title: 'Golden Eagle Jersey'
                 },
                 {
                     id: 5,
                     image: 'jersey-designs/Mockup24A005.jpg',
-                    title: 'Purple Gaming Storm'
+                    title: 'Purple Storm Jersey'
                 },
                 {
                     id: 6,
                     image: 'jersey-designs/Mockup24A006.jpg',
-                    title: 'Orange ROG Blaze'
+                    title: 'Orange Blaze Jersey'
                 },
                 {
                     id: 7,
                     image: 'jersey-designs/Mockup24A007.jpg',
-                    title: 'Silver Gaming Lightning'
+                    title: 'Silver Lightning Jersey'
                 },
                 {
                     id: 8,
                     image: 'jersey-designs/Mockup24A008.jpg',
-                    title: 'ROG Black Panther'
+                    title: 'Black Panther Jersey'
                 },
                 {
                     id: 9,
                     image: 'jersey-designs/Mockup24A009.jpg',
-                    title: 'White Gaming Knight'
+                    title: 'White Knight Jersey'
                 },
                 {
                     id: 10,
                     image: 'jersey-designs/Mockup24A010.jpg',
-                    title: 'Crimson ROG Fire'
+                    title: 'Crimson Fire Jersey'
                 }
             ];
 
