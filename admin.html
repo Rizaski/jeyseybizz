@@ -19,6 +19,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -442,8 +445,15 @@
                         </button>
                         <div id="notification-center" class="absolute right-0 mt-2 w-80 bg-rog-light rounded-lg shadow-lg border border-rog-red/30 hidden z-50">
                             <div class="p-4 border-b border-rog-gray">
-                                <h3 class="text-lg font-rog-heading font-semibold text-white">Notifications</h3>
-                                <p class="text-sm text-gray-400 font-rog-body">Client submissions and updates</p>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-rog-heading font-semibold text-white">Notifications</h3>
+                                        <p class="text-sm text-gray-400 font-rog-body">Client submissions and updates</p>
+                                    </div>
+                                    <button id="clear-all-notifications" class="text-xs text-rog-red hover:text-rog-orange transition-colors duration-300 font-rog-body">
+                                        <i class="fas fa-trash mr-1"></i>Clear All
+                                    </button>
+                                </div>
                             </div>
                             <div id="notification-list" class="max-h-64 overflow-y-auto">
                                 <!-- Notifications will be populated here -->
@@ -1025,17 +1035,33 @@
             </div>
 
             <!-- Charts Section -->
-            <div class="grid md:grid-cols-2 gap-6">
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
                 <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6">
-                    <h3 class="text-xl font-rog-heading font-semibold text-white mb-4">Sales Trend</h3>
-                    <div id="sales-chart" class="h-64 flex items-center justify-center text-gray-400">
-                        <p>Sales chart will be displayed here</p>
+                    <h3 class="text-xl font-rog-heading font-semibold text-white mb-4">Sales Trend (Last 7 Days)</h3>
+                    <div class="relative h-64">
+                        <canvas id="sales-chart"></canvas>
                     </div>
                 </div>
                 <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6">
-                    <h3 class="text-xl font-rog-heading font-semibold text-white mb-4">Top Products</h3>
-                    <div id="products-chart" class="h-64 flex items-center justify-center text-gray-400">
-                        <p>Products chart will be displayed here</p>
+                    <h3 class="text-xl font-rog-heading font-semibold text-white mb-4">Order Status Distribution</h3>
+                    <div class="relative h-64">
+                        <canvas id="orders-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Analytics -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6">
+                    <h3 class="text-xl font-rog-heading font-semibold text-white mb-4">Monthly Revenue</h3>
+                    <div class="relative h-64">
+                        <canvas id="revenue-chart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6">
+                    <h3 class="text-xl font-rog-heading font-semibold text-white mb-4">Customer Growth</h3>
+                    <div class="relative h-64">
+                        <canvas id="customers-chart"></canvas>
                     </div>
                 </div>
             </div>
@@ -1048,9 +1074,38 @@
                 <p class="text-gray-400 font-rog-body">Generate and download business reports</p>
             </div>
 
+            <!-- Report Filters -->
+            <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6 mb-8">
+                <h3 class="text-xl font-rog-heading font-semibold text-white mb-4">Report Filters</h3>
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Report Type</label>
+                        <select id="report-type" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red">
+                            <option value="sales">Sales Report</option>
+                            <option value="customers">Customer Report</option>
+                            <option value="inventory">Inventory Report</option>
+                            <option value="financial">Financial Report</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Date From</label>
+                        <input type="date" id="report-date-from" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Date To</label>
+                        <input type="date" id="report-date-to" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red">
+                    </div>
+                    <div class="flex items-end">
+                        <button id="generate-report" class="w-full rog-button py-3 rounded-lg font-rog-heading font-semibold text-white">
+                            <i class="fas fa-file-alt mr-2"></i>Generate Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Report Types -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 bg-gradient-to-br from-rog-red to-rog-orange rounded-lg flex items-center justify-center mr-4">
                             <i class="fas fa-shopping-cart text-white"></i>
@@ -1060,12 +1115,12 @@
                             <p class="text-sm text-gray-400 font-rog-body">Order and revenue data</p>
                         </div>
                     </div>
-                    <button class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white">
+                    <button class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white" onclick="generateReport('sales')">
                         <i class="fas fa-download mr-2"></i>Generate Report
                     </button>
                 </div>
 
-                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 bg-gradient-to-br from-rog-blue to-rog-purple rounded-lg flex items-center justify-center mr-4">
                             <i class="fas fa-users text-white"></i>
@@ -1075,12 +1130,12 @@
                             <p class="text-sm text-gray-400 font-rog-body">Customer analytics</p>
                         </div>
                     </div>
-                    <button class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white">
+                    <button class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white" onclick="generateReport('customers')">
                         <i class="fas fa-download mr-2"></i>Generate Report
                     </button>
                 </div>
 
-                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-4">
                             <i class="fas fa-tshirt text-white"></i>
@@ -1090,7 +1145,22 @@
                             <p class="text-sm text-gray-400 font-rog-body">Stock and product data</p>
                         </div>
                     </div>
-                    <button class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white">
+                    <button class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white" onclick="generateReport('inventory')">
+                        <i class="fas fa-download mr-2"></i>Generate Report
+                    </button>
+                </div>
+
+                <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-chart-line text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-rog-heading font-semibold text-white">Financial Report</h3>
+                            <p class="text-sm text-gray-400 font-rog-body">Revenue and profit data</p>
+                        </div>
+                    </div>
+                    <button class="w-full rog-button py-2 rounded-lg font-rog-heading font-semibold text-white" onclick="generateReport('financial')">
                         <i class="fas fa-download mr-2"></i>Generate Report
                     </button>
                 </div>
@@ -1552,17 +1622,359 @@
             try {
                 console.log('Loading analytics data...');
                 await updateAnalyticsStats();
+                await initializeCharts();
             } catch (error) {
                 console.error('Error loading analytics data:', error);
+            }
+        }
+
+        // Initialize charts
+        async function initializeCharts() {
+            try {
+                // Sales Trend Chart
+                const salesCtx = document.getElementById('sales-chart');
+                if (salesCtx) {
+                    new Chart(salesCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                            datasets: [{
+                                label: 'Sales ($)',
+                                data: [1200, 1900, 3000, 5000, 2000, 3000, 4500],
+                                borderColor: '#ff0037',
+                                backgroundColor: 'rgba(255, 0, 55, 0.1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: '#ffffff'
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        color: '#ffffff'
+                                    },
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    }
+                                },
+                                y: {
+                                    ticks: {
+                                        color: '#ffffff'
+                                    },
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Orders Status Chart
+                const ordersCtx = document.getElementById('orders-chart');
+                if (ordersCtx) {
+                    new Chart(ordersCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Completed', 'Pending', 'Processing', 'Cancelled'],
+                            datasets: [{
+                                data: [45, 20, 25, 10],
+                                backgroundColor: [
+                                    '#10b981',
+                                    '#f59e0b',
+                                    '#3b82f6',
+                                    '#ef4444'
+                                ],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: '#ffffff'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Revenue Chart
+                const revenueCtx = document.getElementById('revenue-chart');
+                if (revenueCtx) {
+                    new Chart(revenueCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                            datasets: [{
+                                label: 'Revenue ($)',
+                                data: [12000, 19000, 30000, 50000, 20000, 30000],
+                                backgroundColor: 'rgba(255, 0, 55, 0.8)',
+                                borderColor: '#ff0037',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: '#ffffff'
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        color: '#ffffff'
+                                    },
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    }
+                                },
+                                y: {
+                                    ticks: {
+                                        color: '#ffffff'
+                                    },
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Customers Chart
+                const customersCtx = document.getElementById('customers-chart');
+                if (customersCtx) {
+                    new Chart(customersCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                            datasets: [{
+                                label: 'New Customers',
+                                data: [10, 15, 25, 40, 20, 35],
+                                borderColor: '#00d4ff',
+                                backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: '#ffffff'
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        color: '#ffffff'
+                                    },
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    }
+                                },
+                                y: {
+                                    ticks: {
+                                        color: '#ffffff'
+                                    },
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error initializing charts:', error);
             }
         }
 
         async function loadReportsData() {
             try {
                 console.log('Loading reports data...');
-                // Load recent reports
+                await loadRecentReports();
+                setupReportsFunctionality();
             } catch (error) {
                 console.error('Error loading reports data:', error);
+            }
+        }
+
+        // Load recent reports
+        async function loadRecentReports() {
+            try {
+                const reports = [
+                    {
+                        id: 1,
+                        name: 'Sales Report - December 2024',
+                        type: 'Sales',
+                        generated: '2024-12-15',
+                        size: '2.3 MB',
+                        status: 'Ready'
+                    },
+                    {
+                        id: 2,
+                        name: 'Customer Analytics - Q4 2024',
+                        type: 'Customer',
+                        generated: '2024-12-10',
+                        size: '1.8 MB',
+                        status: 'Ready'
+                    },
+                    {
+                        id: 3,
+                        name: 'Inventory Status Report',
+                        type: 'Inventory',
+                        generated: '2024-12-08',
+                        size: '1.2 MB',
+                        status: 'Ready'
+                    }
+                ];
+
+                renderReportsTable(reports);
+            } catch (error) {
+                console.error('Error loading recent reports:', error);
+            }
+        }
+
+        // Render reports table
+        function renderReportsTable(reports) {
+            const tbody = document.getElementById('reports-table-body');
+            if (!tbody) return;
+
+            if (reports.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-gray-400 font-rog-body">No reports found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = reports.map(report => `
+                <tr class="border-b border-rog-gray/50">
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${report.name}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${report.type}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${report.generated}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${report.size}</td>
+                    <td class="py-3 px-4">
+                        <button class="text-rog-red hover:text-rog-orange mr-2" onclick="downloadReport('${report.id}')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="text-red-400 hover:text-red-300" onclick="deleteReport('${report.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Setup reports functionality
+        function setupReportsFunctionality() {
+            // Generate report button
+            const generateReportBtn = document.getElementById('generate-report');
+            if (generateReportBtn) {
+                generateReportBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    await generateCustomReport();
+                });
+            }
+
+            // Refresh reports button
+            const refreshReportsBtn = document.getElementById('refresh-reports');
+            if (refreshReportsBtn) {
+                refreshReportsBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    await loadRecentReports();
+                });
+            }
+        }
+
+        // Generate custom report
+        async function generateCustomReport() {
+            try {
+                const reportType = document.getElementById('report-type').value;
+                const dateFrom = document.getElementById('report-date-from').value;
+                const dateTo = document.getElementById('report-date-to').value;
+
+                if (!dateFrom || !dateTo) {
+                    alert('Please select date range');
+                    return;
+                }
+
+                console.log(`Generating ${reportType} report from ${dateFrom} to ${dateTo}`);
+                
+                // Simulate report generation
+                const reportName = `${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report - ${dateFrom} to ${dateTo}`;
+                
+                // Add to recent reports
+                const newReport = {
+                    id: Date.now(),
+                    name: reportName,
+                    type: reportType.charAt(0).toUpperCase() + reportType.slice(1),
+                    generated: new Date().toISOString().split('T')[0],
+                    size: '1.5 MB',
+                    status: 'Ready'
+                };
+
+                // Update the table
+                await loadRecentReports();
+                
+                alert('Report generated successfully!');
+            } catch (error) {
+                console.error('Error generating report:', error);
+                alert('Error generating report. Please try again.');
+            }
+        }
+
+        // Generate report by type
+        function generateReport(type) {
+            console.log(`Generating ${type} report...`);
+            // Set the report type in the filter
+            document.getElementById('report-type').value = type;
+            
+            // Set default date range (last 30 days)
+            const today = new Date();
+            const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+            
+            document.getElementById('report-date-from').value = thirtyDaysAgo.toISOString().split('T')[0];
+            document.getElementById('report-date-to').value = today.toISOString().split('T')[0];
+            
+            // Generate the report
+            generateCustomReport();
+        }
+
+        // Download report
+        function downloadReport(reportId) {
+            console.log(`Downloading report ${reportId}...`);
+            // In a real application, this would download the actual file
+            alert('Report download started!');
+        }
+
+        // Delete report
+        function deleteReport(reportId) {
+            if (confirm('Are you sure you want to delete this report?')) {
+                console.log(`Deleting report ${reportId}...`);
+                // In a real application, this would delete the report
+                alert('Report deleted successfully!');
+                loadRecentReports();
             }
         }
 
@@ -1582,12 +1994,12 @@
                 const adminUser = localStorage.getItem('adminUser');
                 if (adminUser) {
                     const adminData = JSON.parse(adminUser);
-                    
+
                     // Populate profile form
                     const profileName = document.getElementById('profileName');
                     const profileEmail = document.getElementById('profileEmail');
                     const profilePhone = document.getElementById('profilePhone');
-                    
+
                     if (profileName) profileName.value = adminData.name || '';
                     if (profileEmail) profileEmail.value = adminData.email || '';
                     if (profilePhone) profilePhone.value = adminData.phone || '';
@@ -1628,19 +2040,19 @@
         function updatePasswordStrength() {
             const password = document.getElementById('newPassword').value;
             const strengthIndicator = document.getElementById('passwordStrength');
-            
+
             if (!strengthIndicator) return;
-            
+
             const strength = calculatePasswordStrength(password);
-            
+
             // Remove existing classes
             strengthIndicator.classList.remove('weak', 'medium', 'strong');
-            
+
             if (password.length === 0) {
                 strengthIndicator.style.background = '#333';
                 return;
             }
-            
+
             if (strength < 3) {
                 strengthIndicator.classList.add('weak');
             } else if (strength < 5) {
@@ -1653,17 +2065,17 @@
         // Calculate password strength
         function calculatePasswordStrength(password) {
             let strength = 0;
-            
+
             // Length check
             if (password.length >= 8) strength++;
             if (password.length >= 12) strength++;
-            
+
             // Character variety checks
             if (/[a-z]/.test(password)) strength++;
             if (/[A-Z]/.test(password)) strength++;
             if (/\d/.test(password)) strength++;
             if (/[^a-zA-Z\d]/.test(password)) strength++;
-            
+
             return strength;
         }
 
@@ -1688,13 +2100,13 @@
                     adminData.email = email;
                     adminData.phone = phone;
                     adminData.updatedAt = new Date().toISOString();
-                    
+
                     localStorage.setItem('adminUser', JSON.stringify(adminData));
-                    
+
                     // Update UI
                     loadAdminUserInfo();
                     showSettingsMessage('Profile updated successfully!', 'success');
-                    
+
                     // Clear form
                     document.getElementById('profileForm').reset();
                     loadProfileData();
@@ -1734,16 +2146,24 @@
                 const adminUser = localStorage.getItem('adminUser');
                 if (adminUser) {
                     const adminData = JSON.parse(adminUser);
-                    
+
                     // Simple password verification (in real app, this would be server-side)
-                    const validPasswords = [
-                        { email: 'admin@otomono.com', password: 'admin123' },
-                        { email: 'staff@otomono.com', password: 'staff123' },
-                        { email: 'miicrossoft@gmail.com', password: 'admin123' }
+                    const validPasswords = [{
+                            email: 'admin@otomono.com',
+                            password: 'admin123'
+                        },
+                        {
+                            email: 'staff@otomono.com',
+                            password: 'staff123'
+                        },
+                        {
+                            email: 'miicrossoft@gmail.com',
+                            password: 'admin123'
+                        }
                     ];
-                    
+
                     const validAdmin = validPasswords.find(a => a.email === adminData.email && a.password === currentPassword);
-                    
+
                     if (!validAdmin) {
                         showSettingsMessage('Current password is incorrect', 'error');
                         return;
@@ -1752,11 +2172,11 @@
                     // Update password (in real app, this would be server-side)
                     adminData.password = newPassword;
                     adminData.passwordChangedAt = new Date().toISOString();
-                    
+
                     localStorage.setItem('adminUser', JSON.stringify(adminData));
-                    
+
                     showSettingsMessage('Password changed successfully!', 'success');
-                    
+
                     // Clear form
                     document.getElementById('passwordForm').reset();
                 }
@@ -1772,7 +2192,7 @@
             const hasUpperCase = /[A-Z]/.test(password);
             const hasLowerCase = /[a-z]/.test(password);
             const hasNumbers = /\d/.test(password);
-            
+
             return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers;
         }
 
@@ -1780,10 +2200,10 @@
         function showSettingsMessage(message, type) {
             const messageDiv = document.getElementById('settingsMessage');
             const messageText = document.getElementById('settingsMessageText');
-            
+
             if (messageDiv && messageText) {
                 messageText.textContent = message;
-                
+
                 // Update styling based on type
                 const messageContainer = messageDiv.querySelector('div');
                 if (type === 'error') {
@@ -1795,9 +2215,9 @@
                     messageContainer.querySelector('i').className = 'fas fa-check-circle text-green-400 mr-3';
                     messageText.className = 'text-green-400 font-rog-body';
                 }
-                
+
                 messageDiv.classList.remove('hidden');
-                
+
                 // Auto-hide after 5 seconds
                 setTimeout(() => {
                     messageDiv.classList.add('hidden');
@@ -2222,6 +2642,7 @@
             const notificationCenter = document.getElementById('notification-center');
             const notificationCount = document.getElementById('notification-count');
             const notificationList = document.getElementById('notification-list');
+            const clearAllBtn = document.getElementById('clear-all-notifications');
 
             if (notificationBtn && notificationCenter) {
                 notificationBtn.addEventListener('click', (e) => {
@@ -2234,6 +2655,14 @@
                     if (!notificationBtn.contains(e.target) && !notificationCenter.contains(e.target)) {
                         notificationCenter.classList.add('hidden');
                     }
+                });
+            }
+
+            // Clear all notifications
+            if (clearAllBtn) {
+                clearAllBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    clearAllNotifications();
                 });
             }
 
@@ -2308,6 +2737,23 @@
                     notificationCount.classList.remove('opacity-100');
                 }
             }
+        }
+
+        // Clear all notifications
+        function clearAllNotifications() {
+            const notificationList = document.getElementById('notification-list');
+            const notificationCount = document.getElementById('notification-count');
+            
+            if (notificationList) {
+                notificationList.innerHTML = '<div class="p-4 text-center text-gray-400 font-rog-body">No notifications</div>';
+            }
+            
+            if (notificationCount) {
+                notificationCount.classList.add('opacity-0', 'pointer-events-none');
+                notificationCount.classList.remove('opacity-100');
+            }
+            
+            console.log('All notifications cleared');
         }
 
         // User profile dropdown functionality
@@ -2432,6 +2878,9 @@
         window.deleteCustomer = deleteCustomer;
         window.editProduct = editProduct;
         window.deleteProduct = deleteProduct;
+        window.generateReport = generateReport;
+        window.downloadReport = downloadReport;
+        window.deleteReport = deleteReport;
 
         // Refresh functionality
         function setupRefresh() {
