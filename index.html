@@ -160,40 +160,10 @@
             box-shadow: 0 25px 50px rgba(255, 0, 55, 0.3), 0 0 30px rgba(0, 212, 255, 0.2);
         }
 
-        .reel-container {
-            perspective: 1000px;
-        }
-
-        .reel-item {
-            transform-style: preserve-3d;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
-            outline: none;
-            text-decoration: none;
-        }
-
-        .reel-item h3 {
-            text-decoration: none !important;
-            border: none !important;
-            outline: none !important;
-        }
-
-        .reel-item.active {
-            transform: rotateY(0deg) scale(1.1);
-            z-index: 10;
-            box-shadow: 0 0 40px rgba(255, 0, 55, 0.4);
-        }
-
-        .reel-item.prev {
-            transform: rotateY(45deg) translateZ(-100px) scale(0.9);
-            opacity: 0.7;
-            filter: hue-rotate(180deg);
-        }
-
-        .reel-item.next {
-            transform: rotateY(-45deg) translateZ(-100px) scale(0.9);
-            opacity: 0.7;
-            filter: hue-rotate(-180deg);
+        /* Modern Design Showcase Styles */
+        .design-showcase {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(26, 26, 26, 0.6) 100%);
+            backdrop-filter: blur(20px);
         }
 
         .mobile-menu {
@@ -312,46 +282,116 @@
         </div>
     </section>
 
-    <!-- Jersey Designs Reel -->
-    <section id="designs" class="py-20 bg-rog-light">
-        <div class="container mx-auto px-4">
+    <!-- Featured Designs Section -->
+    <section id="designs" class="py-20 bg-rog-light relative overflow-hidden">
+        <!-- Background Effects -->
+        <div class="absolute inset-0 bg-gradient-to-br from-rog-red/5 via-transparent to-rog-blue/5"></div>
+        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-rog-red/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-rog-blue/10 rounded-full blur-3xl"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
             <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-rog-display font-bold mb-6">
+                <h2 class="text-4xl md:text-6xl font-rog-display font-bold mb-6">
                     Featured
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-rog-red via-rog-orange to-rog-blue">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-rog-red via-rog-orange to-rog-blue animate-glow">
                         Designs
                     </span>
                 </h2>
-                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
-                    Explore our collection of premium jersey designs. Each piece is crafted with attention to detail and quality.
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                    Discover our premium collection of custom jersey designs. Each piece is meticulously crafted with cutting-edge technology and premium materials.
                 </p>
             </div>
 
-            <!-- Reel Container -->
-            <div class="reel-container max-w-6xl mx-auto">
-                <div class="relative h-96 flex items-center justify-center">
-                    <!-- Reel Items -->
-                    <div id="reel-items" class="relative w-full h-full flex items-center justify-center">
-                        <!-- Jersey items will be dynamically loaded here -->
+            <!-- Modern Design Showcase -->
+            <div class="max-w-7xl mx-auto">
+                <!-- Main Display Area -->
+                <div class="relative bg-gradient-to-br from-rog-dark/50 to-rog-light/30 backdrop-blur-sm rounded-3xl p-8 border border-rog-red/20 shadow-2xl">
+                    <!-- Current Design Display -->
+                    <div id="current-design" class="relative">
+                        <div class="flex flex-col lg:flex-row items-center gap-12">
+                            <!-- Jersey Image -->
+                            <div class="flex-1 relative group">
+                                <div class="relative overflow-hidden rounded-2xl shadow-2xl">
+                                    <img id="current-jersey-image" src="" alt="" class="w-full h-auto transition-transform duration-700 group-hover:scale-105">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                                </div>
+                                <!-- Design Badge -->
+                                <div class="absolute top-4 right-4 bg-rog-red/90 backdrop-blur-sm px-4 py-2 rounded-full">
+                                    <span id="current-design-number" class="text-white font-rog-heading font-semibold text-sm">DESIGN NO. 24A001</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Design Info -->
+                            <div class="flex-1 space-y-6">
+                                <div>
+                                    <h3 id="current-design-title" class="text-3xl lg:text-4xl font-rog-display font-bold text-white mb-4"></h3>
+                                    <p class="text-gray-300 text-lg leading-relaxed">
+                                        Premium quality materials with advanced moisture-wicking technology. Perfect for professional teams and serious athletes.
+                                    </p>
+                                </div>
+                                
+                                <!-- Features -->
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 bg-rog-red rounded-full"></div>
+                                        <span class="text-gray-300 font-rog-body">Premium Materials</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 bg-rog-blue rounded-full"></div>
+                                        <span class="text-gray-300 font-rog-body">Moisture Wicking</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 bg-rog-orange rounded-full"></div>
+                                        <span class="text-gray-300 font-rog-body">Custom Design</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2 h-2 bg-rog-purple rounded-full"></div>
+                                        <span class="text-gray-300 font-rog-body">Fast Delivery</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                                    <button class="rog-button px-8 py-4 rounded-xl font-rog-heading font-semibold text-lg transition-all duration-300 hover:shadow-2xl">
+                                        <i class="fas fa-paint-brush mr-2"></i>
+                                        Customize This Design
+                                    </button>
+                                    <button class="glass-effect px-8 py-4 rounded-xl font-rog-heading font-semibold text-lg text-white hover:bg-white hover:text-rog-dark transition-all duration-300">
+                                        <i class="fas fa-eye mr-2"></i>
+                                        View Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
+                    
                     <!-- Navigation Controls -->
-                    <button id="reel-prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-rog-red/80 hover:bg-rog-red rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button id="reel-next" class="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-rog-red/80 hover:bg-rog-red rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-
-                    <!-- Play/Pause Button -->
-                    <button id="reel-play" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-16 h-16 bg-rog-red/80 hover:bg-rog-red rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110">
-                        <i id="reel-play-icon" class="fas fa-play text-xl"></i>
-                    </button>
+                    <div class="flex items-center justify-between mt-8">
+                        <!-- Previous Button -->
+                        <button id="reel-prev" class="group flex items-center space-x-3 px-6 py-3 bg-rog-red/20 hover:bg-rog-red/30 backdrop-blur-sm rounded-xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
+                            <i class="fas fa-chevron-left text-rog-red group-hover:text-white transition-colors"></i>
+                            <span class="text-rog-red group-hover:text-white font-rog-heading font-medium transition-colors">Previous</span>
+                        </button>
+                        
+                        <!-- Play/Pause Button -->
+                        <button id="reel-play" class="w-16 h-16 bg-gradient-to-r from-rog-red to-rog-orange hover:from-rog-orange hover:to-rog-red rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110 shadow-lg">
+                            <i id="reel-play-icon" class="fas fa-play text-xl"></i>
+                        </button>
+                        
+                        <!-- Next Button -->
+                        <button id="reel-next" class="group flex items-center space-x-3 px-6 py-3 bg-rog-red/20 hover:bg-rog-red/30 backdrop-blur-sm rounded-xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
+                            <span class="text-rog-red group-hover:text-white font-rog-heading font-medium transition-colors">Next</span>
+                            <i class="fas fa-chevron-right text-rog-red group-hover:text-white transition-colors"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Reel Indicators -->
-                <div id="reel-indicators" class="flex justify-center space-x-2 mt-8">
-                    <!-- Indicators will be dynamically generated -->
+                <!-- Design Thumbnails -->
+                <div class="mt-12">
+                    <h3 class="text-2xl font-rog-heading font-semibold text-white mb-6 text-center">Browse All Designs</h3>
+                    <div id="design-thumbnails" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        <!-- Thumbnails will be dynamically generated -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -513,57 +553,67 @@
             });
         }
 
-        // Jersey designs reel functionality
+        // Modern Design Showcase functionality
         function setupDesignsReel() {
             const jerseyDesigns = [{
                     id: 1,
                     image: 'jersey-designs/Mockup24A001.jpg',
-                    title: 'Classic Red Jersey'
+                    title: 'Classic Red Jersey',
+                    number: '24A001'
                 },
                 {
                     id: 2,
                     image: 'jersey-designs/Mockup24A002.jpg',
-                    title: 'Blue Thunder Jersey'
+                    title: 'Blue Thunder Jersey',
+                    number: '24A002'
                 },
                 {
                     id: 3,
                     image: 'jersey-designs/Mockup24A003.jpg',
-                    title: 'Green Machine Jersey'
+                    title: 'Green Machine Jersey',
+                    number: '24A003'
                 },
                 {
                     id: 4,
                     image: 'jersey-designs/Mockup24A004.jpg',
-                    title: 'Golden Eagle Jersey'
+                    title: 'Golden Eagle Jersey',
+                    number: '24A004'
                 },
                 {
                     id: 5,
                     image: 'jersey-designs/Mockup24A005.jpg',
-                    title: 'Purple Storm Jersey'
+                    title: 'Purple Storm Jersey',
+                    number: '24A005'
                 },
                 {
                     id: 6,
                     image: 'jersey-designs/Mockup24A006.jpg',
-                    title: 'Orange Blaze Jersey'
+                    title: 'Orange Blaze Jersey',
+                    number: '24A006'
                 },
                 {
                     id: 7,
                     image: 'jersey-designs/Mockup24A007.jpg',
-                    title: 'Silver Lightning Jersey'
+                    title: 'Silver Lightning Jersey',
+                    number: '24A007'
                 },
                 {
                     id: 8,
                     image: 'jersey-designs/Mockup24A008.jpg',
-                    title: 'Black Panther Jersey'
+                    title: 'Black Panther Jersey',
+                    number: '24A008'
                 },
                 {
                     id: 9,
                     image: 'jersey-designs/Mockup24A009.jpg',
-                    title: 'White Knight Jersey'
+                    title: 'White Knight Jersey',
+                    number: '24A009'
                 },
                 {
                     id: 10,
                     image: 'jersey-designs/Mockup24A010.jpg',
-                    title: 'Crimson Fire Jersey'
+                    title: 'Crimson Fire Jersey',
+                    number: '24A010'
                 }
             ];
 
@@ -571,79 +621,70 @@
             let isPlaying = false;
             let playInterval;
 
-            const reelItems = document.getElementById('reel-items');
-            const indicators = document.getElementById('reel-indicators');
+            const currentJerseyImage = document.getElementById('current-jersey-image');
+            const currentDesignTitle = document.getElementById('current-design-title');
+            const currentDesignNumber = document.getElementById('current-design-number');
+            const thumbnailsContainer = document.getElementById('design-thumbnails');
             const prevBtn = document.getElementById('reel-prev');
             const nextBtn = document.getElementById('reel-next');
             const playBtn = document.getElementById('reel-play');
             const playIcon = document.getElementById('reel-play-icon');
 
-            // Initialize reel items
-            function initReelItems() {
-                reelItems.innerHTML = '';
+            // Initialize thumbnails
+            function initThumbnails() {
+                thumbnailsContainer.innerHTML = '';
                 jerseyDesigns.forEach((design, index) => {
-                    const item = document.createElement('div');
-                    item.className = 'reel-item absolute inset-0 flex items-center justify-center';
-                    item.innerHTML = `
-                        <div class="jersey-card max-w-sm mx-auto">
-                            <img src="${design.image}" alt="${design.title}" class="w-full h-auto rounded-lg shadow-2xl">
-                            <div class="text-center mt-4">
-                                <h3 class="text-xl font-rog-heading font-semibold text-white" style="text-decoration: none; border: none; outline: none;">${design.title}</h3>
+                    const thumbnail = document.createElement('div');
+                    thumbnail.className = `relative group cursor-pointer transition-all duration-300 hover:scale-105 ${index === 0 ? 'ring-2 ring-rog-red' : ''}`;
+                    thumbnail.innerHTML = `
+                        <div class="relative overflow-hidden rounded-xl shadow-lg">
+                            <img src="${design.image}" alt="${design.title}" class="w-full h-32 object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div class="absolute bottom-2 left-2 right-2">
+                                <h4 class="text-white font-rog-heading font-semibold text-sm">${design.title}</h4>
                             </div>
                         </div>
                     `;
-                    reelItems.appendChild(item);
+                    thumbnail.addEventListener('click', () => goToSlide(index));
+                    thumbnailsContainer.appendChild(thumbnail);
                 });
             }
 
-            // Initialize indicators
-            function initIndicators() {
-                indicators.innerHTML = '';
-                jerseyDesigns.forEach((_, index) => {
-                    const indicator = document.createElement('button');
-                    indicator.className = `w-3 h-3 rounded-full transition-all duration-300 ${index === 0 ? 'bg-rog-red' : 'bg-gray-600'}`;
-                    indicator.addEventListener('click', () => goToSlide(index));
-                    indicators.appendChild(indicator);
-                });
-            }
+            // Update current design display
+            function updateCurrentDesign() {
+                const design = jerseyDesigns[currentSlide];
+                if (currentJerseyImage) currentJerseyImage.src = design.image;
+                if (currentJerseyImage) currentJerseyImage.alt = design.title;
+                if (currentDesignTitle) currentDesignTitle.textContent = design.title;
+                if (currentDesignNumber) currentDesignNumber.textContent = `DESIGN NO. ${design.number}`;
 
-            // Update slide
-            function updateSlide() {
-                const items = reelItems.querySelectorAll('.reel-item');
-                const indicatorBtns = indicators.querySelectorAll('button');
-
-                items.forEach((item, index) => {
-                    item.classList.remove('active', 'prev', 'next');
+                // Update thumbnail selection
+                const thumbnails = thumbnailsContainer.querySelectorAll('div');
+                thumbnails.forEach((thumb, index) => {
                     if (index === currentSlide) {
-                        item.classList.add('active');
-                    } else if (index === (currentSlide - 1 + jerseyDesigns.length) % jerseyDesigns.length) {
-                        item.classList.add('prev');
-                    } else if (index === (currentSlide + 1) % jerseyDesigns.length) {
-                        item.classList.add('next');
+                        thumb.classList.add('ring-2', 'ring-rog-red');
+                    } else {
+                        thumb.classList.remove('ring-2', 'ring-rog-red');
                     }
-                });
-
-                indicatorBtns.forEach((btn, index) => {
-                    btn.className = `w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-rog-red' : 'bg-gray-600'}`;
                 });
             }
 
             // Go to specific slide
             function goToSlide(index) {
                 currentSlide = index;
-                updateSlide();
+                updateCurrentDesign();
             }
 
             // Next slide
             function nextSlide() {
                 currentSlide = (currentSlide + 1) % jerseyDesigns.length;
-                updateSlide();
+                updateCurrentDesign();
             }
 
             // Previous slide
             function prevSlide() {
                 currentSlide = (currentSlide - 1 + jerseyDesigns.length) % jerseyDesigns.length;
-                updateSlide();
+                updateCurrentDesign();
             }
 
             // Toggle play/pause
@@ -651,7 +692,7 @@
                 isPlaying = !isPlaying;
                 if (isPlaying) {
                     playIcon.className = 'fas fa-pause text-xl';
-                    playInterval = setInterval(nextSlide, 3000);
+                    playInterval = setInterval(nextSlide, 4000);
                 } else {
                     playIcon.className = 'fas fa-play text-xl';
                     clearInterval(playInterval);
@@ -680,15 +721,26 @@
                 });
             }
 
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                } else if (e.key === 'ArrowRight') {
+                    nextSlide();
+                } else if (e.key === ' ') {
+                    e.preventDefault();
+                    togglePlay();
+                }
+            });
+
             // Initialize
-            initReelItems();
-            initIndicators();
-            updateSlide();
+            initThumbnails();
+            updateCurrentDesign();
 
             // Auto-play on page load
             setTimeout(() => {
                 togglePlay();
-            }, 2000);
+            }, 3000);
         }
 
         // Admin panel functionality
