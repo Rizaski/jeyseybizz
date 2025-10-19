@@ -373,9 +373,9 @@
                 <i class="fas fa-users text-rog-red"></i>
                 <span>Customers</span>
             </a>
-            <a href="#products" class="flex items-center space-x-3 px-4 py-3 text-white hover:bg-rog-gray rounded-lg transition-colors duration-300 font-rog-body">
-                <i class="fas fa-tshirt text-rog-red"></i>
-                <span>Products</span>
+            <a href="#materials" class="flex items-center space-x-3 px-4 py-3 text-white hover:bg-rog-gray rounded-lg transition-colors duration-300 font-rog-body">
+                <i class="fas fa-layer-group text-rog-red"></i>
+                <span>Materials</span>
             </a>
             <a href="designer-studio.html" class="flex items-center space-x-3 px-4 py-3 text-white hover:bg-rog-gray rounded-lg transition-colors duration-300 font-rog-body">
                 <i class="fas fa-paint-brush text-rog-red"></i>
@@ -510,7 +510,7 @@
                             <tr class="border-b border-rog-gray">
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Order ID</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Customer</th>
-                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Product</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Material</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Status</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Amount</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Date</th>
@@ -639,7 +639,7 @@
                             <tr class="border-b border-rog-gray">
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Order ID</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Customer</th>
-                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Product</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Material</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Status</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Amount</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Date</th>
@@ -727,30 +727,30 @@
             </div>
         </section>
 
-        <!-- Products Section -->
-        <section id="products" class="p-6 hidden">
+        <!-- Materials Section -->
+        <section id="materials" class="p-6 hidden">
             <div class="mb-8">
-                <h2 class="text-3xl font-rog-display font-bold text-white mb-4">Products Management</h2>
-                <p class="text-gray-400 font-rog-body">Manage jersey products and inventory</p>
+                <h2 class="text-3xl font-rog-display font-bold text-white mb-4">Materials Management</h2>
+                <p class="text-gray-400 font-rog-body">Manage jersey materials and inventory</p>
             </div>
 
-            <!-- Product Categories -->
+            <!-- Material Categories -->
             <div class="grid md:grid-cols-4 gap-6 mb-8">
                 <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-2xl font-rog-display font-bold text-white" id="total-products">0</p>
-                            <p class="text-sm text-gray-400 font-rog-body">Total Products</p>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="total-materials">0</p>
+                            <p class="text-sm text-gray-400 font-rog-body">Total Materials</p>
                         </div>
                         <div class="w-12 h-12 bg-gradient-to-br from-rog-red to-rog-orange rounded-lg flex items-center justify-center">
-                            <i class="fas fa-tshirt text-white"></i>
+                            <i class="fas fa-layer-group text-white"></i>
                         </div>
                     </div>
                 </div>
                 <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-2xl font-rog-display font-bold text-white" id="in-stock">0</p>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="materials-in-stock">0</p>
                             <p class="text-sm text-gray-400 font-rog-body">In Stock</p>
                         </div>
                         <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
@@ -761,7 +761,7 @@
                 <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-2xl font-rog-display font-bold text-white" id="low-stock">0</p>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="materials-low-stock">0</p>
                             <p class="text-sm text-gray-400 font-rog-body">Low Stock</p>
                         </div>
                         <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center">
@@ -772,7 +772,7 @@
                 <div class="admin-card bg-rog-light/20 backdrop-blur-sm p-6 rounded-2xl border border-rog-red/30">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-2xl font-rog-display font-bold text-white" id="out-of-stock">0</p>
+                            <p class="text-2xl font-rog-display font-bold text-white" id="materials-out-of-stock">0</p>
                             <p class="text-sm text-gray-400 font-rog-body">Out of Stock</p>
                         </div>
                         <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
@@ -782,28 +782,28 @@
                 </div>
             </div>
 
-            <!-- Products Table -->
+            <!-- Materials Table -->
             <div class="bg-rog-light/20 backdrop-blur-sm rounded-2xl border border-rog-red/30 p-6">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-rog-heading font-semibold text-white">Products List</h3>
-                    <button id="add-product-btn" class="rog-button px-4 py-2 rounded-lg font-rog-heading font-semibold text-white">
-                        <i class="fas fa-plus mr-2"></i>Add Product
+                    <h3 class="text-xl font-rog-heading font-semibold text-white">Materials List</h3>
+                    <button id="add-material-btn" class="rog-button px-4 py-2 rounded-lg font-rog-heading font-semibold text-white">
+                        <i class="fas fa-plus mr-2"></i>Add Material
                     </button>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead>
                             <tr class="border-b border-rog-gray">
-                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Product</th>
-                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Category</th>
-                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Price</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Material</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Type</th>
+                                <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Price per Unit</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Stock</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Status</th>
                                 <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="products-table-body">
-                            <!-- Products will be populated here -->
+                        <tbody id="materials-table-body">
+                            <!-- Materials will be populated here -->
                         </tbody>
                     </table>
                 </div>
@@ -1028,7 +1028,7 @@
         let currentPage = 'dashboard';
         let ordersData = [];
         let customersData = [];
-        let productsData = [];
+        let materialsData = [];
         let currentEditId = null;
 
         // Firebase imports
@@ -1037,8 +1037,20 @@
         // Initialize Firebase imports
         async function initializeFirebase() {
             try {
-                const { getFirestore, collection: col, getDocs: getDocsFn, addDoc: addDocFn, updateDoc: updateDocFn, deleteDoc: deleteDocFn, doc: docFn, query: queryFn, orderBy: orderByFn, where: whereFn, onSnapshot: onSnapshotFn } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-                
+                const {
+                    getFirestore,
+                    collection: col,
+                    getDocs: getDocsFn,
+                    addDoc: addDocFn,
+                    updateDoc: updateDocFn,
+                    deleteDoc: deleteDocFn,
+                    doc: docFn,
+                    query: queryFn,
+                    orderBy: orderByFn,
+                    where: whereFn,
+                    onSnapshot: onSnapshotFn
+                } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
                 collection = col;
                 getDocs = getDocsFn;
                 addDoc = addDocFn;
@@ -1049,7 +1061,7 @@
                 orderBy = orderByFn;
                 where = whereFn;
                 onSnapshot = onSnapshotFn;
-                
+
                 console.log('Firebase Firestore imported successfully');
             } catch (error) {
                 console.error('Error importing Firebase Firestore:', error);
@@ -1143,8 +1155,8 @@
                 case 'customers':
                     await loadCustomersData();
                     break;
-                case 'products':
-                    await loadProductsData();
+                case 'materials':
+                    await loadMaterialsData();
                     break;
                 case 'analytics':
                     await loadAnalyticsData();
@@ -1196,12 +1208,12 @@
                     const ordersRef = collection(window.firebaseDb, 'orders');
                     const ordersSnapshot = await getDocs(ordersRef);
                     const orders = ordersSnapshot.docs.map(doc => doc.data());
-                    
+
                     // Load customers for stats
                     const customersRef = collection(window.firebaseDb, 'customers');
                     const customersSnapshot = await getDocs(customersRef);
                     const customers = customersSnapshot.docs.map(doc => doc.data());
-                    
+
                     updateDashboardStats(orders, customers);
                 } else {
                     updateDashboardStats([], []);
@@ -1217,13 +1229,13 @@
             const activeCustomers = customers.filter(c => c.status === 'active').length;
             const pendingOrders = orders.filter(o => o.status === 'pending').length;
             const completedOrders = orders.filter(o => o.status === 'completed').length;
-            
+
             // Update dashboard stats
             const totalOrdersEl = document.getElementById('dashboard-total-orders');
             const activeCustomersEl = document.getElementById('dashboard-active-customers');
             const pendingOrdersEl = document.getElementById('dashboard-pending-orders');
             const completedOrdersEl = document.getElementById('dashboard-completed-orders');
-            
+
             if (totalOrdersEl) totalOrdersEl.textContent = totalOrders;
             if (activeCustomersEl) activeCustomersEl.textContent = activeCustomers;
             if (pendingOrdersEl) pendingOrdersEl.textContent = pendingOrders;
@@ -1243,7 +1255,7 @@
                 <tr class="border-b border-rog-gray/50">
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.id || 'N/A'}</td>
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.customer || 'N/A'}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.product || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.material || 'N/A'}</td>
                     <td class="py-3 px-4">
                         <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status || 'N/A'}</span>
                     </td>
@@ -1295,25 +1307,29 @@
             }
         }
 
-        async function loadProductsData() {
+        async function loadMaterialsData() {
             try {
-                console.log('Loading products data...');
-                if (window.firebaseDb) {
-                    const productsRef = collection(window.firebaseDb, 'products');
-                    const productsSnapshot = await getDocs(productsRef);
-                    productsData = productsSnapshot.docs.map(doc => ({
+                console.log('Loading materials data...');
+                if (window.firebaseDb && collection) {
+                    const materialsRef = collection(window.firebaseDb, 'materials');
+                    const q = query(materialsRef, orderBy('createdAt', 'desc'));
+                    const materialsSnapshot = await getDocs(q);
+                    materialsData = materialsSnapshot.docs.map(doc => ({
                         id: doc.id,
                         ...doc.data()
                     }));
-                    renderProductsTable();
-                    updateProductStats();
+                    renderMaterialsTable();
+                    updateMaterialStats();
                 } else {
-                    productsData = [];
-                    renderProductsTable();
-                    updateProductStats();
+                    materialsData = [];
+                    renderMaterialsTable();
+                    updateMaterialStats();
                 }
             } catch (error) {
-                console.error('Error loading products data:', error);
+                console.error('Error loading materials data:', error);
+                materialsData = [];
+                renderMaterialsTable();
+                updateMaterialStats();
             }
         }
 
@@ -1358,7 +1374,7 @@
                 <tr class="border-b border-rog-gray/50">
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.id || 'N/A'}</td>
                     <td class="py-3 px-4 font-rog-body text-gray-300">${order.customer || 'N/A'}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.product || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${order.material || 'N/A'}</td>
                     <td class="py-3 px-4">
                         <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status || 'N/A'}</span>
                     </td>
@@ -1407,29 +1423,29 @@
             `).join('');
         }
 
-        function renderProductsTable() {
-            const tbody = document.getElementById('products-table-body');
+        function renderMaterialsTable() {
+            const tbody = document.getElementById('materials-table-body');
             if (!tbody) return;
 
-            if (productsData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-gray-400 font-rog-body">No products found</td></tr>';
+            if (materialsData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-gray-400 font-rog-body">No materials found</td></tr>';
                 return;
             }
 
-            tbody.innerHTML = productsData.map(product => `
+            tbody.innerHTML = materialsData.map(material => `
                 <tr class="border-b border-rog-gray/50">
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${product.name || 'N/A'}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${product.category || 'N/A'}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">$${product.price || '0.00'}</td>
-                    <td class="py-3 px-4 font-rog-body text-gray-300">${product.stock || 0}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${material.name || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${material.type || 'N/A'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">$${material.price || '0.00'}</td>
+                    <td class="py-3 px-4 font-rog-body text-gray-300">${material.stock || 0}</td>
                     <td class="py-3 px-4">
-                        <span class="px-2 py-1 ${getStatusColor(product.status)} rounded-full text-xs font-rog-body">${product.status || 'N/A'}</span>
+                        <span class="px-2 py-1 ${getStatusColor(material.status)} rounded-full text-xs font-rog-body">${material.status || 'N/A'}</span>
                     </td>
                     <td class="py-3 px-4">
-                        <button class="text-rog-red hover:text-rog-orange mr-2" onclick="editProduct('${product.id}')">
+                        <button class="text-rog-red hover:text-rog-orange mr-2" onclick="editMaterial('${material.id}')">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="text-red-400 hover:text-red-300" onclick="deleteProduct('${product.id}')">
+                        <button class="text-red-400 hover:text-red-300" onclick="deleteMaterial('${material.id}')">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -1466,16 +1482,16 @@
             }).length;
         }
 
-        async function updateProductStats() {
-            const totalProducts = document.getElementById('total-products');
-            const inStock = document.getElementById('in-stock');
-            const lowStock = document.getElementById('low-stock');
-            const outOfStock = document.getElementById('out-of-stock');
+        async         function updateMaterialStats() {
+            const totalMaterials = document.getElementById('total-materials');
+            const materialsInStock = document.getElementById('materials-in-stock');
+            const materialsLowStock = document.getElementById('materials-low-stock');
+            const materialsOutOfStock = document.getElementById('materials-out-of-stock');
 
-            if (totalProducts) totalProducts.textContent = productsData.length;
-            if (inStock) inStock.textContent = productsData.filter(p => p.stock > 10).length;
-            if (lowStock) lowStock.textContent = productsData.filter(p => p.stock <= 10 && p.stock > 0).length;
-            if (outOfStock) outOfStock.textContent = productsData.filter(p => p.stock === 0).length;
+            if (totalMaterials) totalMaterials.textContent = materialsData.length;
+            if (materialsInStock) materialsInStock.textContent = materialsData.filter(m => m.stock > 10).length;
+            if (materialsLowStock) materialsLowStock.textContent = materialsData.filter(m => m.stock <= 10 && m.stock > 0).length;
+            if (materialsOutOfStock) materialsOutOfStock.textContent = materialsData.filter(m => m.stock === 0).length;
         }
 
         async function updateAnalyticsStats() {
@@ -1484,17 +1500,17 @@
                     const ordersRef = collection(window.firebaseDb, 'orders');
                     const ordersSnapshot = await getDocs(ordersRef);
                     const orders = ordersSnapshot.docs.map(doc => doc.data());
-                    
+
                     const totalRevenue = orders.reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
                     const avgOrderValue = orders.length > 0 ? totalRevenue / orders.length : 0;
                     const conversionRate = 3.2; // This would be calculated based on actual data
                     const customerSatisfaction = 94; // This would be calculated based on actual data
-                    
+
                     const totalRevenueEl = document.getElementById('total-revenue');
                     const avgOrderValueEl = document.getElementById('avg-order-value');
                     const conversionRateEl = document.getElementById('conversion-rate');
                     const customerSatisfactionEl = document.getElementById('customer-satisfaction');
-                    
+
                     if (totalRevenueEl) totalRevenueEl.textContent = `$${totalRevenue.toFixed(2)}`;
                     if (avgOrderValueEl) avgOrderValueEl.textContent = `$${avgOrderValue.toFixed(2)}`;
                     if (conversionRateEl) conversionRateEl.textContent = `${conversionRate}%`;
@@ -1577,38 +1593,38 @@
                 });
             }
 
-            // Product modal
-            const productModal = document.getElementById('productModal');
-            const addProductBtn = document.getElementById('add-product-btn');
-            const closeProductModal = document.getElementById('closeProductModal');
-            const cancelProduct = document.getElementById('cancelProduct');
-            const productForm = document.getElementById('productForm');
+            // Material modal
+            const materialModal = document.getElementById('materialModal');
+            const addMaterialBtn = document.getElementById('add-material-btn');
+            const closeMaterialModal = document.getElementById('closeMaterialModal');
+            const cancelMaterial = document.getElementById('cancelMaterial');
+            const materialForm = document.getElementById('materialForm');
 
-            if (addProductBtn) {
-                addProductBtn.addEventListener('click', () => {
+            if (addMaterialBtn) {
+                addMaterialBtn.addEventListener('click', () => {
                     currentEditId = null;
-                    document.getElementById('productModalTitle').textContent = 'Add New Product';
-                    productForm.reset();
-                    productModal.classList.remove('hidden');
+                    document.getElementById('materialModalTitle').textContent = 'Add New Material';
+                    materialForm.reset();
+                    materialModal.classList.remove('hidden');
                 });
             }
 
-            if (closeProductModal) {
-                closeProductModal.addEventListener('click', () => {
-                    productModal.classList.add('hidden');
+            if (closeMaterialModal) {
+                closeMaterialModal.addEventListener('click', () => {
+                    materialModal.classList.add('hidden');
                 });
             }
 
-            if (cancelProduct) {
-                cancelProduct.addEventListener('click', () => {
-                    productModal.classList.add('hidden');
+            if (cancelMaterial) {
+                cancelMaterial.addEventListener('click', () => {
+                    materialModal.classList.add('hidden');
                 });
             }
 
-            if (productForm) {
-                productForm.addEventListener('submit', async (e) => {
+            if (materialForm) {
+                materialForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    await saveProduct();
+                    await saveMaterial();
                 });
             }
         }
@@ -1619,7 +1635,7 @@
                 const orderData = {
                     customer: document.getElementById('orderCustomer').value,
                     email: document.getElementById('orderEmail').value,
-                    product: document.getElementById('orderProduct').value,
+                    material: document.getElementById('orderMaterial').value,
                     quantity: parseInt(document.getElementById('orderQuantity').value),
                     amount: parseFloat(document.getElementById('orderAmount').value),
                     status: document.getElementById('orderStatus').value,
@@ -1668,28 +1684,28 @@
             }
         }
 
-        async function saveProduct() {
+        async function saveMaterial() {
             try {
-                const productData = {
-                    name: document.getElementById('productName').value,
-                    category: document.getElementById('productCategory').value,
-                    price: parseFloat(document.getElementById('productPrice').value),
-                    stock: parseInt(document.getElementById('productStock').value),
-                    description: document.getElementById('productDescription').value,
+                const materialData = {
+                    name: document.getElementById('materialName').value,
+                    type: document.getElementById('materialType').value,
+                    price: parseFloat(document.getElementById('materialPrice').value),
+                    stock: parseInt(document.getElementById('materialStock').value),
+                    description: document.getElementById('materialDescription').value,
                     status: 'active',
                     createdAt: new Date()
                 };
 
                 if (window.firebaseDb && addDoc) {
-                    const productsRef = collection(window.firebaseDb, 'products');
-                    await addDoc(productsRef, productData);
-                    console.log('Product saved successfully');
+                    const materialsRef = collection(window.firebaseDb, 'materials');
+                    await addDoc(materialsRef, materialData);
+                    console.log('Material saved successfully');
                 }
 
-                document.getElementById('productModal').classList.add('hidden');
-                await loadProductsData();
+                document.getElementById('materialModal').classList.add('hidden');
+                await loadMaterialsData();
             } catch (error) {
-                console.error('Error saving product:', error);
+                console.error('Error saving material:', error);
             }
         }
 
@@ -1735,22 +1751,22 @@
             }
         }
 
-        function editProduct(productId) {
-            console.log('Edit product:', productId);
-            // Implement edit product functionality
+        function editMaterial(materialId) {
+            console.log('Edit material:', materialId);
+            // Implement edit material functionality
         }
 
-        async function deleteProduct(productId) {
-            if (confirm('Are you sure you want to delete this product?')) {
+        async function deleteMaterial(materialId) {
+            if (confirm('Are you sure you want to delete this material?')) {
                 try {
                     if (window.firebaseDb && deleteDoc && doc) {
-                        const productRef = doc(window.firebaseDb, 'products', productId);
-                        await deleteDoc(productRef);
-                        console.log('Product deleted successfully');
-                        await loadProductsData();
+                        const materialRef = doc(window.firebaseDb, 'materials', materialId);
+                        await deleteDoc(materialRef);
+                        console.log('Material deleted successfully');
+                        await loadMaterialsData();
                     }
                 } catch (error) {
-                    console.error('Error deleting product:', error);
+                    console.error('Error deleting material:', error);
                 }
             }
         }
@@ -1853,8 +1869,8 @@
         window.deleteOrder = deleteOrder;
         window.editCustomer = editCustomer;
         window.deleteCustomer = deleteCustomer;
-        window.editProduct = editProduct;
-        window.deleteProduct = deleteProduct;
+        window.editMaterial = editMaterial;
+        window.deleteMaterial = deleteMaterial;
 
         // Initialize all functionality
         document.addEventListener('DOMContentLoaded', async function() {
@@ -1866,10 +1882,10 @@
             setupUserProfile();
             loadAdminUserInfo();
             updateSessionDuration();
-            
+
             // Update session duration every minute
             setInterval(updateSessionDuration, 60000);
-            
+
             // Load initial dashboard data
             await loadDashboardData();
         });
@@ -1898,9 +1914,21 @@
                     </div>
                     <div class="grid md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Product</label>
-                            <select id="orderProduct" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
-                                <option value="">Select Product</option>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Material</label>
+                            <select id="orderMaterial" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                                <option value="">Select Material</option>
+                                <option value="Waffle">Waffle</option>
+                                <option value="Combweb">Combweb</option>
+                                <option value="Vortex Jacquard">Vortex Jacquard</option>
+                                <option value="Mesh">Mesh</option>
+                                <option value="Iceburg">Iceburg</option>
+                                <option value="Nano Check">Nano Check</option>
+                                <option value="Closehole">Closehole</option>
+                                <option value="Drytec">Drytec</option>
+                                <option value="Wetlook">Wetlook</option>
+                                <option value="Baby Pk">Baby Pk</option>
+                                <option value="Cool Tech">Cool Tech</option>
+                                <option value="Net">Net</option>
                             </select>
                         </div>
                         <div>
@@ -1984,50 +2012,64 @@
         </div>
     </div>
 
-    <!-- Product Modal -->
-    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <!-- Material Modal -->
+    <div id="materialModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-rog-light rounded-2xl p-6 w-full max-w-2xl">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-2xl font-rog-display font-bold text-white" id="productModalTitle">Add New Product</h3>
-                    <button id="closeProductModal" class="text-gray-400 hover:text-white">
+                    <h3 class="text-2xl font-rog-display font-bold text-white" id="materialModalTitle">Add New Material</h3>
+                    <button id="closeMaterialModal" class="text-gray-400 hover:text-white">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
-                <form id="productForm" class="space-y-4">
+                <form id="materialForm" class="space-y-4">
                     <div class="grid md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Product Name</label>
-                            <input type="text" id="productName" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter product name" required>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Material Name</label>
+                            <select id="materialName" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                                <option value="">Select Material</option>
+                                <option value="Waffle">Waffle</option>
+                                <option value="Combweb">Combweb</option>
+                                <option value="Vortex Jacquard">Vortex Jacquard</option>
+                                <option value="Mesh">Mesh</option>
+                                <option value="Iceburg">Iceburg</option>
+                                <option value="Nano Check">Nano Check</option>
+                                <option value="Closehole">Closehole</option>
+                                <option value="Drytec">Drytec</option>
+                                <option value="Wetlook">Wetlook</option>
+                                <option value="Baby Pk">Baby Pk</option>
+                                <option value="Cool Tech">Cool Tech</option>
+                                <option value="Net">Net</option>
+                            </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Category</label>
-                            <select id="productCategory" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
-                                <option value="">Select Category</option>
-                                <option value="Sports">Sports</option>
-                                <option value="Team">Team</option>
-                                <option value="Custom">Custom</option>
-                                <option value="Training">Training</option>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Material Type</label>
+                            <select id="materialType" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red" required>
+                                <option value="">Select Type</option>
+                                <option value="Fabric">Fabric</option>
+                                <option value="Mesh">Mesh</option>
+                                <option value="Technical">Technical</option>
+                                <option value="Performance">Performance</option>
                             </select>
                         </div>
                     </div>
                     <div class="grid md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Price</label>
-                            <input type="number" id="productPrice" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter price" step="0.01" required>
+                            <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Price per Unit</label>
+                            <input type="number" id="materialPrice" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter price per unit" step="0.01" required>
                         </div>
                         <div>
                             <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Stock Quantity</label>
-                            <input type="number" id="productStock" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter stock quantity" min="0" required>
+                            <input type="number" id="materialStock" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter stock quantity" min="0" required>
                         </div>
                     </div>
                     <div>
                         <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Description</label>
-                        <textarea id="productDescription" rows="3" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter product description"></textarea>
+                        <textarea id="materialDescription" rows="3" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rog-red" placeholder="Enter material description"></textarea>
                     </div>
                     <div class="flex justify-end space-x-4">
-                        <button type="button" id="cancelProduct" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">Cancel</button>
-                        <button type="submit" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">Save Product</button>
+                        <button type="button" id="cancelMaterial" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">Cancel</button>
+                        <button type="submit" class="rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white">Save Material</button>
                     </div>
                 </form>
             </div>
