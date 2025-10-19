@@ -1223,10 +1223,10 @@
                     e.preventDefault();
                     const link = e.target.closest('nav a[href^="#"]');
                     const targetId = link.getAttribute('href').substring(1);
-                    
+
                     // Show the page
                     showPage(targetId);
-                    
+
                     // Close mobile sidebar
                     const sidebar = document.getElementById('sidebar');
                     const mobileOverlay = document.getElementById('mobileOverlay');
@@ -3120,6 +3120,12 @@
             showPage(pageId);
         }
 
+        // Simple test function
+        function testNav() {
+            console.log('Testing navigation...');
+            showPage('orders');
+        }
+
         // Make functions global
         window.logout = logout;
         window.editOrder = editOrder;
@@ -3134,6 +3140,7 @@
         window.testNavigation = testNavigation;
         window.testPageNavigation = testPageNavigation;
         window.showPage = showPage;
+        window.testNav = testNav;
 
         // Initialize all functionality
         document.addEventListener('DOMContentLoaded', async function() {
