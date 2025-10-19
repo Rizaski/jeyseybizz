@@ -14,6 +14,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+
     <!-- ROG Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -287,48 +290,71 @@
 
                     console.log('Admin login attempt:', email);
 
-                    // Admin credentials check - credentials should be configured securely
-                    // For security, credentials are not hardcoded in the client-side code
-                    // This should be handled by a secure backend authentication system
+                    // Show loading state
+                    const submitBtn = adminLoginForm.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Authenticating...';
+                    submitBtn.disabled = true;
 
-                    // Placeholder for secure authentication
-                    const admin = null; // Replace with secure authentication logic
-
-                    if (admin) {
-                        console.log('Admin authentication successful:', admin);
+                    // Firebase Authentication
+                    try {
+                        console.log('Attempting Firebase authentication for:', email);
+                        
+                        // Import Firebase Auth
+                        const { getAuth, signInWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+                        
+                        // Get Firebase app instance
+                        const { getApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+                        const app = getApp();
+                        const auth = getAuth(app);
+                        
+                        // Attempt Firebase sign in
+                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                        const user = userCredential.user;
+                        
+                        console.log('Firebase authentication successful:', user.email);
 
                         // Store admin session
                         localStorage.setItem('adminUser', JSON.stringify({
-                            id: 'admin_' + Date.now(),
-                            email: admin.email,
-                            name: admin.name,
+                            id: user.uid,
+                            email: user.email,
+                            name: user.displayName || user.email.split('@')[0],
                             userType: 'admin',
                             loginTime: new Date().toISOString()
                         }));
 
                         // Show success message
-                        const submitBtn = adminLoginForm.querySelector('button[type="submit"]');
-                        const originalText = submitBtn.innerHTML;
                         submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Login Successful!';
                         submitBtn.classList.add('bg-green-600');
-                        submitBtn.disabled = true;
 
                         setTimeout(() => {
-                            window.location.href = 'admin-panel.html';
+                            window.location.href = 'admin.html';
                         }, 1500);
-                    } else {
-                        console.log('Admin authentication failed');
-
+                        
+                    } catch (error) {
+                        console.error('Firebase authentication failed:', error);
+                        
                         // Show error message
-                        const submitBtn = adminLoginForm.querySelector('button[type="submit"]');
-                        const originalText = submitBtn.innerHTML;
-                        submitBtn.innerHTML = '<i class="fas fa-times mr-2"></i>Invalid Credentials';
+                        
+                        let errorMessage = 'Login Failed';
+                        if (error.code === 'auth/user-not-found') {
+                            errorMessage = 'User not found';
+                        } else if (error.code === 'auth/wrong-password') {
+                            errorMessage = 'Invalid password';
+                        } else if (error.code === 'auth/invalid-email') {
+                            errorMessage = 'Invalid email';
+                        } else if (error.code === 'auth/too-many-requests') {
+                            errorMessage = 'Too many attempts. Try again later';
+                        }
+                        
+                        submitBtn.innerHTML = `<i class="fas fa-times mr-2"></i>${errorMessage}`;
                         submitBtn.classList.add('bg-red-600');
 
                         setTimeout(() => {
                             submitBtn.innerHTML = originalText;
                             submitBtn.classList.remove('bg-red-600');
-                        }, 2000);
+                            submitBtn.disabled = false;
+                        }, 3000);
                     }
                 });
             }
