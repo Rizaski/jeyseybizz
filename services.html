@@ -595,9 +595,9 @@
         // Mobile menu functionality - FIXED VERSION
         document.addEventListener('DOMContentLoaded', function() {
             function setupMobileMenu() {
-                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-                const mobileMenu = document.getElementById('mobile-menu');
-                const mobileMenuClose = document.getElementById('mobile-menu-close');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
 
                 console.log('Mobile menu elements:', {
                     button: mobileMenuBtn,
@@ -615,53 +615,53 @@
                     }
                 }
 
-                // Open mobile menu
-                if (mobileMenuBtn) {
-                    mobileMenuBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Mobile menu button clicked');
-                        
-                        if (mobileMenu) {
-                            mobileMenu.classList.remove('hidden');
-                            document.body.style.overflow = 'hidden';
-                            console.log('Mobile menu opened');
-                        } else {
-                            console.error('Mobile menu element not found');
-                        }
-                    });
+            // Open mobile menu
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Mobile menu button clicked');
+                    
+                    if (mobileMenu) {
+                        mobileMenu.classList.remove('hidden');
+                        document.body.style.overflow = 'hidden';
+                        console.log('Mobile menu opened');
+                    } else {
+                        console.error('Mobile menu element not found');
+                    }
+                });
                 } else {
                     console.error('Mobile menu button not found');
-                }
+            }
 
-                // Close mobile menu
-                if (mobileMenuClose) {
-                    mobileMenuClose.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        closeMobileMenu();
-                    });
-                }
+            // Close mobile menu
+            if (mobileMenuClose) {
+                mobileMenuClose.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMobileMenu();
+                });
+            }
 
                 // Close menu when clicking outside
                 if (mobileMenu) {
                     mobileMenu.addEventListener('click', function(e) {
                         if (e.target === mobileMenu) {
-                            closeMobileMenu();
-                        }
-                    });
+                        closeMobileMenu();
+                    }
+                });
 
                     // Close menu when clicking on navigation links
                     mobileMenu.querySelectorAll('nav a').forEach(link => {
                         link.addEventListener('click', closeMobileMenu);
                     });
-                }
+            }
 
-                // Add keyboard support for mobile menu
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
-                        closeMobileMenu();
-                    }
+            // Add keyboard support for mobile menu
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                    closeMobileMenu();
+                }
                 });
             }
 

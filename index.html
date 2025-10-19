@@ -1,1365 +1,627 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Otomono Jerseys - Premium Jersey Design & Printing | Custom Sportswear</title>
-    <meta name="description" content="Premium jersey design, printing, and selling services. Quality materials, professional printing, and fast delivery for all your team needs. Custom sportswear solutions.">
-    <meta name="keywords" content="jersey design, custom jerseys, sportswear, team uniforms, printing services, Maldives, Otomono">
-    <meta name="author" content="Otomono Jerseys">
-    <meta name="robots" content="index, follow">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://otomono.vercel.app/">
-    <meta property="og:title" content="Otomono Jerseys - Premium Jersey Design & Printing">
-    <meta property="og:description" content="Premium jersey design, printing, and selling services. Quality materials, professional printing, and fast delivery for all your team needs.">
-    <meta property="og:image" content="https://otomono.vercel.app/public/logo.png">
-    <meta property="og:site_name" content="Otomono Jerseys">
-    <meta property="og:locale" content="en_US">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://otomono.vercel.app/">
-    <meta property="twitter:title" content="Otomono Jerseys - Premium Jersey Design & Printing">
-    <meta property="twitter:description" content="Premium jersey design, printing, and selling services. Quality materials, professional printing, and fast delivery for all your team needs.">
-    <meta property="twitter:image" content="https://otomono.vercel.app/public/logo.png">
-
+    <title>Otomono Jerseys - Premium Custom Jersey Design</title>
+    <meta name="description" content="Create stunning custom jerseys with our advanced 3D designer. Premium quality, fast delivery, and endless customization options.">
+    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="public/favicon.png">
     <link rel="apple-touch-icon" href="public/favicon.png">
-
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://otomono.vercel.app/">
-
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Otomono Jerseys",
-            "url": "https://otomono.vercel.app/",
-            "logo": "https://otomono.vercel.app/public/logo.png",
-            "description": "Premium jersey design, printing, and selling services. Quality materials, professional printing, and fast delivery for all your team needs.",
-            "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "Noomuraka",
-                "addressLocality": "Manadhoo",
-                "postalCode": "20199",
-                "addressRegion": "Noonu Atoll",
-                "addressCountry": "MV"
-            },
-            "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+960-7XXX-777",
-                "contactType": "customer service",
-                "email": "info@otomono.com"
-            },
-            "sameAs": [
-                "https://otomono.vercel.app/"
-            ],
-            "offers": {
-                "@type": "Offer",
-                "name": "Custom Jersey Design and Printing",
-                "description": "Premium jersey design, printing, and selling services",
-                "category": "Sportswear"
-            }
-        }
-    </script>
-
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-        gtag('config', 'GA_MEASUREMENT_ID', {
-            page_title: 'Otomono Jerseys - Premium Jersey Design & Printing',
-            page_location: window.location.href
-        });
-    </script>
-
+    
+    <!-- Custom Tailwind Config -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#ff0040',
-                        secondary: '#1a1a1a',
-                        accent: '#ff0040',
-                        'rog-red': '#ff0040',
+                        'rog-red': '#dc2626',
                         'rog-dark': '#0a0a0a',
-                        'rog-gray': '#1a1a1a',
-                        'rog-light': '#2a2a2a',
+                        'rog-light': '#1a1a1a',
+                        'rog-gray': '#2a2a2a',
                     },
                     fontFamily: {
-                        'rog-heading': ['Orbitron', 'Inter', 'sans-serif'],
-                        'rog-body': ['Roboto', 'Inter', 'sans-serif'],
-                        'rog-display': ['Orbitron', 'sans-serif'],
+                        'rog-display': ['Playfair Display', 'serif'],
+                        'rog-heading': ['Inter', 'sans-serif'],
+                        'rog-body': ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'slide-in-left': 'slideInLeft 0.8s ease-out',
+                        'slide-in-right': 'slideInRight 0.8s ease-out',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(30px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        slideInLeft: {
+                            '0%': { transform: 'translateX(-30px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(30px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 20px rgba(220, 38, 38, 0.5)' },
+                            '100%': { boxShadow: '0 0 30px rgba(220, 38, 38, 0.8)' },
+                        },
                     },
                 }
             }
         }
     </script>
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            scroll-behavior: smooth;
-            background-color: #0a0a0a;
-            color: #ffffff;
-        }
-
-        /* ROG Global Styles */
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-family: 'Orbitron', 'Inter', sans-serif;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        p,
-        span,
-        div,
-        a,
-        li {
-            font-family: 'Roboto', 'Inter', sans-serif;
-        }
-
-        .rog-heading {
-            font-family: 'Orbitron', 'Inter', sans-serif;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .rog-body {
-            font-family: 'Roboto', 'Inter', sans-serif;
-            font-weight: 400;
-            line-height: 1.6;
-        }
-
-        .rog-display {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .glow {
-            text-shadow: 0 0 10px rgba(255, 0, 64, 0.5);
-        }
-
-        .hover\:glow:hover {
-            text-shadow: 0 0 15px rgba(255, 0, 64, 0.8);
-        }
-
         .rog-button {
-            background: linear-gradient(45deg, #ff0040, #ff4080);
-            border: 1px solid #ff0040;
-            color: white;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
             transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(255, 0, 64, 0.3);
         }
-
         .rog-button:hover {
-            background: linear-gradient(45deg, #ff4080, #ff0040);
-            box-shadow: 0 0 30px rgba(255, 0, 64, 0.6);
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 50%, #ef4444 100%);
             transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4);
         }
-
-        .slider-image {
-            transition: opacity 0.5s ease-in-out;
+        .hero-gradient {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
         }
-
-        .indicator {
-            transition: all 0.3s ease;
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        .indicator:hover {
-            transform: scale(1.2);
+        .jersey-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .jersey-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        .reel-container {
+            perspective: 1000px;
+        }
+        .reel-item {
+            transform-style: preserve-3d;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reel-item.active {
+            transform: rotateY(0deg) scale(1.1);
+            z-index: 10;
+        }
+        .reel-item.prev {
+            transform: rotateY(45deg) translateZ(-100px) scale(0.9);
+            opacity: 0.7;
+        }
+        .reel-item.next {
+            transform: rotateY(-45deg) translateZ(-100px) scale(0.9);
+            opacity: 0.7;
+        }
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
         }
     </style>
-
-    <!-- Firebase Configuration Files -->
-    <script src="firebase-env-config.js"></script>
-    <script src="firebase-simple-config.js"></script>
-    <script src="firebase-robust-config.js"></script>
-
 </head>
-
-<body class="min-h-screen bg-rog-dark text-white">
+<body class="bg-rog-dark text-white font-rog-body overflow-x-hidden">
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-rog-dark/95 backdrop-blur-sm border-b border-rog-red shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo Section -->
-                <div class="flex items-center">
-                    <a href="index.html" class="hover:opacity-80 transition-opacity duration-200">
-                        <img src="public/logo.png" alt="Otomono Logo" class="h-8 w-auto" />
-                    </a>
+    <header class="fixed top-0 left-0 right-0 z-50 glass-effect">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <img src="public/logo.png" alt="Otomono Jerseys" class="h-10 w-auto">
+                    <span class="text-2xl font-rog-display font-bold text-white">Otomono</span>
                 </div>
-
-                <!-- Navigation Menu -->
+                
+                <!-- Desktop Navigation -->
                 <nav class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-rog-red font-rog-heading font-bold glow">Home</a>
-                    <a href="services.html" class="text-white hover:text-rog-red font-rog-heading font-medium transition-colors hover:glow">Services</a>
-                    <a href="about.html" class="text-white hover:text-rog-red font-rog-heading font-medium transition-colors hover:glow">About</a>
-                    <a href="contact.html" class="text-white hover:text-rog-red font-rog-heading font-medium transition-colors hover:glow">Contact</a>
+                    <a href="#home" class="text-white hover:text-rog-red transition-colors duration-300 font-rog-heading font-medium">Home</a>
+                    <a href="#designs" class="text-white hover:text-rog-red transition-colors duration-300 font-rog-heading font-medium">Designs</a>
+                    <a href="#about" class="text-white hover:text-rog-red transition-colors duration-300 font-rog-heading font-medium">About</a>
+                    <a href="#contact" class="text-white hover:text-rog-red transition-colors duration-300 font-rog-heading font-medium">Contact</a>
+                    <a href="services.html" class="text-white hover:text-rog-red transition-colors duration-300 font-rog-heading font-medium">Services</a>
                 </nav>
-
-                <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg bg-rog-light hover:bg-rog-red transition-all duration-200 border border-rog-red">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-
-                <!-- User Actions -->
+                
+                <!-- Desktop Admin Panel Button -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <!-- Admin Panel Button -->
-                    <button id="admin-panel-btn" class="relative group p-3 rounded-lg bg-rog-light/20 backdrop-blur-sm border border-rog-red/30 hover:bg-rog-red/20 transition-all duration-300 hover:border-rog-red">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-rog-dark text-rog-red text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red">
-                            Admin Panel
-                        </div>
+                    <button id="admin-panel-btn" class="rog-button px-6 py-2 rounded-lg font-rog-heading font-semibold text-white transition-all duration-300 hover:shadow-lg">
+                        <i class="fas fa-cog mr-2"></i>
+                        Admin Panel
                     </button>
                 </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-white hover:text-rog-red transition-colors duration-300">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
             </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 h-full w-80 bg-rog-light shadow-2xl z-50 md:hidden">
+            <div class="flex items-center justify-between p-6 border-b border-rog-gray">
+                <div class="flex items-center space-x-3">
+                    <img src="public/logo.png" alt="Otomono Jerseys" class="h-8 w-auto">
+                    <span class="text-xl font-rog-display font-bold text-white">Otomono</span>
+                </div>
+                <button id="mobile-menu-close" class="text-white hover:text-rog-red transition-colors duration-300">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            
+            <nav class="p-6 space-y-6">
+                <a href="#home" class="block text-white hover:text-rog-red transition-colors duration-300 font-rog-heading font-medium text-lg">Home</a>
+                <a href="#designs" class="block text-white hover:text-rog-red transition-colors duration-300 font-rog-heading font-medium text-lg">Designs</a>
+                <a href="#about" class="block text-white hover:text-rog-red transition-colors duration-300 font-rog-heading font-medium text-lg">About</a>
+                <a href="#contact" class="block text-white hover:text-rog-red transition-colors duration-300 font-rog-heading font-medium text-lg">Contact</a>
+                <a href="services.html" class="block text-white hover:text-rog-red transition-colors duration-300 font-rog-heading font-medium text-lg">Services</a>
+                
+                <!-- Mobile Admin Panel Button -->
+                <button id="mobile-admin-panel-btn" class="w-full rog-button px-6 py-3 rounded-lg font-rog-heading font-semibold text-white transition-all duration-300 hover:shadow-lg">
+                    <i class="fas fa-cog mr-2"></i>
+                    Admin Panel
+                </button>
+            </nav>
         </div>
     </header>
 
-
-
-
-
-    <!-- Mobile Navigation Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 z-50 bg-black bg-opacity-75 hidden md:hidden">
-        <div class="fixed top-0 right-0 h-full w-80 bg-rog-dark shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out border-l border-rog-red/30">
-            <div class="flex flex-col h-full">
-                <!-- Mobile Menu Header -->
-                <div class="flex items-center justify-between p-6 border-b border-rog-red/30 bg-rog-dark">
-                    <img src="public/logo-white.png" alt="Otomono Logo" class="h-8 w-auto" />
-                    <button id="mobile-menu-close" class="p-2 rounded-lg hover:bg-rog-red/20 transition-colors border border-rog-red/30">
-                        <svg class="w-6 h-6 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Mobile Menu Links -->
-                <nav class="flex-1 px-6 py-8 bg-rog-dark">
-                    <div class="space-y-6">
-                        <a href="index.html" class="block text-xl font-rog-heading font-semibold text-rog-red border-b-2 border-rog-red pb-2 glow">Home</a>
-                        <a href="services.html" class="block text-xl font-rog-heading font-semibold text-white hover:text-rog-red transition-colors py-2 border-b border-rog-red/20 hover:border-rog-red">Services</a>
-                        <a href="about.html" class="block text-xl font-rog-heading font-semibold text-white hover:text-rog-red transition-colors py-2 border-b border-rog-red/20 hover:border-rog-red">About</a>
-                        <a href="contact.html" class="block text-xl font-rog-heading font-semibold text-white hover:text-rog-red transition-colors py-2 border-b border-rog-red/20 hover:border-rog-red">Contact</a>
-                    </div>
-
-                    <!-- Mobile Action Buttons -->
-                    <div class="mt-8 pt-8 border-t border-rog-red/30 space-y-4">
-                        <!-- Mobile Admin Panel Button -->
-                        <button id="mobile-admin-panel-btn" class="w-full flex items-center justify-center px-4 py-3 bg-rog-light/20 backdrop-blur-sm rounded-lg hover:bg-rog-red/20 transition-all duration-300 border border-rog-red/30 hover:border-rog-red">
-                            <svg class="w-5 h-5 text-rog-red mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                            <span class="text-white font-rog-heading font-medium">Admin Panel</span>
-                        </button>
-
-                        <!-- Mobile Chat Button -->
-                        <button id="mobile-chat-btn" class="w-full flex items-center justify-center px-4 py-3 bg-rog-light/20 backdrop-blur-sm rounded-lg hover:bg-rog-red/20 transition-all duration-300 border border-rog-red/30 hover:border-rog-red">
-                            <svg class="w-5 h-5 text-rog-red mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
-                            <span class="text-white font-rog-heading font-medium">Live Chat</span>
-                            <span class="bg-rog-red text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse ml-2">●</span>
-                        </button>
-                    </div>
-                </nav>
-            </div>
-        </div>
-    </div>
-
-    <!-- Floating Live Chat Button (Mobile Only) -->
-    <button id="floating-chat-btn" class="fixed bottom-6 right-6 z-40 md:hidden bg-rog-red hover:bg-rog-red/90 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110 group">
-        <svg class="w-6 h-6 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg>
-        <!-- Notification Badge -->
-        <span class="absolute -top-1 -right-1 bg-white text-rog-red text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">●</span>
-        <!-- Tooltip -->
-        <div class="absolute bottom-full right-0 mb-2 px-3 py-1 bg-rog-dark text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-rog-red/30">
-            Live Chat Support
-        </div>
-    </button>
-
     <!-- Hero Section -->
-    <section id="home" class="relative py-20 text-white overflow-hidden min-h-screen flex items-center bg-rog-dark">
-        <!-- ROG-style gradient background -->
-        <div class="absolute inset-0 bg-gradient-to-br from-rog-red/20 via-rog-dark to-rog-gray"></div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <h1 class="text-5xl lg:text-6xl font-rog-display font-bold leading-tight text-white glow mb-6">
-                PREMIUM JERSEY DESIGNS
-            </h1>
-            <p class="text-xl text-gray-200 leading-relaxed max-w-3xl mx-auto font-rog-body mb-12">
-                Custom designs, quality printing, and fast delivery for all your jersey needs
-            </p>
-
-            <!-- Reel Style Slider -->
+    <section id="home" class="hero-gradient min-h-screen flex items-center justify-center relative overflow-hidden">
+        <!-- Background Video -->
+        <div class="absolute inset-0 z-0">
+            <video autoplay muted loop class="w-full h-full object-cover opacity-20">
+                <source src="public/hero.mp4" type="video/mp4">
+            </video>
+        </div>
+        
+        <!-- Hero Content -->
+        <div class="container mx-auto px-4 text-center relative z-10">
             <div class="max-w-4xl mx-auto">
-                <div class="relative">
-                    <div class="relative w-full h-96 rounded-2xl overflow-hidden bg-rog-light/20 backdrop-blur-sm border border-rog-red/30">
-                        <img id="slider-image" src="jersey-designs/Mockup24A001.jpg" alt="Jersey Design" class="w-full h-full object-cover slider-image" />
-
-                        <!-- Slider Controls -->
-                        <button id="prev-btn" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-rog-red/80 rounded-full p-3 text-white hover:bg-rog-red transition-all">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-
-                        <button id="next-btn" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-rog-red/80 rounded-full p-3 text-white hover:bg-rog-red transition-all">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-
-                        <!-- Play/Pause Button -->
-                        <button id="play-btn" class="absolute top-4 right-4 bg-rog-red/80 rounded-full p-2 text-white hover:bg-rog-red transition-all">
-                            <svg id="play-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z" />
-                            </svg>
-                        </button>
-
-                        <!-- Slide Indicators -->
-                        <div id="indicators" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                            <!-- Indicators will be generated by JavaScript -->
-                        </div>
-                    </div>
+                <h1 class="text-5xl md:text-7xl font-rog-display font-bold mb-6 animate-fade-in">
+                    Create Your
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-rog-red to-pink-500 animate-glow">
+                        Perfect Jersey
+                    </span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 animate-slide-up font-rog-body">
+                    Design stunning custom jerseys with our advanced 3D designer. 
+                    Premium quality, fast delivery, and endless customization options.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up">
+                    <a href="3D-Jersey-Designer/designer-studio.html" class="rog-button px-8 py-4 rounded-lg font-rog-heading font-semibold text-lg transition-all duration-300 hover:shadow-xl">
+                        <i class="fas fa-paint-brush mr-2"></i>
+                        Start Designing
+                    </a>
+                    <a href="#designs" class="glass-effect px-8 py-4 rounded-lg font-rog-heading font-semibold text-lg text-white hover:bg-white hover:text-rog-dark transition-all duration-300">
+                        <i class="fas fa-eye mr-2"></i>
+                        View Designs
+                    </a>
                 </div>
             </div>
+        </div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 animate-float">
+            <div class="w-20 h-20 bg-rog-red/20 rounded-full blur-xl"></div>
+        </div>
+        <div class="absolute bottom-20 right-10 animate-float" style="animation-delay: 2s;">
+            <div class="w-32 h-32 bg-pink-500/20 rounded-full blur-xl"></div>
         </div>
     </section>
+
+    <!-- Jersey Designs Reel -->
+    <section id="designs" class="py-20 bg-rog-light">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-rog-display font-bold mb-6">
+                    Featured
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-rog-red to-pink-500">
+                        Designs
+                    </span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    Explore our collection of premium jersey designs. Each piece is crafted with attention to detail and quality.
+                </p>
+            </div>
+            
+            <!-- Reel Container -->
+            <div class="reel-container max-w-6xl mx-auto">
+                <div class="relative h-96 flex items-center justify-center">
+                    <!-- Reel Items -->
+                    <div id="reel-items" class="relative w-full h-full flex items-center justify-center">
+                        <!-- Jersey items will be dynamically loaded here -->
+                    </div>
+                    
+                    <!-- Navigation Controls -->
+                    <button id="reel-prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-rog-red/80 hover:bg-rog-red rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button id="reel-next" class="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-rog-red/80 hover:bg-rog-red rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    
+                    <!-- Play/Pause Button -->
+                    <button id="reel-play" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-16 h-16 bg-rog-red/80 hover:bg-rog-red rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110">
+                        <i id="reel-play-icon" class="fas fa-play text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- Reel Indicators -->
+                <div id="reel-indicators" class="flex justify-center space-x-2 mt-8">
+                    <!-- Indicators will be dynamically generated -->
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Features Section -->
-    <section id="designs" class="py-20 bg-rog-gray">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-rog-display font-bold text-white mb-6 glow">WHY CHOOSE OTOMONO?</h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto font-rog-body">
-                    Experience the difference with our premium jersey solutions
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300 text-center">
-                    <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-rog-red">
-                        <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-rog-heading font-bold text-rog-red mb-4">PREMIUM QUALITY</h3>
-                    <p class="text-gray-300 font-rog-body">High-quality materials and professional printing techniques</p>
-                </div>
-
-                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300 text-center">
-                    <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-rog-red">
-                        <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0V7a2 2 0 012-2h4a2 2 0 012 2v0M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-2M8 7h8" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-rog-heading font-bold text-rog-red mb-4">FAST DELIVERY</h3>
-                    <p class="text-gray-300 font-rog-body">Quick turnaround times with reliable shipping</p>
-                </div>
-
-                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300 text-center">
-                    <div class="w-16 h-16 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-rog-red">
-                        <svg class="w-8 h-8 text-rog-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-rog-heading font-bold text-rog-red mb-4">CUSTOM DESIGNS</h3>
-                    <p class="text-gray-300 font-rog-body">Personalized jerseys tailored to your specifications</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
     <section class="py-20 bg-rog-dark">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-rog-display font-bold text-white mb-6 glow">WHAT OUR CUSTOMERS SAY</h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto font-rog-body">
-                    Hear from satisfied customers who trust Otomono for their jersey needs
-                </p>
+                <h2 class="text-4xl md:text-5xl font-rog-display font-bold mb-6">
+                    Why Choose
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-rog-red to-pink-500">
+                        Otomono?
+                    </span>
+                </h2>
             </div>
+            
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
-                    <div class="flex items-center mb-6">
-                        <div class="flex text-rog-red">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                        </div>
+                <div class="text-center animate-slide-in-left">
+                    <div class="w-20 h-20 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-palette text-3xl text-rog-red"></i>
                     </div>
-                    <p class="text-gray-300 mb-6 font-rog-body">"Excellent quality and fast delivery! The jersey exceeded my expectations."</p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-rog-red rounded-full flex items-center justify-center text-white font-rog-heading font-bold mr-4">
-                            AS
-                        </div>
-                        <div>
-                            <p class="font-rog-heading font-bold text-white">Ali Shareef</p>
-                            <p class="text-sm text-gray-400 font-rog-body">Customer</p>
-                        </div>
-                    </div>
+                    <h3 class="text-2xl font-rog-heading font-bold mb-4">3D Design Studio</h3>
+                    <p class="text-gray-300">Create your perfect jersey with our advanced 3D designer. See your design come to life before you order.</p>
                 </div>
-
-                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
-                    <div class="flex items-center mb-6">
-                        <div class="flex text-rog-red">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                        </div>
+                
+                <div class="text-center animate-slide-up">
+                    <div class="w-20 h-20 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-shipping-fast text-3xl text-rog-red"></i>
                     </div>
-                    <p class="text-gray-300 mb-6 font-rog-body">"Professional service and amazing custom designs. Highly recommended!"</p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-rog-red rounded-full flex items-center justify-center text-white font-rog-heading font-bold mr-4">
-                            MI
-                        </div>
-                        <div>
-                            <p class="font-rog-heading font-bold text-white">Mohamed Ismail</p>
-                            <p class="text-sm text-gray-400 font-rog-body">Customer</p>
-                        </div>
-                    </div>
+                    <h3 class="text-2xl font-rog-heading font-bold mb-4">Fast Delivery</h3>
+                    <p class="text-gray-300">Get your custom jerseys delivered quickly with our efficient production and shipping process.</p>
                 </div>
-
-                <div class="bg-rog-light/20 backdrop-blur-sm p-8 rounded-2xl border border-rog-red/30 hover:border-rog-red transition-all duration-300">
-                    <div class="flex items-center mb-6">
-                        <div class="flex text-rog-red">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                        </div>
+                
+                <div class="text-center animate-slide-in-right">
+                    <div class="w-20 h-20 bg-rog-red/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-award text-3xl text-rog-red"></i>
                     </div>
-                    <p class="text-gray-300 mb-6 font-rog-body">"Outstanding customer service and perfect jersey quality. Will order again!"</p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-rog-red rounded-full flex items-center justify-center text-white font-rog-heading font-bold mr-4">
-                            HM
-                        </div>
-                        <div>
-                            <p class="font-rog-heading font-bold text-white">Hassan Mohamed</p>
-                            <p class="text-sm text-gray-400 font-rog-body">Customer</p>
-                        </div>
-                    </div>
+                    <h3 class="text-2xl font-rog-heading font-bold mb-4">Premium Quality</h3>
+                    <p class="text-gray-300">We use only the finest materials and latest printing technology to ensure your jerseys are perfect.</p>
                 </div>
             </div>
         </div>
-    </section>
-    </div>
-    </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="py-20 bg-rog-dark text-center">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl font-rog-display font-bold text-white mb-6 glow">
-                READY TO GET STARTED?
+    <section class="py-20 bg-gradient-to-r from-rog-red to-pink-500">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl md:text-5xl font-rog-display font-bold mb-6 text-white">
+                Ready to Create Your Jersey?
             </h2>
-            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-rog-body">
-                Find more about our collection and create your perfect jersey today!
+            <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+                Join thousands of satisfied customers who have created their perfect jerseys with us.
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="contact.html" class="rog-button px-8 py-4 rounded-2xl font-rog-heading font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl">
-                    CONTACT US
-                </a>
-                <a href="services.html" class="bg-rog-light/20 backdrop-blur-sm text-white px-8 py-4 rounded-2xl font-rog-heading font-semibold text-lg hover:bg-rog-light/40 transition-all duration-300 shadow-lg border border-rog-red/30 hover:border-rog-red">
-                    VIEW SERVICES
-                </a>
-            </div>
+            <a href="3D-Jersey-Designer/designer-studio.html" class="inline-block bg-white text-rog-red px-8 py-4 rounded-lg font-rog-heading font-semibold text-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105">
+                <i class="fas fa-rocket mr-2"></i>
+                Start Your Design Now
+            </a>
         </div>
     </section>
 
-    <!-- Live Chat Bot Modal -->
-    <div id="chat-modal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-rog-dark rounded-2xl shadow-2xl w-full max-w-md max-h-[600px] flex flex-col border border-rog-red/30">
-                <!-- Chat Header -->
-                <div class="bg-rog-red text-white p-4 rounded-t-2xl flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                        <div>
-                            <h3 class="font-rog-heading font-semibold">Otomono Support</h3>
-                            <p class="text-gray-200 text-sm font-rog-body">Online now</p>
-                        </div>
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-6">
+                        <img src="public/logo.png" alt="Otomono Jerseys" class="h-10 w-auto">
+                        <span class="text-2xl font-rog-display font-bold text-white">Otomono</span>
                     </div>
-                    <button id="close-chat" class="text-gray-200 hover:text-white transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+                    <p class="text-gray-400 mb-4">
+                        Creating premium custom jerseys with cutting-edge 3D design technology.
+                    </p>
                 </div>
-
-                <!-- Chat Messages -->
-                <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-rog-dark">
-                    <div class="flex items-start space-x-3">
-                        <div class="w-8 h-8 bg-rog-red rounded-full flex items-center justify-center text-white text-sm font-rog-heading font-semibold">
-                            O
-                        </div>
-                        <div class="bg-rog-light/20 backdrop-blur-sm rounded-lg p-3 max-w-xs border border-rog-red/30">
-                            <p class="text-white font-rog-body">Hello! How can I help you today?</p>
-                            <p class="text-xs text-gray-400 mt-1 font-rog-body">Just now</p>
-                        </div>
-                    </div>
+                
+                <div>
+                    <h3 class="text-lg font-rog-heading font-semibold mb-4 text-white">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-rog-red transition-colors duration-300">Home</a></li>
+                        <li><a href="#designs" class="text-gray-400 hover:text-rog-red transition-colors duration-300">Designs</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-rog-red transition-colors duration-300">About</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-rog-red transition-colors duration-300">Contact</a></li>
+                    </ul>
                 </div>
-
-                <!-- Chat Input -->
-                <div class="p-4 border-t border-rog-red/30 bg-rog-dark">
-                    <div class="flex space-x-2">
-                        <input id="chat-input" type="text" placeholder="Type your message..." class="flex-1 px-3 py-2 bg-rog-light/20 border border-rog-red/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-rog-red focus:border-rog-red text-white placeholder-gray-400 font-rog-body">
-                        <button id="send-message" class="px-4 py-2 rog-button rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                            </svg>
-                        </button>
+                
+                <div>
+                    <h3 class="text-lg font-rog-heading font-semibold mb-4 text-white">Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="services.html" class="text-gray-400 hover:text-rog-red transition-colors duration-300">Custom Jerseys</a></li>
+                        <li><a href="3D-Jersey-Designer/designer-studio.html" class="text-gray-400 hover:text-rog-red transition-colors duration-300">3D Designer</a></li>
+                        <li><a href="client-order-form.html" class="text-gray-400 hover:text-rog-red transition-colors duration-300">Order Form</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-rog-heading font-semibold mb-4 text-white">Contact</h3>
+                    <div class="space-y-2 text-gray-400">
+                        <p><i class="fas fa-envelope mr-2"></i>info@otomono.com</p>
+                        <p><i class="fas fa-phone mr-2"></i>+1 (555) 123-4567</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>New York, NY</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-
-    <script>
-        // Simple page initialization
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Index page loaded successfully');
             
-            // Admin Panel functionality - GUARANTEED FIX
-            function setupAdminPanelButtons() {
-                const adminPanelBtn = document.getElementById('admin-panel-btn');
-                const mobileAdminPanelBtn = document.getElementById('mobile-admin-panel-btn');
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 Otomono Jerseys. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
-                console.log('Admin panel elements found:', {
-                    adminPanelBtn: !!adminPanelBtn,
-                    mobileAdminPanelBtn: !!mobileAdminPanelBtn
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu functionality
+        function setupMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+            function closeMobileMenu() {
+                mobileMenu.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+
+            function openMobileMenu() {
+                mobileMenu.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    openMobileMenu();
+                });
+            }
+
+            if (mobileMenuClose) {
+                mobileMenuClose.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    closeMobileMenu();
+                });
+            }
+
+            // Close menu when clicking outside
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target === mobileMenu) {
+                    closeMobileMenu();
+                }
+            });
+
+            // Close menu when clicking on navigation links
+            mobileMenu.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+
+            // Keyboard support
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+                    closeMobileMenu();
+                }
+            });
+        }
+
+        // Jersey designs reel functionality
+        function setupDesignsReel() {
+            const jerseyDesigns = [
+                { id: 1, image: 'jersey-designs/Mockup24A001.jpg', title: 'Classic Red Jersey' },
+                { id: 2, image: 'jersey-designs/Mockup24A002.jpg', title: 'Blue Thunder Jersey' },
+                { id: 3, image: 'jersey-designs/Mockup24A003.jpg', title: 'Green Machine Jersey' },
+                { id: 4, image: 'jersey-designs/Mockup24A004.jpg', title: 'Golden Eagle Jersey' },
+                { id: 5, image: 'jersey-designs/Mockup24A005.jpg', title: 'Purple Storm Jersey' },
+                { id: 6, image: 'jersey-designs/Mockup24A006.jpg', title: 'Orange Blaze Jersey' },
+                { id: 7, image: 'jersey-designs/Mockup24A007.jpg', title: 'Silver Lightning Jersey' },
+                { id: 8, image: 'jersey-designs/Mockup24A008.jpg', title: 'Black Panther Jersey' },
+                { id: 9, image: 'jersey-designs/Mockup24A009.jpg', title: 'White Knight Jersey' },
+                { id: 10, image: 'jersey-designs/Mockup24A010.jpg', title: 'Crimson Fire Jersey' }
+            ];
+
+            let currentSlide = 0;
+            let isPlaying = false;
+            let playInterval;
+
+            const reelItems = document.getElementById('reel-items');
+            const indicators = document.getElementById('reel-indicators');
+            const prevBtn = document.getElementById('reel-prev');
+            const nextBtn = document.getElementById('reel-next');
+            const playBtn = document.getElementById('reel-play');
+            const playIcon = document.getElementById('reel-play-icon');
+
+            // Initialize reel items
+            function initReelItems() {
+                reelItems.innerHTML = '';
+                jerseyDesigns.forEach((design, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'reel-item absolute inset-0 flex items-center justify-center';
+                    item.innerHTML = `
+                        <div class="jersey-card max-w-sm mx-auto">
+                            <img src="${design.image}" alt="${design.title}" class="w-full h-auto rounded-lg shadow-2xl">
+                            <div class="text-center mt-4">
+                                <h3 class="text-xl font-rog-heading font-semibold text-white">${design.title}</h3>
+                            </div>
+                        </div>
+                    `;
+                    reelItems.appendChild(item);
+                });
+            }
+
+            // Initialize indicators
+            function initIndicators() {
+                indicators.innerHTML = '';
+                jerseyDesigns.forEach((_, index) => {
+                    const indicator = document.createElement('button');
+                    indicator.className = `w-3 h-3 rounded-full transition-all duration-300 ${index === 0 ? 'bg-rog-red' : 'bg-gray-600'}`;
+                    indicator.addEventListener('click', () => goToSlide(index));
+                    indicators.appendChild(indicator);
+                });
+            }
+
+            // Update slide
+            function updateSlide() {
+                const items = reelItems.querySelectorAll('.reel-item');
+                const indicatorBtns = indicators.querySelectorAll('button');
+                
+                items.forEach((item, index) => {
+                    item.classList.remove('active', 'prev', 'next');
+                    if (index === currentSlide) {
+                        item.classList.add('active');
+                    } else if (index === (currentSlide - 1 + jerseyDesigns.length) % jerseyDesigns.length) {
+                        item.classList.add('prev');
+                    } else if (index === (currentSlide + 1) % jerseyDesigns.length) {
+                        item.classList.add('next');
+                    }
                 });
 
-                // Desktop admin panel button
-                if (adminPanelBtn) {
-                    // Remove any existing listeners
-                    adminPanelBtn.replaceWith(adminPanelBtn.cloneNode(true));
-                    const newAdminPanelBtn = document.getElementById('admin-panel-btn');
-                    
-                    newAdminPanelBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Desktop admin panel button clicked - redirecting to login');
-                        window.location.href = 'login.html';
-                    });
-                    console.log('Desktop admin panel button event listener added');
-                } else {
-                    console.error('Desktop admin panel button not found');
-                }
+                indicatorBtns.forEach((btn, index) => {
+                    btn.className = `w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-rog-red' : 'bg-gray-600'}`;
+                });
+            }
 
-                // Mobile admin panel button
-                if (mobileAdminPanelBtn) {
-                    // Remove any existing listeners
-                    mobileAdminPanelBtn.replaceWith(mobileAdminPanelBtn.cloneNode(true));
-                    const newMobileAdminPanelBtn = document.getElementById('mobile-admin-panel-btn');
-                    
-                    newMobileAdminPanelBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Mobile admin panel button clicked - redirecting to login');
-                        window.location.href = 'login.html';
-                    });
-                    console.log('Mobile admin panel button event listener added');
+            // Go to specific slide
+            function goToSlide(index) {
+                currentSlide = index;
+                updateSlide();
+            }
+
+            // Next slide
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % jerseyDesigns.length;
+                updateSlide();
+            }
+
+            // Previous slide
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + jerseyDesigns.length) % jerseyDesigns.length;
+                updateSlide();
+            }
+
+            // Toggle play/pause
+            function togglePlay() {
+                isPlaying = !isPlaying;
+                if (isPlaying) {
+                    playIcon.className = 'fas fa-pause text-xl';
+                    playInterval = setInterval(nextSlide, 3000);
                 } else {
-                    console.error('Mobile admin panel button not found');
+                    playIcon.className = 'fas fa-play text-xl';
+                    clearInterval(playInterval);
                 }
             }
 
-            // Setup admin panel buttons immediately
+            // Event listeners
+            if (prevBtn) {
+                prevBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    prevSlide();
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    nextSlide();
+                });
+            }
+
+            if (playBtn) {
+                playBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    togglePlay();
+                });
+            }
+
+            // Initialize
+            initReelItems();
+            initIndicators();
+            updateSlide();
+
+            // Auto-play on page load
+            setTimeout(() => {
+                togglePlay();
+            }, 2000);
+        }
+
+        // Admin panel functionality
+        function setupAdminPanelButtons() {
+            const adminPanelBtn = document.getElementById('admin-panel-btn');
+            const mobileAdminPanelBtn = document.getElementById('mobile-admin-panel-btn');
+
+            if (adminPanelBtn) {
+                adminPanelBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = 'login.html';
+                });
+            }
+
+            if (mobileAdminPanelBtn) {
+                mobileAdminPanelBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = 'login.html';
+                });
+            }
+        }
+
+        // Smooth scrolling for anchor links
+        function setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Initialize all functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            setupMobileMenu();
+            setupDesignsReel();
             setupAdminPanelButtons();
-
-                // Mobile menu functionality - FIXED VERSION
-                function setupMobileMenu() {
-                    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-                    const mobileMenu = document.getElementById('mobile-menu');
-                    const mobileMenuClose = document.getElementById('mobile-menu-close');
-
-                    console.log('Mobile menu elements:', {
-                        button: mobileMenuBtn,
-                        menu: mobileMenu,
-                        close: mobileMenuClose
-                    });
-
-                    // Close mobile menu function
-                    function closeMobileMenu() {
-                        console.log('Closing mobile menu');
-                        if (mobileMenu) {
-                            mobileMenu.classList.add('hidden');
-                            document.body.style.overflow = '';
-                            console.log('Mobile menu closed');
-                        }
-                    }
-
-                    // Open mobile menu
-                    if (mobileMenuBtn) {
-                        mobileMenuBtn.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            console.log('Mobile menu button clicked');
-
-                            if (mobileMenu) {
-                                mobileMenu.classList.remove('hidden');
-                                document.body.style.overflow = 'hidden';
-                                console.log('Mobile menu opened');
-                            } else {
-                                console.error('Mobile menu element not found');
-                            }
-                        });
-                    } else {
-                        console.error('Mobile menu button not found');
-                    }
-
-                    // Close mobile menu
-                    if (mobileMenuClose) {
-                        mobileMenuClose.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            closeMobileMenu();
-                        });
-                    }
-
-                    // Close menu when clicking outside
-                    if (mobileMenu) {
-                        mobileMenu.addEventListener('click', function(e) {
-                            if (e.target === mobileMenu) {
-                                closeMobileMenu();
-                            }
-                        });
-
-                        // Close menu when clicking on navigation links
-                        mobileMenu.querySelectorAll('nav a').forEach(link => {
-                            link.addEventListener('click', closeMobileMenu);
-                        });
-                    }
-
-                    // Add keyboard support for mobile menu
-                    document.addEventListener('keydown', function(e) {
-                        if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
-                            closeMobileMenu();
-                        }
-                    });
-                }
-
-                // Setup mobile menu
-                setupMobileMenu();
-
-                // Customer Chat System
-                const floatingChatBtn = document.getElementById('floating-chat-btn');
-                const customerChatModal = document.getElementById('customer-chat-modal');
-                const closeChatModal = document.getElementById('close-chat-modal');
-                const customerInfoForm = document.getElementById('customer-info-form');
-                const chatInterface = document.getElementById('chat-interface');
-                const startChatBtn = document.getElementById('start-chat-btn');
-                const chatMessageInput = document.getElementById('chat-message-input');
-                const sendMessageBtn = document.getElementById('send-message-btn');
-                const chatMessages = document.getElementById('chat-messages');
-
-                let customerInfo = null;
-                let chatMessagesList = [];
-
-                // Open chat modal
-                if (floatingChatBtn) {
-                    floatingChatBtn.addEventListener('click', function() {
-                        customerChatModal.classList.remove('hidden');
-                        console.log('Customer chat modal opened');
-                    });
-                }
-
-                // Close chat modal
-                if (closeChatModal) {
-                    closeChatModal.addEventListener('click', function() {
-                        customerChatModal.classList.add('hidden');
-                        console.log('Customer chat modal closed');
-                    });
-                }
-
-                // Start chat
-                if (startChatBtn) {
-                    startChatBtn.addEventListener('click', function() {
-                        const name = document.getElementById('customer-name').value.trim();
-                        const email = document.getElementById('customer-email').value.trim();
-                        const phone = document.getElementById('customer-phone').value.trim();
-
-                        if (!name || !email || !phone) {
-                            alert('Please fill in all fields');
-                            return;
-                        }
-
-                        customerInfo = {
-                            name,
-                            email,
-                            phone
-                        };
-                        customerInfoForm.classList.add('hidden');
-                        chatInterface.classList.remove('hidden');
-
-                        // Add welcome message
-                        addChatMessage('Hello! I\'m ' + name + '. I need help with my order.', 'customer');
-
-                        // Notify admin panel
-                        notifyAdminNewCustomer(name, email, phone);
-
-                        console.log('Chat started for customer:', customerInfo);
-                    });
-                }
-
-                // Send message
-                function sendMessage() {
-                    const message = chatMessageInput.value.trim();
-                    if (message && customerInfo) {
-                        addChatMessage(message, 'customer');
-                        chatMessageInput.value = '';
-
-                        // Notify admin panel
-                        notifyAdminNewMessage(customerInfo.name, message);
-
-                        // Simulate admin response
-                        setTimeout(() => {
-                            addChatMessage('Thank you for your message. Our support team will get back to you shortly.', 'admin');
-                        }, 2000);
-                    }
-                }
-
-                if (sendMessageBtn) {
-                    sendMessageBtn.addEventListener('click', sendMessage);
-                }
-
-                if (chatMessageInput) {
-                    chatMessageInput.addEventListener('keypress', function(e) {
-                        if (e.key === 'Enter') {
-                            sendMessage();
-                        }
-                    });
-                }
-
-                function addChatMessage(message, sender) {
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = `flex ${sender === 'customer' ? 'justify-end' : 'justify-start'}`;
-
-                    const messageContent = document.createElement('div');
-                    messageContent.className = `max-w-xs px-3 py-2 rounded-lg ${
-                        sender === 'customer' 
-                            ? 'bg-rog-red text-white' 
-                            : 'bg-gray-700 text-white'
-                    }`;
-
-                    messageContent.innerHTML = `
-                        <p class="text-sm">${message}</p>
-                        <p class="text-xs opacity-70 mt-1">${new Date().toLocaleTimeString()}</p>
-                    `;
-
-                    messageDiv.appendChild(messageContent);
-                    chatMessages.appendChild(messageDiv);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-                    chatMessagesList.push({
-                        message,
-                        sender,
-                        timestamp: new Date().toISOString()
-                    });
-                }
-
-                function notifyAdminNewCustomer(name, email, phone) {
-                    // This would send a notification to the admin panel
-                    console.log('New customer chat started:', {
-                        name,
-                        email,
-                        phone
-                    });
-                    // In a real implementation, this would use Firebase or WebSocket
-                }
-
-                function notifyAdminNewMessage(customerName, message) {
-                    // This would send a message notification to the admin panel
-                    console.log('New message from customer:', {
-                        customerName,
-                        message
-                    });
-                    // In a real implementation, this would use Firebase or WebSocket
-                }
-                // Jersey designs reel - FIXED VERSION
-                function setupDesignsReel() {
-                    const jerseyDesigns = [{
-                            id: 1,
-                            image: 'jersey-designs/Mockup24A001.jpg',
-                            title: 'Classic Blue Design',
-                            price: '$29.99'
-                        },
-                        {
-                            id: 2,
-                            image: 'jersey-designs/Mockup24A002.jpg',
-                            title: 'Modern Red Jersey',
-                            price: '$34.99'
-                        },
-                        {
-                            id: 3,
-                            image: 'jersey-designs/Mockup24A003.jpg',
-                            title: 'Elegant White',
-                            price: '$32.99'
-                        },
-                        {
-                            id: 4,
-                            image: 'jersey-designs/Mockup24A004.jpg',
-                            title: 'Bold Black Design',
-                            price: '$36.99'
-                        },
-                        {
-                            id: 5,
-                            image: 'jersey-designs/Mockup24A005.jpg',
-                            title: 'Vibrant Green',
-                            price: '$31.99'
-                        },
-                        {
-                            id: 6,
-                            image: 'jersey-designs/Mockup24A006.jpg',
-                            title: 'Royal Purple',
-                            price: '$33.99'
-                        },
-                        {
-                            id: 7,
-                            image: 'jersey-designs/Mockup24A007.jpg',
-                            title: 'Sunset Orange',
-                            price: '$30.99'
-                        },
-                        {
-                            id: 8,
-                            image: 'jersey-designs/Mockup24A008.jpg',
-                            title: 'Ocean Blue',
-                            price: '$35.99'
-                        },
-                        {
-                            id: 9,
-                            image: 'jersey-designs/Mockup24A009.jpg',
-                            title: 'Forest Green',
-                            price: '$32.99'
-                        },
-                        {
-                            id: 10,
-                            image: 'jersey-designs/Mockup24A010.jpg',
-                            title: 'Midnight Black',
-                            price: '$37.99'
-                        },
-                    ];
-
-                    let currentSlide = 0;
-                    let isPlaying = false;
-                    let playInterval;
-
-                    // DOM elements
-                    const sliderImage = document.getElementById('slider-image');
-                    const prevBtn = document.getElementById('prev-btn');
-                    const nextBtn = document.getElementById('next-btn');
-                    const playBtn = document.getElementById('play-btn');
-                    const playIcon = document.getElementById('play-icon');
-                    const indicators = document.getElementById('indicators');
-
-                    console.log('Designs reel elements:', {
-                        sliderImage: !!sliderImage,
-                        prevBtn: !!prevBtn,
-                        nextBtn: !!nextBtn,
-                        playBtn: !!playBtn,
-                        playIcon: !!playIcon,
-                        indicators: !!indicators
-                    });
-
-                    // Initialize indicators
-                    function initIndicators() {
-                        if (!indicators) {
-                            console.error('Indicators element not found');
-                            return;
-                        }
-                        indicators.innerHTML = '';
-                        jerseyDesigns.forEach((_, index) => {
-                            const indicator = document.createElement('button');
-                            indicator.className = `w-2 h-2 rounded-full transition-all indicator ${
-                            index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
-                        }`;
-                            indicator.addEventListener('click', () => goToSlide(index));
-                            indicators.appendChild(indicator);
-                        });
-                    }
-
-                    // Update slide
-                    function updateSlide() {
-                        if (!sliderImage) {
-                            console.error('Slider image element not found');
-                            return;
-                        }
-                        sliderImage.src = jerseyDesigns[currentSlide].image;
-                        sliderImage.alt = jerseyDesigns[currentSlide].title;
-
-                        // Update indicators
-                        if (indicators) {
-                            const indicatorButtons = indicators.querySelectorAll('button');
-                            indicatorButtons.forEach((btn, index) => {
-                                btn.className = `w-2 h-2 rounded-full transition-all indicator ${
-                                index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
-                            }`;
-                            });
-                        }
-                    }
-
-                    // Go to specific slide
-                    function goToSlide(index) {
-                        currentSlide = index;
-                        updateSlide();
-                    }
-
-                    // Next slide
-                    function nextSlide() {
-                        currentSlide = (currentSlide + 1) % jerseyDesigns.length;
-                        updateSlide();
-                    }
-
-                    // Previous slide
-                    function prevSlide() {
-                        currentSlide = (currentSlide - 1 + jerseyDesigns.length) % jerseyDesigns.length;
-                        updateSlide();
-                    }
-
-                    // Toggle play/pause
-                    function togglePlay() {
-                        isPlaying = !isPlaying;
-                        if (isPlaying) {
-                            if (playIcon) playIcon.innerHTML = '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>';
-                            playInterval = setInterval(nextSlide, 3000);
-                        } else {
-                            if (playIcon) playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-                            clearInterval(playInterval);
-                        }
-                    }
-
-                    // Event listeners
-                    if (prevBtn) {
-                        prevBtn.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            prevSlide();
-                        });
-                    }
-                    if (nextBtn) {
-                        nextBtn.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            nextSlide();
-                        });
-                    }
-                    if (playBtn) {
-                        playBtn.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            togglePlay();
-                        });
-                    }
-
-                    // Initialize
-                    initIndicators();
-                    updateSlide();
-
-                    // Auto-play on page load
-                    setTimeout(() => {
-                        togglePlay();
-                    }, 2000);
-                }
-
-                // Setup designs reel
-                setupDesignsReel();
-
-                // Modal functionality
-                const chatModal = document.getElementById('chat-modal');
-                const chatBtn = document.getElementById('chat-btn');
-                const profileBtn = document.getElementById('profile-btn');
-
-                // Debug: Check if modal elements exist
-                console.log('Modal elements:', {
-                    chatModal: !!chatModal,
-                    chatBtn: !!chatBtn,
-                    profileBtn: !!profileBtn
-                });
-
-                // Chat functionality
-                if (chatBtn && chatModal) {
-                    chatBtn.addEventListener('click', () => {
-                        chatModal.classList.remove('hidden');
-                    });
-                }
-
-
-                // Floating chat button functionality (Mobile only)
-                const floatingChatBtn = document.getElementById('floating-chat-btn');
-                if (floatingChatBtn && chatModal) {
-                    floatingChatBtn.addEventListener('click', () => {
-                        chatModal.classList.remove('hidden');
-                    });
-                }
-
-
-                const closeChatBtn = document.getElementById('close-chat');
-                if (closeChatBtn && chatModal) {
-                    closeChatBtn.addEventListener('click', () => {
-                        chatModal.classList.add('hidden');
-                    });
-                }
-
-
-
-                // Close modals when clicking outside
-                [chatModal].filter(modal => modal).forEach(modal => {
-                    modal.addEventListener('click', (e) => {
-                        if (e.target === modal) {
-                            modal.classList.add('hidden');
-                        }
-                    });
-                });
-
-                // Chat bot responses
-                const chatResponses = [
-                    "Thank you for your interest! Our team will get back to you shortly.",
-                    "We offer custom jersey designs with premium quality materials.",
-                    "You can choose from our catalog or request a custom design.",
-                    "We provide digital proofs before printing for your approval.",
-                    "Our jerseys come with a 30-day satisfaction guarantee."
-                ];
-
-                // Send message functionality with Firestore integration
-                const sendMessageBtn = document.getElementById('send-message');
-                const chatInput = document.getElementById('chat-input');
-
-                if (sendMessageBtn && chatInput) {
-                    sendMessageBtn.addEventListener('click', async () => {
-                        const message = chatInput.value.trim();
-                        if (message) {
-                            await sendChatMessage(message);
-                            chatInput.value = '';
-                        }
-                    });
-
-                    // Send message on Enter key
-                    chatInput.addEventListener('keypress', async (e) => {
-                        if (e.key === 'Enter') {
-                            const message = chatInput.value.trim();
-                            if (message) {
-                                await sendChatMessage(message);
-                                chatInput.value = '';
-                            }
-                        }
-                    });
-                }
-
-                // Enhanced chat functions with Firestore
-                async function sendChatMessage(message) {
-                    if (!window.FirebaseDB) {
-                        // Fallback to local chat if Firebase not available
-                        addMessage(message, 'user');
-                        setTimeout(() => {
-                            const randomResponse = chatResponses[Math.floor(Math.random() * chatResponses.length)];
-                            addMessage(randomResponse, 'bot');
-                        }, 1000);
-                        return;
-                    }
-
-                    try {
-                        // Add user message to UI immediately
-                        addMessage(message, 'user');
-
-                        // Get current user
-                        const user = window.FirebaseAuth ? .getCurrentUser();
-                        const userId = user ? .uid || 'anonymous;
-                        const userName = user ? .displayName || 'Guest';
-
-                        // Save message to Firestore
-                        await window.FirebaseDB.sendChatMessage({
-                            userId: userId,
-                            userName: userName,
-                            message: message,
-                            sender: 'user',
-                            timestamp: new Date().toISOString()
-                        });
-
-                        // Track user action
-                        await window.FirebaseDB.trackUserAction(userId, 'chat_message_sent', {
-                            messageLength: message.length
-                        });
-
-                        // Simulate bot response
-                        setTimeout(async () => {
-                            const randomResponse = chatResponses[Math.floor(Math.random() * chatResponses.length)];
-
-                            // Add bot response to UI
-                            addMessage(randomResponse, 'bot');
-
-                            // Save bot response to Firestore
-                            await window.FirebaseDB.sendChatMessage({
-                                userId: userId,
-                                userName: 'Otomono Support',
-                                message: randomResponse,
-                                sender: 'bot',
-                                timestamp: new Date().toISOString()
-                            });
-                        }, 1000);
-
-                    } catch (error) {
-                        console.error('Error sending chat message:', error);
-                        // Fallback to local response
-                        setTimeout(() => {
-                            addMessage("Sorry, there was an error sending your message. Please try again.", 'bot');
-                        }, 1000);
-                    }
-                }
-
-                // Load chat history when modal opens
-                if (chatBtn && chatModal) {
-                    chatBtn.addEventListener('click', async () => {
-                        chatModal.classList.remove('hidden');
-                        await loadChatHistory();
-                    });
-                }
-
-                if (floatingChatBtn && chatModal) {
-                    floatingChatBtn.addEventListener('click', async () => {
-                        chatModal.classList.remove('hidden');
-                        await loadChatHistory();
-                    });
-                }
-
-                async function loadChatHistory() {
-                    if (!window.FirebaseDB) return;
-
-                    try {
-                        const messages = await window.FirebaseDB.getChatMessages(20);
-                        const messagesContainer = document.getElementById('chat-messages');
-
-                        if (messagesContainer && messages.length > 0) {
-                            // Clear existing messages except the first welcome message
-                            const welcomeMessage = messagesContainer.querySelector('.flex.items-start.space-x-3');
-                            messagesContainer.innerHTML = '';
-                            if (welcomeMessage) {
-                                messagesContainer.appendChild(welcomeMessage);
-                            }
-
-                            // Add historical messages
-                            messages.forEach(msg => {
-                                if (msg.sender === 'user' || msg.sender === 'bot') {
-                                    addMessage(msg.message, msg.sender, false);
-                                }
-                            });
-                        }
-                    } catch (error) {
-                        console.error('Error loading chat history:', error);
-                    }
-                }
-
-                // Set up real-time chat listener
-                if (window.FirebaseDB) {
-                    try {
-                        window.FirebaseDB.listenToChatMessages((messages) => {
-                            // Update chat with new messages in real-time
-                            console.log('Real-time chat update:', messages.length, 'messages');
-                        });
-                    } catch (error) {
-                        console.error('Error setting up real-time chat listener:', error);
-                    }
-                }
-
-                function addMessage(text, sender) {
-                    const messagesContainer = document.getElementById('chat-messages');
-                    const messageDiv = document.createElement('div');
-
-                    if (sender === 'user') {
-                        messageDiv.className = 'flex items-start space-x-3 justify-end';
-                        messageDiv.innerHTML = `
-                        <div class="bg-rog-red text-white rounded-lg p-3 max-w-xs border border-rog-red/30">
-                            <p class="font-rog-body">${text}</p>
-                            <p class="text-gray-200 text-xs mt-1 font-rog-body">Just now</p>
-                        </div>
-                        <div class="w-8 h-8 bg-rog-red rounded-full flex items-center justify-center text-white text-sm font-rog-heading font-semibold">
-                            U
-                        </div>
-                    `;
-                    } else {
-                        messageDiv.className = 'flex items-start space-x-3';
-                        messageDiv.innerHTML = `
-                        <div class="w-8 h-8 bg-rog-red rounded-full flex items-center justify-center text-white text-sm font-rog-heading font-semibold">
-                            O
-                        </div>
-                        <div class="bg-rog-light/20 backdrop-blur-sm rounded-lg p-3 max-w-xs border border-rog-red/30">
-                            <p class="text-white font-rog-body">${text}</p>
-                            <p class="text-xs text-gray-400 mt-1 font-rog-body">Just now</p>
-                        </div>
-                    `;
-                    }
-
-                    messagesContainer.appendChild(messageDiv);
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                }
-
-
-                // Error handling and loading states
-                window.addEventListener('error', function(e) {
-                    console.error('Global error:', e.error);
-                    // Track errors in analytics
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'exception', {
-                            'description': e.error.message,
-                            'fatal': false
-                        });
-                    }
-                });
-
-                // Performance monitoring
-                window.addEventListener('load', function() {
-                    // Track page load time
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'timing_complete', {
-                            'name': 'load',
-                            'value': performance.now()
-                        });
-                    }
-                });
-
-                // Form validation
-                function validateForm(form) {
-                    const inputs = form.querySelectorAll('input[required], textarea[required]');
-                    let isValid = true;
-
-                    inputs.forEach(input => {
-                        if (!input.value.trim()) {
-                            input.classList.add('border-red-500');
-                            isValid = false;
-                        } else {
-                            input.classList.remove('border-red-500');
-                        }
-                    });
-
-                    return isValid;
-                }
-
-                // Add loading states to buttons
-                function addLoadingState(button) {
-                    button.disabled = true;
-                    button.innerHTML = '<div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>';
-                }
-
-                function removeLoadingState(button, originalText) {
-                    button.disabled = false;
-                    button.innerHTML = originalText;
-                }
-
-                // Mobile menu functionality
-                // Mobile menu functionality is already handled above
-                // This section is removed to prevent duplicate event listeners
-
-                // Mobile sign out
-                if (mobileSignOut) {
-                    console.log('Adding mobile sign-out event listener');
-                    mobileSignOut.addEventListener('click', async (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Mobile sign out button clicked');
-                        try {
-                            await window.FirebaseAuth.signOut();
-                            console.log('Mobile sign out successful, redirecting...');
-                            window.location.href = 'index.html';
-                        } catch (error) {
-                            console.error('Mobile sign out error:', error);
-                        }
-                    });
-                } else {
-                    console.error('Mobile sign out button not found');
-                }
-
-
-            } catch (error) {
-                console.error('Error initializing index page:', error);
-            }
+            setupSmoothScrolling();
         });
-
     </script>
 </body>
-
 </html>
