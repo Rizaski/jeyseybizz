@@ -6,48 +6,150 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services - Otomono Jerseys</title>
     <link rel="icon" type="image/png" href="public/favicon.png">
+    <link rel="apple-touch-icon" href="public/favicon.png">
+
+    <!-- ROG Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#ff0040',
-                        secondary: '#1a1a1a',
-                        accent: '#ff0040',
-                        'rog-red': '#ff0040',
-                        'rog-dark': '#0a0a0a',
-                        'rog-gray': '#1a1a1a',
-                        'rog-light': '#2a2a2a',
+                        'rog-red': '#ff0037',
+                        'rog-orange': '#ff6b35',
+                        'rog-dark': '#000000',
+                        'rog-light': '#1a1a1a',
+                        'rog-gray': '#333333',
+                        'rog-blue': '#00d4ff',
+                        'rog-purple': '#8b5cf6',
                     },
                     fontFamily: {
-                        'rog-heading': ['Orbitron', 'Inter', 'sans-serif'],
-                        'rog-body': ['Roboto', 'Inter', 'sans-serif'],
-                        'rog-display': ['Orbitron', 'sans-serif'],
+                        'rog-display': ['Orbitron', 'monospace'],
+                        'rog-heading': ['Exo 2', 'sans-serif'],
+                        'rog-body': ['Roboto', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'slide-in-left': 'slideInLeft 0.8s ease-out',
+                        'slide-in-right': 'slideInRight 0.8s ease-out',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': {
+                                opacity: '0'
+                            },
+                            '100%': {
+                                opacity: '1'
+                            },
+                        },
+                        slideUp: {
+                            '0%': {
+                                transform: 'translateY(30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateY(0)',
+                                opacity: '1'
+                            },
+                        },
+                        slideInLeft: {
+                            '0%': {
+                                transform: 'translateX(-30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
+                        },
+                        slideInRight: {
+                            '0%': {
+                                transform: 'translateX(30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
+                        },
+                        float: {
+                            '0%, 100%': {
+                                transform: 'translateY(0px)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-20px)'
+                            },
+                        },
+                        glow: {
+                            '0%': {
+                                boxShadow: '0 0 20px rgba(255, 0, 55, 0.5)'
+                            },
+                            '100%': {
+                                boxShadow: '0 0 30px rgba(255, 0, 55, 0.8)'
+                            },
+                        },
                     },
                 }
             }
         }
     </script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        .rog-button {
+            background: linear-gradient(135deg, #ff0037 0%, #ff6b35 50%, #00d4ff 100%);
+            transition: all 0.3s ease;
+            border: 1px solid #ff0037;
+            box-shadow: 0 0 20px rgba(255, 0, 55, 0.3);
         }
 
-        body {
-            font-family: 'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            scroll-behavior: smooth;
-            background-color: #0a0a0a;
-            color: #ffffff;
+        .rog-button:hover {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff0037 50%, #8b5cf6 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(255, 0, 55, 0.6);
+            border-color: #00d4ff;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 30%, #333333 70%, #000000 100%);
+            position: relative;
+        }
+
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 0, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 0, 55, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
         }
 
         /* ROG Global Styles */
@@ -133,81 +235,81 @@
 
     <!-- Improved Authentication Handler -->
     <script src="js/improved-auth-handler.js"></script>
-    
+
     <!-- Profile Photo Handler -->
     <script src="js/profile-photo-handler.js"></script>
-    
+
     <!-- Universal Authentication Fix -->
     <script src="js/universal-auth-fix.js"></script>
-    
+
     <!-- Deployed Authentication Fix -->
     <script src="js/deployed-auth-fix.js"></script>
-    
+
     <!-- Gmail Profile Photo Fix -->
     <script src="js/gmail-profile-photo-fix.js"></script>
-    
+
     <!-- Aggressive Gmail Fix -->
     <script src="js/aggressive-gmail-fix.js"></script>
-    
+
     <!-- BULLETPROOF Gmail Fix -->
     <script src="js/bulletproof-gmail-fix.js"></script>
-    
+
     <!-- ULTIMATE Gmail Fix -->
     <script src="js/ultimate-gmail-fix.js"></script>
-    
+
     <!-- FINAL Gmail Fix -->
     <script src="js/final-gmail-fix.js"></script>
-    
+
     <!-- Smooth Auth Handler -->
     <script src="js/smooth-auth-handler.js"></script>
-    
+
     <!-- User Icon Fix -->
     <script src="js/user-icon-fix.js"></script>
-    
+
     <!-- Smooth Profile Fix -->
     <script src="js/smooth-profile-fix.js"></script>
-    
+
     <!-- Stop Loading CSS Fix -->
     <script src="js/stop-loading-css.js"></script>
-    
+
     <!-- Simple User Icon -->
     <script src="js/simple-user-icon.js"></script>
-    
+
     <!-- Simple User Icon CSS -->
     <script src="js/simple-user-icon-css.js"></script>
-    
+
     <!-- Clean Gmail Profile -->
     <script src="js/clean-gmail-profile.js"></script>
-    
+
     <!-- Clean Profile CSS -->
     <script src="js/clean-profile-css.js"></script>
-    
+
     <!-- ABSOLUTE FINAL FIX -->
     <script src="js/ABSOLUTE-FINAL-FIX.js"></script>
-    
+
     <!-- ABSOLUTE FINAL CSS -->
     <script src="js/ABSOLUTE-FINAL-CSS.js"></script>
-    
+
     <!-- SIGNOUT DROPDOWN FIX -->
     <script src="js/SIGNOUT-DROPDOWN-FIX.js"></script>
-    
+
     <!-- GMAIL USER INFO FIX -->
     <script src="js/GMAIL-USER-INFO-FIX.js"></script>
-    
-    
+
+
     <!-- STOP CONSTANT LOADING -->
     <script src="js/STOP-CONSTANT-LOADING.js"></script>
-    
+
     <!-- STATIC PROFILE CSS -->
     <script src="js/STATIC-PROFILE-CSS.js"></script>
-    
+
 </head>
 
-<body class="min-h-screen bg-rog-dark text-white">
+<body class="min-h-screen bg-rog-dark text-white font-rog-body overflow-x-hidden">
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-rog-dark/95 backdrop-blur-sm border-b border-rog-red shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+    <header class="fixed top-0 left-0 right-0 z-50 glass-effect">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
                 <!-- Logo Section -->
                 <div class="flex items-center">
                     <a href="index.html" class="hover:opacity-80 transition-opacity duration-200">
@@ -595,9 +697,9 @@
         // Mobile menu functionality - FIXED VERSION
         document.addEventListener('DOMContentLoaded', function() {
             function setupMobileMenu() {
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const mobileMenuClose = document.getElementById('mobile-menu-close');
+                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+                const mobileMenu = document.getElementById('mobile-menu');
+                const mobileMenuClose = document.getElementById('mobile-menu-close');
 
                 console.log('Mobile menu elements:', {
                     button: mobileMenuBtn,
@@ -615,53 +717,53 @@
                     }
                 }
 
-            // Open mobile menu
-            if (mobileMenuBtn) {
-                mobileMenuBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Mobile menu button clicked');
-                    
-                    if (mobileMenu) {
-                        mobileMenu.classList.remove('hidden');
-                        document.body.style.overflow = 'hidden';
-                        console.log('Mobile menu opened');
-                    } else {
-                        console.error('Mobile menu element not found');
-                    }
-                });
+                // Open mobile menu
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Mobile menu button clicked');
+
+                        if (mobileMenu) {
+                            mobileMenu.classList.remove('hidden');
+                            document.body.style.overflow = 'hidden';
+                            console.log('Mobile menu opened');
+                        } else {
+                            console.error('Mobile menu element not found');
+                        }
+                    });
                 } else {
                     console.error('Mobile menu button not found');
-            }
+                }
 
-            // Close mobile menu
-            if (mobileMenuClose) {
-                mobileMenuClose.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    closeMobileMenu();
-                });
-            }
+                // Close mobile menu
+                if (mobileMenuClose) {
+                    mobileMenuClose.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMobileMenu();
+                    });
+                }
 
                 // Close menu when clicking outside
                 if (mobileMenu) {
                     mobileMenu.addEventListener('click', function(e) {
                         if (e.target === mobileMenu) {
-                        closeMobileMenu();
-                    }
-                });
+                            closeMobileMenu();
+                        }
+                    });
 
                     // Close menu when clicking on navigation links
                     mobileMenu.querySelectorAll('nav a').forEach(link => {
                         link.addEventListener('click', closeMobileMenu);
                     });
-            }
-
-            // Add keyboard support for mobile menu
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
-                    closeMobileMenu();
                 }
+
+                // Add keyboard support for mobile menu
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        closeMobileMenu();
+                    }
                 });
             }
 
@@ -672,62 +774,61 @@
         // Authentication functionality
         // Authentication check with persistent session
         document.addEventListener('DOMContentLoaded', async function() {
-                try {
-                    // Wait for Firebase to initialize and restore auth state
-                    await new Promise(resolve => {
-                        const checkAuth = () => {
-                            if (window.FirebaseAuth && window.FirebaseAuth.getCurrentUser) {
-                                resolve();
-                            } else {
-                                setTimeout(checkAuth, 100);
-                            }
-                        };
-                        checkAuth();
-                    });
-
-                    // Wait a bit for authentication to be processed
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-
-                    // Check localStorage first
-                    const storedUser = localStorage.getItem('user');
-                    console.log('Stored user data:', storedUser);
-
-                    // Restore authentication state (persistent login)
-                    const user = await window.FirebaseAuth.restoreAuthState();
-                    console.log('Restored user:', user);
-
-                    if (user) {
-                        console.log('User authenticated:', user.email);
-                        console.log('User photoURL:', user.photoURL);
-                        console.log('User displayName:', user.displayName);
-
-                        // Update user information in header
-                        console.log('Updating user info in services page...');
-                        updateUserInfo(user);
-                    } else {
-                        console.log('No authenticated user, showing login button');
-                    }
-
-                    // Track page visit
-                    if (window.FirebaseDB && window.FirebaseAuth) {
-                        try {
-                            const currentUser = window.FirebaseAuth.getCurrentUser();
-                            const userId = currentUser ? currentUser.uid : 'anonymous';
-                            await window.FirebaseDB.trackUserAction(userId, 'page_visit', {
-                                page: 'services',
-                                url: window.location.href,
-                                timestamp: new Date().toISOString()
-                            });
-                        } catch (error) {
-                            console.error('Error tracking page visit:', error);
+            try {
+                // Wait for Firebase to initialize and restore auth state
+                await new Promise(resolve => {
+                    const checkAuth = () => {
+                        if (window.FirebaseAuth && window.FirebaseAuth.getCurrentUser) {
+                            resolve();
+                        } else {
+                            setTimeout(checkAuth, 100);
                         }
-                    }
+                    };
+                    checkAuth();
+                });
 
-                    } catch (error) {
-                    console.error('Error initializing services page:', error);
+                // Wait a bit for authentication to be processed
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Check localStorage first
+                const storedUser = localStorage.getItem('user');
+                console.log('Stored user data:', storedUser);
+
+                // Restore authentication state (persistent login)
+                const user = await window.FirebaseAuth.restoreAuthState();
+                console.log('Restored user:', user);
+
+                if (user) {
+                    console.log('User authenticated:', user.email);
+                    console.log('User photoURL:', user.photoURL);
+                    console.log('User displayName:', user.displayName);
+
+                    // Update user information in header
+                    console.log('Updating user info in services page...');
+                    updateUserInfo(user);
+                } else {
+                    console.log('No authenticated user, showing login button');
                 }
-            });
 
+                // Track page visit
+                if (window.FirebaseDB && window.FirebaseAuth) {
+                    try {
+                        const currentUser = window.FirebaseAuth.getCurrentUser();
+                        const userId = currentUser ? currentUser.uid : 'anonymous';
+                        await window.FirebaseDB.trackUserAction(userId, 'page_visit', {
+                            page: 'services',
+                            url: window.location.href,
+                            timestamp: new Date().toISOString()
+                        });
+                    } catch (error) {
+                        console.error('Error tracking page visit:', error);
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error initializing services page:', error);
+            }
+        });
     </script>
 
 
@@ -735,7 +836,7 @@
         // Admin Panel functionality
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Services page loaded with admin functionality');
-            
+
             const adminPanelBtn = document.getElementById('admin-panel-btn');
             const adminLoginModal = document.getElementById('admin-login-modal');
             const closeAdminLogin = document.getElementById('close-admin-login');

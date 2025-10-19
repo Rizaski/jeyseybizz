@@ -6,29 +6,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Otomono Jerseys</title>
     <link rel="icon" type="image/png" href="public/favicon.png">
+    <link rel="apple-touch-icon" href="public/favicon.png">
+
+    <!-- ROG Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#ff0040',
-                        secondary: '#1a1a1a',
-                        accent: '#ff0040',
-                        'rog-red': '#ff0040',
-                        'rog-dark': '#0a0a0a',
-                        'rog-gray': '#1a1a1a',
-                        'rog-light': '#2a2a2a',
+                        'rog-red': '#ff0037',
+                        'rog-orange': '#ff6b35',
+                        'rog-dark': '#000000',
+                        'rog-light': '#1a1a1a',
+                        'rog-gray': '#333333',
+                        'rog-blue': '#00d4ff',
+                        'rog-purple': '#8b5cf6',
                     },
                     fontFamily: {
-                        'rog-heading': ['Orbitron', 'Inter', 'sans-serif'],
-                        'rog-body': ['Roboto', 'Inter', 'sans-serif'],
-                        'rog-display': ['Orbitron', 'sans-serif'],
+                        'rog-display': ['Orbitron', 'monospace'],
+                        'rog-heading': ['Exo 2', 'sans-serif'],
+                        'rog-body': ['Roboto', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'slide-in-left': 'slideInLeft 0.8s ease-out',
+                        'slide-in-right': 'slideInRight 0.8s ease-out',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': {
+                                opacity: '0'
+                            },
+                            '100%': {
+                                opacity: '1'
+                            },
+                        },
+                        slideUp: {
+                            '0%': {
+                                transform: 'translateY(30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateY(0)',
+                                opacity: '1'
+                            },
+                        },
+                        slideInLeft: {
+                            '0%': {
+                                transform: 'translateX(-30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
+                        },
+                        slideInRight: {
+                            '0%': {
+                                transform: 'translateX(30px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
+                        },
+                        float: {
+                            '0%, 100%': {
+                                transform: 'translateY(0px)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-20px)'
+                            },
+                        },
+                        glow: {
+                            '0%': {
+                                boxShadow: '0 0 20px rgba(255, 0, 55, 0.5)'
+                            },
+                            '100%': {
+                                boxShadow: '0 0 30px rgba(255, 0, 55, 0.8)'
+                            },
+                        },
                     },
                 }
             }
@@ -211,71 +281,71 @@
 
     <!-- Improved Authentication Handler -->
     <script src="js/improved-auth-handler.js"></script>
-    
+
     <!-- Profile Photo Handler -->
     <script src="js/profile-photo-handler.js"></script>
-    
+
     <!-- Universal Authentication Fix -->
     <script src="js/universal-auth-fix.js"></script>
-    
+
     <!-- Deployed Authentication Fix -->
     <script src="js/deployed-auth-fix.js"></script>
-    
+
     <!-- Gmail Profile Photo Fix -->
     <script src="js/gmail-profile-photo-fix.js"></script>
-    
+
     <!-- Aggressive Gmail Fix -->
     <script src="js/aggressive-gmail-fix.js"></script>
-    
+
     <!-- BULLETPROOF Gmail Fix -->
     <script src="js/bulletproof-gmail-fix.js"></script>
-    
+
     <!-- ULTIMATE Gmail Fix -->
     <script src="js/ultimate-gmail-fix.js"></script>
-    
+
     <!-- FINAL Gmail Fix -->
     <script src="js/final-gmail-fix.js"></script>
-    
+
     <!-- Smooth Auth Handler -->
     <script src="js/smooth-auth-handler.js"></script>
-    
+
     <!-- User Icon Fix -->
     <script src="js/user-icon-fix.js"></script>
-    
+
     <!-- Smooth Profile Fix -->
     <script src="js/smooth-profile-fix.js"></script>
-    
+
     <!-- Stop Loading CSS Fix -->
     <script src="js/stop-loading-css.js"></script>
-    
+
     <!-- Simple User Icon -->
     <script src="js/simple-user-icon.js"></script>
-    
+
     <!-- Simple User Icon CSS -->
     <script src="js/simple-user-icon-css.js"></script>
-    
+
     <!-- Clean Gmail Profile -->
     <script src="js/clean-gmail-profile.js"></script>
-    
+
     <!-- Clean Profile CSS -->
     <script src="js/clean-profile-css.js"></script>
-    
+
     <!-- ABSOLUTE FINAL FIX -->
     <script src="js/ABSOLUTE-FINAL-FIX.js"></script>
-    
+
     <!-- ABSOLUTE FINAL CSS -->
     <script src="js/ABSOLUTE-FINAL-CSS.js"></script>
-    
+
     <!-- SIGNOUT DROPDOWN FIX -->
     <script src="js/SIGNOUT-DROPDOWN-FIX.js"></script>
-    
+
     <!-- GMAIL USER INFO FIX -->
     <script src="js/GMAIL-USER-INFO-FIX.js"></script>
-    
-    
+
+
     <!-- STOP CONSTANT LOADING -->
     <script src="js/STOP-CONSTANT-LOADING.js"></script>
-    
+
     <!-- STATIC PROFILE CSS -->
     <script src="js/STATIC-PROFILE-CSS.js"></script>
 </head>
@@ -897,7 +967,7 @@
                             e.preventDefault();
                             e.stopPropagation();
                             console.log('Mobile menu button clicked');
-                            
+
                             if (mobileMenu) {
                                 mobileMenu.classList.remove('hidden');
                                 document.body.style.overflow = 'hidden';
@@ -1203,7 +1273,7 @@
         // Admin Panel functionality
         document.addEventListener('DOMContentLoaded', function() {
             console.log('About page loaded with admin functionality');
-            
+
             const adminPanelBtn = document.getElementById('admin-panel-btn');
             const adminLoginModal = document.getElementById('admin-login-modal');
             const closeAdminLogin = document.getElementById('close-admin-login');
