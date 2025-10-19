@@ -529,6 +529,20 @@
         async function loadOrderDetails() {
             console.log('Loading order details for orderId:', orderId);
 
+            // Get URL parameters as fallback
+            const urlParams = new URLSearchParams(window.location.search);
+            const fallbackOrder = {
+                orderId: urlParams.get('orderId') || orderId,
+                customerName: urlParams.get('customerName') || '',
+                customerEmail: urlParams.get('customerEmail') || '',
+                mobileNumber: urlParams.get('mobileNumber') || '',
+                materialPreference: urlParams.get('materialPreference') || '',
+                quantity: parseInt(urlParams.get('quantity') || '1'),
+                amount: urlParams.get('amount') || '',
+                status: urlParams.get('status') || 'processing',
+                createdAt: urlParams.get('createdAt') || new Date().toISOString()
+            };
+
             try {
                 // First try to get from Firestore (where admin panel saves)
                 const {
@@ -632,49 +646,45 @@
                         showOrderForm(order);
                     }
                 } else {
-                    console.log('Order not found in Realtime Database either');
-                    document.getElementById('order-details').innerHTML = `
-                        <div class="text-red-400 text-center text-black">
-                            <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
-                            <p>Order not found. Please check your order link.</p>
-                            <p class="text-sm text-gray-500 mt-2">Order ID: ${orderId}</p>
-                        </div>
-                    `;
+                    console.log('Order not found in Realtime Database either, using URL parameters');
+                    // Use fallback order data from URL parameters
+                    showOrderForm(fallbackOrder);
                 }
             } catch (error) {
                 console.error('Error loading order:', error);
-                document.getElementById('order-details').innerHTML = `
-                    <div class="text-red-400 text-center text-black">
-                        <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
-                        <p>Error loading order details. Please try again.</p>
-                    </div>
-                `;
+                console.log('Using fallback order data from URL parameters');
+                // Use fallback order data from URL parameters
+                showOrderForm(fallbackOrder);
             }
         }
 
         // Show order form (when jersey details don't exist)
         function showOrderForm(order) {
+            // Get URL parameters to populate initial order details
+            const urlParams = new URLSearchParams(window.location.search);
+            
             document.getElementById('order-details').innerHTML = `
                 <div class="bg-gray-800 rounded-lg p-6 mb-6">
                     <h2 class="text-xl font-semibold text-white mb-4 flex items-center">
                         <i class="fas fa-shopping-cart mr-2 text-blue-400"></i>
                         Initial Order Details
                     </h2>
-                    <div class="grid grid-cols-2 gap-4 text-sm" data-quantity="${order.quantity || 1}">
-                        <div><strong class="text-gray-300">Order ID:</strong> <span class="text-white">${order.orderId || orderId}</span></div>
-                        <div><strong class="text-gray-300">Customer:</strong> <span class="text-white">${order.customerName}</span></div>
-                        <div><strong class="text-gray-300">Email:</strong> <span class="text-white">${order.customerEmail}</span></div>
-                        <div><strong class="text-gray-300">Mobile:</strong> <span class="text-white">${order.mobileNumber || 'N/A'}</span></div>
-                        <div><strong class="text-gray-300">Quantity:</strong> <span class="text-white">${order.quantity}</span></div>
-                        <div><strong class="text-gray-300">Material:</strong> <span class="text-white">${order.materialPreference}</span></div>
-                        <div><strong class="text-gray-300">Status:</strong> ${getStatusBadge(order.status)}</div>
-                        <div><strong class="text-gray-300">Created:</strong> <span class="text-white">${new Date(order.createdAt).toLocaleDateString()}</span></div>
+                    <div class="grid grid-cols-2 gap-4 text-sm" data-quantity="${urlParams.get('quantity') || order.quantity || 1}">
+                        <div><strong class="text-gray-300">Order ID:</strong> <span class="text-white">${urlParams.get('orderId') || order.orderId || orderId}</span></div>
+                        <div><strong class="text-gray-300">Customer:</strong> <span class="text-white">${urlParams.get('customerName') || order.customerName || 'N/A'}</span></div>
+                        <div><strong class="text-gray-300">Email:</strong> <span class="text-white">${urlParams.get('customerEmail') || order.customerEmail || 'N/A'}</span></div>
+                        <div><strong class="text-gray-300">Mobile:</strong> <span class="text-white">${urlParams.get('mobileNumber') || order.mobileNumber || 'N/A'}</span></div>
+                        <div><strong class="text-gray-300">Quantity:</strong> <span class="text-white">${urlParams.get('quantity') || order.quantity || 1}</span></div>
+                        <div><strong class="text-gray-300">Material:</strong> <span class="text-white">${urlParams.get('materialPreference') || order.materialPreference || 'N/A'}</span></div>
+                        <div><strong class="text-gray-300">Status:</strong> ${getStatusBadge(urlParams.get('status') || order.status || 'processing')}</div>
+                        <div><strong class="text-gray-300">Created:</strong> <span class="text-white">${urlParams.get('createdAt') ? new Date(urlParams.get('createdAt')).toLocaleDateString() : (order.createdAt ? new Date(order.createdAt).toLocaleDateString() : new Date().toLocaleDateString())}</span></div>
                     </div>
                 </div>
             `;
 
-            // Generate dynamic jersey forms based on quantity
-            generateJerseyForms(order.quantity || 1);
+            // Generate dynamic jersey forms based on quantity from URL params or order data
+            const quantity = parseInt(urlParams.get('quantity') || order.quantity || 1);
+            generateJerseyForms(quantity);
         }
 
         // Get status badge with color coding
@@ -895,13 +905,13 @@
                             </h2>
                             <div class="grid grid-cols-2 gap-4 text-sm">
                                 <div><strong class="text-gray-300">Order ID:</strong> <span class="text-white">${order.orderId || orderId}</span></div>
-                                <div><strong class="text-gray-300">Customer:</strong> <span class="text-white">${order.customerName}</span></div>
-                                <div><strong class="text-gray-300">Email:</strong> <span class="text-white">${order.customerEmail}</span></div>
+                                <div><strong class="text-gray-300">Customer:</strong> <span class="text-white">${order.customerName || 'N/A'}</span></div>
+                                <div><strong class="text-gray-300">Email:</strong> <span class="text-white">${order.customerEmail || 'N/A'}</span></div>
                                 <div><strong class="text-gray-300">Mobile:</strong> <span class="text-white">${order.mobileNumber || 'N/A'}</span></div>
-                                <div><strong class="text-gray-300">Quantity:</strong> <span class="text-white">${order.quantity}</span></div>
-                                <div><strong class="text-gray-300">Material:</strong> <span class="text-white">${order.materialPreference}</span></div>
-                                <div><strong class="text-gray-300">Status:</strong> ${getStatusBadge(order.status)}</div>
-                                <div><strong class="text-gray-300">Created:</strong> <span class="text-white">${new Date(order.createdAt).toLocaleDateString()}</span></div>
+                                <div><strong class="text-gray-300">Quantity:</strong> <span class="text-white">${order.quantity || 1}</span></div>
+                                <div><strong class="text-gray-300">Material:</strong> <span class="text-white">${order.materialPreference || 'N/A'}</span></div>
+                                <div><strong class="text-gray-300">Status:</strong> ${getStatusBadge(order.status || 'processing')}</div>
+                                <div><strong class="text-gray-300">Created:</strong> <span class="text-white">${order.createdAt ? new Date(order.createdAt).toLocaleDateString() : new Date().toLocaleDateString()}</span></div>
                             </div>
                         </div>
 

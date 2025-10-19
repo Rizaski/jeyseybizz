@@ -3224,20 +3224,28 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                 return;
             }
 
-            // Generate a unique client link with customer details
-            const customerDetails = {
+            // Generate a unique client link with complete order details
+            const orderDetails = {
                 orderId: orderId,
                 customerName: order.customer || '',
                 customerEmail: order.email || '',
-                customerPhone: order.phone || '',
+                mobileNumber: order.phone || '',
+                materialPreference: order.material || '',
+                quantity: order.quantity || 1,
+                amount: order.amount || '',
+                status: order.status || 'processing',
+                createdAt: order.date || new Date().toISOString(),
+                // Include all order fields that might be needed
+                customer: order.customer || '',
+                email: order.email || '',
+                phone: order.phone || '',
                 product: order.product || '',
                 material: order.material || '',
-                quantity: order.quantity || '',
-                amount: order.amount || ''
+                notes: order.notes || ''
             };
 
-            // Encode customer details as URL parameters
-            const params = new URLSearchParams(customerDetails);
+            // Encode order details as URL parameters
+            const params = new URLSearchParams(orderDetails);
             const clientLink = `${window.location.origin}/client-order-form.html?${params.toString()}&token=${generateToken()}`;
 
             // Show the link in a modal
