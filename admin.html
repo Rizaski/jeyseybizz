@@ -626,8 +626,8 @@
                             </div>
                             <div class="py-2">
                                 <a href="#" class="block px-3 py-2 text-sm hover:bg-rog-gray rounded font-rog-body">Profile</a>
-                                <a href="#" class="block px-3 py-2 text-sm hover:bg-rog-gray rounded font-rog-body">Settings</a>
-                                <a href="#" class="block px-3 py-2 text-sm hover:bg-rog-gray rounded font-rog-body">Help</a>
+                                <a href="#" onclick="navigateToSettings()" class="block px-3 py-2 text-sm hover:bg-rog-gray rounded font-rog-body">Settings</a>
+                                <a href="#" onclick="showHelpDialog()" class="block px-3 py-2 text-sm hover:bg-rog-gray rounded font-rog-body">Help</a>
                                 <hr class="my-2 border-rog-gray">
                                 <a href="#" class="block px-3 py-2 text-sm hover:bg-rog-gray rounded text-rog-red font-rog-body" onclick="logout()">Logout</a>
                             </div>
@@ -1968,14 +1968,18 @@
                 for (let i = 6; i >= 0; i--) {
                     const date = new Date();
                     date.setDate(date.getDate() - i);
-                    last7Days.push(date.toLocaleDateString('en-US', { weekday: 'short' }));
+                    last7Days.push(date.toLocaleDateString('en-US', {
+                        weekday: 'short'
+                    }));
                 }
 
                 // Calculate sales for each day from orders data
                 const salesData = last7Days.map(day => {
                     const dayOrders = ordersData.filter(order => {
                         const orderDate = new Date(order.date);
-                        const dayName = orderDate.toLocaleDateString('en-US', { weekday: 'short' });
+                        const dayName = orderDate.toLocaleDateString('en-US', {
+                            weekday: 'short'
+                        });
                         return dayName === day;
                     });
                     return dayOrders.reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
@@ -1987,7 +1991,10 @@
                 };
             } catch (error) {
                 console.error('Error getting sales trend data:', error);
-                return { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], values: [0, 0, 0, 0, 0, 0, 0] };
+                return {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    values: [0, 0, 0, 0, 0, 0, 0]
+                };
             }
         }
 
@@ -2013,7 +2020,10 @@
                 };
             } catch (error) {
                 console.error('Error getting order status data:', error);
-                return { labels: ['Completed', 'Pending', 'Processing', 'Cancelled'], values: [0, 0, 0, 0] };
+                return {
+                    labels: ['Completed', 'Pending', 'Processing', 'Cancelled'],
+                    values: [0, 0, 0, 0]
+                };
             }
         }
 
@@ -2024,13 +2034,17 @@
                 for (let i = 5; i >= 0; i--) {
                     const date = new Date();
                     date.setMonth(date.getMonth() - i);
-                    last6Months.push(date.toLocaleDateString('en-US', { month: 'short' }));
+                    last6Months.push(date.toLocaleDateString('en-US', {
+                        month: 'short'
+                    }));
                 }
 
                 const revenueData = last6Months.map(month => {
                     const monthOrders = ordersData.filter(order => {
                         const orderDate = new Date(order.date);
-                        const orderMonth = orderDate.toLocaleDateString('en-US', { month: 'short' });
+                        const orderMonth = orderDate.toLocaleDateString('en-US', {
+                            month: 'short'
+                        });
                         return orderMonth === month;
                     });
                     return monthOrders.reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
@@ -2042,7 +2056,10 @@
                 };
             } catch (error) {
                 console.error('Error getting revenue data:', error);
-                return { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], values: [0, 0, 0, 0, 0, 0] };
+                return {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    values: [0, 0, 0, 0, 0, 0]
+                };
             }
         }
 
@@ -2053,13 +2070,17 @@
                 for (let i = 5; i >= 0; i--) {
                     const date = new Date();
                     date.setMonth(date.getMonth() - i);
-                    last6Months.push(date.toLocaleDateString('en-US', { month: 'short' }));
+                    last6Months.push(date.toLocaleDateString('en-US', {
+                        month: 'short'
+                    }));
                 }
 
                 const customerData = last6Months.map(month => {
                     const monthCustomers = customersData.filter(customer => {
                         const customerDate = new Date(customer.date || customer.createdAt);
-                        const customerMonth = customerDate.toLocaleDateString('en-US', { month: 'short' });
+                        const customerMonth = customerDate.toLocaleDateString('en-US', {
+                            month: 'short'
+                        });
                         return customerMonth === month;
                     });
                     return monthCustomers.length;
@@ -2071,7 +2092,10 @@
                 };
             } catch (error) {
                 console.error('Error getting customer growth data:', error);
-                return { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], values: [0, 0, 0, 0, 0, 0] };
+                return {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    values: [0, 0, 0, 0, 0, 0]
+                };
             }
         }
 
@@ -2101,11 +2125,11 @@
             try {
                 const reports = [];
                 const currentDate = new Date();
-                
+
                 // Generate Sales Report
                 const totalSales = ordersData.reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
                 const completedOrders = ordersData.filter(order => order.status === 'Completed').length;
-                
+
                 reports.push({
                     id: 1,
                     name: `Sales Report - ${currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`,
@@ -2360,7 +2384,9 @@
                                         <h4 class="text-lg font-rog-heading font-semibold text-white mb-3">Key Metrics</h4>
                                         <div class="space-y-2">
                                             ${Object.entries(report.data || {}).map(([key, value]) => 
-                                                `<p class="text-gray-300"><span class="text-rog-red">${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</span> ${value}</p>`
+                                                ` < p class = "text-gray-300" > < span class = "text-rog-red" > $ {
+                key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())
+            }: < /span> ${value}</p > `
                                             ).join('')}
                                         </div>
                                     </div>
@@ -2383,7 +2409,7 @@
                     </div>
                 </div>
             `;
-            
+
             document.body.insertAdjacentHTML('beforeend', modalHtml);
         }
 
@@ -2435,7 +2461,7 @@
                     </div>
                 </div>
             `;
-            
+
             document.body.insertAdjacentHTML('beforeend', modalHtml);
         }
 
@@ -2459,9 +2485,9 @@
         function executeExport(reportId) {
             const format = document.getElementById('export-format').value;
             const includeLogo = document.querySelector('input[name="include-logo"]:checked').value === 'yes';
-            
+
             console.log(`Exporting report ${reportId} as ${format} with logo: ${includeLogo}`);
-            
+
             // Simulate export process
             showRogSuccess(`Report exported successfully as ${format.toUpperCase()}!`, 'Export Complete');
             closeExportOptionsModal();
@@ -3390,7 +3416,33 @@
                 });
             }
 
-            // Load notifications
+            // Check if notifications were cleared
+            const notificationsCleared = localStorage.getItem('notificationsCleared');
+            const clearedTime = localStorage.getItem('notificationsClearedTime');
+            
+            if (notificationsCleared === 'true' && clearedTime) {
+                // Check if cleared within last 24 hours
+                const timeDiff = Date.now() - parseInt(clearedTime);
+                const hoursDiff = timeDiff / (1000 * 60 * 60);
+                
+                if (hoursDiff < 24) {
+                    // Keep notifications cleared
+                    if (notificationCount) {
+                        notificationCount.classList.add('opacity-0', 'pointer-events-none');
+                        notificationCount.classList.remove('opacity-100');
+                    }
+                    if (notificationList) {
+                        notificationList.innerHTML = '<div class="p-4 text-center text-gray-400 font-rog-body">No notifications</div>';
+                    }
+                    return; // Don't load notifications
+                } else {
+                    // Clear the stored state after 24 hours
+                    localStorage.removeItem('notificationsCleared');
+                    localStorage.removeItem('notificationsClearedTime');
+                }
+            }
+
+            // Load notifications only if not cleared
             loadNotifications();
         }
 
@@ -3476,6 +3528,10 @@
                 notificationCount.classList.add('opacity-0', 'pointer-events-none');
                 notificationCount.classList.remove('opacity-100');
             }
+
+            // Store cleared state in localStorage
+            localStorage.setItem('notificationsCleared', 'true');
+            localStorage.setItem('notificationsClearedTime', Date.now().toString());
 
             console.log('All notifications cleared');
         }
@@ -3600,6 +3656,226 @@
             }
         }
 
+        // Navigation functions
+        function navigateToSettings() {
+            // Close user dropdown
+            const userDropdown = document.getElementById('user-dropdown');
+            if (userDropdown) {
+                userDropdown.classList.add('hidden');
+            }
+            
+            // Navigate to settings section
+            showSection('settings');
+        }
+
+        // Help dialog functionality
+        function showHelpDialog() {
+            // Close user dropdown
+            const userDropdown = document.getElementById('user-dropdown');
+            if (userDropdown) {
+                userDropdown.classList.add('hidden');
+            }
+
+            const helpDialogHtml = `
+                <div id="helpDialog" class="fixed inset-0 bg-black bg-opacity-50 z-50">
+                    <div class="flex items-center justify-center min-h-screen p-4">
+                        <div class="bg-rog-light rounded-2xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-2xl font-rog-display font-bold text-white">Admin Panel Help</h3>
+                                <button onclick="closeHelpDialog()" class="text-gray-400 hover:text-white">
+                                    <i class="fas fa-times text-xl"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="space-y-6">
+                                <!-- Navigation Help -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-3">
+                                        <i class="fas fa-compass text-rog-red mr-2"></i>Navigation
+                                    </h4>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h5 class="font-rog-heading font-semibold text-rog-red mb-2">Sidebar Navigation</h5>
+                                            <ul class="space-y-1 text-sm text-gray-300">
+                                                <li><span class="text-rog-red">•</span> Dashboard - Overview and statistics</li>
+                                                <li><span class="text-rog-red">•</span> Orders - Manage customer orders</li>
+                                                <li><span class="text-rog-red">•</span> Customers - Customer management</li>
+                                                <li><span class="text-rog-red">•</span> Materials - Inventory materials</li>
+                                                <li><span class="text-rog-red">•</span> Products - Product catalog</li>
+                                                <li><span class="text-rog-red">•</span> Analytics - Charts and insights</li>
+                                                <li><span class="text-rog-red">•</span> Reports - Generate reports</li>
+                                                <li><span class="text-rog-red">•</span> Settings - Profile and security</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-rog-heading font-semibold text-rog-red mb-2">Header Controls</h5>
+                                            <ul class="space-y-1 text-sm text-gray-300">
+                                                <li><span class="text-rog-red">•</span> Mobile Menu - Toggle sidebar on mobile</li>
+                                                <li><span class="text-rog-red">•</span> Notifications - View system alerts</li>
+                                                <li><span class="text-rog-red">•</span> Refresh - Reload current data</li>
+                                                <li><span class="text-rog-red">•</span> Profile - User settings and logout</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Order Management Help -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-3">
+                                        <i class="fas fa-shopping-cart text-rog-red mr-2"></i>Order Management
+                                    </h4>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h5 class="font-rog-heading font-semibold text-rog-red mb-2">Order Actions</h5>
+                                            <ul class="space-y-1 text-sm text-gray-300">
+                                                <li><span class="text-rog-red">👁️</span> View - See order details</li>
+                                                <li><span class="text-rog-red">🔗</span> Generate Link - Create client form link</li>
+                                                <li><span class="text-rog-red">✏️</span> Edit - Modify order information</li>
+                                                <li><span class="text-rog-red">🗑️</span> Delete - Remove order</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-rog-heading font-semibold text-rog-red mb-2">Order Filters</h5>
+                                            <ul class="space-y-1 text-sm text-gray-300">
+                                                <li><span class="text-rog-red">•</span> Search by ID, customer, or product</li>
+                                                <li><span class="text-rog-red">•</span> Filter by status (Pending, Processing, etc.)</li>
+                                                <li><span class="text-rog-red">•</span> Date range filtering</li>
+                                                <li><span class="text-rog-red">•</span> Real-time search results</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Analytics Help -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-3">
+                                        <i class="fas fa-chart-line text-rog-red mr-2"></i>Analytics & Reports
+                                    </h4>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h5 class="font-rog-heading font-semibold text-rog-red mb-2">Analytics Charts</h5>
+                                            <ul class="space-y-1 text-sm text-gray-300">
+                                                <li><span class="text-rog-red">•</span> Sales Trend - 7-day sales data</li>
+                                                <li><span class="text-rog-red">•</span> Order Status - Distribution pie chart</li>
+                                                <li><span class="text-rog-red">•</span> Monthly Revenue - 6-month bar chart</li>
+                                                <li><span class="text-rog-red">•</span> Customer Growth - Acquisition trends</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-rog-heading font-semibold text-rog-red mb-2">Report Actions</h5>
+                                            <ul class="space-y-1 text-sm text-gray-300">
+                                                <li><span class="text-rog-red">👁️</span> View - See report details</li>
+                                                <li><span class="text-rog-red">📤</span> Export - PDF, Excel, CSV, JSON</li>
+                                                <li><span class="text-rog-red">⬇️</span> Download - Direct file download</li>
+                                                <li><span class="text-rog-red">🗑️</span> Delete - Remove report</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Settings Help -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-3">
+                                        <i class="fas fa-cog text-rog-red mr-2"></i>Settings & Security
+                                    </h4>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h5 class="font-rog-heading font-semibold text-rog-red mb-2">Profile Settings</h5>
+                                            <ul class="space-y-1 text-sm text-gray-300">
+                                                <li><span class="text-rog-red">•</span> Update name, email, phone</li>
+                                                <li><span class="text-rog-red">•</span> Real-time validation</li>
+                                                <li><span class="text-rog-red">•</span> Success notifications</li>
+                                                <li><span class="text-rog-red">•</span> Form reset after update</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-rog-heading font-semibold text-rog-red mb-2">Password Security</h5>
+                                            <ul class="space-y-1 text-sm text-gray-300">
+                                                <li><span class="text-rog-red">•</span> Current password verification</li>
+                                                <li><span class="text-rog-red">•</span> Password strength indicator</li>
+                                                <li><span class="text-rog-red">•</span> 8+ characters, mixed case, numbers</li>
+                                                <li><span class="text-rog-red">•</span> Secure password change process</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Keyboard Shortcuts -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-3">
+                                        <i class="fas fa-keyboard text-rog-red mr-2"></i>Keyboard Shortcuts
+                                    </h4>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h5 class="font-rog-heading font-semibold text-rog-red mb-2">Navigation</h5>
+                                            <ul class="space-y-1 text-sm text-gray-300">
+                                                <li><span class="text-rog-red">Ctrl + 1</span> - Dashboard</li>
+                                                <li><span class="text-rog-red">Ctrl + 2</span> - Orders</li>
+                                                <li><span class="text-rog-red">Ctrl + 3</span> - Customers</li>
+                                                <li><span class="text-rog-red">Ctrl + 4</span> - Materials</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-rog-heading font-semibold text-rog-red mb-2">Actions</h5>
+                                            <ul class="space-y-1 text-sm text-gray-300">
+                                                <li><span class="text-rog-red">Ctrl + R</span> - Refresh data</li>
+                                                <li><span class="text-rog-red">Ctrl + N</span> - New item</li>
+                                                <li><span class="text-rog-red">Esc</span> - Close modals</li>
+                                                <li><span class="text-rog-red">F1</span> - Show this help</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Mobile Help -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-3">
+                                        <i class="fas fa-mobile-alt text-rog-red mr-2"></i>Mobile Usage
+                                    </h4>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h5 class="font-rog-heading font-semibold text-rog-red mb-2">Touch Controls</h5>
+                                            <ul class="space-y-1 text-sm text-gray-300">
+                                                <li><span class="text-rog-red">•</span> Tap menu button to toggle sidebar</li>
+                                                <li><span class="text-rog-red">•</span> Swipe gestures for navigation</li>
+                                                <li><span class="text-rog-red">•</span> Touch-friendly buttons</li>
+                                                <li><span class="text-rog-red">•</span> Responsive table scrolling</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-rog-heading font-semibold text-rog-red mb-2">Mobile Features</h5>
+                                            <ul class="space-y-1 text-sm text-gray-300">
+                                                <li><span class="text-rog-red">•</span> Auto-hide sidebar on navigation</li>
+                                                <li><span class="text-rog-red">•</span> Optimized chart display</li>
+                                                <li><span class="text-rog-red">•</span> Touch-optimized modals</li>
+                                                <li><span class="text-rog-red">•</span> Mobile-friendly forms</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-end mt-6">
+                                <button onclick="closeHelpDialog()" class="px-6 py-3 bg-rog-red text-white rounded-lg font-rog-heading font-semibold hover:bg-rog-orange transition-colors duration-300">
+                                    Close Help
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', helpDialogHtml);
+        }
+
+        // Close help dialog
+        function closeHelpDialog() {
+            const helpDialog = document.getElementById('helpDialog');
+            if (helpDialog) {
+                helpDialog.remove();
+            }
+        }
+
         // Make functions global
         window.logout = logout;
         window.editOrder = editOrder;
@@ -3627,6 +3903,9 @@
         window.closeReportDetailsModal = closeReportDetailsModal;
         window.closeExportOptionsModal = closeExportOptionsModal;
         window.executeExport = executeExport;
+        window.navigateToSettings = navigateToSettings;
+        window.showHelpDialog = showHelpDialog;
+        window.closeHelpDialog = closeHelpDialog;
 
         // Refresh functionality
         function setupRefresh() {
