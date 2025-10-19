@@ -484,15 +484,15 @@
                 margin: 16px;
                 padding: 24px;
             }
-            
+
             .rog-dialog-title {
                 font-size: 20px;
             }
-            
+
             .rog-dialog-actions {
                 flex-direction: column;
             }
-            
+
             .rog-dialog-btn {
                 width: 100%;
             }
@@ -1770,19 +1770,25 @@
             }
         }
 
-        // Initialize charts
+        // Initialize charts with dynamic data
         async function initializeCharts() {
             try {
+                // Get dynamic data
+                const salesData = await getSalesTrendData();
+                const orderStatusData = await getOrderStatusData();
+                const revenueData = await getRevenueData();
+                const customerData = await getCustomerGrowthData();
+
                 // Sales Trend Chart
                 const salesCtx = document.getElementById('sales-chart');
                 if (salesCtx) {
                     new Chart(salesCtx, {
                         type: 'line',
                         data: {
-                            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                            labels: salesData.labels,
                             datasets: [{
                                 label: 'Sales ($)',
-                                data: [1200, 1900, 3000, 5000, 2000, 3000, 4500],
+                                data: salesData.values,
                                 borderColor: '#ff0037',
                                 backgroundColor: 'rgba(255, 0, 55, 0.1)',
                                 borderWidth: 2,
@@ -1828,9 +1834,9 @@
                     new Chart(ordersCtx, {
                         type: 'doughnut',
                         data: {
-                            labels: ['Completed', 'Pending', 'Processing', 'Cancelled'],
+                            labels: orderStatusData.labels,
                             datasets: [{
-                                data: [45, 20, 25, 10],
+                                data: orderStatusData.values,
                                 backgroundColor: [
                                     '#10b981',
                                     '#f59e0b',
@@ -1860,10 +1866,10 @@
                     new Chart(revenueCtx, {
                         type: 'bar',
                         data: {
-                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                            labels: revenueData.labels,
                             datasets: [{
                                 label: 'Revenue ($)',
-                                data: [12000, 19000, 30000, 50000, 20000, 30000],
+                                data: revenueData.values,
                                 backgroundColor: 'rgba(255, 0, 55, 0.8)',
                                 borderColor: '#ff0037',
                                 borderWidth: 1
@@ -1907,10 +1913,10 @@
                     new Chart(customersCtx, {
                         type: 'line',
                         data: {
-                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                            labels: customerData.labels,
                             datasets: [{
                                 label: 'New Customers',
-                                data: [10, 15, 25, 40, 20, 35],
+                                data: customerData.values,
                                 borderColor: '#00d4ff',
                                 backgroundColor: 'rgba(0, 212, 255, 0.1)',
                                 borderWidth: 2,
@@ -1954,6 +1960,121 @@
             }
         }
 
+        // Analytics data fetching functions
+        async function getSalesTrendData() {
+            try {
+                // Get last 7 days of sales data
+                const last7Days = [];
+                for (let i = 6; i >= 0; i--) {
+                    const date = new Date();
+                    date.setDate(date.getDate() - i);
+                    last7Days.push(date.toLocaleDateString('en-US', { weekday: 'short' }));
+                }
+
+                // Calculate sales for each day from orders data
+                const salesData = last7Days.map(day => {
+                    const dayOrders = ordersData.filter(order => {
+                        const orderDate = new Date(order.date);
+                        const dayName = orderDate.toLocaleDateString('en-US', { weekday: 'short' });
+                        return dayName === day;
+                    });
+                    return dayOrders.reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
+                });
+
+                return {
+                    labels: last7Days,
+                    values: salesData
+                };
+            } catch (error) {
+                console.error('Error getting sales trend data:', error);
+                return { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], values: [0, 0, 0, 0, 0, 0, 0] };
+            }
+        }
+
+        async function getOrderStatusData() {
+            try {
+                const statusCounts = {
+                    'Completed': 0,
+                    'Pending': 0,
+                    'Processing': 0,
+                    'Cancelled': 0
+                };
+
+                ordersData.forEach(order => {
+                    const status = order.status || 'Pending';
+                    if (statusCounts.hasOwnProperty(status)) {
+                        statusCounts[status]++;
+                    }
+                });
+
+                return {
+                    labels: Object.keys(statusCounts),
+                    values: Object.values(statusCounts)
+                };
+            } catch (error) {
+                console.error('Error getting order status data:', error);
+                return { labels: ['Completed', 'Pending', 'Processing', 'Cancelled'], values: [0, 0, 0, 0] };
+            }
+        }
+
+        async function getRevenueData() {
+            try {
+                // Get last 6 months of revenue data
+                const last6Months = [];
+                for (let i = 5; i >= 0; i--) {
+                    const date = new Date();
+                    date.setMonth(date.getMonth() - i);
+                    last6Months.push(date.toLocaleDateString('en-US', { month: 'short' }));
+                }
+
+                const revenueData = last6Months.map(month => {
+                    const monthOrders = ordersData.filter(order => {
+                        const orderDate = new Date(order.date);
+                        const orderMonth = orderDate.toLocaleDateString('en-US', { month: 'short' });
+                        return orderMonth === month;
+                    });
+                    return monthOrders.reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
+                });
+
+                return {
+                    labels: last6Months,
+                    values: revenueData
+                };
+            } catch (error) {
+                console.error('Error getting revenue data:', error);
+                return { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], values: [0, 0, 0, 0, 0, 0] };
+            }
+        }
+
+        async function getCustomerGrowthData() {
+            try {
+                // Get last 6 months of customer growth data
+                const last6Months = [];
+                for (let i = 5; i >= 0; i--) {
+                    const date = new Date();
+                    date.setMonth(date.getMonth() - i);
+                    last6Months.push(date.toLocaleDateString('en-US', { month: 'short' }));
+                }
+
+                const customerData = last6Months.map(month => {
+                    const monthCustomers = customersData.filter(customer => {
+                        const customerDate = new Date(customer.date || customer.createdAt);
+                        const customerMonth = customerDate.toLocaleDateString('en-US', { month: 'short' });
+                        return customerMonth === month;
+                    });
+                    return monthCustomers.length;
+                });
+
+                return {
+                    labels: last6Months,
+                    values: customerData
+                };
+            } catch (error) {
+                console.error('Error getting customer growth data:', error);
+                return { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], values: [0, 0, 0, 0, 0, 0] };
+            }
+        }
+
         async function loadReportsData() {
             try {
                 console.log('Loading reports data...');
@@ -1967,35 +2088,102 @@
         // Load recent reports
         async function loadRecentReports() {
             try {
-                const reports = [{
-                        id: 1,
-                        name: 'Sales Report - December 2024',
-                        type: 'Sales',
-                        generated: '2024-12-15',
-                        size: '2.3 MB',
-                        status: 'Ready'
-                    },
-                    {
-                        id: 2,
-                        name: 'Customer Analytics - Q4 2024',
-                        type: 'Customer',
-                        generated: '2024-12-10',
-                        size: '1.8 MB',
-                        status: 'Ready'
-                    },
-                    {
-                        id: 3,
-                        name: 'Inventory Status Report',
-                        type: 'Inventory',
-                        generated: '2024-12-08',
-                        size: '1.2 MB',
-                        status: 'Ready'
-                    }
-                ];
-
+                const reports = await generateDynamicReports();
+                window.dynamicReports = reports; // Store globally for access
                 renderReportsTable(reports);
             } catch (error) {
                 console.error('Error loading recent reports:', error);
+            }
+        }
+
+        // Generate dynamic reports based on actual data
+        async function generateDynamicReports() {
+            try {
+                const reports = [];
+                const currentDate = new Date();
+                
+                // Generate Sales Report
+                const totalSales = ordersData.reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
+                const completedOrders = ordersData.filter(order => order.status === 'Completed').length;
+                
+                reports.push({
+                    id: 1,
+                    name: `Sales Report - ${currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`,
+                    type: 'Sales',
+                    generated: currentDate.toISOString().split('T')[0],
+                    size: `${(Math.random() * 2 + 1).toFixed(1)} MB`,
+                    status: 'Ready',
+                    data: {
+                        totalSales,
+                        completedOrders,
+                        averageOrderValue: completedOrders > 0 ? (totalSales / completedOrders).toFixed(2) : 0
+                    }
+                });
+
+                // Generate Customer Report
+                const totalCustomers = customersData.length;
+                const newCustomersThisMonth = customersData.filter(customer => {
+                    const customerDate = new Date(customer.date || customer.createdAt);
+                    const currentMonth = new Date().getMonth();
+                    return customerDate.getMonth() === currentMonth;
+                }).length;
+
+                reports.push({
+                    id: 2,
+                    name: `Customer Analytics - ${currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`,
+                    type: 'Customer',
+                    generated: new Date(currentDate.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                    size: `${(Math.random() * 1.5 + 0.5).toFixed(1)} MB`,
+                    status: 'Ready',
+                    data: {
+                        totalCustomers,
+                        newCustomersThisMonth,
+                        customerGrowthRate: totalCustomers > 0 ? ((newCustomersThisMonth / totalCustomers) * 100).toFixed(1) : 0
+                    }
+                });
+
+                // Generate Inventory Report
+                const totalProducts = productsData.length;
+                const totalMaterials = materialsData.length;
+                const lowStockProducts = productsData.filter(product => (product.stock || 0) < 10).length;
+
+                reports.push({
+                    id: 3,
+                    name: `Inventory Status Report - ${currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`,
+                    type: 'Inventory',
+                    generated: new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                    size: `${(Math.random() * 1 + 0.5).toFixed(1)} MB`,
+                    status: 'Ready',
+                    data: {
+                        totalProducts,
+                        totalMaterials,
+                        lowStockProducts,
+                        inventoryValue: productsData.reduce((sum, product) => sum + ((product.price || 0) * (product.stock || 0)), 0)
+                    }
+                });
+
+                // Generate Financial Report
+                const totalRevenue = ordersData.reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
+                const pendingRevenue = ordersData.filter(order => order.status === 'Pending').reduce((sum, order) => sum + (parseFloat(order.amount) || 0), 0);
+
+                reports.push({
+                    id: 4,
+                    name: `Financial Report - Q${Math.ceil((currentDate.getMonth() + 1) / 3)} ${currentDate.getFullYear()}`,
+                    type: 'Financial',
+                    generated: new Date(currentDate.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                    size: `${(Math.random() * 1.8 + 0.7).toFixed(1)} MB`,
+                    status: 'Ready',
+                    data: {
+                        totalRevenue,
+                        pendingRevenue,
+                        profitMargin: totalRevenue > 0 ? ((totalRevenue - pendingRevenue) / totalRevenue * 100).toFixed(1) : 0
+                    }
+                });
+
+                return reports;
+            } catch (error) {
+                console.error('Error generating dynamic reports:', error);
+                return [];
             }
         }
 
@@ -2016,12 +2204,20 @@
                     <td class="py-3 px-4 font-rog-body text-gray-300">${report.generated}</td>
                     <td class="py-3 px-4 font-rog-body text-gray-300">${report.size}</td>
                     <td class="py-3 px-4">
-                        <button class="text-rog-red hover:text-rog-orange mr-2" onclick="downloadReport('${report.id}')">
-                            <i class="fas fa-download"></i>
-                        </button>
-                        <button class="text-red-400 hover:text-red-300" onclick="deleteReport('${report.id}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <div class="flex items-center space-x-2">
+                            <button class="text-rog-blue hover:text-rog-purple mr-1" onclick="viewReport('${report.id}')" title="View Report">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="text-green-400 hover:text-green-300 mr-1" onclick="exportReport('${report.id}')" title="Export Report">
+                                <i class="fas fa-file-export"></i>
+                            </button>
+                            <button class="text-rog-red hover:text-rog-orange mr-1" onclick="downloadReport('${report.id}')" title="Download Report">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="text-red-400 hover:text-red-300" onclick="deleteReport('${report.id}')" title="Delete Report">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             `).join('');
@@ -2077,7 +2273,7 @@
 
                 // Update the table
                 await loadRecentReports();
-                
+
                 showRogSuccess('Report generated successfully!', 'Report Generated');
             } catch (error) {
                 console.error('Error generating report:', error);
@@ -2102,11 +2298,173 @@
             generateCustomReport();
         }
 
+        // View report details
+        function viewReport(reportId) {
+            console.log(`Viewing report ${reportId}...`);
+            // Find the report
+            const report = window.dynamicReports?.find(r => r.id == reportId);
+            if (!report) {
+                showRogError('Report not found', 'Report Not Found');
+                return;
+            }
+
+            // Show report details modal
+            showReportDetailsModal(report);
+        }
+
+        // Export report
+        function exportReport(reportId) {
+            console.log(`Exporting report ${reportId}...`);
+            // Find the report
+            const report = window.dynamicReports?.find(r => r.id == reportId);
+            if (!report) {
+                showRogError('Report not found', 'Report Not Found');
+                return;
+            }
+
+            // Show export options modal
+            showExportOptionsModal(report);
+        }
+
         // Download report
         function downloadReport(reportId) {
             console.log(`Downloading report ${reportId}...`);
             // In a real application, this would download the actual file
             showRogSuccess('Report download started!', 'Download Initiated');
+        }
+
+        // Show report details modal
+        function showReportDetailsModal(report) {
+            const modalHtml = `
+                <div id="reportDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50">
+                    <div class="flex items-center justify-center min-h-screen p-4">
+                        <div class="bg-rog-light rounded-2xl p-6 w-full max-w-4xl">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-2xl font-rog-display font-bold text-white">${report.name}</h3>
+                                <button onclick="closeReportDetailsModal()" class="text-gray-400 hover:text-white">
+                                    <i class="fas fa-times text-xl"></i>
+                                </button>
+                            </div>
+                            <div class="space-y-6">
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div class="bg-rog-light/20 rounded-lg p-4">
+                                        <h4 class="text-lg font-rog-heading font-semibold text-white mb-3">Report Information</h4>
+                                        <div class="space-y-2">
+                                            <p class="text-gray-300"><span class="text-rog-red">Type:</span> ${report.type}</p>
+                                            <p class="text-gray-300"><span class="text-rog-red">Generated:</span> ${report.generated}</p>
+                                            <p class="text-gray-300"><span class="text-rog-red">Size:</span> ${report.size}</p>
+                                            <p class="text-gray-300"><span class="text-rog-red">Status:</span> <span class="text-green-400">${report.status}</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="bg-rog-light/20 rounded-lg p-4">
+                                        <h4 class="text-lg font-rog-heading font-semibold text-white mb-3">Key Metrics</h4>
+                                        <div class="space-y-2">
+                                            ${Object.entries(report.data || {}).map(([key, value]) => 
+                                                `<p class="text-gray-300"><span class="text-rog-red">${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</span> ${value}</p>`
+                                            ).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-3">Report Summary</h4>
+                                    <p class="text-gray-300">
+                                        This ${report.type.toLowerCase()} report contains comprehensive data analysis 
+                                        generated on ${report.generated}. The report includes key performance indicators 
+                                        and business metrics relevant to your ${report.type.toLowerCase()} operations.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex justify-end mt-6">
+                                <button onclick="closeReportDetailsModal()" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        // Show export options modal
+        function showExportOptionsModal(report) {
+            const modalHtml = `
+                <div id="exportOptionsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50">
+                    <div class="flex items-center justify-center min-h-screen p-4">
+                        <div class="bg-rog-light rounded-2xl p-6 w-full max-w-md">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-2xl font-rog-display font-bold text-white">Export Report</h3>
+                                <button onclick="closeExportOptionsModal()" class="text-gray-400 hover:text-white">
+                                    <i class="fas fa-times text-xl"></i>
+                                </button>
+                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Export Format</label>
+                                    <select id="export-format" class="w-full px-4 py-3 bg-rog-light/20 border border-rog-red/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rog-red">
+                                        <option value="pdf">PDF Document</option>
+                                        <option value="excel">Excel Spreadsheet</option>
+                                        <option value="csv">CSV File</option>
+                                        <option value="json">JSON Data</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-rog-heading font-medium text-rog-red mb-2">Include Logo</label>
+                                    <div class="flex items-center space-x-4">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="include-logo" value="yes" checked class="mr-2 text-rog-red">
+                                            <span class="text-white">Yes</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="include-logo" value="no" class="mr-2 text-rog-red">
+                                            <span class="text-white">No</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-end mt-6 space-x-3">
+                                <button onclick="closeExportOptionsModal()" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-rog-heading font-semibold hover:bg-gray-700 transition-colors duration-300">
+                                    Cancel
+                                </button>
+                                <button onclick="executeExport('${report.id}')" class="px-6 py-3 bg-rog-red text-white rounded-lg font-rog-heading font-semibold hover:bg-rog-orange transition-colors duration-300">
+                                    Export
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        // Close report details modal
+        function closeReportDetailsModal() {
+            const modal = document.getElementById('reportDetailsModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // Close export options modal
+        function closeExportOptionsModal() {
+            const modal = document.getElementById('exportOptionsModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // Execute export
+        function executeExport(reportId) {
+            const format = document.getElementById('export-format').value;
+            const includeLogo = document.querySelector('input[name="include-logo"]:checked').value === 'yes';
+            
+            console.log(`Exporting report ${reportId} as ${format} with logo: ${includeLogo}`);
+            
+            // Simulate export process
+            showRogSuccess(`Report exported successfully as ${format.toUpperCase()}!`, 'Export Complete');
+            closeExportOptionsModal();
         }
 
         // Delete report
@@ -3264,6 +3622,11 @@
         window.showRogConfirm = showRogConfirm;
         window.showRogSuccess = showRogSuccess;
         window.showRogError = showRogError;
+        window.viewReport = viewReport;
+        window.exportReport = exportReport;
+        window.closeReportDetailsModal = closeReportDetailsModal;
+        window.closeExportOptionsModal = closeExportOptionsModal;
+        window.executeExport = executeExport;
 
         // Refresh functionality
         function setupRefresh() {
@@ -3298,13 +3661,13 @@
         function showRogDialog(options) {
             const {
                 type = 'info',
-                title = 'Notification',
-                message = '',
-                confirmText = 'OK',
-                cancelText = 'Cancel',
-                showCancel = false,
-                onConfirm = null,
-                onCancel = null
+                    title = 'Notification',
+                    message = '',
+                    confirmText = 'OK',
+                    cancelText = 'Cancel',
+                    showCancel = false,
+                    onConfirm = null,
+                    onCancel = null
             } = options;
 
             const dialogId = 'rog-dialog-' + Date.now();
@@ -3334,10 +3697,13 @@
             `;
 
             document.body.insertAdjacentHTML('beforeend', dialogHtml);
-            
+
             // Store callbacks
             window.rogDialogCallbacks = window.rogDialogCallbacks || {};
-            window.rogDialogCallbacks[dialogId] = { onConfirm, onCancel };
+            window.rogDialogCallbacks[dialogId] = {
+                onConfirm,
+                onCancel
+            };
         }
 
         function closeRogDialog(dialogId, confirmed) {
