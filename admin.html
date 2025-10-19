@@ -1175,6 +1175,10 @@
             }
         }
 
+        // Global navigation state
+        let currentPage = 'dashboard';
+        let isSidebarOpen = false;
+
         // Mobile sidebar functionality
         function setupMobileSidebar() {
             const sidebarToggle = document.getElementById('sidebar-toggle');
@@ -1186,21 +1190,29 @@
                 sidebar.classList.add('open');
                 mobileOverlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
+                isSidebarOpen = true;
             }
 
             function closeSidebar() {
                 sidebar.classList.remove('open');
                 mobileOverlay.classList.remove('active');
                 document.body.style.overflow = '';
+                isSidebarOpen = false;
             }
 
+            // Toggle sidebar
             if (sidebarToggle) {
                 sidebarToggle.addEventListener('click', (e) => {
                     e.preventDefault();
-                    openSidebar();
+                    if (isSidebarOpen) {
+                        closeSidebar();
+                    } else {
+                        openSidebar();
+                    }
                 });
             }
 
+            // Close sidebar
             if (sidebarClose) {
                 sidebarClose.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -1208,54 +1220,36 @@
                 });
             }
 
+            // Close on overlay click
             if (mobileOverlay) {
                 mobileOverlay.addEventListener('click', closeSidebar);
             }
 
-            // Navigation links will be handled by setupNavigation function
+            // Close on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && isSidebarOpen) {
+                    closeSidebar();
+                }
+            });
         }
 
-        // Simple navigation functionality
+        // Navigation functionality
         function setupNavigation() {
-            // Simple event delegation for all navigation links
+            // Handle navigation clicks
             document.addEventListener('click', function(e) {
-                if (e.target.closest('nav a[href^="#"]')) {
+                const navLink = e.target.closest('nav a[href^="#"]');
+                if (navLink) {
                     e.preventDefault();
-                    const link = e.target.closest('nav a[href^="#"]');
-                    const targetId = link.getAttribute('href').substring(1);
-
-                    // Show the page
-                    showPage(targetId);
-
-                    // Close mobile sidebar
-                    const sidebar = document.getElementById('sidebar');
-                    const mobileOverlay = document.getElementById('mobileOverlay');
-                    if (sidebar && sidebar.classList.contains('open')) {
-                        sidebar.classList.remove('open');
-                        if (mobileOverlay) mobileOverlay.classList.remove('active');
-                        document.body.style.overflow = '';
-                    }
+                    const targetId = navLink.getAttribute('href').substring(1);
+                    navigateToPage(targetId);
                 }
             });
         }
 
-        // Update active navigation state
-        function updateActiveNavigation(activeId) {
-            const navLinks = document.querySelectorAll('nav a[href^="#"]');
-            navLinks.forEach(link => {
-                const targetId = link.getAttribute('href').substring(1);
-                if (targetId === activeId) {
-                    link.classList.add('bg-rog-red', 'text-white');
-                    link.classList.remove('text-white', 'hover:bg-rog-gray');
-                } else {
-                    link.classList.remove('bg-rog-red', 'text-white');
-                    link.classList.add('text-white', 'hover:bg-rog-gray');
-                }
-            });
-        }
+        // Navigate to specific page
+        function navigateToPage(pageId) {
+            console.log('Navigating to:', pageId);
 
-        // Show specific page
-        function showPage(pageId) {
             // Hide all sections
             const sections = document.querySelectorAll('main > section');
             sections.forEach(section => {
@@ -1267,8 +1261,108 @@
             if (targetSection) {
                 targetSection.classList.remove('hidden');
                 currentPage = pageId;
+
+                // Update active navigation
+                updateActiveNavigation(pageId);
+
+                // Load page data
                 loadPageData(pageId);
+
+                // Close mobile sidebar if open
+                if (isSidebarOpen) {
+                    closeMobileSidebar();
+                }
+            } else {
+                console.error('Section not found:', pageId);
             }
+        }
+
+        // Close mobile sidebar
+        function closeMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            if (sidebar && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                if (mobileOverlay) mobileOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                isSidebarOpen = false;
+            }
+        }
+
+        // Update active navigation state
+        function updateActiveNavigation(activeId) {
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href').substring(1);
+                if (href === activeId) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        // Profile dropdown functionality
+        function setupProfileDropdown() {
+            const profileButton = document.getElementById('profile-button');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            const profileClose = document.getElementById('profile-close');
+
+            if (profileButton && profileDropdown) {
+                profileButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    profileDropdown.classList.toggle('hidden');
+                });
+
+                if (profileClose) {
+                    profileClose.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        profileDropdown.classList.add('hidden');
+                    });
+                }
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!profileButton.contains(e.target) && !profileDropdown.contains(e.target)) {
+                        profileDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Notifications functionality
+        function setupNotifications() {
+            const notificationButton = document.getElementById('notification-button');
+            const notificationDropdown = document.getElementById('notification-dropdown');
+            const notificationClose = document.getElementById('notification-close');
+
+            if (notificationButton && notificationDropdown) {
+                notificationButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    notificationDropdown.classList.toggle('hidden');
+                });
+
+                if (notificationClose) {
+                    notificationClose.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        notificationDropdown.classList.add('hidden');
+                    });
+                }
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!notificationButton.contains(e.target) && !notificationDropdown.contains(e.target)) {
+                        notificationDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Show specific page (alias for navigateToPage)
+        function showPage(pageId) {
+            navigateToPage(pageId);
         }
 
         // Load data for specific page
@@ -3148,8 +3242,9 @@
             await initializeFirebase();
             setupMobileSidebar();
             setupNavigation();
-            setupModals();
+            setupProfileDropdown();
             setupNotifications();
+            setupModals();
             setupUserProfile();
             loadAdminUserInfo();
             updateSessionDuration();
