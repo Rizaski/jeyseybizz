@@ -314,8 +314,21 @@
                 max-width: calc(100vw - 32px);
             }
 
+            /* Mobile order modal scrolling */
+            #orderModal .flex {
+                align-items: flex-start;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+
+            #orderModal .bg-rog-light {
+                margin: 0;
+                max-height: calc(100vh - 40px);
+                overflow-y: auto;
+            }
+
             /* Ensure content doesn't go below sidebar */
-            .sidebar.open + main {
+            .sidebar.open+main {
                 margin-left: 0;
                 padding-top: 60px;
             }
@@ -648,7 +661,7 @@
     </header>
 
     <!-- Sidebar -->
-    <aside id="sidebar" class="sidebar fixed top-0 left-0 h-full w-80 bg-rog-light shadow-2xl z-40 md:translate-x-0">
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 h-full w-80 bg-rog-light shadow-2xl z-50 md:translate-x-0">
         <div class="flex items-center justify-between p-6 border-b border-rog-gray">
             <div class="flex items-center space-x-3">
                 <div class="w-8 h-8 bg-gradient-to-br from-rog-red to-rog-orange rounded-lg flex items-center justify-center">
@@ -3276,6 +3289,7 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
 
         // Show order details modal with client-submitted details
         function showOrderDetailsModal(order) {
+            console.log('Order data for details:', order);
             const modalHtml = `
                 <div id="orderDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50">
                     <div class="flex items-center justify-center min-h-screen p-4">
@@ -3361,31 +3375,31 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                                             <tbody>
                                                 <tr class="border-b border-rog-gray/50">
                                                     <td class="py-3 px-4 font-rog-body text-rog-red">Jersey Type</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.jerseyType || 'Not specified'}</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.jerseyType || order.clientJerseyType || order.jerseyDetails?.jerseyType || 'Not specified'}</td>
                                                 </tr>
                                                 <tr class="border-b border-rog-gray/50">
                                                     <td class="py-3 px-4 font-rog-body text-rog-red">Jersey Name</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.jerseyName || 'Not specified'}</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.jerseyName || order.clientJerseyName || order.jerseyDetails?.jerseyName || 'Not specified'}</td>
                                                 </tr>
                                                 <tr class="border-b border-rog-gray/50">
                                                     <td class="py-3 px-4 font-rog-body text-rog-red">Jersey Number</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.jerseyNumber || 'Not specified'}</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.jerseyNumber || order.clientJerseyNumber || order.jerseyDetails?.jerseyNumber || 'Not specified'}</td>
                                                 </tr>
                                                 <tr class="border-b border-rog-gray/50">
                                                     <td class="py-3 px-4 font-rog-body text-rog-red">Size Category</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.sizeCategory || 'Not specified'}</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.sizeCategory || order.clientSizeCategory || order.jerseyDetails?.sizeCategory || 'Not specified'}</td>
                                                 </tr>
                                                 <tr class="border-b border-rog-gray/50">
                                                     <td class="py-3 px-4 font-rog-body text-rog-red">Size</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.size || 'Not specified'}</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.size || order.clientSize || order.jerseyDetails?.size || 'Not specified'}</td>
                                                 </tr>
                                                 <tr class="border-b border-rog-gray/50">
                                                     <td class="py-3 px-4 font-rog-body text-rog-red">Sleeve</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.sleeve || 'Not specified'}</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.sleeve || order.clientSleeve || order.jerseyDetails?.sleeve || 'Not specified'}</td>
                                                 </tr>
                                                 <tr class="border-b border-rog-gray/50">
                                                     <td class="py-3 px-4 font-rog-body text-rog-red">Shorts</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.shorts || 'Not specified'}</td>
+                                                    <td class="py-3 px-4 font-rog-body text-white">${order.shorts || order.clientShorts || order.jerseyDetails?.shorts || 'Not specified'}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -4405,8 +4419,8 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
 
     <!-- Order Modal -->
     <div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-rog-light rounded-2xl p-6 w-full max-w-2xl">
+        <div class="flex items-center justify-center min-h-screen p-4 overflow-y-auto">
+            <div class="bg-rog-light rounded-2xl p-6 w-full max-w-2xl my-8">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-2xl font-rog-display font-bold text-white" id="orderModalTitle">Add New Order</h3>
                     <button id="closeOrderModal" class="text-gray-400 hover:text-white">
