@@ -3287,9 +3287,16 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
             showClientLinkModal(order, clientLink);
         }
 
-        // Show order details modal with client-submitted details
+        // Show order details modal with client-submitted details (same format as client form)
         function showOrderDetailsModal(order) {
             console.log('Order data for details:', order);
+            
+            // Generate order summary with size breakdowns (same as client form)
+            const summary = generateOrderSummary(order);
+            
+            // Generate jersey details HTML (same as client form)
+            const jerseyDetailsHTML = generateJerseyDetailsHTML(order);
+            
             const modalHtml = `
                 <div id="orderDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50">
                     <div class="flex items-center justify-center min-h-screen p-4">
@@ -3302,108 +3309,75 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
                             </div>
                             
                             <div class="space-y-6">
-                                <!-- Initial Order Record -->
+                                <!-- Order Summary (same as client form) -->
                                 <div class="bg-rog-light/20 rounded-lg p-4">
                                     <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
-                                        <i class="fas fa-file-alt text-rog-red mr-2"></i>Initial Order Record
+                                        <i class="fas fa-chart-pie text-rog-red mr-2"></i>Order Summary
                                     </h4>
-                                    <div class="overflow-x-auto">
-                                        <table class="w-full">
-                                            <thead>
-                                                <tr class="border-b border-rog-gray">
-                                                    <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Field</th>
-                                                    <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Value</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Order ID</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.id || 'N/A'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Customer Name</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.customer || 'N/A'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Email</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.email || 'N/A'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Phone</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.phone || 'N/A'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Material</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.material || 'N/A'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Quantity</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.quantity || 'N/A'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Total Amount</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white font-semibold text-rog-red">$${order.amount || '0.00'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Order Date</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.date || 'N/A'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Status</td>
-                                                    <td class="py-3 px-4">
-                                                        <span class="px-2 py-1 ${getStatusColor(order.status)} rounded-full text-xs font-rog-body">${order.status || 'N/A'}</span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <!-- Size Breakdown -->
+                                        <div class="bg-rog-light/30 rounded-lg p-4">
+                                            <h5 class="text-lg font-rog-heading font-semibold text-white mb-3 flex items-center">
+                                                <i class="fas fa-ruler text-rog-blue mr-2"></i>Size Breakdown
+                                            </h5>
+                                            <div class="space-y-2">
+                                                ${summary.sizeBreakdown.map(item => `
+                                                    <div class="flex justify-between items-center py-1 border-b border-rog-gray/50">
+                                                        <span class="text-gray-300">${item.size}</span>
+                                                        <span class="text-white font-semibold">${item.count}</span>
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Category Breakdown -->
+                                        <div class="bg-rog-light/30 rounded-lg p-4">
+                                            <h5 class="text-lg font-rog-heading font-semibold text-white mb-3 flex items-center">
+                                                <i class="fas fa-users text-rog-green mr-2"></i>Category Breakdown
+                                            </h5>
+                                            <div class="space-y-2">
+                                                ${summary.categoryBreakdown.map(item => `
+                                                    <div class="flex justify-between items-center py-1 border-b border-rog-gray/50">
+                                                        <span class="text-gray-300">${item.category}</span>
+                                                        <span class="text-white font-semibold">${item.count}</span>
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Total Summary -->
+                                    <div class="mt-4 bg-rog-gray/50 rounded-lg p-4">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-lg font-semibold text-white">Total Jerseys:</span>
+                                            <span class="text-2xl font-bold text-rog-red">${summary.totalJerseys}</span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Jersey Details Submitted by Client -->
+                                <!-- Initial Order Details (same as client form) -->
                                 <div class="bg-rog-light/20 rounded-lg p-4">
                                     <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
-                                        <i class="fas fa-tshirt text-rog-red mr-2"></i>Jersey Details Submitted by Client
+                                        <i class="fas fa-shopping-cart text-rog-blue mr-2"></i>Initial Order Details
                                     </h4>
-                                    <div class="overflow-x-auto">
-                                        <table class="w-full">
-                                            <thead>
-                                                <tr class="border-b border-rog-gray">
-                                                    <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Specification</th>
-                                                    <th class="text-left py-3 px-4 font-rog-heading font-semibold text-white">Client Input</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Jersey Type</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.jerseyType || order.clientJerseyType || order.jerseyDetails?.jerseyType || 'Not specified'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Jersey Name</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.jerseyName || order.clientJerseyName || order.jerseyDetails?.jerseyName || 'Not specified'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Jersey Number</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.jerseyNumber || order.clientJerseyNumber || order.jerseyDetails?.jerseyNumber || 'Not specified'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Size Category</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.sizeCategory || order.clientSizeCategory || order.jerseyDetails?.sizeCategory || 'Not specified'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Size</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.size || order.clientSize || order.jerseyDetails?.size || 'Not specified'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Sleeve</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.sleeve || order.clientSleeve || order.jerseyDetails?.sleeve || 'Not specified'}</td>
-                                                </tr>
-                                                <tr class="border-b border-rog-gray/50">
-                                                    <td class="py-3 px-4 font-rog-body text-rog-red">Shorts</td>
-                                                    <td class="py-3 px-4 font-rog-body text-white">${order.shorts || order.clientShorts || order.jerseyDetails?.shorts || 'Not specified'}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="grid grid-cols-2 gap-4 text-sm">
+                                        <div><strong class="text-gray-300">Order ID:</strong> <span class="text-white">${order.id || 'N/A'}</span></div>
+                                        <div><strong class="text-gray-300">Customer:</strong> <span class="text-white">${order.customer || 'N/A'}</span></div>
+                                        <div><strong class="text-gray-300">Email:</strong> <span class="text-white">${order.email || 'N/A'}</span></div>
+                                        <div><strong class="text-gray-300">Mobile:</strong> <span class="text-white">${order.phone || 'N/A'}</span></div>
+                                        <div><strong class="text-gray-300">Quantity:</strong> <span class="text-white">${order.quantity || 1}</span></div>
+                                        <div><strong class="text-gray-300">Material:</strong> <span class="text-white">${order.material || 'N/A'}</span></div>
+                                        <div><strong class="text-gray-300">Status:</strong> ${getStatusBadge(order.status || 'processing')}</div>
+                                        <div><strong class="text-gray-300">Created:</strong> <span class="text-white">${formatDate(order.date || new Date().toISOString())}</span></div>
                                     </div>
+                                </div>
+
+                                <!-- Jersey Details (same format as client form) -->
+                                <div class="bg-rog-light/20 rounded-lg p-4">
+                                    <h4 class="text-lg font-rog-heading font-semibold text-white mb-4">
+                                        <i class="fas fa-tshirt text-rog-green mr-2"></i>Jersey Details Submitted by Client
+                                    </h4>
+                                    ${jerseyDetailsHTML}
                                 </div>
 
                             </div>
@@ -3419,6 +3393,185 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
             `;
 
             document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        // Helper functions for order details display (same as client form)
+        function generateOrderSummary(order) {
+            let jerseys = [];
+
+            // Handle both new format (array) and legacy format (single object)
+            if (order.jerseys && Array.isArray(order.jerseys)) {
+                jerseys = order.jerseys;
+            } else if (order.jerseyType || order.jerseyName || order.jerseyNumber) {
+                // Legacy single jersey format
+                jerseys = [{
+                    jerseyNumber: 1,
+                    jerseyType: order.jerseyType || 'N/A',
+                    jerseyName: order.jerseyName || 'N/A',
+                    jerseyNumberValue: order.jerseyNumber || 'N/A',
+                    sizeCategory: order.sizeCategory || 'N/A',
+                    size: order.size || 'N/A',
+                    sleeve: order.sleeve || 'N/A',
+                    shorts: order.shorts || 'N/A',
+                    completedAt: order.completedAt || new Date().toISOString()
+                }];
+            }
+
+            // Count sizes
+            const sizeCounts = {};
+            const categoryCounts = {};
+
+            jerseys.forEach(jersey => {
+                const size = jersey.size || 'N/A';
+                const category = jersey.sizeCategory || 'N/A';
+
+                sizeCounts[size] = (sizeCounts[size] || 0) + 1;
+                categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+            });
+
+            // Convert to arrays for display
+            const sizeBreakdown = Object.entries(sizeCounts)
+                .map(([size, count]) => ({
+                    size,
+                    count
+                }))
+                .sort((a, b) => {
+                    const sizeOrder = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'];
+                    return sizeOrder.indexOf(a.size) - sizeOrder.indexOf(b.size);
+                });
+
+            const categoryBreakdown = Object.entries(categoryCounts)
+                .map(([category, count]) => ({
+                    category,
+                    count
+                }))
+                .sort((a, b) => a.category.localeCompare(b.category));
+
+            return {
+                totalJerseys: jerseys.length,
+                sizeBreakdown,
+                categoryBreakdown
+            };
+        }
+
+        function generateJerseyDetailsHTML(order) {
+            let jerseys = [];
+
+            // Handle both new format (array) and legacy format (single object)
+            if (order.jerseys && Array.isArray(order.jerseys)) {
+                jerseys = order.jerseys;
+            } else if (order.jerseyType || order.jerseyName || order.jerseyNumber) {
+                // Legacy single jersey format
+                jerseys = [{
+                    jerseyNumber: 1,
+                    jerseyType: order.jerseyType || 'N/A',
+                    jerseyName: order.jerseyName || 'N/A',
+                    jerseyNumberValue: order.jerseyNumber || 'N/A',
+                    sizeCategory: order.sizeCategory || 'N/A',
+                    size: order.size || 'N/A',
+                    sleeve: order.sleeve || 'N/A',
+                    shorts: order.shorts || 'N/A',
+                    completedAt: order.completedAt || new Date().toISOString()
+                }];
+            }
+
+            if (jerseys.length === 1) {
+                // Single jersey - show in simple format
+                const jersey = jerseys[0];
+                return `
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><strong class="text-gray-300">Jersey Type:</strong> <span class="text-white">${jersey.jerseyType}</span></div>
+                        <div><strong class="text-gray-300">Jersey Name:</strong> <span class="text-white">${jersey.jerseyName}</span></div>
+                        <div><strong class="text-gray-300">Jersey Number:</strong> <span class="text-white">${jersey.jerseyNumberValue}</span></div>
+                        <div><strong class="text-gray-300">Size Category:</strong> <span class="text-white">${jersey.sizeCategory}</span></div>
+                        <div><strong class="text-gray-300">Size:</strong> <span class="text-white">${jersey.size}</span></div>
+                        <div><strong class="text-gray-300">Sleeve:</strong> <span class="text-white">${jersey.sleeve}</span></div>
+                        <div><strong class="text-gray-300">Shorts:</strong> <span class="text-white">${jersey.shorts}</span></div>
+                        <div><strong class="text-gray-300">Submitted:</strong> <span class="text-white">${formatDate(jersey.completedAt)}</span></div>
+                    </div>
+                `;
+            } else {
+                // Multiple jerseys - show in card format
+                return `
+                    <div class="space-y-4">
+                        ${jerseys.map((jersey, index) => `
+                            <div class="bg-rog-light/30 rounded-lg p-4 border border-rog-gray/50">
+                                <h5 class="text-lg font-semibold text-white mb-3 flex items-center">
+                                    <i class="fas fa-tshirt mr-2 text-rog-red"></i>
+                                    Jersey ${jersey.jerseyNumber || (index + 1)}
+                                </h5>
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div><strong class="text-gray-300">Type:</strong> <span class="text-white">${jersey.jerseyType}</span></div>
+                                    <div><strong class="text-gray-300">Name:</strong> <span class="text-white">${jersey.jerseyName}</span></div>
+                                    <div><strong class="text-gray-300">Number:</strong> <span class="text-white">${jersey.jerseyNumberValue}</span></div>
+                                    <div><strong class="text-gray-300">Category:</strong> <span class="text-white">${jersey.sizeCategory}</span></div>
+                                    <div><strong class="text-gray-300">Size:</strong> <span class="text-white">${jersey.size}</span></div>
+                                    <div><strong class="text-gray-300">Sleeve:</strong> <span class="text-white">${jersey.sleeve}</span></div>
+                                    <div><strong class="text-gray-300">Shorts:</strong> <span class="text-white">${jersey.shorts}</span></div>
+                                    <div><strong class="text-gray-300">Submitted:</strong> <span class="text-white">${formatDate(jersey.completedAt)}</span></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            
+            try {
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) {
+                    return 'N/A';
+                }
+                return date.toLocaleDateString();
+            } catch (error) {
+                console.warn('Date formatting error:', error);
+                return 'N/A';
+            }
+        }
+
+        function getStatusBadge(status) {
+            const statusLower = (status || '').toLowerCase();
+
+            if (statusLower.includes('pending') || statusLower.includes('new')) {
+                return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
+                    <i class="fas fa-clock mr-1"></i>
+                    ${status}
+                </span>`;
+            } else if (statusLower.includes('processing') || statusLower.includes('in progress')) {
+                return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                    <i class="fas fa-cog mr-1"></i>
+                    ${status}
+                </span>`;
+            } else if (statusLower.includes('completed') || statusLower.includes('done') || statusLower.includes('finished')) {
+                return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                    <i class="fas fa-check-circle mr-1"></i>
+                    ${status}
+                </span>`;
+            } else if (statusLower.includes('cancelled') || statusLower.includes('canceled')) {
+                return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">
+                    <i class="fas fa-times-circle mr-1"></i>
+                    ${status}
+                </span>`;
+            } else if (statusLower.includes('on hold') || statusLower.includes('paused')) {
+                return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200">
+                    <i class="fas fa-pause-circle mr-1"></i>
+                    ${status}
+                </span>`;
+            } else if (statusLower.includes('shipped') || statusLower.includes('delivered')) {
+                return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
+                    <i class="fas fa-truck mr-1"></i>
+                    ${status}
+                </span>`;
+            } else {
+                // Default status styling
+                return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    ${status}
+                </span>`;
+            }
         }
 
         // Show client link modal
