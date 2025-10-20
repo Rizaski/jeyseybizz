@@ -3930,14 +3930,14 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
             }
 
             // Navigate to settings section
-            showSection('settings');
+            showPage('settings');
         }
 
         // Dashboard quick action navigation functions
         function navigateToOrders() {
             console.log('Opening Add New Order form...');
             // Navigate to orders section first
-            showSection('orders');
+            showPage('orders');
 
             // Then trigger the Add New Order form
             setTimeout(() => {
@@ -3950,12 +3950,12 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
 
         function navigateToAnalytics() {
             console.log('Navigating to Analytics section...');
-            showSection('analytics');
+            showPage('analytics');
         }
 
         function navigateToReports() {
             console.log('Navigating to Reports section...');
-            showSection('reports');
+            showPage('reports');
         }
 
         // Alias for showPage function
@@ -4208,6 +4208,8 @@ ${JSON.stringify(report.data || {}, null, 2)}`;
         window.navigateToReports = navigateToReports;
         window.showHelpDialog = showHelpDialog;
         window.closeHelpDialog = closeHelpDialog;
+        window.showPage = showPage;
+        window.showSection = showSection;
 
         // Refresh functionality
         function setupRefresh() {
